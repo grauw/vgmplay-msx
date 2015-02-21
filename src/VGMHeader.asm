@@ -139,7 +139,7 @@ VGMHeader_Process:
 	ret
 
 VGMHeader_PrintVersion:
-	ld hl,VGMHeader_infoVersion
+	ld hl,VGMHeader_versionLabel
 	call System_Print
 	ld a,(ix + VGMHeader.version + 1)
 	call System_PrintHexANoLeading0
@@ -188,7 +188,7 @@ VGMHeader_ThrowNoVGMFileError:
 
 VGMHeader_instance: VGMHeader
 
-VGMHeader_infoVersion:
+VGMHeader_versionLabel:
 	db "Version: ",0
 
 VGMHeader_infoAY8910Clock:
