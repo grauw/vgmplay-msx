@@ -4,6 +4,8 @@
 VGMPlay: MACRO
 	fileHandle:
 		db 0
+	header:
+		dw VGMHeader_instance
 	data:
 		dw DATA
 	sfg:
@@ -40,6 +42,16 @@ VGMPlay_Main:
 ; ix = this
 ; ix <- this
 VGMPlay_Constructor:
+	ret
+
+; ix = this
+; de <- VGM header
+; ix <- VGM header
+VGMPlay_GetHeader:
+	ld e,(ix + VGMPlay.header)
+	ld d,(ix + VGMPlay.header + 1)
+	ld ixl,e
+	ld ixh,d
 	ret
 
 ; ix = this
@@ -85,13 +97,12 @@ Loop:
 
 VGMPlay_ReadHeader:
 	ld b,(ix + VGMPlay.fileHandle)
-	ld de,VGMHeader_instance
+	push ix
+	call VGMPlay_GetHeader
 	ld hl,256
 	ld c,_READ
 	call BDOS
 	call VGMPlay_CheckDOSError
-	push ix
-	ld ix,VGMHeader_instance
 	call VGMHeader_Constructor
 	pop ix
 	ret
@@ -99,7 +110,7 @@ VGMPlay_ReadHeader:
 VGMPlay_ShowInfo:
 	call System_PrintCrLf
 	push ix
-	ld ix,VGMHeader_instance
+	call VGMPlay_GetHeader
 	call VGMHeader_ShowInfo
 	pop ix
 	ret
