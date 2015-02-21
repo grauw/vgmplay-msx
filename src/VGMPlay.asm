@@ -44,11 +44,7 @@ VGMPlay_Constructor:
 VGMPlay_EnterMainLoop:
 	call VGMPlay_OpenFile
 	call VGMPlay_ReadHeader
-	call System_PrintCrLf
-	push ix
-	ld ix,VGMHeader_instance
-	call VGMHeader_ShowInfo
-	pop ix
+	call VGMPlay_ShowInfo
 	call VGMPlay_CloseFile
 
 	call VGMPlay_MainLoop
@@ -95,6 +91,14 @@ VGMPlay_ReadHeader:
 	push ix
 	ld ix,VGMHeader_instance
 	call VGMHeader_Constructor
+	pop ix
+	ret
+
+VGMPlay_ShowInfo:
+	call System_PrintCrLf
+	push ix
+	ld ix,VGMHeader_instance
+	call VGMHeader_ShowInfo
 	pop ix
 	ret
 
