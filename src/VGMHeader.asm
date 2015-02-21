@@ -541,16 +541,16 @@ VGMHeader_versionLabel:
 	db "Version: ",0
 
 VGMHeader_sn76489Name:
-	db "SN76489",0
+	db "SN76489 (DCSG)",0
 
 VGMHeader_ym2413Name:
-	db "YM2413",0
+	db "YM2413 (OPLL)",0
 
 VGMHeader_ym2612Name:
-	db "YM2612",0
+	db "YM2612 (OPN2)",0
 
 VGMHeader_ym2151Name:
-	db "YM2151",0
+	db "YM2151 (OPM)",0
 
 VGMHeader_segaPCMName:
 	db "Sega PCM",0
@@ -559,37 +559,37 @@ VGMHeader_rf5c68Name:
 	db "RF5C68",0
 
 VGMHeader_ym2203Name:
-	db "YM2203",0
+	db "YM2203 (OPN)",0
 
 VGMHeader_ym2608Name:
-	db "YM2608",0
+	db "YM2608 (OPNA)",0
 
 VGMHeader_ym2610Name:
-	db "YM2610",0
+	db "YM2610 (OPNB)",0
 
 VGMHeader_ym2610bName:
-	db "YM2610B",0
+	db "YM2610B (OPNB)",0
 
 VGMHeader_ym3812Name:
-	db "YM3812",0
+	db "YM3812 (OPL2)",0
 
 VGMHeader_ym3526Name:
-	db "YM3526",0
+	db "YM3526 (OPL)",0
 
 VGMHeader_y8950Name:
-	db "Y8950",0
+	db "Y8950 (MSX-AUDIO)",0
 
 VGMHeader_ymf262Name:
-	db "YMF262",0
+	db "YMF262 (OPL3)",0
 
 VGMHeader_ymf278bName:
-	db "YMF278B",0
+	db "YMF278B (OPL4)",0
 
 VGMHeader_ymf271Name:
-	db "YMF271",0
+	db "YMF271 (OPX)",0
 
 VGMHeader_ymz280bName:
-	db "YMZ280B",0
+	db "YMZ280B (PCMD8)",0
 
 VGMHeader_rf5c164Name:
 	db "RF5C164",0
@@ -598,13 +598,13 @@ VGMHeader_pwmName:
 	db "PWM",0
 
 VGMHeader_ay8910Name:
-	db "AY-3-8910",0
+	db "AY-3-8910 (PSG)",0
 
 VGMHeader_gameBoyDMGName:
 	db "Game Boy DMG",0
 
 VGMHeader_nesAPUName:
-	db "NES APU",0
+	db "2A03 (NES APU)",0
 
 VGMHeader_multiPCMName:
 	db "MultiPCM",0
@@ -619,7 +619,7 @@ VGMHeader_okiM6295Name:
 	db "OKI M6295",0
 
 VGMHeader_k051649Name:
-	db "K051649",0
+	db "K051649 (SCC)",0
 
 VGMHeader_k054539Name:
 	db "K054539",0
@@ -634,7 +634,7 @@ VGMHeader_k053260Name:
 	db "K053260",0
 
 VGMHeader_pokeyName:
-	db "Pokey",0
+	db "POKEY",0
 
 VGMHeader_qSoundName:
 	db "QSound",0
