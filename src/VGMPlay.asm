@@ -4,6 +4,8 @@
 VGMPlay: MACRO
 	fileHandle:
 		db 0
+	data:
+		dw DATA
 	sfg:
 		dw 0
 	ENDM
@@ -100,6 +102,22 @@ VGMPlay_ShowInfo:
 	ld ix,VGMHeader_instance
 	call VGMHeader_ShowInfo
 	pop ix
+	ret
+
+VGMPlay_ReadData:
+	call VGMHeader_GetDataOffset
+	ld a,0
+	ld b,(ix + VGMPlay.fileHandle)
+	ld c,_SEEK
+	call BDOS
+	call VGMPlay_CheckDOSError
+	ld hl,4000H
+	ld e,(ix + VGMPlay.data)
+	ld d,(ix + VGMPlay.data + 1)
+	ld b,(ix + VGMPlay.fileHandle)
+	ld c,_READ
+	call BDOS
+	call VGMPlay_CheckDOSError
 	ret
 
 VGMPlay_CloseFile:
