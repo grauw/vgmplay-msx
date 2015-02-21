@@ -1,0 +1,238 @@
+;
+; System routines
+;
+
+; a = character
+; Modifies: none
+System_PrintChar:
+	exx
+	ex af,af'
+	push af
+	push bc
+	push de
+	push hl
+	ex af,af'
+	exx
+	push ix
+	push iy
+	ld iy,(EXPTBL-1)
+	ld ix,CHPUT
+	call CALSLT
+	pop iy
+	pop ix
+	exx
+	ex af,af'
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ex af,af'
+	exx
+	ret
+
+; hl = string (0-terminated)
+; Modifies: none
+System_Print:
+	push af
+	push hl
+System_Print_Loop:
+	ld a,(hl)
+	and a
+	jp z,System_Print_Done
+	call System_PrintChar
+	inc hl
+	jp System_Print_Loop
+System_Print_Done:
+	pop hl
+	pop af
+	ret
+
+; hl = string (0-terminated)
+; Modifies: none
+System_PrintLn:
+	push hl
+	call System_Print
+	ld hl,System_crlf
+	call System_Print
+	pop hl
+	ret
+
+; Modifies: none
+System_PrintCrLf:
+	push hl
+	ld hl,System_crlf
+	call System_Print
+	pop hl
+	ret
+
+; dehl = value
+; Modifies: none
+System_PrintHexDEHL:
+	ex de,hl
+	call System_PrintHexHL
+	ex de,hl
+	call System_PrintHexHL
+	ret
+
+; hl = value
+; Modifies: none
+System_PrintHexHL:
+	push af
+	ld a,h
+	call System_PrintHexA
+	ld a,l
+	call System_PrintHexA
+	pop af
+	ret
+
+; a = value
+; Modifies: none
+System_PrintHexA:
+	push af
+	rrca
+	rrca
+	rrca
+	rrca
+	and 0FH
+	call System_PrintHex
+	pop af
+	and 0FH
+	call System_PrintHex
+	ret
+
+; a = value
+; Modifies: none
+System_PrintHexANoLeading0:
+	push af
+	rrca
+	rrca
+	rrca
+	rrca
+	and 0FH
+	call nz,System_PrintHex
+	pop af
+	and 0FH
+	call System_PrintHex
+	ret
+
+; a = value (0 - 15)
+; Modifies: none
+System_PrintHex:
+	push af
+	call System_NibbleToHexDigit
+	call System_PrintChar
+	pop af
+	ret
+
+; a = value (0 - 15)
+; a <- hexadecimal character
+; Modifies: a
+System_NibbleToHexDigit:
+	cp 10
+	ccf
+	adc a,"0"
+	daa
+	ret
+
+; de = ASCIIZ string
+; a <- length, excluding the terminator
+; bc <- 0 - length, excluding the terminator
+; hl <- end of ASCIIZ string + 1
+; Modifies: af, bc, hl
+System_GetStringLength:
+	ex de,hl
+	ld e,l
+	ld d,h
+	xor a
+	ld b,a
+	ld c,a
+	cpir
+	ld a,c
+	inc bc
+	cpl
+	ret
+
+	SECTION RAM
+
+; Up to 19% faster alternative for large LDIRs (break-even at 21 loops)
+; hl = source
+; de = destination
+; bc = byte count
+System_FastLDIR: PROC
+	xor a
+	sub c
+	and 16-1
+	add a,a
+	di
+	ld (jumpOffset),a
+	ei
+	jr nz,$
+jumpOffset: equ $ - 1
+Loop:
+	REPT 16
+	ldi
+	ENDM
+	jp pe,Loop
+	ret
+	ENDP
+
+	ENDS
+
+System_EnableTurbo:
+	ld a,(EXPTBL)
+	ld hl,IDBYT2
+	call RDSLT
+	ei
+	cp 3
+	ret c
+	ld a,10000001B
+	ld iy,(EXPTBL-1)
+	ld ix,CHGCPU
+	call CALSLT
+	ret
+
+System_Stop:
+	di
+	halt
+	jp System_Stop
+
+System_ThrowException:
+	IF DEBUG
+	in a,(02EH)
+	ENDIF
+	pop de
+	call System_PrintExceptionMessage
+	jp System_Stop
+
+; hl = message
+System_ThrowExceptionWithMessage:
+	IF DEBUG
+	in a,(02EH)
+	ENDIF
+	pop de
+	push hl
+	call System_PrintExceptionMessage
+	pop hl
+	call System_PrintLn
+	jp System_Stop
+
+; de = address
+System_PrintExceptionMessage:
+	push de
+	ld hl,System_exceptionMessage
+	call System_Print
+	pop hl
+	dec hl
+	dec hl
+	dec hl
+	call System_PrintHexHL
+	ld hl,System_crlf
+	call System_Print
+	ret
+
+;
+System_exceptionMessage:
+	db "An exception occurred on address: ", 0
+
+System_crlf:
+	db "\r\n", 0
