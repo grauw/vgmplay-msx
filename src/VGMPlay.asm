@@ -6,10 +6,13 @@ VGMPlay: MACRO
 		db 0
 	header:
 		dw VGMHeader_instance
-	data:
-		dw DATA
+	reader:
+		dw DataReader_instance
+	player:
+		dw Player_instance
 	sfg:
 		dw 0
+	size:
 	ENDM
 
 ;
@@ -56,6 +59,26 @@ VGMPlay_GetHeader:
 	ret
 
 ; ix = this
+; de <- VGM data reader
+; ix <- VGM data reader
+VGMPlay_GetReader:
+	ld e,(ix + VGMPlay.reader)
+	ld d,(ix + VGMPlay.reader + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- VGM data
+; ix <- VGM data
+VGMPlay_GetPlayer:
+	ld e,(ix + VGMPlay.player)
+	ld d,(ix + VGMPlay.player + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
 VGMPlay_EnterMainLoop:
 	call VGMPlay_OpenFile
 	call VGMPlay_ReadHeader
@@ -63,7 +86,12 @@ VGMPlay_EnterMainLoop:
 	call VGMPlay_ReadData
 	call VGMPlay_CloseFile
 
-	call VGMPlay_MainLoop
+	push ix
+	call VGMPlay_GetPlayer
+	ld de,DataReader_instance
+	call Player_Constructor
+	call Player_Play
+	pop ix
 	ret
 
 VGMPlay_OpenFile: PROC
@@ -129,12 +157,17 @@ VGMPlay_ReadData:
 	call BDOS
 	call VGMPlay_CheckDOSError
 	ld hl,4000H
-	ld e,(ix + VGMPlay.data)
-	ld d,(ix + VGMPlay.data + 1)
+	ld de,DATA
 	ld b,(ix + VGMPlay.fileHandle)
 	ld c,_READ
 	call BDOS
 	call VGMPlay_CheckDOSError
+	push ix
+	call VGMPlay_GetReader
+	ld hl,DATA
+	ld bc,4000H
+	call DataReader_Constructor
+	pop ix
 	ret
 
 VGMPlay_CloseFile:
@@ -142,26 +175,6 @@ VGMPlay_CloseFile:
 	ld c,_CLOSE
 	call BDOS
 	call VGMPlay_CheckDOSError
-	ret
-
-VGMPlay_MainLoop:
-	; ...
-;	ld b,8
-;	call VGMPlay_GetKeyRow
-;	and 00000001B
-;	jp nz,VGMPlay_MainLoop
-	ret
-
-; b = row number
-; a <- row bits
-VGMPlay_GetKeyRow:
-	di
-	in a,(PPI_PORT_C)
-	and 11110000B
-	or b
-	out (PPI_PORT_C),a
-	ei
-	in a,(PPI_PORT_B)
 	ret
 
 ; hl <- current timer value, in 14 cycle increments
