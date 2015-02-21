@@ -10,7 +10,7 @@ DEBUG: equ 1
 
 	org 100H
 
-TPA: ds 02E00H
+TPA: ds 02F00H
 RAM: ds 1000H
 PAGE1: ds 04000H
 DATA:
