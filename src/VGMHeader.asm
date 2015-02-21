@@ -561,7 +561,7 @@ VGMHeader_PrintQSoundInfo:
 	ld bc,VGMHeader_qSoundName
 	jp VGMHeader_PrintClock
 
-VGMHeader_PrintClock:
+VGMHeader_PrintClock: PROC
 	ld a,d
 	or e
 	or h
@@ -571,7 +571,11 @@ VGMHeader_PrintClock:
 	ld l,c
 	ld h,b
 	call System_Print
+	bit 6,d
 	ld hl,VGMHeader_clockLabelInfix
+	jr z,Single
+	ld hl,VGMHeader_clockDualLabelInfix
+Single:
 	call System_Print
 	pop hl
 	res 7,d  ; clear flag bits
@@ -580,6 +584,7 @@ VGMHeader_PrintClock:
 	ld hl,VGMHeader_hz
 	call System_Print
 	ret
+	ENDP
 
 ; ix = this
 ; f <- nz: invalid identification
@@ -732,6 +737,9 @@ VGMHeader_qSoundName:
 
 VGMHeader_clockLabelInfix:
 	db ": ",0
+
+VGMHeader_clockDualLabelInfix:
+	db " x2: ",0
 
 VGMHeader_hz:
 	db " Hz",13,10,0
