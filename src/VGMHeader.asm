@@ -250,8 +250,8 @@ VGMHeader_PrintYM2610Info:
 	ld h,(ix + VGMHeader.ym2610BClock + 1)
 	ld e,(ix + VGMHeader.ym2610BClock + 2)
 	ld d,(ix + VGMHeader.ym2610BClock + 3)
-	ld bc,VGMHeader_ym2610Name
 	bit 7,d
+	ld bc,VGMHeader_ym2610Name
 	jp z,VGMHeader_PrintClock
 	res 7,d
 	ld bc,VGMHeader_ym2610bName
@@ -334,6 +334,28 @@ VGMHeader_PrintAY8910Info:
 	ld h,(ix + VGMHeader.ay8910Clock + 1)
 	ld e,(ix + VGMHeader.ay8910Clock + 2)
 	ld d,(ix + VGMHeader.ay8910Clock + 3)
+	ld a,(ix + VGMHeader.ay8910ChipType)
+	cp 10H
+	ld bc,VGMHeader_ym2149Name
+	jp z,VGMHeader_PrintClock
+	cp 11H
+	ld bc,VGMHeader_ym3439Name
+	jp z,VGMHeader_PrintClock
+	cp 12H
+	ld bc,VGMHeader_ymz284Name
+	jp z,VGMHeader_PrintClock
+	cp 13H
+	ld bc,VGMHeader_ymz294Name
+	jp z,VGMHeader_PrintClock
+	cp 1H
+	ld bc,VGMHeader_ay8912Name
+	jp z,VGMHeader_PrintClock
+	cp 2H
+	ld bc,VGMHeader_ay8913Name
+	jp z,VGMHeader_PrintClock
+	cp 3H
+	ld bc,VGMHeader_ay8930Name
+	jp z,VGMHeader_PrintClock
 	ld bc,VGMHeader_ay8910Name
 	jp VGMHeader_PrintClock
 
@@ -599,6 +621,27 @@ VGMHeader_pwmName:
 
 VGMHeader_ay8910Name:
 	db "AY-3-8910 (PSG)",0
+
+VGMHeader_ay8912Name:
+	db "AY-3-8912 (PSG)",0
+
+VGMHeader_ay8913Name:
+	db "AY-3-8913 (PSG)",0
+
+VGMHeader_ay8930Name:
+	db "AY8930 (EPSG)",0
+
+VGMHeader_ym2149Name:
+	db "YM2149 (SSG)",0
+
+VGMHeader_ym3439Name:
+	db "YM3439 (SSG)",0
+
+VGMHeader_ymz284Name:
+	db "YMZ284 (SSGL)",0
+
+VGMHeader_ymz294Name:
+	db "YMZ294 (SSG)",0
 
 VGMHeader_gameBoyDMGName:
 	db "Game Boy DMG",0
