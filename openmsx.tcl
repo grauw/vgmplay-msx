@@ -11,5 +11,4 @@ diskmanipulator format hda
 diskmanipulator import hda bin/
 
 set throttle off
-after time 14 "set throttle on"
-after time 12 "type \"vgmplay sorcer37.vgm\\r\""
+after time 13 "set throttle on"
