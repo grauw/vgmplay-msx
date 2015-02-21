@@ -146,7 +146,7 @@ VGMHeader_PrintVersion:
 	ld a,"."
 	call System_PrintChar
 	ld a,(ix + VGMHeader.version)
-	call System_PrintHexANoLeading0
+	call System_PrintHexA
 	call System_PrintCrLf
 	ret
 
@@ -192,7 +192,7 @@ VGMHeader_infoVersion:
 	db "Version: ",0
 
 VGMHeader_infoAY8910Clock:
-	db "AY-3-8910 clock: ",0
+	db "AY-3-8910: ",0
 
 VGMHeader_noVGMFile:
 	db "Not a VGM file.",13,10,0
