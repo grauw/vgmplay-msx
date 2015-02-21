@@ -134,6 +134,81 @@ System_NibbleToHexDigit:
 	daa
 	ret
 
+; dehl = value
+; Modifies: none
+System_PrintDecDEHL: PROC
+	push af
+	push bc
+	push de
+	push hl
+	push iy
+	ex de,hl
+	ld iyl,e
+	ld iyh,d
+	ld a,80H
+	ld bc,-1000000000 >> 16
+	ld de,-1000000000 & 0FFFFH
+	call Digit
+	ld bc,100000000 >> 16
+	ld de,100000000 & 0FFFFH
+	call DigitReverse
+	ld bc,-10000000 >> 16
+	ld de,-10000000 & 0FFFFH
+	call Digit
+	ld bc,1000000 >> 16
+	ld de,1000000 & 0FFFFH
+	call DigitReverse
+	ld bc,-100000 >> 16
+	ld de,-100000 & 0FFFFH
+	call Digit
+	ld bc,10000 >> 16
+	ld de,10000 & 0FFFFH
+	call DigitReverse
+	ld bc,-1000 >> 16
+	ld de,-1000 & 0FFFFH
+	call Digit
+	ld bc,100 >> 16
+	ld de,100 & 0FFFFH
+	call DigitReverse
+	ld bc,-10 >> 16
+	ld de,-10 & 0FFFFH
+	call Digit
+	ld bc,1 >> 16
+	ld de,1 & 0FFFFH
+	call DigitReverse
+	pop iy
+	pop hl
+	pop de
+	pop bc
+	pop af
+	ret
+Digit:
+	and 80H
+	or "0" - 1
+Loop:
+	inc a
+	add iy,de
+	adc hl,bc
+	jp c,Loop
+	jp Print
+DigitReverse:
+	and 80H
+	or "9" + 1
+LoopReverse:
+	dec a
+	add iy,de
+	adc hl,bc
+	jp nc,LoopReverse
+	jp Print
+Print:
+	and a
+	jp p,System_PrintChar
+	cp "0" + 80H
+	ret z
+	and 3FH
+	jp System_PrintChar
+	ENDP
+
 ; de = ASCIIZ string
 ; a <- length, excluding the terminator
 ; bc <- 0 - length, excluding the terminator

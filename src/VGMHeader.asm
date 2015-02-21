@@ -157,7 +157,7 @@ VGMHeader_PrintAY8910Clock:
 	ld h,(ix + VGMHeader.ay8910Clock + 1)
 	ld e,(ix + VGMHeader.ay8910Clock + 2)
 	ld d,(ix + VGMHeader.ay8910Clock + 3)
-	call System_PrintHexDEHL
+	call System_PrintDecDEHL
 	ld hl,VGMHeader_hz
 	call System_Print
 	ret
