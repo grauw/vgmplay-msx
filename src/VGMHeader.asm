@@ -300,7 +300,6 @@ VGMHeader_PrintYM2610Info:
 	bit 7,d
 	ld bc,VGMHeader_ym2610Name
 	jp z,VGMHeader_PrintClock
-	res 7,d
 	ld bc,VGMHeader_ym2610bName
 	jp VGMHeader_PrintClock
 
@@ -575,6 +574,8 @@ VGMHeader_PrintClock:
 	ld hl,VGMHeader_clockLabelInfix
 	call System_Print
 	pop hl
+	res 7,d  ; clear flag bits
+	res 6,d
 	call System_PrintDecDEHL
 	ld hl,VGMHeader_hz
 	call System_Print
