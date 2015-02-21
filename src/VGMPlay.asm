@@ -60,6 +60,7 @@ VGMPlay_EnterMainLoop:
 	call VGMPlay_OpenFile
 	call VGMPlay_ReadHeader
 	call VGMPlay_ShowInfo
+	call VGMPlay_ReadData
 	call VGMPlay_CloseFile
 
 	call VGMPlay_MainLoop
@@ -118,7 +119,10 @@ VGMPlay_ShowInfo:
 	ret
 
 VGMPlay_ReadData:
+	push ix
+	call VGMPlay_GetHeader
 	call VGMHeader_GetDataOffset
+	pop ix
 	ld a,0
 	ld b,(ix + VGMPlay.fileHandle)
 	ld c,_SEEK
