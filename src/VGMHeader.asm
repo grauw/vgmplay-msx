@@ -135,7 +135,7 @@ VGMHeader_Process:
 	call VGMHeader_CheckID
 	jp nz,VGMHeader_ThrowNoVGMFileError
 	call VGMHeader_PrintVersion
-	call VGMHeader_PrintAY8910Clock
+	call VGMHeader_PrintAY8910Info
 	ret
 
 VGMHeader_PrintVersion:
@@ -150,13 +150,27 @@ VGMHeader_PrintVersion:
 	call System_PrintCrLf
 	ret
 
-VGMHeader_PrintAY8910Clock:
-	ld hl,VGMHeader_infoAY8910Clock
-	call System_Print
+VGMHeader_PrintAY8910Info:
 	ld l,(ix + VGMHeader.ay8910Clock)
 	ld h,(ix + VGMHeader.ay8910Clock + 1)
 	ld e,(ix + VGMHeader.ay8910Clock + 2)
 	ld d,(ix + VGMHeader.ay8910Clock + 3)
+	ld bc,VGMHeader_ay8910Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintClock:
+	ld a,d
+	or e
+	or h
+	or l
+	ret z
+	push hl
+	ld l,c
+	ld h,b
+	call System_Print
+	ld hl,VGMHeader_clockLabelInfix
+	call System_Print
+	pop hl
 	call System_PrintDecDEHL
 	ld hl,VGMHeader_hz
 	call System_Print
@@ -191,13 +205,16 @@ VGMHeader_instance: VGMHeader
 VGMHeader_versionLabel:
 	db "Version: ",0
 
-VGMHeader_infoAY8910Clock:
-	db "AY-3-8910: ",0
+VGMHeader_ay8910Name:
+	db "AY-3-8910",0
 
-VGMHeader_noVGMFile:
-	db "Not a VGM file.",13,10,0
+VGMHeader_clockLabelInfix:
+	db ": ",0
 
 VGMHeader_hz:
 	db " Hz",13,10,0
+
+VGMHeader_noVGMFile:
+	db "Not a VGM file.",13,10,0
 
 	ENDS
