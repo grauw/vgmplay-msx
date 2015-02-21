@@ -128,7 +128,54 @@ VGMHeader: MACRO
 ; ix = this
 ; ix <- this
 VGMHeader_Constructor:
+	call VGMHeader_ClearPastDataOffset
 	ret
+
+; ix = this
+VGMHeader_ClearPastDataOffset:
+	call VGMHeader_GetDataOffset
+	ld a,d
+	or e
+	or h
+	ret nz
+	ld a,l
+	ld c,ixl
+	ld b,ixh
+	add hl,bc
+	ld (hl),0
+	neg
+	dec a
+	ret z
+	ld c,a
+	ld b,0
+	ld e,l
+	ld d,h
+	inc de
+	ldir
+	ret
+
+; ix = this
+; dehl <- VGM data offset
+VGMHeader_GetDataOffset: PROC
+	ld h,(ix + VGMHeader.version + 1)
+	ld l,(ix + VGMHeader.version)
+	ld bc,-150H
+	add hl,bc
+	jp nc,Pre1_50
+	ld l,(ix + VGMHeader.vgmDataOffset)
+	ld h,(ix + VGMHeader.vgmDataOffset + 1)
+	ld e,(ix + VGMHeader.vgmDataOffset + 2)
+	ld d,(ix + VGMHeader.vgmDataOffset + 3)
+	ld bc,34H
+	add hl,bc
+	ret nc
+	inc de
+	ret
+Pre1_50:
+	ld de,0
+	ld hl,40H
+	ret
+	ENDP
 
 ; ix = this
 VGMHeader_Process:
