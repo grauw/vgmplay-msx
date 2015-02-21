@@ -47,8 +47,7 @@ VGMPlay_EnterMainLoop:
 	call System_PrintCrLf
 	push ix
 	ld ix,VGMHeader_instance
-	call VGMHeader_Constructor
-	call VGMHeader_Process
+	call VGMHeader_ShowInfo
 	pop ix
 	call VGMPlay_CloseFile
 
@@ -93,6 +92,10 @@ VGMPlay_ReadHeader:
 	ld c,_READ
 	call BDOS
 	call VGMPlay_CheckDOSError
+	push ix
+	ld ix,VGMHeader_instance
+	call VGMHeader_Constructor
+	pop ix
 	ret
 
 VGMPlay_CloseFile:

@@ -128,6 +128,8 @@ VGMHeader: MACRO
 ; ix = this
 ; ix <- this
 VGMHeader_Constructor:
+	call VGMHeader_CheckID
+	jp nz,VGMHeader_ThrowNoVGMFileError
 	call VGMHeader_ClearPastDataOffset
 	ret
 
@@ -178,9 +180,7 @@ Pre1_50:
 	ENDP
 
 ; ix = this
-VGMHeader_Process:
-	call VGMHeader_CheckID
-	jp nz,VGMHeader_ThrowNoVGMFileError
+VGMHeader_ShowInfo:
 	call VGMHeader_PrintVersion
 	call VGMHeader_PrintSN76489Info
 	call VGMHeader_PrintYM2413Info
