@@ -135,7 +135,38 @@ VGMHeader_Process:
 	call VGMHeader_CheckID
 	jp nz,VGMHeader_ThrowNoVGMFileError
 	call VGMHeader_PrintVersion
+	call VGMHeader_PrintSN76489Info
+	call VGMHeader_PrintYM2413Info
+	call VGMHeader_PrintYM2612Info
+	call VGMHeader_PrintYM2151Info
+	call VGMHeader_PrintSegaPCMInfo
+	call VGMHeader_PrintRF5C68Info
+	call VGMHeader_PrintYM2203Info
+	call VGMHeader_PrintYM2608Info
+	call VGMHeader_PrintYM2610Info
+	call VGMHeader_PrintYM3812Info
+	call VGMHeader_PrintYM3526Info
+	call VGMHeader_PrintY8950Info
+	call VGMHeader_PrintYMF262Info
+	call VGMHeader_PrintYMF278BInfo
+	call VGMHeader_PrintYMF271Info
+	call VGMHeader_PrintYMZ280BInfo
+	call VGMHeader_PrintRF5C164Info
+	call VGMHeader_PrintPWMInfo
 	call VGMHeader_PrintAY8910Info
+	call VGMHeader_PrintGameBoyDMGInfo
+	call VGMHeader_PrintNESAPUInfo
+	call VGMHeader_PrintMultiPCMInfo
+	call VGMHeader_PrintUPD7759Info
+	call VGMHeader_PrintOKIM6258Info
+	call VGMHeader_PrintOKIM6295Info
+	call VGMHeader_PrintK051649Info
+	call VGMHeader_PrintK054539Info
+	call VGMHeader_PrintHuC6280Info
+	call VGMHeader_PrintC140Info
+	call VGMHeader_PrintK053260Info
+	call VGMHeader_PrintPokeyInfo
+	call VGMHeader_PrintQSoundInfo
 	ret
 
 VGMHeader_PrintVersion:
@@ -150,12 +181,316 @@ VGMHeader_PrintVersion:
 	call System_PrintCrLf
 	ret
 
+VGMHeader_PrintSN76489Info:
+	ld l,(ix + VGMHeader.sn76489Clock)
+	ld h,(ix + VGMHeader.sn76489Clock + 1)
+	ld e,(ix + VGMHeader.sn76489Clock + 2)
+	ld d,(ix + VGMHeader.sn76489Clock + 3)
+	ld bc,VGMHeader_sn76489Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM2413Info:
+	ld l,(ix + VGMHeader.ym2413Clock)
+	ld h,(ix + VGMHeader.ym2413Clock + 1)
+	ld e,(ix + VGMHeader.ym2413Clock + 2)
+	ld d,(ix + VGMHeader.ym2413Clock + 3)
+	ld bc,VGMHeader_ym2413Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM2612Info:
+	ld l,(ix + VGMHeader.ym2612Clock)
+	ld h,(ix + VGMHeader.ym2612Clock + 1)
+	ld e,(ix + VGMHeader.ym2612Clock + 2)
+	ld d,(ix + VGMHeader.ym2612Clock + 3)
+	ld bc,VGMHeader_ym2612Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM2151Info:
+	ld l,(ix + VGMHeader.ym2151Clock)
+	ld h,(ix + VGMHeader.ym2151Clock + 1)
+	ld e,(ix + VGMHeader.ym2151Clock + 2)
+	ld d,(ix + VGMHeader.ym2151Clock + 3)
+	ld bc,VGMHeader_ym2151Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintSegaPCMInfo:
+	ld l,(ix + VGMHeader.segaPCMClock)
+	ld h,(ix + VGMHeader.segaPCMClock + 1)
+	ld e,(ix + VGMHeader.segaPCMClock + 2)
+	ld d,(ix + VGMHeader.segaPCMClock + 3)
+	ld bc,VGMHeader_segaPCMName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintRF5C68Info:
+	ld l,(ix + VGMHeader.rf5c68Clock)
+	ld h,(ix + VGMHeader.rf5c68Clock + 1)
+	ld e,(ix + VGMHeader.rf5c68Clock + 2)
+	ld d,(ix + VGMHeader.rf5c68Clock + 3)
+	ld bc,VGMHeader_rf5c68Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM2203Info:
+	ld l,(ix + VGMHeader.ym2203Clock)
+	ld h,(ix + VGMHeader.ym2203Clock + 1)
+	ld e,(ix + VGMHeader.ym2203Clock + 2)
+	ld d,(ix + VGMHeader.ym2203Clock + 3)
+	ld bc,VGMHeader_ym2203Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM2608Info:
+	ld l,(ix + VGMHeader.ym2608Clock)
+	ld h,(ix + VGMHeader.ym2608Clock + 1)
+	ld e,(ix + VGMHeader.ym2608Clock + 2)
+	ld d,(ix + VGMHeader.ym2608Clock + 3)
+	ld bc,VGMHeader_ym2608Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM2610Info:
+	ld l,(ix + VGMHeader.ym2610BClock)
+	ld h,(ix + VGMHeader.ym2610BClock + 1)
+	ld e,(ix + VGMHeader.ym2610BClock + 2)
+	ld d,(ix + VGMHeader.ym2610BClock + 3)
+	ld bc,VGMHeader_ym2610Name
+	bit 7,d
+	jp z,VGMHeader_PrintClock
+	res 7,d
+	ld bc,VGMHeader_ym2610bName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM3812Info:
+	ld l,(ix + VGMHeader.ym3812Clock)
+	ld h,(ix + VGMHeader.ym3812Clock + 1)
+	ld e,(ix + VGMHeader.ym3812Clock + 2)
+	ld d,(ix + VGMHeader.ym3812Clock + 3)
+	ld bc,VGMHeader_ym3812Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYM3526Info:
+	ld l,(ix + VGMHeader.ym3526Clock)
+	ld h,(ix + VGMHeader.ym3526Clock + 1)
+	ld e,(ix + VGMHeader.ym3526Clock + 2)
+	ld d,(ix + VGMHeader.ym3526Clock + 3)
+	ld bc,VGMHeader_ym3526Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintY8950Info:
+	ld l,(ix + VGMHeader.y8950Clock)
+	ld h,(ix + VGMHeader.y8950Clock + 1)
+	ld e,(ix + VGMHeader.y8950Clock + 2)
+	ld d,(ix + VGMHeader.y8950Clock + 3)
+	ld bc,VGMHeader_y8950Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYMF262Info:
+	ld l,(ix + VGMHeader.ymf262Clock)
+	ld h,(ix + VGMHeader.ymf262Clock + 1)
+	ld e,(ix + VGMHeader.ymf262Clock + 2)
+	ld d,(ix + VGMHeader.ymf262Clock + 3)
+	ld bc,VGMHeader_ymf262Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYMF278BInfo:
+	ld l,(ix + VGMHeader.ymf278bClock)
+	ld h,(ix + VGMHeader.ymf278bClock + 1)
+	ld e,(ix + VGMHeader.ymf278bClock + 2)
+	ld d,(ix + VGMHeader.ymf278bClock + 3)
+	ld bc,VGMHeader_ymf278bName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYMF271Info:
+	ld l,(ix + VGMHeader.ymf271Clock)
+	ld h,(ix + VGMHeader.ymf271Clock + 1)
+	ld e,(ix + VGMHeader.ymf271Clock + 2)
+	ld d,(ix + VGMHeader.ymf271Clock + 3)
+	ld bc,VGMHeader_ymf271Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintYMZ280BInfo:
+	ld l,(ix + VGMHeader.ymz280bClock)
+	ld h,(ix + VGMHeader.ymz280bClock + 1)
+	ld e,(ix + VGMHeader.ymz280bClock + 2)
+	ld d,(ix + VGMHeader.ymz280bClock + 3)
+	ld bc,VGMHeader_ymz280bName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintRF5C164Info:
+	ld l,(ix + VGMHeader.rf5c164Clock)
+	ld h,(ix + VGMHeader.rf5c164Clock + 1)
+	ld e,(ix + VGMHeader.rf5c164Clock + 2)
+	ld d,(ix + VGMHeader.rf5c164Clock + 3)
+	ld bc,VGMHeader_rf5c164Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintPWMInfo:
+	ld l,(ix + VGMHeader.pwmClock)
+	ld h,(ix + VGMHeader.pwmClock + 1)
+	ld e,(ix + VGMHeader.pwmClock + 2)
+	ld d,(ix + VGMHeader.pwmClock + 3)
+	ld bc,VGMHeader_pwmName
+	jp VGMHeader_PrintClock
+
 VGMHeader_PrintAY8910Info:
 	ld l,(ix + VGMHeader.ay8910Clock)
 	ld h,(ix + VGMHeader.ay8910Clock + 1)
 	ld e,(ix + VGMHeader.ay8910Clock + 2)
 	ld d,(ix + VGMHeader.ay8910Clock + 3)
 	ld bc,VGMHeader_ay8910Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintGameBoyDMGInfo:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.gameBoyDMGClock - 80H)
+	ld h,(ix + VGMHeader.gameBoyDMGClock - 80H + 1)
+	ld e,(ix + VGMHeader.gameBoyDMGClock - 80H + 2)
+	ld d,(ix + VGMHeader.gameBoyDMGClock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_gameBoyDMGName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintNESAPUInfo:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.nesAPUClock - 80H)
+	ld h,(ix + VGMHeader.nesAPUClock - 80H + 1)
+	ld e,(ix + VGMHeader.nesAPUClock - 80H + 2)
+	ld d,(ix + VGMHeader.nesAPUClock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_nesAPUName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintMultiPCMInfo:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.multiPCMClock - 80H)
+	ld h,(ix + VGMHeader.multiPCMClock - 80H + 1)
+	ld e,(ix + VGMHeader.multiPCMClock - 80H + 2)
+	ld d,(ix + VGMHeader.multiPCMClock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_multiPCMName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintUPD7759Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.uPD7759Clock - 80H)
+	ld h,(ix + VGMHeader.uPD7759Clock - 80H + 1)
+	ld e,(ix + VGMHeader.uPD7759Clock - 80H + 2)
+	ld d,(ix + VGMHeader.uPD7759Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_uPD7759Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintOKIM6258Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.okiM6258Clock - 80H)
+	ld h,(ix + VGMHeader.okiM6258Clock - 80H + 1)
+	ld e,(ix + VGMHeader.okiM6258Clock - 80H + 2)
+	ld d,(ix + VGMHeader.okiM6258Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_okiM6258Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintOKIM6295Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.okiM6295Clock - 80H)
+	ld h,(ix + VGMHeader.okiM6295Clock - 80H + 1)
+	ld e,(ix + VGMHeader.okiM6295Clock - 80H + 2)
+	ld d,(ix + VGMHeader.okiM6295Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_okiM6295Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintK051649Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.k051649Clock - 80H)
+	ld h,(ix + VGMHeader.k051649Clock - 80H + 1)
+	ld e,(ix + VGMHeader.k051649Clock - 80H + 2)
+	ld d,(ix + VGMHeader.k051649Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_k051649Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintK054539Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.k054539Clock - 80H)
+	ld h,(ix + VGMHeader.k054539Clock - 80H + 1)
+	ld e,(ix + VGMHeader.k054539Clock - 80H + 2)
+	ld d,(ix + VGMHeader.k054539Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_k054539Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintHuC6280Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.huC6280Clock - 80H)
+	ld h,(ix + VGMHeader.huC6280Clock - 80H + 1)
+	ld e,(ix + VGMHeader.huC6280Clock - 80H + 2)
+	ld d,(ix + VGMHeader.huC6280Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_huC6280Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintC140Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.c140Clock - 80H)
+	ld h,(ix + VGMHeader.c140Clock - 80H + 1)
+	ld e,(ix + VGMHeader.c140Clock - 80H + 2)
+	ld d,(ix + VGMHeader.c140Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_c140Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintK053260Info:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.k053260Clock - 80H)
+	ld h,(ix + VGMHeader.k053260Clock - 80H + 1)
+	ld e,(ix + VGMHeader.k053260Clock - 80H + 2)
+	ld d,(ix + VGMHeader.k053260Clock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_k053260Name
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintPokeyInfo:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.pokeyClock - 80H)
+	ld h,(ix + VGMHeader.pokeyClock - 80H + 1)
+	ld e,(ix + VGMHeader.pokeyClock - 80H + 2)
+	ld d,(ix + VGMHeader.pokeyClock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_pokeyName
+	jp VGMHeader_PrintClock
+
+VGMHeader_PrintQSoundInfo:
+	push ix
+	ld de,80H
+	add ix,de
+	ld l,(ix + VGMHeader.qSoundClock - 80H)
+	ld h,(ix + VGMHeader.qSoundClock - 80H + 1)
+	ld e,(ix + VGMHeader.qSoundClock - 80H + 2)
+	ld d,(ix + VGMHeader.qSoundClock - 80H + 3)
+	pop ix
+	ld bc,VGMHeader_qSoundName
 	jp VGMHeader_PrintClock
 
 VGMHeader_PrintClock:
@@ -205,8 +540,104 @@ VGMHeader_instance: VGMHeader
 VGMHeader_versionLabel:
 	db "Version: ",0
 
+VGMHeader_sn76489Name:
+	db "SN76489",0
+
+VGMHeader_ym2413Name:
+	db "YM2413",0
+
+VGMHeader_ym2612Name:
+	db "YM2612",0
+
+VGMHeader_ym2151Name:
+	db "YM2151",0
+
+VGMHeader_segaPCMName:
+	db "Sega PCM",0
+
+VGMHeader_rf5c68Name:
+	db "RF5C68",0
+
+VGMHeader_ym2203Name:
+	db "YM2203",0
+
+VGMHeader_ym2608Name:
+	db "YM2608",0
+
+VGMHeader_ym2610Name:
+	db "YM2610",0
+
+VGMHeader_ym2610bName:
+	db "YM2610B",0
+
+VGMHeader_ym3812Name:
+	db "YM3812",0
+
+VGMHeader_ym3526Name:
+	db "YM3526",0
+
+VGMHeader_y8950Name:
+	db "Y8950",0
+
+VGMHeader_ymf262Name:
+	db "YMF262",0
+
+VGMHeader_ymf278bName:
+	db "YMF278B",0
+
+VGMHeader_ymf271Name:
+	db "YMF271",0
+
+VGMHeader_ymz280bName:
+	db "YMZ280B",0
+
+VGMHeader_rf5c164Name:
+	db "RF5C164",0
+
+VGMHeader_pwmName:
+	db "PWM",0
+
 VGMHeader_ay8910Name:
 	db "AY-3-8910",0
+
+VGMHeader_gameBoyDMGName:
+	db "Game Boy DMG",0
+
+VGMHeader_nesAPUName:
+	db "NES APU",0
+
+VGMHeader_multiPCMName:
+	db "MultiPCM",0
+
+VGMHeader_uPD7759Name:
+	db "uPD7759",0
+
+VGMHeader_okiM6258Name:
+	db "OKI M6258",0
+
+VGMHeader_okiM6295Name:
+	db "OKI M6295",0
+
+VGMHeader_k051649Name:
+	db "K051649",0
+
+VGMHeader_k054539Name:
+	db "K054539",0
+
+VGMHeader_huC6280Name:
+	db "HuC6280",0
+
+VGMHeader_c140Name:
+	db "C140",0
+
+VGMHeader_k053260Name:
+	db "K053260",0
+
+VGMHeader_pokeyName:
+	db "Pokey",0
+
+VGMHeader_qSoundName:
+	db "QSound",0
 
 VGMHeader_clockLabelInfix:
 	db ": ",0
