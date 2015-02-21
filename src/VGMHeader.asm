@@ -158,7 +158,7 @@ VGMHeader_PrintAY8910Clock:
 	ld e,(ix + VGMHeader.ay8910Clock + 2)
 	ld d,(ix + VGMHeader.ay8910Clock + 3)
 	call System_PrintHexDEHL
-	ld hl,VGMHeader_mhz
+	ld hl,VGMHeader_hz
 	call System_Print
 	ret
 
@@ -197,7 +197,7 @@ VGMHeader_infoAY8910Clock:
 VGMHeader_noVGMFile:
 	db "Not a VGM file.",13,10,0
 
-VGMHeader_mhz:
-	db " MHz",13,10,0
+VGMHeader_hz:
+	db " Hz",13,10,0
 
 	ENDS
