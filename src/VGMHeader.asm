@@ -129,7 +129,8 @@ VGMHeader: MACRO
 ; ix <- this
 VGMHeader_Constructor:
 	call VGMHeader_CheckID
-	jp nz,VGMHeader_ThrowNoVGMFileError
+	ld hl,VGMHeader_noVGMFileError
+	call nz,VGMPlay_ThrowWithMessage
 	call VGMHeader_ClearPastDataOffset
 	ret
 
@@ -602,11 +603,6 @@ VGMHeader_CheckID:
 	cp " "
 	ret
 
-VGMHeader_ThrowNoVGMFileError:
-	ld hl,VGMHeader_noVGMFile
-	call System_Print
-	jp REBOOT
-
 ;
 	SECTION RAM
 
@@ -744,7 +740,7 @@ VGMHeader_clockDualLabelInfix:
 VGMHeader_hz:
 	db " Hz",13,10,0
 
-VGMHeader_noVGMFile:
+VGMHeader_noVGMFileError:
 	db "Not a VGM file.",13,10,0
 
 	ENDS

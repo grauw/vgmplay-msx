@@ -15,7 +15,8 @@ VGMPlay: MACRO
 ;
 VGMPlay_Main:
 	call DOS_IsDOS2
-	jp c,VGMPlay_ThrowDOS2RequiredError
+	ld hl,VGMPlay_dos2RequiredError
+	call c,VGMPlay_ThrowWithMessage
 
 	ld hl,VGMPlay_welcome
 	call System_Print
@@ -70,7 +71,8 @@ Loop:
 	inc de
 	ld a,(de)
 	and a
-	jp z,VGMPlay_ThrowInvalidFilenameError
+	ld hl,VGMPlay_invalidFilenameError
+	call z,VGMPlay_ThrowWithMessage
 	cp " "
 	jr z,Loop
 	push de
@@ -173,16 +175,6 @@ VGMPlay_GetHighResTimerValue:
 	ld h,a
 	ret
 
-VGMPlay_ThrowDOS2RequiredError:
-	ld hl,VGMPlay_dos2Required
-	call System_Print
-	jp REBOOT
-
-VGMPlay_ThrowInvalidFilenameError:
-	ld hl,VGMPlay_invalidFilename
-	call System_Print
-	jp REBOOT
-
 ; a <- DOS error code
 VGMPlay_CheckDOSError:
 	and a
@@ -193,6 +185,10 @@ VGMPlay_ThrowDOSError:
 	ld de,VGMPlay_explainBuffer
 	call BDOS
 	ld hl,VGMPlay_explainBuffer
+	jp VGMPlay_ThrowWithMessage
+
+; hl <- message
+VGMPlay_ThrowWithMessage:
 	call System_Print
 	jp REBOOT
 
@@ -210,10 +206,10 @@ VGMPlay_loadingFile:
 VGMPlay_dotDotDot:
 	db "...",13,10,0
 
-VGMPlay_dos2Required:
+VGMPlay_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
 
-VGMPlay_invalidFilename:
+VGMPlay_invalidFilenameError:
 	db "Invalid file name.",13,10,0
 
 VGMPlay_explainBuffer:
