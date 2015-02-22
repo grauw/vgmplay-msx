@@ -5,7 +5,7 @@ VGMPlay: MACRO
 	fileHandle:
 		db 0
 	header:
-		dw VGMHeader_instance
+		dw Header_instance
 	reader:
 		dw DataReader_instance
 	player:
@@ -128,7 +128,7 @@ VGMPlay_ReadHeader:
 	ld c,_READ
 	call BDOS
 	call VGMPlay_CheckDOSError
-	call VGMHeader_Constructor
+	call Header_Constructor
 	pop ix
 	ret
 
@@ -136,14 +136,14 @@ VGMPlay_ShowInfo:
 	call System_PrintCrLf
 	push ix
 	call VGMPlay_GetHeader
-	call VGMHeader_ShowInfo
+	call Header_ShowInfo
 	pop ix
 	ret
 
 VGMPlay_ReadData:
 	push ix
 	call VGMPlay_GetHeader
-	call VGMHeader_GetDataOffset
+	call Header_GetDataOffset
 	pop ix
 	ld a,0
 	ld b,(ix + VGMPlay.fileHandle)

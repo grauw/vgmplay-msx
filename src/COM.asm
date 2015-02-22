@@ -26,7 +26,7 @@ COM_Main:
 	INCLUDE "DOS.asm"
 	INCLUDE "BIOS.asm"
 	INCLUDE "VGMPlay.asm"
-	INCLUDE "VGMHeader.asm"
+	INCLUDE "Header.asm"
 	INCLUDE "DataReader.asm"
 	INCLUDE "Player.asm"
 	INCLUDE "System.asm"
