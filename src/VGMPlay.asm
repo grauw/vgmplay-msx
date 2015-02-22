@@ -2,8 +2,6 @@
 ; Top-level VGMPlay program class
 ;
 VGMPlay: MACRO
-	fileHandle:
-		db 0
 	header:
 		dw Header_instance
 	reader:
@@ -96,15 +94,15 @@ VGMPlay_GetSFG:
 
 ; ix = this
 VGMPlay_EnterMainLoop:
-	call VGMPlay_OpenFile
+	call VGMPlay_LoadFile
 	call VGMPlay_ReadHeader
 	call VGMPlay_ShowInfo
-	call VGMPlay_ReadData
-	call VGMPlay_CloseFile
 	call VGMPlay_Play
 	ret
 
-VGMPlay_OpenFile: PROC
+; ix = this
+VGMPlay_LoadFile: PROC
+	push ix
 	ld de,DTA
 Loop:
 	inc de
@@ -121,33 +119,35 @@ Loop:
 	ld (de),a
 	ld hl,VGMPlay_loadingFile
 	call System_Print
-	pop de
-	push de
-	ex de,hl
+	pop hl
+	push hl
 	call System_Print
 	ld hl,VGMPlay_dotDotDot
 	call System_Print
-	pop de
-	ld a,00000001B  ; read-only
-	ld c,_OPEN
-	call BDOS
-	call VGMPlay_CheckDOSError
-	ld (ix + VGMPlay.fileHandle),b
+	call VGMPlay_GetReader
+	pop hl
+	call DataReader_Constructor
+	pop ix
 	ret
 	ENDP
 
+; ix = this
 VGMPlay_ReadHeader:
-	ld b,(ix + VGMPlay.fileHandle)
+	push ix
+	ld bc,256
+	ld l,(ix + VGMPlay.header)
+	ld h,(ix + VGMPlay.header + 1)
+	call VGMPlay_GetReader
+	ex de,hl
+	call DataReader_ReadBlock
+	pop ix
 	push ix
 	call VGMPlay_GetHeader
-	ld hl,256
-	ld c,_READ
-	call BDOS
-	call VGMPlay_CheckDOSError
 	call Header_Constructor
 	pop ix
 	ret
 
+; ix = this
 VGMPlay_ShowInfo:
 	call System_PrintCrLf
 	push ix
@@ -156,44 +156,25 @@ VGMPlay_ShowInfo:
 	pop ix
 	ret
 
-VGMPlay_ReadData:
-	push ix
-	call VGMPlay_GetHeader
-	call Header_GetDataOffset
-	pop ix
-	ld a,0
-	ld b,(ix + VGMPlay.fileHandle)
-	ld c,_SEEK
-	call BDOS
-	call VGMPlay_CheckDOSError
-	ld hl,9000H
-	ld de,DATA
-	ld b,(ix + VGMPlay.fileHandle)
-	ld c,_READ
-	call BDOS
-	call VGMPlay_CheckDOSError
-	push ix
-	call VGMPlay_GetReader
-	ld c,l
-	ld b,h
-	ld hl,DATA
-	call DataReader_Constructor
-	pop ix
-	ret
-
-VGMPlay_CloseFile:
-	ld b,(ix + VGMPlay.fileHandle)
-	ld c,_CLOSE
-	call BDOS
-	call VGMPlay_CheckDOSError
-	ret
-
+; ix = this
 VGMPlay_Play:
 	ld hl,VGMPlay_playing
 	call System_Print
 	push ix
+	call VGMPlay_GetHeader
+	call Header_GetDataOffset
+	pop ix
+	push ix
+	push de
+	call VGMPlay_GetReader
+	pop de
+	call DataReader_SetPosition
+	pop ix
+	push ix
+	ld l,(ix + VGMPlay.reader)
+	ld h,(ix + VGMPlay.reader + 1)
 	call VGMPlay_GetPlayer
-	ld de,DataReader_instance
+	ex de,hl
 	call Player_Constructor
 	call Player_Play
 	pop ix
