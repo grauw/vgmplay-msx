@@ -9,7 +9,7 @@ Project information
 Author: Laurens Holst <laurens.nospam@grauw.nl>  
 Site: <https://bitbucket.org/grauw/vgmplay>  
 Issues: <https://bitbucket.org/grauw/vgmplay/issues>  
-Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>
+Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>  
 License: Simplified BSD License
 
 Plays back VGM music files on MSX on the appropriate or emulated sound chips.
