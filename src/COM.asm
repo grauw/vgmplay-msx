@@ -25,15 +25,15 @@ COM_Main:
 
 	INCLUDE "DOS.asm"
 	INCLUDE "BIOS.asm"
-	INCLUDE "VGMPlay.asm"
-	INCLUDE "Header.asm"
-	INCLUDE "DataReader.asm"
-	INCLUDE "Player.asm"
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
 	INCLUDE "Mapper.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
+	INCLUDE "VGMPlay.asm"
+	INCLUDE "Header.asm"
+	INCLUDE "DataReader.asm"
+	INCLUDE "Player.asm"
 	INCLUDE "SFG.asm"
 
 	ENDS
