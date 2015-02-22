@@ -217,6 +217,10 @@ Player_EndOfSoundData:
 	out (0A0H),a
 	ld a,0B8H
 	out (0A1H),a
+	push ix
+	ld ix,SFG_instance
+	call SFG_Reset
+	pop ix
 	jp REBOOT
 	ret
 

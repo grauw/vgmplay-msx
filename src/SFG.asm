@@ -90,6 +90,42 @@ MaskCT:
 	ret
 	ENDP
 
+; ix = this
+SFG_Reset:
+	call SFG_AllNotesOff
+	call SFG_Mute
+	ret
+
+; ix = this
+SFG_AllNotesOff: PROC
+	ld b,8
+	ld hl,0008H
+Loop:
+	push bc
+	push hl
+	call SFG_WriteRegister
+	pop hl
+	pop bc
+	inc h
+	djnz Loop
+	ret
+	ENDP
+
+; ix = this
+SFG_Mute: PROC
+	ld b,32
+	ld hl,7F60H
+Loop:
+	push bc
+	push hl
+	call SFG_WriteRegister
+	pop hl
+	pop bc
+	inc l
+	djnz Loop
+	ret
+	ENDP
+
 ;
 ; Detect MIDI interface
 ;
