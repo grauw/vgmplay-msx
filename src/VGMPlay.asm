@@ -224,7 +224,9 @@ VGMPlay_TerminateWithDOSError:
 	ld de,VGMPlay_explainBuffer
 	call BDOS
 	ld hl,VGMPlay_explainBuffer
-	jp VGMPlay_TerminateWithError
+	call System_Print
+	call System_PrintCrLf
+	jp REBOOT
 
 ; hl <- message
 VGMPlay_TerminateWithError:
