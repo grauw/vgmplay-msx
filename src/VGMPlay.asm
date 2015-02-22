@@ -215,7 +215,7 @@ VGMPlay_ThrowWithMessage:
 VGMPlay_instance: VGMPlay
 
 VGMPlay_welcome:
-	db "VGMPlay 0.1",13,10,10,0
+	db "VGMPlay 0.1 by Grauw",13,10,10,0
 
 VGMPlay_loadingFile:
 	db "Loading ",0
