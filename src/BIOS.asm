@@ -2,6 +2,7 @@
 ; BIOS symbols
 ;
 RDSLT: equ 0CH
+WRSLT: equ 14H
 CALSLT: equ 1CH
 IDBYT0: equ 2BH
 IDBYT1: equ 2CH

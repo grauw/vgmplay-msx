@@ -3,9 +3,12 @@
 ;
 ; The SFG module uses the YM2151.
 ;
-SFG01_DATA: equ 3FF5H
-SFG01_STATUS: equ 3FF6H
-SFG01_COMMAND: equ 3FF6H
+SFG01_YM2151_STATUS: equ 3FF0H
+SFG01_YM2151_ADDRESS: equ 3FF0H
+SFG01_YM2151_DATA: equ 3FF1H
+SFG01_UART_DATA: equ 3FF5H
+SFG01_UART_STATUS: equ 3FF6H
+SFG01_UART_COMMAND: equ 3FF6H
 SFG01_ID_ADDRESS: equ 80H
 
 SFG01: MACRO
@@ -42,6 +45,22 @@ SFG01_SetSlot:
 	call Memory_PrepareSlotPage0
 	ld (ix + SFG01.preparedSlot),e
 	ld (ix + SFG01.preparedSlot + 1),d
+	ret
+
+; ix = this
+; l = register
+; h = value
+SFG01_WriteRegister:
+	push hl
+	ld e,l
+	ld a,(ix + SFG01.slot)
+	ld hl,SFG01_YM2151_ADDRESS
+	call WRSLT
+	pop hl
+	ld e,h
+	ld a,(ix + SFG01.slot)
+	ld hl,SFG01_YM2151_DATA
+	call WRSLT
 	ret
 
 ;

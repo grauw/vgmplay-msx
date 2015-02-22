@@ -171,6 +171,15 @@ Player_GetKeyRow:
 	ret
 
 ; ix = this
+Player_YM2151Write:
+	call Player_ReadWord
+	push ix
+	ld ix,SFG01_instance
+	call SFG01_WriteRegister
+	pop ix
+	ret
+
+; ix = this
 Player_AY8910Write: PROC
 	call Player_ReadWord
 	ld a,l
@@ -411,7 +420,7 @@ Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 51H
 	dw Player_UnsupportedCommand  ; 52H
 	dw Player_UnsupportedCommand  ; 53H
-	dw Player_UnsupportedCommand  ; 54H
+	dw Player_YM2151Write         ; 54H
 	dw Player_UnsupportedCommand  ; 55H
 	dw Player_UnsupportedCommand  ; 56H
 	dw Player_UnsupportedCommand  ; 57H

@@ -11,7 +11,7 @@ VGMPlay: MACRO
 	player:
 		dw Player_instance
 	sfg:
-		dw 0
+		dw SFG01_instance
 	size:
 	ENDM
 
@@ -46,6 +46,10 @@ VGMPlay_Main:
 ; ix = this
 ; ix <- this
 VGMPlay_Constructor:
+	push ix
+	call VGMPlay_GetSFG
+	call SFG01_Install
+	pop ix
 	ret
 
 ; ix = this
@@ -74,6 +78,16 @@ VGMPlay_GetReader:
 VGMPlay_GetPlayer:
 	ld e,(ix + VGMPlay.player)
 	ld d,(ix + VGMPlay.player + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- VGM header
+; ix <- VGM header
+VGMPlay_GetSFG:
+	ld e,(ix + VGMPlay.sfg)
+	ld d,(ix + VGMPlay.sfg + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
