@@ -175,8 +175,8 @@ Player_GetKeyRow:
 Player_YM2151Write:
 	call Player_ReadWord
 	push ix
-	ld ix,SFG01_instance
-	call SFG01_SafeWriteRegister
+	ld ix,SFG_instance
+	call SFG_SafeWriteRegister
 	pop ix
 	ret
 

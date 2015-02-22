@@ -11,7 +11,7 @@ VGMPlay: MACRO
 	player:
 		dw Player_instance
 	sfg:
-		dw SFG01_instance
+		dw SFG_instance
 	size:
 	ENDM
 
@@ -48,7 +48,7 @@ VGMPlay_Main:
 VGMPlay_Constructor:
 	push ix
 	call VGMPlay_GetSFG
-	call SFG01_Install
+	call SFG_Install
 	pop ix
 	ret
 

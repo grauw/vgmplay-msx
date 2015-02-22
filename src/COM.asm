@@ -33,6 +33,6 @@ COM_Main:
 	INCLUDE "Memory.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
-	INCLUDE "SFG01.asm"
+	INCLUDE "SFG.asm"
 
 	ENDS
