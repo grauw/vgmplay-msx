@@ -4,37 +4,37 @@
 Mapper: MACRO
 	primaryMapperSlot:
 		db 0
-	Allocate: equ $ + 1
+	Allocate:
 		jp 0
-	Free: equ $ + 1
+	Free:
 		jp 0
-	Read: equ $ + 1
+	Read:
 		jp 0
-	Write: equ $ + 1
+	Write:
 		jp 0
-	Call: equ $ + 1
+	Call:
 		jp 0
-	Calls: equ $ + 1
+	Calls:
 		jp 0
-	PutPH: equ $ + 1
+	PutPH:
 		jp 0
-	GetPH: equ $ + 1
+	GetPH:
 		jp 0
-	PutP0: equ $ + 1
+	PutP0:
 		jp 0
-	GetP0: equ $ + 1
+	GetP0:
 		jp 0
-	PutP1: equ $ + 1
+	PutP1:
 		jp 0
-	GetP1: equ $ + 1
+	GetP1:
 		jp 0
-	PutP2: equ $ + 1
+	PutP2:
 		jp 0
-	GetP2: equ $ + 1
+	GetP2:
 		jp 0
-	PutP3: equ $ + 1
+	PutP3:
 		jp 0
-	GetP3: equ $ + 1
+	GetP3:
 		jp 0
 	ENDM
 
@@ -57,53 +57,53 @@ Mapper_Constructor:
 	pop hl
 	ld (ix + Mapper.primaryMapperSlot),b
 	ld de,3
-	ld (ix + Mapper.Allocate),l
-	ld (ix + Mapper.Allocate + 1),h
+	ld (ix + Mapper.Allocate + 1),l
+	ld (ix + Mapper.Allocate + 2),h
 	add hl,de
-	ld (ix + Mapper.Free),l
-	ld (ix + Mapper.Free + 1),h
+	ld (ix + Mapper.Free + 1),l
+	ld (ix + Mapper.Free + 2),h
 	add hl,de
-	ld (ix + Mapper.Read),l
-	ld (ix + Mapper.Read + 1),h
+	ld (ix + Mapper.Read + 1),l
+	ld (ix + Mapper.Read + 2),h
 	add hl,de
-	ld (ix + Mapper.Write),l
-	ld (ix + Mapper.Write + 1),h
+	ld (ix + Mapper.Write + 1),l
+	ld (ix + Mapper.Write + 2),h
 	add hl,de
-	ld (ix + Mapper.Call),l
-	ld (ix + Mapper.Call + 1),h
+	ld (ix + Mapper.Call + 1),l
+	ld (ix + Mapper.Call + 2),h
 	add hl,de
-	ld (ix + Mapper.Calls),l
-	ld (ix + Mapper.Calls + 1),h
+	ld (ix + Mapper.Calls + 1),l
+	ld (ix + Mapper.Calls + 2),h
 	add hl,de
-	ld (ix + Mapper.PutPH),l
-	ld (ix + Mapper.PutPH + 1),h
+	ld (ix + Mapper.PutPH + 1),l
+	ld (ix + Mapper.PutPH + 2),h
 	add hl,de
-	ld (ix + Mapper.GetPH),l
-	ld (ix + Mapper.GetPH + 1),h
+	ld (ix + Mapper.GetPH + 1),l
+	ld (ix + Mapper.GetPH + 2),h
 	add hl,de
-	ld (ix + Mapper.PutP0),l
-	ld (ix + Mapper.PutP0 + 1),h
+	ld (ix + Mapper.PutP0 + 1),l
+	ld (ix + Mapper.PutP0 + 2),h
 	add hl,de
-	ld (ix + Mapper.GetP0),l
-	ld (ix + Mapper.GetP0 + 1),h
+	ld (ix + Mapper.GetP0 + 1),l
+	ld (ix + Mapper.GetP0 + 2),h
 	add hl,de
-	ld (ix + Mapper.PutP1),l
-	ld (ix + Mapper.PutP1 + 1),h
+	ld (ix + Mapper.PutP1 + 1),l
+	ld (ix + Mapper.PutP1 + 2),h
 	add hl,de
-	ld (ix + Mapper.GetP1),l
-	ld (ix + Mapper.GetP1 + 1),h
+	ld (ix + Mapper.GetP1 + 1),l
+	ld (ix + Mapper.GetP1 + 2),h
 	add hl,de
-	ld (ix + Mapper.PutP2),l
-	ld (ix + Mapper.PutP2 + 1),h
+	ld (ix + Mapper.PutP2 + 1),l
+	ld (ix + Mapper.PutP2 + 2),h
 	add hl,de
-	ld (ix + Mapper.GetP2),l
-	ld (ix + Mapper.GetP2 + 1),h
+	ld (ix + Mapper.GetP2 + 1),l
+	ld (ix + Mapper.GetP2 + 2),h
 	add hl,de
-	ld (ix + Mapper.PutP3),l
-	ld (ix + Mapper.PutP3 + 1),h
+	ld (ix + Mapper.PutP3 + 1),l
+	ld (ix + Mapper.PutP3 + 2),h
 	add hl,de
-	ld (ix + Mapper.GetP3),l
-	ld (ix + Mapper.GetP3 + 1),h
+	ld (ix + Mapper.GetP3 + 1),l
+	ld (ix + Mapper.GetP3 + 2),h
 	ret
 
 ;
