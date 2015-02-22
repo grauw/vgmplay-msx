@@ -156,7 +156,7 @@ VGMPlay_ReadData:
 	ld c,_SEEK
 	call BDOS
 	call VGMPlay_CheckDOSError
-	ld hl,4000H
+	ld hl,9000H
 	ld de,DATA
 	ld b,(ix + VGMPlay.fileHandle)
 	ld c,_READ
@@ -164,8 +164,9 @@ VGMPlay_ReadData:
 	call VGMPlay_CheckDOSError
 	push ix
 	call VGMPlay_GetReader
+	ld c,l
+	ld b,h
 	ld hl,DATA
-	ld bc,4000H
 	call DataReader_Constructor
 	pop ix
 	ret
