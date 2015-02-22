@@ -3,15 +3,11 @@
 ;
 ; The SFG module uses the YM2151.
 ;
-SFG_YM2151_STATUS: equ 3FF0H
-SFG_YM2151_ADDRESS: equ 3FF0H
-SFG_YM2151_DATA: equ 3FF1H
-SFG_UART_DATA: equ 3FF5H
-SFG_UART_STATUS: equ 3FF6H
-SFG_UART_COMMAND: equ 3FF6H
-SFG_ID_ADDRESS: equ 80H
-
 SFG: MACRO
+	YM2151_STATUS: equ 3FF0H
+	YM2151_ADDRESS: equ 3FF0H
+	YM2151_DATA: equ 3FF1H
+	ID_ADDRESS: equ 80H
 	found:
 		db 0
 	slot:
@@ -56,12 +52,12 @@ SFG_WriteRegister:
 	push hl
 	ld e,l
 	ld a,(ix + SFG.slot)
-	ld hl,SFG_YM2151_ADDRESS
+	ld hl,SFG.YM2151_ADDRESS
 	call WRSLT
 	pop hl
 	ld e,h
 	ld a,(ix + SFG.slot)
-	ld hl,SFG_YM2151_DATA
+	ld hl,SFG.YM2151_DATA
 	call WRSLT
 	ret
 
@@ -147,7 +143,7 @@ SFG_Detect:
 ;
 SFG_MatchID:
 	ld de,SFG_id
-	ld hl,SFG_ID_ADDRESS
+	ld hl,SFG.ID_ADDRESS
 	ld bc,6
 	call Memory_MatchSlotString
 	ret
