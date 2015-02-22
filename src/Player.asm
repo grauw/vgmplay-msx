@@ -73,6 +73,7 @@ Player_CheckWait: PROC
 	and a
 	sbc hl,de
 	jp c,Done
+	jr z,Done
 	ld (ix + Player.wait),l
 	ld (ix + Player.wait + 1),h
 	ld (ix + Player.time),0
