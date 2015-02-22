@@ -1,5 +1,5 @@
-VGMPlay - VGM music file player for MSX
-=======================================
+VGMPlay for MSX
+===============
 
 Copyright 2013 Laurens Holst
 
@@ -55,7 +55,7 @@ uncompressed VGM file.
 Development information
 -----------------------
 
-VGMPLAY is free and open source software. If you want to contribute to the
+VGMPlay is free and open source software. If you want to contribute to the
 project you are very welcome to. Please contact me at any one of the places
 mentioned in the project information section.
 
