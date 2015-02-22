@@ -42,7 +42,7 @@ DataReader_ReadByte: PROC
 	ret
 EndOfData:
 	ld hl,DataReader_endOfDataError
-	call VGMPlay_ThrowWithMessage
+	call VGMPlay_TerminateWithError
 	ret
 	ENDP
 

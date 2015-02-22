@@ -19,7 +19,7 @@ VGMPlay: MACRO
 VGMPlay_Main:
 	call DOS_IsDOS2
 	ld hl,VGMPlay_dos2RequiredError
-	call c,VGMPlay_ThrowWithMessage
+	call c,VGMPlay_TerminateWithError
 
 	ld hl,VGMPlay_welcome
 	call System_Print
@@ -109,7 +109,7 @@ Loop:
 	ld a,(de)
 	and a
 	ld hl,VGMPlay_invalidFilenameError
-	call z,VGMPlay_ThrowWithMessage
+	call z,VGMPlay_TerminateWithError
 	cp " "
 	jr z,Loop
 	push de
@@ -216,16 +216,16 @@ VGMPlay_GetHighResTimerValue:
 VGMPlay_CheckDOSError:
 	and a
 	ret z
-VGMPlay_ThrowDOSError:
+VGMPlay_TerminateWithDOSError:
 	ld b,a
 	ld c,_EXPLAIN
 	ld de,VGMPlay_explainBuffer
 	call BDOS
 	ld hl,VGMPlay_explainBuffer
-	jp VGMPlay_ThrowWithMessage
+	jp VGMPlay_TerminateWithError
 
 ; hl <- message
-VGMPlay_ThrowWithMessage:
+VGMPlay_TerminateWithError:
 	call System_Print
 	jp REBOOT
 
