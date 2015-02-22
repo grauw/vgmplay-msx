@@ -51,6 +51,8 @@ SFG_SetSlot:
 ; l = register
 ; h = value
 SFG_WriteRegister:
+	bit 0,(ix + SFG.found)
+	ret z
 	push hl
 	ld e,l
 	ld a,(ix + SFG.slot)
