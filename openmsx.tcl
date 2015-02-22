@@ -11,4 +11,4 @@ diskmanipulator format hda
 diskmanipulator import hda bin/
 
 set throttle off
-after time 13 "set throttle on"
+after time 12 "set throttle on"
