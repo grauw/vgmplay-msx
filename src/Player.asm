@@ -8,6 +8,8 @@ Player: MACRO
 		dw 0
 	time:
 		dw 0
+	wait:
+		dw 0
 	lastJiffy:
 		dw 0
 	wait60th:
@@ -39,7 +41,9 @@ Loop:
 	ENDP
 
 ; ix = this
-Player_Process:
+Player_Process: PROC
+	call Player_CheckWait
+	ret c
 	call Player_ReadByte
 	ld e,a
 	ld d,0
@@ -50,8 +54,44 @@ Player_Process:
 	inc hl
 	ld h,(hl)
 	ld l,d
+	call JumpHL
+	jp Player_Process
+JumpHL:
 	jp hl
+	ENDP
+
+; ix = this
+; f <- c: waiting
+Player_CheckWait: PROC
+	ld l,(ix + Player.wait)
+	ld h,(ix + Player.wait + 1)
+	ld a,l
+	or h
+	ret z
+	ld e,(ix + Player.time)
+	ld d,(ix + Player.time + 1)
+	and a
+	sbc hl,de
+	jp c,Done
+	ld (ix + Player.wait),l
+	ld (ix + Player.wait + 1),h
+	ld (ix + Player.time),0
+	ld (ix + Player.time + 1),0
+	scf
 	ret
+Done:
+	ld (ix + Player.wait),0
+	ld (ix + Player.wait + 1),0
+	dec hl
+	ld a,l
+	cpl
+	ld (ix + Player.time),a
+	ld a,h
+	cpl
+	ld (ix + Player.time + 1),a
+	and a
+	ret
+	ENDP
 
 ; ix = this
 Player_UpdateTime: PROC
@@ -131,6 +171,46 @@ Player_GetKeyRow:
 	ret
 
 ; ix = this
+Player_AY8910Write: PROC
+	call Player_ReadWord
+	ld a,l
+	cp 13
+	ret nc
+	out (0A0H),a
+	cp 7
+	jr z,Mixer
+	ld a,h
+	out (0A1H),a
+	ret
+Mixer:
+	ld a,h
+	and 3FH
+	or 80H
+	out (0A1H),a
+	ret
+	ENDP
+
+Player_EndOfSoundData:
+	ld a,8
+	out (0A0H),a
+	ld a,0
+	out (0A1H),a
+	ld a,9
+	out (0A0H),a
+	ld a,0
+	out (0A1H),a
+	ld a,10
+	out (0A0H),a
+	ld a,0
+	out (0A1H),a
+	ld a,7
+	out (0A0H),a
+	ld a,0B8H
+	out (0A1H),a
+	jp REBOOT
+	ret
+
+; ix = this
 Player_SetWait: PROC
 	call Player_ReadByte
 	cp 62H
@@ -152,9 +232,11 @@ Set50th:
 
 ; ix = this
 Player_WaitSamples:
-	; do something with it
+	ld (ix + Player.wait),l
+	ld (ix + Player.wait + 1),h
 	ret
 
+; ix = this
 Player_WaitNSamples:
 	call Player_ReadWord
 	jp Player_WaitSamples
@@ -347,7 +429,7 @@ Player_commandsJumpTable:
 	dw Player_Wait882Samples      ; 63H
 	dw Player_SetWait             ; 64H
 	dw Player_UnsupportedCommand  ; 65H
-	dw Player_UnsupportedCommand  ; 66H
+	dw Player_EndOfSoundData      ; 66H
 	dw Player_UnsupportedCommand  ; 67H
 	dw Player_UnsupportedCommand  ; 68H
 	dw Player_UnsupportedCommand  ; 69H
@@ -405,7 +487,7 @@ Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 9DH
 	dw Player_UnsupportedCommand  ; 9EH
 	dw Player_UnsupportedCommand  ; 9FH
-	dw Player_UnsupportedCommand  ; A0H
+	dw Player_AY8910Write         ; A0H
 	dw Player_Skip3               ; A1H
 	dw Player_Skip3               ; A2H
 	dw Player_Skip3               ; A3H
