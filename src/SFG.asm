@@ -134,7 +134,7 @@ Loop:
 ; a <- slot
 ;
 SFG_Detect:
-	ld hl,MSXMidi_MatchID
+	ld hl,SFG_MatchID
 	call Memory_SearchSlots
 	ret
 
@@ -145,7 +145,7 @@ SFG_Detect:
 ; a = slot id
 ; f <- c: found
 ;
-MSXMidi_MatchID:
+SFG_MatchID:
 	ld de,SFG_id
 	ld hl,SFG_ID_ADDRESS
 	ld bc,6
