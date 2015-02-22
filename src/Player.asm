@@ -175,7 +175,7 @@ Player_YM2151Write:
 	call Player_ReadWord
 	push ix
 	ld ix,SFG01_instance
-	call SFG01_WriteRegister
+	call SFG01_SafeWriteRegister
 	pop ix
 	ret
 

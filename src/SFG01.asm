@@ -63,6 +63,31 @@ SFG01_WriteRegister:
 	call WRSLT
 	ret
 
+; ix = this
+; l = register
+; h = value
+SFG01_SafeWriteRegister: PROC
+	ld a,l
+	cp 01H
+	ret z
+	cp 14H
+	jr z,MaskIRQEN
+	cp 1BH
+	jr z,MaskCT
+	jp SFG01_WriteRegister
+MaskIRQEN:
+	ld a,h
+	and 11110011B
+	ld h,a
+	jp SFG01_WriteRegister
+MaskCT:
+	ld a,h
+	and 00111111B
+	ld h,a
+	jp SFG01_WriteRegister
+	ret
+	ENDP
+
 ;
 ; Detect MIDI interface
 ;
