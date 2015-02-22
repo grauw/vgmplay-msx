@@ -85,13 +85,7 @@ VGMPlay_EnterMainLoop:
 	call VGMPlay_ShowInfo
 	call VGMPlay_ReadData
 	call VGMPlay_CloseFile
-
-	push ix
-	call VGMPlay_GetPlayer
-	ld de,DataReader_instance
-	call Player_Constructor
-	call Player_Play
-	pop ix
+	call VGMPlay_Play
 	ret
 
 VGMPlay_OpenFile: PROC
@@ -178,6 +172,17 @@ VGMPlay_CloseFile:
 	call VGMPlay_CheckDOSError
 	ret
 
+VGMPlay_Play:
+	ld hl,VGMPlay_playing
+	call System_Print
+	push ix
+	call VGMPlay_GetPlayer
+	ld de,DataReader_instance
+	call Player_Constructor
+	call Player_Play
+	pop ix
+	ret
+
 ; hl <- current timer value, in 14 cycle increments
 ; Modifies: af, hl
 VGMPlay_GetHighResTimerValue:
@@ -223,6 +228,9 @@ VGMPlay_loadingFile:
 
 VGMPlay_dotDotDot:
 	db "...",13,10,0
+
+VGMPlay_playing:
+	db 13,10,"Playing...",13,10,0
 
 VGMPlay_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
