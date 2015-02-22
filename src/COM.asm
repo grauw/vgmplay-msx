@@ -31,6 +31,7 @@ COM_Main:
 	INCLUDE "Player.asm"
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
+	INCLUDE "Mapper.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "SFG.asm"

@@ -26,6 +26,8 @@ VGMPlay_Main:
 
 ;	call System_EnableTurbo
 
+	ld ix,Mapper_instance
+	call Mapper_Constructor
 	ld ix,Heap_heap
 	call Heap_Constructor
 	ld ix,Heap_heapUpper
