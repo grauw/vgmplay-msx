@@ -1,5 +1,5 @@
-VGMPlay - VGM music file format player for MSX
-==============================================
+VGMPlay - VGM music file player for MSX
+=======================================
 
 Copyright 2013 Laurens Holst
 
@@ -26,15 +26,15 @@ System Requirements
   * MSX, MSX2, MSX2+ or MSX turboR
   * 16kB video RAM
   * 64kB main RAM
-  * MSX-DOS or MSX-DOS 2
+  * MSX-DOS 2
 
 
-Supported output devices
-------------------------
+Supported sound chips
+---------------------
 
-  * Yamaha YM2151 (SFG-01/05)
+  * AY-3-8910 / YM2149 (PSG)
 
-Support for more sound chips will be added in the future.
+Support for more chips will be added in the future.
 
 
 Usage instructions
