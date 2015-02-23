@@ -104,14 +104,13 @@ Player_UpdateTime: PROC
 	ret z
 	ld (ix + Player.lastJiffy),e
 	ld (ix + Player.lastJiffy + 1),d
-	ld a,l
-	neg
+	ld b,l
 	ld l,(ix + Player.time)
 	ld h,(ix + Player.time + 1)
 	ld de,Player.SAMPLES_60HZ
 Loop:
 	add hl,de
-	dec a
+	inc b
 	jr nz,Loop
 	ld (ix + Player.time),l
 	ld (ix + Player.time + 1),h
