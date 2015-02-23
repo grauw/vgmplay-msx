@@ -25,7 +25,6 @@ COM_Main:
 	INCLUDE "DOS.asm"
 	INCLUDE "BIOS.asm"
 	INCLUDE "System.asm"
-	INCLUDE "Memory.asm"
 	INCLUDE "Mapper.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
@@ -36,5 +35,11 @@ COM_Main:
 	INCLUDE "Player.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "SFG.asm"
+
+	ENDS
+
+	SECTION PAGE1
+
+	INCLUDE "Memory.asm"
 
 	ENDS
