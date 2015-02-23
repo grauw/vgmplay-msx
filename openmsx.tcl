@@ -10,7 +10,5 @@ hda /tmp/vgmplay.dsk
 diskmanipulator format hda
 diskmanipulator import hda bin/
 
-set Yamaha\ SFG-05_volume 100
-
 set throttle off
 after time 12 "set throttle on"
