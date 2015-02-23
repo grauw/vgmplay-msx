@@ -254,16 +254,30 @@ Loop:
 	ENDS
 
 System_EnableTurbo:
-	ld a,(EXPTBL)
-	ld hl,IDBYT2
-	call RDSLT
-	ei
-	cp 3
+	call System_IsTurboR
 	ret c
 	ld a,10000001B
 	ld iy,(EXPTBL-1)
 	ld ix,CHGCPU
 	call CALSLT
+	ret
+
+System_DisableTurbo:
+	call System_IsTurboR
+	ret c
+	ld a,10000000B
+	ld iy,(EXPTBL-1)
+	ld ix,CHGCPU
+	call CALSLT
+	ret
+
+; f <- c: not turbo R
+System_IsTurboR:
+	ld a,(EXPTBL)
+	ld hl,IDBYT2
+	call RDSLT
+	ei
+	cp 3
 	ret
 
 System_Stop:
