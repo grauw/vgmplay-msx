@@ -31,6 +31,7 @@ SFG_Uninstall:
 	ld a,(ix + SFG.found)
 	and a
 	ret z
+	call SFG_Reset
 	ret
 
 ; ix = this

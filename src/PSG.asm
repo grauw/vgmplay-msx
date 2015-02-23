@@ -14,6 +14,7 @@ PSG_Install:
 
 ; ix = this
 PSG_Uninstall:
+	call PSG_Reset
 	ret
 
 ; ix = this

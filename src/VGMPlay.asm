@@ -39,6 +39,7 @@ VGMPlay_Main:
 	ld ix,VGMPlay_instance
 	call VGMPlay_Constructor
 	call VGMPlay_EnterMainLoop
+	call VGMPlay_Destructor
 
 	ld iy,(EXPTBL-1)
 	ld ix,KILBUF
@@ -55,6 +56,19 @@ VGMPlay_Constructor:
 	push ix
 	call VGMPlay_GetSFG
 	call SFG_Install
+	pop ix
+	ret
+
+; ix = this
+; ix <- this
+VGMPlay_Destructor:
+	push ix
+	call VGMPlay_GetPSG
+	call PSG_Uninstall
+	pop ix
+	push ix
+	call VGMPlay_GetSFG
+	call SFG_Uninstall
 	pop ix
 	ret
 
