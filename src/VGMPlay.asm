@@ -21,6 +21,10 @@ VGMPlay_Main:
 	ld hl,VGMPlay_dos2RequiredError
 	call c,VGMPlay_TerminateWithError
 
+	call VDP_InitMirrorsOnVDPUpgrades
+	call VDP_GetVersion
+	call nz,VDP_Enable60Hz
+
 	ld hl,VGMPlay_welcome
 	call System_Print
 

@@ -27,6 +27,7 @@ COM_Main:
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
 	INCLUDE "Mapper.asm"
+	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "VGMPlay.asm"
