@@ -181,42 +181,19 @@ Player_YM2151Write:
 	ret
 
 ; ix = this
-Player_AY8910Write: PROC
+Player_AY8910Write:
 	call Player_ReadWord
-	ld a,l
-	cp 13
-	ret nc
-	out (0A0H),a
-	cp 7
-	jr z,Mixer
-	ld a,h
-	out (0A1H),a
+	push ix
+	ld ix,PSG_instance
+	call PSG_SafeWriteRegister
+	pop ix
 	ret
-Mixer:
-	ld a,h
-	and 3FH
-	or 80H
-	out (0A1H),a
-	ret
-	ENDP
 
 Player_EndOfSoundData:
-	ld a,8
-	out (0A0H),a
-	ld a,0
-	out (0A1H),a
-	ld a,9
-	out (0A0H),a
-	ld a,0
-	out (0A1H),a
-	ld a,10
-	out (0A0H),a
-	ld a,0
-	out (0A1H),a
-	ld a,7
-	out (0A0H),a
-	ld a,0B8H
-	out (0A1H),a
+	push ix
+	ld ix,PSG_instance
+	call PSG_Reset
+	pop ix
 	push ix
 	ld ix,SFG_instance
 	call SFG_Reset

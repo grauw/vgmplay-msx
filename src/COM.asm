@@ -33,6 +33,7 @@ COM_Main:
 	INCLUDE "Header.asm"
 	INCLUDE "DataReader.asm"
 	INCLUDE "Player.asm"
+	INCLUDE "PSG.asm"
 	INCLUDE "SFG.asm"
 
 	ENDS

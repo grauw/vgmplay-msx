@@ -8,6 +8,8 @@ VGMPlay: MACRO
 		dw DataReader_instance
 	player:
 		dw Player_instance
+	psg:
+		dw PSG_instance
 	sfg:
 		dw SFG_instance
 	size:
@@ -47,6 +49,10 @@ VGMPlay_Main:
 ; ix <- this
 VGMPlay_Constructor:
 	push ix
+	call VGMPlay_GetPSG
+	call PSG_Install
+	pop ix
+	push ix
 	call VGMPlay_GetSFG
 	call SFG_Install
 	pop ix
@@ -83,8 +89,18 @@ VGMPlay_GetPlayer:
 	ret
 
 ; ix = this
-; de <- VGM header
-; ix <- VGM header
+; de <- PSG chip
+; ix <- PSG chip
+VGMPlay_GetPSG:
+	ld e,(ix + VGMPlay.psg)
+	ld d,(ix + VGMPlay.psg + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- SFG chip
+; ix <- SFG chip
 VGMPlay_GetSFG:
 	ld e,(ix + VGMPlay.sfg)
 	ld d,(ix + VGMPlay.sfg + 1)
