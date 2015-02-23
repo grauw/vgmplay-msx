@@ -52,25 +52,25 @@ SFG_SetSlot:
 SFG_WriteRegister:
 	bit 0,(ix + SFG.found)
 	ret z
+	ld a,r
+	ld a,h
+	ex af,af'
+	ld a,l
 	ld e,(ix + SFG.preparedSlot)
 	ld d,(ix + SFG.preparedSlot + 1)
-	ld a,r
 	ld c,0A8H
-	ex af,af'
+	ld hl,0FFFFH
 	di
 	in b,(c)
 	out (c),d
-	ld a,(0FFFFH)
-	cpl
-	ld d,a
-	ld a,e
-	ld (0FFFFH),a
-	ld a,l
+	ld d,(hl)
+	ld (hl),e
 	ld (SFG.YM2151_ADDRESS),a
-	ld a,h
+	ex af,af'
 	ld (SFG.YM2151_DATA),a
 	ld a,d
-	ld (0FFFFH),a
+	cpl
+	ld (hl),a
 	out (c),b
 	ex af,af'
 	ret po
