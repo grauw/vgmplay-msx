@@ -51,15 +51,17 @@ SFG_WriteRegister:
 	bit 0,(ix + SFG.found)
 	ret z
 	push hl
-	ld e,l
-	ld a,(ix + SFG.slot)
+	ld c,l
 	ld hl,SFG.YM2151_ADDRESS
-	call WRSLT
+	ld e,(ix + SFG.preparedSlot)
+	ld d,(ix + SFG.preparedSlot + 1)
+	call Memory_WritePreparedSlot
 	pop hl
-	ld e,h
-	ld a,(ix + SFG.slot)
+	ld c,h
 	ld hl,SFG.YM2151_DATA
-	call WRSLT
+	ld e,(ix + SFG.preparedSlot)
+	ld d,(ix + SFG.preparedSlot + 1)
+	call Memory_WritePreparedSlot
 	ret
 
 ; ix = this
