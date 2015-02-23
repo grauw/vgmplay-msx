@@ -44,25 +44,40 @@ SFG_SetSlot:
 	ld (ix + SFG.preparedSlot + 1),d
 	ret
 
+	SECTION PAGE1
+
 ; ix = this
 ; l = register
 ; h = value
 SFG_WriteRegister:
 	bit 0,(ix + SFG.found)
 	ret z
-	push hl
-	ld c,l
-	ld hl,SFG.YM2151_ADDRESS
 	ld e,(ix + SFG.preparedSlot)
 	ld d,(ix + SFG.preparedSlot + 1)
-	call Memory_WritePreparedSlot
-	pop hl
-	ld c,h
-	ld hl,SFG.YM2151_DATA
-	ld e,(ix + SFG.preparedSlot)
-	ld d,(ix + SFG.preparedSlot + 1)
-	call Memory_WritePreparedSlot
+	ld a,r
+	ld c,0A8H
+	ex af,af'
+	di
+	in b,(c)
+	out (c),d
+	ld a,(0FFFFH)
+	cpl
+	ld d,a
+	ld a,e
+	ld (0FFFFH),a
+	ld a,l
+	ld (SFG.YM2151_ADDRESS),a
+	ld a,h
+	ld (SFG.YM2151_DATA),a
+	ld a,d
+	ld (0FFFFH),a
+	out (c),b
+	ex af,af'
+	ret po
+	ei
 	ret
+
+	ENDS
 
 ; ix = this
 ; l = register
