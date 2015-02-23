@@ -40,10 +40,6 @@ VGMPlay_Main:
 	call VGMPlay_Constructor
 	call VGMPlay_EnterMainLoop
 	call VGMPlay_Destructor
-
-	ld iy,(EXPTBL-1)
-	ld ix,KILBUF
-	call CALSLT
 	ret
 
 ; ix = this

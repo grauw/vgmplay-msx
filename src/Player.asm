@@ -36,7 +36,7 @@ Loop:
 	call Player_Process
 	call Player_UpdateTime
 	call Player_CheckExitKey
-	jp nz,Loop
+	jp z,Loop
 	ret
 	ENDP
 
@@ -154,21 +154,12 @@ Player_ReadWord:
 
 ; f <- z: pressed
 Player_CheckExitKey:
-	ld b,8
-	call Player_GetKeyRow
-	and 00000001B
-	ret
-
-; b = row number
-; a <- row bits
-Player_GetKeyRow:
-	di
-	in a,(PPI_PORT_C)
-	and 11110000B
-	or b
-	out (PPI_PORT_C),a
-	ei
-	in a,(PPI_PORT_B)
+	ld c,_CONST
+	call BDOS
+	and a
+	ret z
+	ld c,_INNOE
+	call BDOS
 	ret
 
 ; ix = this
