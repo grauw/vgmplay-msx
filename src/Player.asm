@@ -107,7 +107,10 @@ Player_UpdateTime: PROC
 	ld b,l
 	ld l,(ix + Player.time)
 	ld h,(ix + Player.time + 1)
+	call VDP_Is60Hz
 	ld de,Player.SAMPLES_60HZ
+	jr z,Loop
+	ld de,Player.SAMPLES_50HZ
 Loop:
 	add hl,de
 	inc b

@@ -179,6 +179,13 @@ VDP_SetColorTableBase:
 	call VDP_SetRegister
 	ret
 
+; f <- z: 60Hz, nz: 50Hz
+; Modifies: af
+VDP_Is60Hz:
+	ld a,(VDP_MIRROR_8 + 9)
+	and 00000010B
+	ret
+
 ;
 ; Detect VDP version
 ;
