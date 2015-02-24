@@ -190,7 +190,6 @@ Player_EndOfSoundData:
 	call SFG_Reset
 	pop ix
 	jp REBOOT
-	ret
 
 ; ix = this
 Player_SetWait: PROC
