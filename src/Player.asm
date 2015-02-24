@@ -6,6 +6,7 @@
 Player: MACRO
 	SAMPLES_60HZ: equ 735
 	SAMPLES_50HZ: equ 882
+	SAMPLES_CAP: equ 1000
 	reader:
 		dw 0
 	time:
@@ -116,6 +117,11 @@ Loop:
 	djnz Loop
 	ld (ix + Player.time),l
 	ld (ix + Player.time + 1),h
+	ld de,Player.SAMPLES_CAP
+	sbc hl,de
+	ret c
+	ld (ix + Player.time),Player.SAMPLES_CAP & 0FFH
+	ld (ix + Player.time + 1),Player.SAMPLES_CAP >> 8
 	ret
 	ENDP
 
