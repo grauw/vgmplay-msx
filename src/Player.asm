@@ -41,9 +41,9 @@ Loop:
 
 ; ix = this
 Player_Process: PROC
-Loop:
 	call Player_CheckWait
 	ret c
+NoWait:
 	call Player_ReadByte
 	ld e,a
 	ld d,0
@@ -54,9 +54,6 @@ Loop:
 	inc hl
 	ld h,(hl)
 	ld l,d
-	call JumpHL
-	jp Loop
-JumpHL:
 	jp hl
 	ENDP
 
@@ -169,7 +166,7 @@ Player_YM2151Write:
 	ld ix,SFG_instance
 	call SFG_SafeWriteRegister
 	pop ix
-	ret
+	jp Player_Process.NoWait
 
 ; ix = this
 Player_AY8910Write:
@@ -178,7 +175,7 @@ Player_AY8910Write:
 	ld ix,PSG_instance
 	call PSG_SafeWriteRegister
 	pop ix
-	ret
+	jp Player_Process.NoWait
 
 Player_EndOfSoundData:
 	push ix
@@ -203,19 +200,19 @@ Set60th:
 	call Player_ReadWord
 	ld (ix + Player.wait60th),l
 	ld (ix + Player.wait60th + 1),h
-	ret
+	jp Player_Process.NoWait
 Set50th:
 	call Player_ReadWord
 	ld (ix + Player.wait50th),l
 	ld (ix + Player.wait50th + 1),h
-	ret
+	jp Player_Process.NoWait
 	ENDP
 
 ; ix = this
 Player_WaitSamples:
 	ld (ix + Player.wait),l
 	ld (ix + Player.wait + 1),h
-	ret
+	jp Player_Process
 
 ; ix = this
 Player_WaitNSamples:
@@ -286,7 +283,7 @@ Player_Skip3:
 Player_Skip2:
 	call Player_ReadByte
 Player_Skip1:
-	ret
+	jp Player_Process.NoWait
 
 ; ix = this
 Player_UnsupportedCommand:
