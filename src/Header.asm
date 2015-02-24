@@ -181,6 +181,19 @@ Pre1_50:
 	ENDP
 
 ; ix = this
+; dehl <- loop offset
+Header_GetLoopOffset:
+	ld l,(ix + Header.loopOffset)
+	ld h,(ix + Header.loopOffset + 1)
+	ld e,(ix + Header.loopOffset + 2)
+	ld d,(ix + Header.loopOffset + 3)
+	ld bc,1CH
+	add hl,bc
+	ret nc
+	inc de
+	ret
+
+; ix = this
 Header_ShowInfo:
 	call Header_PrintVersion
 	call Header_PrintSN76489Info

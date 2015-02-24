@@ -21,6 +21,8 @@ Player: MACRO
 		dw SAMPLES_60HZ
 	wait50th:
 		dw SAMPLES_50HZ
+	loopCount:
+		db 0
 	ended:
 		db 0
 	size:
@@ -157,6 +159,11 @@ Player_ResetPosition:
 	call Player_GetHeader
 	call Header_GetDataOffset
 	pop ix
+	call Player_SetPosition
+	ret
+
+; ix = this
+Player_SetPosition:
 	push ix
 	push de
 	call Player_GetReader
@@ -221,9 +228,23 @@ Player_AY8910Write:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
-Player_EndOfSoundData:
+Player_EndOfSoundData: PROC
+	push ix
+	call Player_GetHeader
+	call Header_GetLoopOffset
+	pop ix
+	ld a,d
+	or e
+	or h
+	or l
+	jr z,NoLoop
+	call Player_SetPosition
+	inc (ix + Player.loopCount)
+	jp Player_ProcessNext.NoWait
+NoLoop:
 	ld (ix + Player.ended),-1
 	ret
+	ENDP
 
 ; ix = this
 Player_SetWait: PROC
