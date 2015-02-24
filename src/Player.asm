@@ -16,6 +16,8 @@ Player: MACRO
 		dw SAMPLES_60HZ
 	wait50th:
 		dw SAMPLES_50HZ
+	ended:
+		db 0
 	size:
 	ENDM
 
@@ -33,7 +35,7 @@ Player_Play: PROC
 	ld (ix + Player.lastJiffy),a
 Loop:
 	call Player_ProcessNext
-	call Player_CheckExitKey
+	call Player_CheckExitCondition
 	ret nz
 	call Player_UpdateTime
 	jp Loop
@@ -149,8 +151,10 @@ Player_ReadWord:
 	pop af
 	ret
 
-; f <- z: pressed
-Player_CheckExitKey:
+; f <- nz: exit condition occurred
+Player_CheckExitCondition:
+	bit 0,(ix + Player.ended)
+	ret nz
 	ld c,_CONST
 	call BDOS
 	and a
@@ -178,16 +182,10 @@ Player_AY8910Write:
 	pop ix
 	jp Player_ProcessNext.NoWait
 
+; ix = this
 Player_EndOfSoundData:
-	push ix
-	ld ix,PSG_instance
-	call PSG_Reset
-	pop ix
-	push ix
-	ld ix,SFG_instance
-	call SFG_Reset
-	pop ix
-	jp REBOOT
+	ld (ix + Player.ended),-1
+	ret
 
 ; ix = this
 Player_SetWait: PROC
