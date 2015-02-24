@@ -258,10 +258,12 @@ Player_Wait16Samples:
 	ld hl,16
 	jp Player_WaitSamples
 Player_Wait735Samples:
-	ld hl,735
+	ld l,(ix + Player.wait60th)
+	ld h,(ix + Player.wait60th + 1)
 	jp Player_WaitSamples
 Player_Wait882Samples:
-	ld hl,882
+	ld l,(ix + Player.wait50th)
+	ld h,(ix + Player.wait50th + 1)
 	jp Player_WaitSamples
 Player_WaitNSamples:
 	call Player_ReadWord
