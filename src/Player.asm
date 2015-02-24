@@ -33,10 +33,10 @@ Player_Play: PROC
 	ld (ix + Player.lastJiffy),a
 Loop:
 	call Player_Process
-	call Player_UpdateTime
 	call Player_CheckExitKey
-	jp z,Loop
-	ret
+	ret nz
+	call Player_UpdateTime
+	jp Loop
 	ENDP
 
 ; ix = this
