@@ -1,7 +1,7 @@
 VGMPlay for MSX
 ===============
 
-Copyright 2013 Laurens Holst
+Copyright 2015 Laurens Holst
 
 Project information
 -------------------
