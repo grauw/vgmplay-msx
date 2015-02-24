@@ -97,9 +97,10 @@ Done:
 ; ix = this
 Player_UpdateTime: PROC
 	ld b,(ix + Player.lastJiffy)
+Wait:
 	ld a,(JIFFY)
 	cp b
-	ret z
+	jp z,Wait
 	ld (ix + Player.lastJiffy),a
 	sub b
 	ld b,a
