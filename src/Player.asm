@@ -41,6 +41,7 @@ Loop:
 
 ; ix = this
 Player_Process: PROC
+Loop:
 	call Player_CheckWait
 	ret c
 	call Player_ReadByte
@@ -54,7 +55,7 @@ Player_Process: PROC
 	ld h,(hl)
 	ld l,d
 	call JumpHL
-	jp Player_Process
+	jp Loop
 JumpHL:
 	jp hl
 	ENDP
