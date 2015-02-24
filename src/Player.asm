@@ -209,15 +209,6 @@ Set50th:
 	ENDP
 
 ; ix = this
-Player_WaitSamples:
-	ld (ix + Player.wait),l
-	ld (ix + Player.wait + 1),h
-	jp Player_Process
-
-; ix = this
-Player_WaitNSamples:
-	call Player_ReadWord
-	jp Player_WaitSamples
 Player_Wait1Samples:
 	ld hl,1
 	jp Player_WaitSamples
@@ -272,6 +263,12 @@ Player_Wait735Samples:
 Player_Wait882Samples:
 	ld hl,882
 	jp Player_WaitSamples
+Player_WaitNSamples:
+	call Player_ReadWord
+Player_WaitSamples:
+	ld (ix + Player.wait),l
+	ld (ix + Player.wait + 1),h
+	jp Player_Process
 
 ; ix = this
 Player_Skip5:
