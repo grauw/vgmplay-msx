@@ -137,7 +137,7 @@ Player_ReadByte:
 	push hl
 	push ix
 	call Player_GetReader
-	call DataReader_ReadByte
+	call Reader_ReadByte
 	pop ix
 	pop hl
 	pop de

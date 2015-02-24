@@ -5,7 +5,7 @@ VGMPlay: MACRO
 	header:
 		dw Header_instance
 	reader:
-		dw DataReader_instance
+		dw Reader_instance
 	player:
 		dw Player_instance
 	psg:
@@ -157,7 +157,7 @@ Loop:
 	call System_Print
 	call VGMPlay_GetReader
 	pop hl
-	call DataReader_Constructor
+	call Reader_Constructor
 	pop ix
 	ret
 	ENDP
@@ -170,7 +170,7 @@ VGMPlay_ReadHeader:
 	ld h,(ix + VGMPlay.header + 1)
 	call VGMPlay_GetReader
 	ex de,hl
-	call DataReader_ReadBlock
+	call Reader_ReadBlock
 	pop ix
 	push ix
 	call VGMPlay_GetHeader
@@ -199,7 +199,7 @@ VGMPlay_Play:
 	push de
 	call VGMPlay_GetReader
 	pop de
-	call DataReader_SetPosition
+	call Reader_SetPosition
 	pop ix
 	push ix
 	ld l,(ix + VGMPlay.reader)
