@@ -1,5 +1,7 @@
 ;
-; VGM file data
+; Play back VGM data
+;
+; Time and wait codes are in units of 44100 Hz samples
 ;
 Player: MACRO
 	SAMPLES_60HZ: equ 735
