@@ -7,8 +7,8 @@ Project information
 -------------------
 
 Author: Laurens Holst <laurens.nospam@grauw.nl>  
-Site: <https://bitbucket.org/grauw/vgmplay>  
-Issues: <https://bitbucket.org/grauw/vgmplay/issues>  
+Site: <https://bitbucket.org/grauw/vgmplay-msx>  
+Issues: <https://bitbucket.org/grauw/vgmplay-msx/issues>  
 Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>  
 License: Simplified BSD License
 
@@ -26,7 +26,7 @@ System Requirements
 
   * MSX, MSX2, MSX2+ or MSX turboR
   * 16kB video RAM
-  * 64kB main RAM
+  * 128kB main RAM
   * MSX-DOS 2
 
 
@@ -34,6 +34,7 @@ Supported sound chips
 ---------------------
 
   * AY-3-8910 / YM2149 (PSG)
+  * YM-2151 (SFG-01/05, OPM)
 
 Support for more chips will be added in the future.
 
@@ -62,10 +63,3 @@ mentioned in the project information section.
 
 You are also free to re-use code for your own projects, provided you abide by
 the license terms.
-
-Label naming convention:
-
-  * Constants: UPPERCASE
-  * Variables: Class_variableName
-  * Methods: Class_MethodName
-  * Method-local labels: Class_MethodName_localName
