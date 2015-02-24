@@ -66,6 +66,10 @@ SFG_WriteRegister:
 	ld d,(hl)
 	ld (hl),e
 	ld (SFG.YM2151_ADDRESS),a
+;Wait:
+;	ld a,(SFG.YM2151_STATUS)
+;	rla
+;	jr c,Wait
 	ex af,af'
 	ld (SFG.YM2151_DATA),a
 	ld a,d
