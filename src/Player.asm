@@ -9,6 +9,8 @@ Player: MACRO
 	SAMPLES_CAP: equ 1000
 	reader:
 		dw 0
+	header:
+		dw 0
 	time:
 		dw 0
 	wait:
@@ -25,15 +27,19 @@ Player: MACRO
 	ENDM
 
 ; de = data reader
+; hl = VGM header
 ; ix = this
 ; ix <- this
 Player_Constructor:
 	ld (ix + Player.reader),e
 	ld (ix + Player.reader + 1),d
+	ld (ix + Player.header),l
+	ld (ix + Player.header + 1),h
 	ret
 
 ; ix = this
 Player_Play: PROC
+	call Player_ResetPosition
 	ld a,(JIFFY)
 	ld (ix + Player.lastJiffy),a
 Loop:
@@ -133,6 +139,30 @@ Player_GetReader:
 	ld d,(ix + Player.reader + 1)
 	ld ixl,e
 	ld ixh,d
+	ret
+
+; ix = this
+; de <- VGM header
+; ix <- VGM header
+Player_GetHeader:
+	ld e,(ix + Player.header)
+	ld d,(ix + Player.header + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+Player_ResetPosition:
+	push ix
+	call Player_GetHeader
+	call Header_GetDataOffset
+	pop ix
+	push ix
+	push de
+	call Player_GetReader
+	pop de
+	call Reader_SetPosition
+	pop ix
 	ret
 
 ; ix = this

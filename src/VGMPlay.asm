@@ -192,20 +192,13 @@ VGMPlay_Play:
 	ld hl,VGMPlay_playing
 	call System_Print
 	push ix
-	call VGMPlay_GetHeader
-	call Header_GetDataOffset
-	pop ix
-	push ix
+	ld e,(ix + VGMPlay.reader)
+	ld d,(ix + VGMPlay.reader + 1)
+	ld l,(ix + VGMPlay.header)
+	ld h,(ix + VGMPlay.header + 1)
 	push de
-	call VGMPlay_GetReader
-	pop de
-	call Reader_SetPosition
-	pop ix
-	push ix
-	ld l,(ix + VGMPlay.reader)
-	ld h,(ix + VGMPlay.reader + 1)
 	call VGMPlay_GetPlayer
-	ex de,hl
+	pop de
 	call Player_Constructor
 	call Player_Play
 	pop ix
