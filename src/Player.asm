@@ -157,6 +157,7 @@ Player_CheckExitKey:
 	ret z
 	ld c,_INNOE
 	call BDOS
+	and a
 	ret
 
 ; ix = this
