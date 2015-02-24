@@ -11,7 +11,7 @@ Player: MACRO
 	wait:
 		dw 0
 	lastJiffy:
-		dw 0
+		db 0
 	wait60th:
 		dw SAMPLES_60HZ
 	wait50th:
@@ -29,9 +29,8 @@ Player_Constructor:
 
 ; ix = this
 Player_Play: PROC
-	ld hl,(JIFFY)
-	ld (ix + Player.lastJiffy),l
-	ld (ix + Player.lastJiffy + 1),h
+	ld a,(JIFFY)
+	ld (ix + Player.lastJiffy),a
 Loop:
 	call Player_Process
 	call Player_UpdateTime
@@ -96,15 +95,13 @@ Done:
 
 ; ix = this
 Player_UpdateTime: PROC
-	ld de,(JIFFY)
-	ld l,(ix + Player.lastJiffy)
-	ld h,(ix + Player.lastJiffy + 1)
-	and a
-	sbc hl,de
+	ld b,(ix + Player.lastJiffy)
+	ld a,(JIFFY)
+	cp b
 	ret z
-	ld (ix + Player.lastJiffy),e
-	ld (ix + Player.lastJiffy + 1),d
-	ld b,l
+	ld (ix + Player.lastJiffy),a
+	sub b
+	ld b,a
 	ld l,(ix + Player.time)
 	ld h,(ix + Player.time + 1)
 	call VDP_Is60Hz
@@ -113,8 +110,7 @@ Player_UpdateTime: PROC
 	ld de,Player.SAMPLES_50HZ
 Loop:
 	add hl,de
-	inc b
-	jr nz,Loop
+	djnz Loop
 	ld (ix + Player.time),l
 	ld (ix + Player.time + 1),h
 	ret
