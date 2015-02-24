@@ -21,12 +21,14 @@ PSG_Uninstall:
 ; l = register
 ; h = value
 PSG_WriteRegister:
+	ld a,r
 	ld a,l
 	di
 	out (PSG.ADDRESS),a
 	ld a,h
-	ei
 	out (PSG.DATA),a
+	ret po
+	ei
 	ret
 
 ; ix = this
