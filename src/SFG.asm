@@ -13,7 +13,9 @@ SFG: MACRO
 	slot:
 		db 0
 	preparedSlot:
-		dw 0
+		db 0
+	preparedSubslot:
+		db 0
 	ENDM
 
 ; ix = this
@@ -40,8 +42,8 @@ SFG_SetSlot:
 	ld (ix + SFG.slot),a
 
 	call Memory_PrepareSlotPage0
-	ld (ix + SFG.preparedSlot),e
-	ld (ix + SFG.preparedSlot + 1),d
+	ld (ix + SFG.preparedSlot),d
+	ld (ix + SFG.preparedSubslot),e
 	ret
 
 	SECTION PAGE1
@@ -55,8 +57,8 @@ SFG_WriteRegister:
 	ld a,h
 	ex af,af'
 	ld a,l
-	ld e,(ix + SFG.preparedSlot)
-	ld d,(ix + SFG.preparedSlot + 1)
+	ld d,(ix + SFG.preparedSlot)
+	ld e,(ix + SFG.preparedSubslot)
 	ld c,0A8H
 	ld hl,0FFFFH
 	di
