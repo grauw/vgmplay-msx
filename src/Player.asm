@@ -64,7 +64,7 @@ NoWait:
 	add hl,de
 	add hl,de
 	ld d,(hl)
-	inc hl
+	inc l
 	ld h,(hl)
 	ld l,d
 	jp hl
@@ -347,6 +347,7 @@ Player_instance: Player
 Player_unsupportedCommandError:
 	db "Unsupported command: ",0
 
+	ALIGN 2
 Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 00H
 	dw Player_UnsupportedCommand  ; 01H
