@@ -6,7 +6,9 @@ Reader: MACRO
 	end:
 		dd 0
 	position:
-		dd 0
+		dw 8000H
+	positionSegmentIndex:
+		db 0
 	lastSegment:
 		db 0
 	segments:
@@ -24,42 +26,44 @@ Reader_Constructor:
 ; ehl = address
 ; ix = this
 Reader_SetPosition:
+	ld a,h
+	and 3FH
+	or 80H
 	ld (ix + Reader.position),l
-	ld (ix + Reader.position + 1),h
-	ld (ix + Reader.position + 2),e
+	ld (ix + Reader.position + 1),a
+	ld a,h
+	rla
+	rl e
+	rla
+	rl e
+	ld (ix + Reader.positionSegmentIndex),e
+	call Reader_SelectSegment
 	ret
 
+; Reads a byte from the current position.
+; No bounds checks are performed.
+;
 ; ix = this
 ; a <- value
 ; Modifies: af, bc, de, hl
 Reader_ReadByte:
 	ld l,(ix + Reader.position)
 	ld h,(ix + Reader.position + 1)
-	ld e,(ix + Reader.position + 2)
-	call Reader_ReadByteAt
-	ld bc,1
-	add hl,bc
+	ld a,(hl)
+	inc hl
 	ld (ix + Reader.position),l
 	ld (ix + Reader.position + 1),h
-	ret nc
+	bit 6,h
+	ret z
+	res 6,h
+	ld (ix + Reader.position + 1),h
+	ld e,(ix + Reader.positionSegmentIndex)
 	inc e
-	ld (ix + Reader.position + 2),e
+	ld (ix + Reader.positionSegmentIndex),e
+	push af
+	call Reader_SelectSegment
+	pop af
 	ret
-
-; ehl = address
-; ix = this
-; Modifies: af
-Reader_ReadByteAt: PROC
-	call Reader_IsValidAddress
-	jr nc,AddressOutOfBounds
-	call Reader_GetSegment
-	call Mapper_instance.Read
-	ret
-AddressOutOfBounds:
-	ld hl,Reader_addressOutOfBoundsError
-	call System_ThrowExceptionWithMessage
-	ret
-	ENDP
 
 ; de = destination address
 ; bc = bytes count
@@ -96,20 +100,17 @@ Reader_IsValidAddress:
 	ret c
 	ret
 
-; ehl = address
+; e = segment index
 ; ix = this
 ; a <- segment
-Reader_GetSegment:
+; Modifies: af
+Reader_SelectSegment:
 	push de
-	ld a,h
-	rla
-	rl e
-	rla
-	rl e
-	ld d,0
 	push ix
+	ld d,0
 	add ix,de
 	ld a,(ix + Reader.segments)
+	call Mapper_instance.PutP2
 	pop ix
 	pop de
 	ret
