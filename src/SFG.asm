@@ -76,7 +76,6 @@ SFG_WriteRegister:
 	cpl
 	ld (hl),a
 	out (c),b
-	ex af,af'
 	ret po
 	ei
 	ret
