@@ -174,21 +174,17 @@ Player_SetPosition:
 
 ; ix = this
 ; a <- value
-Player_ReadByte:
-	push hl
-	push ix
-	call Player_GetReader
-	call Reader_ReadByte
-	pop ix
-	pop hl
-	ret
+; Modifies: af, hl
+Player_ReadByte: equ Reader_instance.ReadByte
 
 ; ix = this
 ; hl <- value
 Player_ReadWord:
 	call Player_ReadByte
 	ld l,a
+	push hl
 	call Player_ReadByte
+	pop hl
 	ld h,a
 	ret
 

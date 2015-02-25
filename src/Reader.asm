@@ -3,14 +3,33 @@
 ;
 Reader: MACRO
 	BASE_ADDRESS: equ 8000H
+	this:
 	end:
 		dd 0
-	position:
-		dw BASE_ADDRESS
 	positionSegmentIndex:
 		db 0
 	lastSegment:
 		db 0
+	; a <- value
+	; Modifies: af, hl
+	ReadByte:
+		ld hl,BASE_ADDRESS
+	position: equ $ - 2
+		ld a,(hl)
+		inc hl
+		ld (position),hl
+		bit 6,h
+		ret z
+		push af
+		ld a,h
+		and 10111111B
+		ld (position + 1),a
+		push ix
+		ld ix,this
+		call Reader_SelectNextSegment
+		pop ix
+		pop af
+		ret
 	segments:
 		ds 256
 	size:
@@ -117,6 +136,14 @@ Reader_SelectSegment:
 	call Mapper_instance.PutP2
 	pop ix
 	pop de
+	ret
+
+; ix = this
+Reader_SelectNextSegment:
+	ld a,(ix + Reader.positionSegmentIndex)
+	inc a
+	ld (ix + Reader.positionSegmentIndex),a
+	call Reader_SelectSegment
 	ret
 
 ; ix = this
