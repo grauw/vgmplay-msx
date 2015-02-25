@@ -26,6 +26,8 @@ Reader_Constructor:
 ; ehl = address
 ; ix = this
 Reader_SetPosition:
+	call Reader_IsValidAddress
+	jp nc,Reader_ThrowAddressOutOfBounds
 	ld a,h
 	and 3FH
 	or 80H
@@ -203,6 +205,11 @@ Done:
 	ld (ix + Reader.end + 2),c
 	ret
 	ENDP
+
+Reader_ThrowAddressOutOfBounds:
+	ld hl,Reader_addressOutOfBoundsError
+	call System_ThrowExceptionWithMessage
+	ret
 
 ;
 	SECTION RAM
