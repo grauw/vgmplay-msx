@@ -28,8 +28,8 @@ VGMPlay_Main:
 	ld hl,VGMPlay_welcome
 	call System_Print
 
+	call System_EnableTurbo
 ;	call System_DisableTurbo
-;	call System_EnableTurbo
 
 	ld ix,Mapper_instance
 	call Mapper_Constructor
