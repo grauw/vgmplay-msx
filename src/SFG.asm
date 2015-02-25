@@ -12,50 +12,49 @@ SFG: MACRO
 		db 0
 	slot:
 		db 0
-	; l = register
-	; h = value
+	; e = register
+	; d = value
 	SafeWriteRegister:
-		ld a,l
+		ld a,e
 		cp 01H
 		ret z
 		cp 14H
 		jr z,MaskIRQEN
 		cp 1BH
 		jr z,MaskCT
-	; l = register
-	; h = value
+	; a = register
+	; d = value
 	WriteRegister:
-		ld e,h
 		ld c,0A8H
 		ld hl,0FFFFH
 		di
 		in b,(c)
-		ld d,0
+		ld e,0
 	preparedSlot: equ $ - 1
-		out (c),d
-		ld d,(hl)
+		out (c),e
+		ld e,(hl)
 		ld (hl),0
 	preparedSubslot: equ $ - 1
 		ld (SFG.YM2151_ADDRESS),a
-		ld a,e
-		ld (SFG.YM2151_DATA),a
 		ld a,d
+		ld (SFG.YM2151_DATA),a
+		ld a,e
 		cpl
 		ld (hl),a
 		ei
 		out (c),b
 		ret
 	MaskCT:
-		ld a,h
+		ld a,d
 		and 00111111B
-		ld h,a
-		ld a,l
+		ld d,a
+		ld a,e
 		jp WriteRegister
 	MaskIRQEN:
-		ld a,h
+		ld a,d
 		and 11110011B
-		ld h,a
-		ld a,l
+		ld d,a
+		ld a,e
 		jp WriteRegister
 	ENDM
 
@@ -94,14 +93,14 @@ SFG_SetSlot:
 	SECTION PAGE1
 
 ; ix = this
-; l = register
-; h = value
+; e = register
+; d = value
 SFG_WriteRegister:
 	bit 0,(ix + SFG.found)
 	ret z
-	ld a,h
+	ld a,d
 	ex af,af'
-	ld a,l
+	ld a,e
 	ld d,(ix + SFG.preparedSlot)
 	ld e,(ix + SFG.preparedSubslot)
 	ld c,0A8H
@@ -128,10 +127,10 @@ SFG_WriteRegister:
 	ENDS
 
 ; ix = this
-; l = register
-; h = value
+; e = register
+; d = value
 SFG_SafeWriteRegister: PROC
-	ld a,l
+	ld a,e
 	cp 01H
 	ret z
 	cp 14H
@@ -139,14 +138,14 @@ SFG_SafeWriteRegister: PROC
 	cp 1BH
 	jp nz,SFG_WriteRegister
 MaskCT:
-	ld a,h
+	ld a,d
 	and 00111111B
-	ld h,a
+	ld d,a
 	jp SFG_WriteRegister
 MaskIRQEN:
-	ld a,h
+	ld a,d
 	and 11110011B
-	ld h,a
+	ld d,a
 	jp SFG_WriteRegister
 	ENDP
 
@@ -159,14 +158,14 @@ SFG_Reset:
 ; ix = this
 SFG_AllNotesOff: PROC
 	ld b,8
-	ld hl,0008H
+	ld de,0008H
 Loop:
 	push bc
-	push hl
+	push de
 	call SFG_WriteRegister
-	pop hl
+	pop de
 	pop bc
-	inc h
+	inc d
 	djnz Loop
 	ret
 	ENDP
@@ -174,14 +173,14 @@ Loop:
 ; ix = this
 SFG_Mute: PROC
 	ld b,32
-	ld hl,7F60H
+	ld de,7F60H
 Loop:
 	push bc
-	push hl
+	push de
 	call SFG_WriteRegister
-	pop hl
+	pop de
 	pop bc
-	inc l
+	inc e
 	djnz Loop
 	ret
 	ENDP
