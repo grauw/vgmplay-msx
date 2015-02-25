@@ -63,10 +63,10 @@ NoWait:
 	ld hl,Player_commandsJumpTable
 	add hl,de
 	add hl,de
-	ld d,(hl)
+	ld e,(hl)
 	inc l
-	ld h,(hl)
-	ld l,d
+	ld d,(hl)
+	ex de,hl
 	jp hl
 	ENDP
 
