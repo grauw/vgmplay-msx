@@ -39,6 +39,7 @@ Reader_SetPosition:
 	rla
 	rl e
 	ld (ix + Reader.positionSegmentIndex),e
+	ld a,e
 	call Reader_SelectSegment
 	ret
 
@@ -47,7 +48,7 @@ Reader_SetPosition:
 ;
 ; ix = this
 ; a <- value
-; Modifies: af, bc, de, hl
+; Modifies: af, hl
 Reader_ReadByte:
 	ld l,(ix + Reader.position)
 	ld h,(ix + Reader.position + 1)
@@ -59,10 +60,10 @@ Reader_ReadByte:
 	ret z
 	res 6,h
 	ld (ix + Reader.position + 1),h
-	ld e,(ix + Reader.positionSegmentIndex)
-	inc e
-	ld (ix + Reader.positionSegmentIndex),e
 	push af
+	ld a,(ix + Reader.positionSegmentIndex)
+	inc a
+	ld (ix + Reader.positionSegmentIndex),a
 	call Reader_SelectSegment
 	pop af
 	ret
@@ -102,13 +103,14 @@ Reader_IsValidAddress:
 	ret c
 	ret
 
-; e = segment index
+; a = segment index
 ; ix = this
 ; a <- segment
 ; Modifies: af
 Reader_SelectSegment:
 	push de
 	push ix
+	ld e,a
 	ld d,0
 	add ix,de
 	ld a,(ix + Reader.segments)

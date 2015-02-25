@@ -175,14 +175,12 @@ Player_SetPosition:
 ; ix = this
 ; a <- value
 Player_ReadByte:
-	push de
 	push hl
 	push ix
 	call Player_GetReader
 	call Reader_ReadByte
 	pop ix
 	pop hl
-	pop de
 	ret
 
 ; ix = this
