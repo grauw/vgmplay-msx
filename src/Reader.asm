@@ -122,6 +122,12 @@ Reader_AllocateSegment:
 	call Mapper_instance.Allocate
 	ld hl,Reader_outOfMemoryError
 	call c,VGMPlay_TerminateWithError
+	ret
+
+; ix = this
+; a = segment number
+; a <- segment number
+Reader_AddSegment:
 	ld e,(ix + Reader.lastSegment)
 	ld d,0
 	push ix
@@ -161,10 +167,16 @@ Reader_LoadFile:
 Reader_ReadAllData: PROC
 	ld c,0
 	ld hl,0
+	push hl
+	push bc
+	call Mapper_instance.GetP2
+	jp FirstSegment
 Loop:
 	push hl
 	push bc
 	call Reader_AllocateSegment
+FirstSegment:
+	call Reader_AddSegment
 	call Mapper_instance.PutP2
 	pop bc
 	push bc
