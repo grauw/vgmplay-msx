@@ -181,11 +181,9 @@ Player_ReadByte: equ Reader_instance.ReadByte
 ; hl <- value
 Player_ReadWord:
 	call Player_ReadByte
-	ld l,a
-	push hl
+	ld e,a
 	call Player_ReadByte
-	pop hl
-	ld h,a
+	ld d,a
 	ret
 
 ; f <- nz: exit condition occurred
@@ -204,12 +202,14 @@ Player_CheckExitCondition:
 ; ix = this
 Player_YM2151Write:
 	call Player_ReadWord
+	ex de,hl
 	call SFG_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
 Player_AY8910Write:
 	call Player_ReadWord
+	ex de,hl
 	call PSG_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
 
@@ -242,78 +242,78 @@ Player_SetWait: PROC
 	call System_ThrowException
 Set60th:
 	call Player_ReadWord
-	ld (ix + Player.wait60th),l
-	ld (ix + Player.wait60th + 1),h
+	ld (ix + Player.wait60th),e
+	ld (ix + Player.wait60th + 1),d
 	jp Player_ProcessNext.NoWait
 Set50th:
 	call Player_ReadWord
-	ld (ix + Player.wait50th),l
-	ld (ix + Player.wait50th + 1),h
+	ld (ix + Player.wait50th),e
+	ld (ix + Player.wait50th + 1),d
 	jp Player_ProcessNext.NoWait
 	ENDP
 
 ; ix = this
 Player_Wait1Samples:
-	ld hl,1
+	ld de,1
 	jp Player_WaitSamples
 Player_Wait2Samples:
-	ld hl,2
+	ld de,2
 	jp Player_WaitSamples
 Player_Wait3Samples:
-	ld hl,3
+	ld de,3
 	jp Player_WaitSamples
 Player_Wait4Samples:
-	ld hl,4
+	ld de,4
 	jp Player_WaitSamples
 Player_Wait5Samples:
-	ld hl,5
+	ld de,5
 	jp Player_WaitSamples
 Player_Wait6Samples:
-	ld hl,6
+	ld de,6
 	jp Player_WaitSamples
 Player_Wait7Samples:
-	ld hl,7
+	ld de,7
 	jp Player_WaitSamples
 Player_Wait8Samples:
-	ld hl,8
+	ld de,8
 	jp Player_WaitSamples
 Player_Wait9Samples:
-	ld hl,9
+	ld de,9
 	jp Player_WaitSamples
 Player_Wait10Samples:
-	ld hl,10
+	ld de,10
 	jp Player_WaitSamples
 Player_Wait11Samples:
-	ld hl,11
+	ld de,11
 	jp Player_WaitSamples
 Player_Wait12Samples:
-	ld hl,12
+	ld de,12
 	jp Player_WaitSamples
 Player_Wait13Samples:
-	ld hl,13
+	ld de,13
 	jp Player_WaitSamples
 Player_Wait14Samples:
-	ld hl,14
+	ld de,14
 	jp Player_WaitSamples
 Player_Wait15Samples:
-	ld hl,15
+	ld de,15
 	jp Player_WaitSamples
 Player_Wait16Samples:
-	ld hl,16
+	ld de,16
 	jp Player_WaitSamples
 Player_Wait735Samples:
-	ld l,(ix + Player.wait60th)
-	ld h,(ix + Player.wait60th + 1)
+	ld e,(ix + Player.wait60th)
+	ld d,(ix + Player.wait60th + 1)
 	jp Player_WaitSamples
 Player_Wait882Samples:
-	ld l,(ix + Player.wait50th)
-	ld h,(ix + Player.wait50th + 1)
+	ld e,(ix + Player.wait50th)
+	ld d,(ix + Player.wait50th + 1)
 	jp Player_WaitSamples
 Player_WaitNSamples:
 	call Player_ReadWord
 Player_WaitSamples:
-	ld (ix + Player.wait),l
-	ld (ix + Player.wait + 1),h
+	ld (ix + Player.wait),e
+	ld (ix + Player.wait + 1),d
 	jp Player_ProcessNext
 
 ; ix = this
