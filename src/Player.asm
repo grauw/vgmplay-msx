@@ -39,6 +39,30 @@ Player_Constructor:
 	ld (ix + Player.header + 1),h
 	ret
 
+; Shuffles the commands jump table so that the LSB and MSB are separated.
+; This allows faster table value lookups.
+Player_InitCommandsJumpTable: PROC
+	ld bc,256
+	ld hl,Player_commandsJumpTable + 1
+	ld de,Player_scratch
+MSBExtractionLoop:
+	ldi
+	inc hl
+	jp pe,MSBExtractionLoop
+	ld bc,255
+	ld hl,Player_commandsJumpTable + 2
+	ld de,Player_commandsJumpTable + 1
+LSBExtractionLoop:
+	ldi
+	inc hl
+	jp pe,LSBExtractionLoop
+	ld bc,256
+	ld hl,Player_scratch
+	ld de,Player_commandsJumpTable + 256
+	call System_FastLDIR
+	ret
+	ENDP
+
 ; ix = this
 Player_Play: PROC
 	call Player_ResetPosition
@@ -58,13 +82,10 @@ Player_ProcessNext: PROC
 	ret c
 NoWait:
 	call Player_ReadByte
-	ld e,a
-	ld d,0
-	ld hl,Player_commandsJumpTable
-	add hl,de
-	add hl,de
+	ld l,a
+	ld h,Player_commandsJumpTable >> 8
 	ld e,(hl)
-	inc l
+	inc h
 	ld d,(hl)
 	ex de,hl
 	jp hl
@@ -345,7 +366,7 @@ Player_instance: Player
 Player_unsupportedCommandError:
 	db "Unsupported command: ",0
 
-	ALIGN 2
+	ALIGN 256
 Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 00H
 	dw Player_UnsupportedCommand  ; 01H
@@ -603,5 +624,8 @@ Player_commandsJumpTable:
 	dw Player_Skip5               ; FDH
 	dw Player_Skip5               ; FEH
 	dw Player_Skip5               ; FFH
+
+Player_scratch:
+	ds 256
 
 	ENDS

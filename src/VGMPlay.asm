@@ -41,6 +41,8 @@ VGMPlay_Main:
 	call Memory_UnitTest
 	call Heap_UnitTest
 
+	call Player_InitCommandsJumpTable
+
 	ld ix,VGMPlay_instance
 	call VGMPlay_Constructor
 	call VGMPlay_EnterMainLoop
