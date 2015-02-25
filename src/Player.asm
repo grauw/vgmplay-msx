@@ -186,12 +186,10 @@ Player_ReadByte:
 ; ix = this
 ; hl <- value
 Player_ReadWord:
-	push af
 	call Player_ReadByte
 	ld l,a
 	call Player_ReadByte
 	ld h,a
-	pop af
 	ret
 
 ; f <- nz: exit condition occurred
