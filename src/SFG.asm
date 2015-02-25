@@ -12,21 +12,66 @@ SFG: MACRO
 		db 0
 	slot:
 		db 0
-	preparedSlot:
-		db 0
-	preparedSubslot:
-		db 0
+	; l = register
+	; h = value
+	SafeWriteRegister:
+		ld a,l
+		cp 01H
+		ret z
+		cp 14H
+		jr z,MaskIRQEN
+		cp 1BH
+		jr z,MaskCT
+	; l = register
+	; h = value
+	WriteRegister:
+		ld e,h
+		ld c,0A8H
+		ld hl,0FFFFH
+		di
+		in b,(c)
+		ld d,0
+	preparedSlot: equ $ - 1
+		out (c),d
+		ld d,(hl)
+		ld (hl),0
+	preparedSubslot: equ $ - 1
+		ld (SFG.YM2151_ADDRESS),a
+		ld a,e
+		ld (SFG.YM2151_DATA),a
+		ld a,d
+		cpl
+		ld (hl),a
+		ei
+		out (c),b
+		ret
+	MaskCT:
+		ld a,h
+		and 00111111B
+		ld h,a
+		ld a,l
+		jp WriteRegister
+	MaskIRQEN:
+		ld a,h
+		and 11110011B
+		ld h,a
+		ld a,l
+		jp WriteRegister
 	ENDM
 
 ; ix = this
-SFG_Install:
+SFG_Install: PROC
 	call SFG_Detect
-	ret nc
+	jr nc,Disable
 	di
 	call SFG_SetSlot
 	ld (ix + SFG.found),-1
 	ei
 	ret
+Disable:
+	ld (ix + SFG.WriteRegister),0C9H  ; ret
+	ret
+	ENDP
 
 ; ix = this
 SFG_Uninstall:
@@ -173,7 +218,7 @@ SFG_id:
 ;
 ; Workarea definition
 ;
-	SECTION RAM
+	SECTION PAGE1
 
 SFG_instance: SFG
 

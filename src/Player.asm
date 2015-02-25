@@ -204,19 +204,13 @@ Player_CheckExitCondition:
 ; ix = this
 Player_YM2151Write:
 	call Player_ReadWord
-	push ix
-	ld ix,SFG_instance
-	call SFG_SafeWriteRegister
-	pop ix
+	call SFG_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
 Player_AY8910Write:
 	call Player_ReadWord
-	push ix
-	ld ix,PSG_instance
-	call PSG_SafeWriteRegister
-	pop ix
+	call PSG_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
 
 ; ix = this

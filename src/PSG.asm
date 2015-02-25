@@ -6,6 +6,30 @@ PSG: MACRO
 	DATA: equ 0A1H
 	found:
 		db -1
+	; l = register
+	; h = value
+	SafeWriteRegister:
+		ld a,l
+		cp 13
+		ret nc
+		cp 7
+		jr z,MaskMixer
+	; a = register
+	; h = value
+	WriteRegister:
+		di
+		out (PSG.ADDRESS),a
+		ld a,h
+		ei
+		out (PSG.DATA),a
+		ret
+	MaskMixer:
+		ld a,h
+		and 3FH
+		or 80H
+		ld h,a
+		ld a,l
+		jp WriteRegister
 	ENDM
 
 ; ix = this
