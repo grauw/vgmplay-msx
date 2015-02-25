@@ -52,7 +52,6 @@ SFG_SetSlot:
 SFG_WriteRegister:
 	bit 0,(ix + SFG.found)
 	ret z
-	ld a,r
 	ld a,h
 	ex af,af'
 	ld a,l
@@ -75,9 +74,8 @@ SFG_WriteRegister:
 	ld a,d
 	cpl
 	ld (hl),a
-	out (c),b
-	ret po
 	ei
+	out (c),b
 	ret
 
 	ENDS
@@ -92,19 +90,17 @@ SFG_SafeWriteRegister: PROC
 	cp 14H
 	jr z,MaskIRQEN
 	cp 1BH
-	jr z,MaskCT
+	jp nz,SFG_WriteRegister
+MaskCT:
+	ld a,h
+	and 00111111B
+	ld h,a
 	jp SFG_WriteRegister
 MaskIRQEN:
 	ld a,h
 	and 11110011B
 	ld h,a
 	jp SFG_WriteRegister
-MaskCT:
-	ld a,h
-	and 00111111B
-	ld h,a
-	jp SFG_WriteRegister
-	ret
 	ENDP
 
 ; ix = this

@@ -21,14 +21,12 @@ PSG_Uninstall:
 ; l = register
 ; h = value
 PSG_WriteRegister:
-	ld a,r
 	ld a,l
 	di
 	out (PSG.ADDRESS),a
 	ld a,h
-	out (PSG.DATA),a
-	ret po
 	ei
+	out (PSG.DATA),a
 	ret
 
 ; ix = this
@@ -39,16 +37,13 @@ PSG_SafeWriteRegister: PROC
 	cp 13
 	ret nc
 	cp 7
-	jr z,MaskMixer
-	call PSG_WriteRegister
-	ret
+	jp nz,PSG_WriteRegister
 MaskMixer:
 	ld a,h
 	and 3FH
 	or 80H
 	ld h,a
-	call PSG_WriteRegister
-	ret
+	jp PSG_WriteRegister
 	ENDP
 
 ; ix = this
