@@ -6,7 +6,7 @@ Reader: MACRO
 	end:
 		dd 0
 	position:
-		dw 8000H
+		dw BASE_ADDRESS
 	positionSegmentIndex:
 		db 0
 	lastSegment:
