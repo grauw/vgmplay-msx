@@ -251,10 +251,6 @@ Player_EndOfSoundData: PROC
 	call Player_GetHeader
 	call Header_GetLoopOffset
 	pop ix
-	ld a,d
-	or e
-	or h
-	or l
 	jr z,NoLoop
 	call Player_SetPosition
 	inc (ix + Player.loopCount)

@@ -182,15 +182,22 @@ Pre1_50:
 
 ; ix = this
 ; dehl <- loop offset
+; f <- z: no loop
 Header_GetLoopOffset:
 	ld l,(ix + Header.loopOffset)
 	ld h,(ix + Header.loopOffset + 1)
 	ld e,(ix + Header.loopOffset + 2)
 	ld d,(ix + Header.loopOffset + 3)
+	ld a,d
+	or e
+	or h
+	or l
+	ret z
 	ld bc,1CH
 	add hl,bc
 	ret nc
 	inc de
+	and a
 	ret
 
 ; ix = this
