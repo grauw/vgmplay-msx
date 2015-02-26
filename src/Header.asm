@@ -201,6 +201,26 @@ Header_GetLoopOffset:
 	ret
 
 ; ix = this
+; dehl <- loop offset
+; f <- z: no loop
+Header_GetGD3Offset:
+	ld l,(ix + Header.gd3Offset)
+	ld h,(ix + Header.gd3Offset + 1)
+	ld e,(ix + Header.gd3Offset + 2)
+	ld d,(ix + Header.gd3Offset + 3)
+	ld a,d
+	or e
+	or h
+	or l
+	ret z
+	ld bc,14H
+	add hl,bc
+	ret nc
+	inc de
+	and a
+	ret
+
+; ix = this
 Header_ShowInfo:
 	call Header_PrintVersion
 	call Header_PrintSN76489Info

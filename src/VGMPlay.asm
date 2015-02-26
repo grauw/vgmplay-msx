@@ -182,9 +182,20 @@ VGMPlay_ReadHeader:
 
 ; ix = this
 VGMPlay_ShowInfo:
-	call System_PrintCrLf
 	push ix
 	call VGMPlay_GetHeader
+	call Header_GetGD3Offset
+	pop ix
+	push ix
+	push de
+	call VGMPlay_GetReader
+	pop de
+	call nz,System_PrintCrLf
+	call nz,GD3_ShowTagInfoEnglish
+	pop ix
+	push ix
+	call VGMPlay_GetHeader
+	call System_PrintCrLf
 	call Header_ShowInfo
 	pop ix
 	ret

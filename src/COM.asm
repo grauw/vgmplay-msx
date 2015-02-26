@@ -31,6 +31,7 @@ COM_Main:
 	INCLUDE "Class.asm"
 	INCLUDE "VGMPlay.asm"
 	INCLUDE "Header.asm"
+	INCLUDE "GD3.asm"
 	INCLUDE "Reader.asm"
 	INCLUDE "Player.asm"
 	INCLUDE "PSG.asm"
