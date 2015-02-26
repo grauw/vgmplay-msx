@@ -23,6 +23,8 @@ Player: MACRO
 		dw SAMPLES_50HZ
 	loopCount:
 		db 0
+	maxLoops:
+		db 2  ; 0: loop infinitely
 	ended:
 		db 0
 	size:
@@ -254,7 +256,11 @@ Player_EndOfSoundData: PROC
 	jr z,NoLoop
 	call Player_SetPosition
 	inc (ix + Player.loopCount)
-	jp Player_ProcessNext.NoWait
+	ld a,(ix + Player.maxLoops)
+	and a
+	jp z,Player_ProcessNext.NoWait
+	cp (ix + Player.loopCount)
+	jp nz,Player_ProcessNext.NoWait
 NoLoop:
 	ld (ix + Player.ended),-1
 	ret
