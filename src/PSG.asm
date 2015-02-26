@@ -72,16 +72,25 @@ MaskMixer:
 	ENDP
 
 ; ix = this
-PSG_Reset:
+PSG_Reset: PROC
 	ld de,0008H
 	call PSG_WriteRegister
 	ld de,0009H
 	call PSG_WriteRegister
 	ld de,000AH
 	call PSG_WriteRegister
-	ld de,0B807H
-	call PSG_WriteRegister
+	ld bc,13
+	ld de,0000H
+Loop:
+	push bc
+	push de
+	call PSG_SafeWriteRegister
+	pop de
+	pop bc
+	inc e
+	djnz Loop
 	ret
+	ENDP
 
 ;
 ; Workarea definition
