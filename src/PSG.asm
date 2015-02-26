@@ -29,7 +29,7 @@ PSG: MACRO
 		or 80H
 		ld d,a
 		ld a,e
-		jp WriteRegister
+		jr WriteRegister
 	ENDM
 
 ; ix = this

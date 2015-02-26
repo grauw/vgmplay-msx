@@ -49,13 +49,13 @@ SFG: MACRO
 		and 00111111B
 		ld d,a
 		ld a,e
-		jp WriteRegister
+		jr WriteRegister
 	MaskIRQEN:
 		ld a,d
 		and 11110011B
 		ld d,a
 		ld a,e
-		jp WriteRegister
+		jr WriteRegister
 	ENDM
 
 ; ix = this
