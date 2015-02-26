@@ -10,7 +10,7 @@ PSG: MACRO
 	; d = value
 	SafeWriteRegister:
 		ld a,e
-		cp 13
+		cp 14
 		ret nc
 		cp 7
 		jr z,MaskMixer
