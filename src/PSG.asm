@@ -34,6 +34,7 @@ PSG: MACRO
 
 ; ix = this
 PSG_Install:
+	call PSG_Reset
 	ret
 
 ; ix = this
