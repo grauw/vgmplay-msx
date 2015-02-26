@@ -96,58 +96,24 @@ SFG_SetSlot:
 ; e = register
 ; d = value
 SFG_WriteRegister:
-	bit 0,(ix + SFG.found)
-	ret z
-	ld a,d
-	ex af,af'
+	push ix
+	pop hl
+	ld bc,SFG.WriteRegister
+	add hl,bc
 	ld a,e
-	ld d,(ix + SFG.preparedSlot)
-	ld e,(ix + SFG.preparedSubslot)
-	ld c,0A8H
-	ld hl,0FFFFH
-	di
-	in b,(c)
-	out (c),d
-	ld d,(hl)
-	ld (hl),e
-	ld (SFG.YM2151_ADDRESS),a
-;Wait:
-;	ld a,(SFG.YM2151_STATUS)
-;	rla
-;	jr c,Wait
-	ex af,af'
-	ld (SFG.YM2151_DATA),a
-	ld a,d
-	cpl
-	ld (hl),a
-	ei
-	out (c),b
-	ret
+	jp hl
 
 	ENDS
 
 ; ix = this
 ; e = register
 ; d = value
-SFG_SafeWriteRegister: PROC
-	ld a,e
-	cp 01H
-	ret z
-	cp 14H
-	jr z,MaskIRQEN
-	cp 1BH
-	jp nz,SFG_WriteRegister
-MaskCT:
-	ld a,d
-	and 00111111B
-	ld d,a
-	jp SFG_WriteRegister
-MaskIRQEN:
-	ld a,d
-	and 11110011B
-	ld d,a
-	jp SFG_WriteRegister
-	ENDP
+SFG_SafeWriteRegister:
+	push ix
+	pop hl
+	ld bc,SFG.SafeWriteRegister
+	add hl,bc
+	jp hl
 
 ; ix = this
 SFG_Reset:

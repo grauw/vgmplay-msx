@@ -46,30 +46,22 @@ PSG_Uninstall:
 ; e = register
 ; d = value
 PSG_WriteRegister:
+	push ix
+	pop hl
+	ld bc,PSG.WriteRegister
+	add hl,bc
 	ld a,e
-	di
-	out (PSG.ADDRESS),a
-	ld a,d
-	ei
-	out (PSG.DATA),a
-	ret
+	jp hl
 
 ; ix = this
 ; e = register
 ; d = value
-PSG_SafeWriteRegister: PROC
-	ld a,e
-	cp 13
-	ret nc
-	cp 7
-	jp nz,PSG_WriteRegister
-MaskMixer:
-	ld a,d
-	and 3FH
-	or 80H
-	ld d,a
-	jp PSG_WriteRegister
-	ENDP
+PSG_SafeWriteRegister:
+	push ix
+	pop hl
+	ld bc,PSG.SafeWriteRegister
+	add hl,bc
+	jp hl
 
 ; ix = this
 PSG_Reset: PROC
