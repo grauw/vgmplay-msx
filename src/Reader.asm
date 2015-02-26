@@ -119,7 +119,6 @@ Reader_IsValidAddress:
 	ret c
 	ld a,l
 	cp (ix + Reader.end)
-	ret c
 	ret
 
 ; a = segment index
