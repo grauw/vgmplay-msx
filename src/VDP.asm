@@ -68,6 +68,7 @@ VDP_InitScreen0: PROC
 	ld iy,(EXPTBL-1)
 	ld ix,INITXT
 	call CALSLT
+	ei
 	ret
 MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
 	ld hl,1000H              ; increase pattern generator table address
@@ -75,6 +76,7 @@ MSX1: ; complicated dance to enable TEXT 2 mode on MSX1 computers with v9938
 	ld iy,(EXPTBL-1)
 	ld ix,INITXT
 	call CALSLT
+	ei
 	ld a,(VDP_MIRROR_0)      ; change TEXT1 to TEXT2 mode
 	or 4
 	ld (VDP_MIRROR_0),a

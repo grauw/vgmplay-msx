@@ -18,6 +18,7 @@ System_PrintChar:
 	ld iy,(EXPTBL-1)
 	ld ix,CHPUT
 	call CALSLT
+	ei
 	pop iy
 	pop ix
 	exx
@@ -260,6 +261,7 @@ System_EnableTurbo:
 	ld iy,(EXPTBL-1)
 	ld ix,CHGCPU
 	call CALSLT
+	ei
 	ret
 
 System_DisableTurbo:
@@ -269,6 +271,7 @@ System_DisableTurbo:
 	ld iy,(EXPTBL-1)
 	ld ix,CHGCPU
 	call CALSLT
+	ei
 	ret
 
 ; f <- c: not turbo R
