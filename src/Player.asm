@@ -66,8 +66,7 @@ LSBExtractionLoop:
 ; ix = this
 Player_Play: PROC
 	call Player_ResetPosition
-	ld a,(JIFFY)
-	ld (ix + Player.lastJiffy),a
+	call Player_InitialiseLastJiffy
 Loop:
 	call Player_ProcessNext
 	call Player_CheckExitCondition
@@ -151,6 +150,20 @@ Loop:
 	ret c
 	ld (ix + Player.time),Player.SAMPLES_CAP & 0FFH
 	ld (ix + Player.time + 1),Player.SAMPLES_CAP >> 8
+	ret
+	ENDP
+
+; Waits for timer interrupt to maximise the time available in the first frame.
+; ix = this
+Player_InitialiseLastJiffy: PROC
+	ld hl,JIFFY
+	ld a,(hl)
+SyncWait:
+	halt
+	cp (hl)
+	jp z,SyncWait
+	ld a,(hl)
+	ld (ix + Player.lastJiffy),a
 	ret
 	ENDP
 
