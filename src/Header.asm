@@ -649,7 +649,7 @@ Header_CheckID:
 Header_instance: Header
 
 Header_versionLabel:
-	db "Version: ",0
+	db "VGM version: ",0
 
 Header_sn76489Name:
 	db "SN76489 (DCSG)",0
