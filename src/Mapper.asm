@@ -56,54 +56,14 @@ Mapper_Constructor:
 	call z,VGMPlay_TerminateWithError
 	pop hl
 	ld (ix + Mapper.primaryMapperSlot),b
-	ld de,3
-	ld (ix + Mapper.Allocate + 1),l
-	ld (ix + Mapper.Allocate + 2),h
-	add hl,de
-	ld (ix + Mapper.Free + 1),l
-	ld (ix + Mapper.Free + 2),h
-	add hl,de
-	ld (ix + Mapper.Read + 1),l
-	ld (ix + Mapper.Read + 2),h
-	add hl,de
-	ld (ix + Mapper.Write + 1),l
-	ld (ix + Mapper.Write + 2),h
-	add hl,de
-	ld (ix + Mapper.Call + 1),l
-	ld (ix + Mapper.Call + 2),h
-	add hl,de
-	ld (ix + Mapper.Calls + 1),l
-	ld (ix + Mapper.Calls + 2),h
-	add hl,de
-	ld (ix + Mapper.PutPH + 1),l
-	ld (ix + Mapper.PutPH + 2),h
-	add hl,de
-	ld (ix + Mapper.GetPH + 1),l
-	ld (ix + Mapper.GetPH + 2),h
-	add hl,de
-	ld (ix + Mapper.PutP0 + 1),l
-	ld (ix + Mapper.PutP0 + 2),h
-	add hl,de
-	ld (ix + Mapper.GetP0 + 1),l
-	ld (ix + Mapper.GetP0 + 2),h
-	add hl,de
-	ld (ix + Mapper.PutP1 + 1),l
-	ld (ix + Mapper.PutP1 + 2),h
-	add hl,de
-	ld (ix + Mapper.GetP1 + 1),l
-	ld (ix + Mapper.GetP1 + 2),h
-	add hl,de
-	ld (ix + Mapper.PutP2 + 1),l
-	ld (ix + Mapper.PutP2 + 2),h
-	add hl,de
-	ld (ix + Mapper.GetP2 + 1),l
-	ld (ix + Mapper.GetP2 + 2),h
-	add hl,de
-	ld (ix + Mapper.PutP3 + 1),l
-	ld (ix + Mapper.PutP3 + 2),h
-	add hl,de
-	ld (ix + Mapper.GetP3 + 1),l
-	ld (ix + Mapper.GetP3 + 2),h
+	ld e,ixl
+	ld d,ixh
+	ld bc,Mapper.Allocate
+	ex de,hl
+	add hl,bc
+	ex de,hl
+	ld bc,16 * 3
+	ldir
 	ret
 
 ;
