@@ -4,6 +4,12 @@
 Mapper: MACRO
 	primaryMapperSlot:
 		db 0
+	initialPage0:
+		db 0
+	initialPage1:
+		db 0
+	initialPage2:
+		db 0
 	Allocate:
 		jp 0
 	Free:
@@ -64,6 +70,23 @@ Mapper_Constructor:
 	ex de,hl
 	ld bc,16 * 3
 	ldir
+	call Mapper_instance.GetP0
+	ld (ix + Mapper.initialPage0),a
+	call Mapper_instance.GetP1
+	ld (ix + Mapper.initialPage1),a
+	call Mapper_instance.GetP2
+	ld (ix + Mapper.initialPage2),a
+	ret
+
+; ix = this
+; ix <- this
+Mapper_Destructor:
+	ld a,(ix + Mapper.initialPage0)
+	call Mapper_instance.PutP0
+	ld a,(ix + Mapper.initialPage1)
+	call Mapper_instance.PutP1
+	ld a,(ix + Mapper.initialPage2)
+	call Mapper_instance.PutP2
 	ret
 
 ;

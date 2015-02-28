@@ -52,7 +52,7 @@ VGMPlay_Main:
 	ld de,VGMPlay_Abort
 	call VGMPlay_SetAbortHandler
 	call VGMPlay_EnterMainLoop
-	call VGMPlay_Destructor
+	call VGMPlay_Abort
 	ret
 
 ; DOS error or abort handler
@@ -61,6 +61,8 @@ VGMPlay_Abort:
 	push bc
 	ld ix,VGMPlay_instance
 	call VGMPlay_Destructor
+	ld ix,Mapper_instance
+	call Mapper_Destructor
 	pop bc
 	pop af
 	ret
