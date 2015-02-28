@@ -271,6 +271,12 @@ Player_YM2151Write:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
+Player_YM3526Write:
+	call Player_ReadWord
+	call MSXAudio_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+
+; ix = this
 Player_AY8910Write:
 	call Player_ReadWord
 	call PSG_instance.SafeWriteRegister
@@ -503,7 +509,7 @@ Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 58H
 	dw Player_UnsupportedCommand  ; 59H
 	dw Player_UnsupportedCommand  ; 5AH
-	dw Player_UnsupportedCommand  ; 5BH
+	dw Player_YM3526Write         ; 5BH
 	dw Player_UnsupportedCommand  ; 5CH
 	dw Player_UnsupportedCommand  ; 5DH
 	dw Player_UnsupportedCommand  ; 5EH

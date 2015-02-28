@@ -14,6 +14,8 @@ VGMPlay: MACRO
 		dw SFG_instance
 	msxMusic:
 		dw MSXMusic_instance
+	msxAudio:
+		dw MSXAudio_instance
 	size:
 	ENDM
 
@@ -66,6 +68,10 @@ VGMPlay_Constructor:
 	call VGMPlay_GetMSXMusic
 	call MSXMusic_Install
 	pop ix
+	push ix
+	call VGMPlay_GetMSXAudio
+	call MSXAudio_Install
+	pop ix
 	ret
 
 ; ix = this
@@ -82,6 +88,10 @@ VGMPlay_Destructor:
 	push ix
 	call VGMPlay_GetMSXMusic
 	call MSXMusic_Uninstall
+	pop ix
+	push ix
+	call VGMPlay_GetMSXAudio
+	call MSXAudio_Uninstall
 	pop ix
 	ret
 
@@ -141,6 +151,16 @@ VGMPlay_GetSFG:
 VGMPlay_GetMSXMusic:
 	ld e,(ix + VGMPlay.msxMusic)
 	ld d,(ix + VGMPlay.msxMusic + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- MSX-AUDIO chip
+; ix <- MSX-AUDIO chip
+VGMPlay_GetMSXAudio:
+	ld e,(ix + VGMPlay.msxAudio)
+	ld d,(ix + VGMPlay.msxAudio + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
