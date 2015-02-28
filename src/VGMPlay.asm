@@ -49,8 +49,27 @@ VGMPlay_Main:
 
 	ld ix,VGMPlay_instance
 	call VGMPlay_Constructor
+	ld de,VGMPlay_Abort
+	call VGMPlay_SetAbortHandler
 	call VGMPlay_EnterMainLoop
 	call VGMPlay_Destructor
+	ret
+
+; DOS error or abort handler
+VGMPlay_Abort:
+	push af
+	push bc
+	ld ix,VGMPlay_instance
+	call VGMPlay_Destructor
+	pop bc
+	pop af
+	ret
+
+; de = abort handler
+; ix = this
+VGMPlay_SetAbortHandler:
+	ld c,_DEFAB
+	call BDOS
 	ret
 
 ; ix = this
