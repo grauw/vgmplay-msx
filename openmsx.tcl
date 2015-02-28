@@ -5,7 +5,7 @@ debug set_watchpoint read_io 0x2E
 #debug set_watchpoint read_mem 0x0000 {([debug read ioports 0xA8] & 0x0C) == 0x04}
 
 ext ide
-diskmanipulator create /tmp/vgmplay.dsk 16M
+diskmanipulator create /tmp/vgmplay.dsk 32M
 hda /tmp/vgmplay.dsk
 diskmanipulator format hda
 diskmanipulator import hda bin/
