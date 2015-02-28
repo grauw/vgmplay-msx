@@ -88,7 +88,7 @@ MSXMusic_Enable:
 
 ; ix = this
 MSXMusic_Mute: PROC
-	ld bc,9
+	ld b,9
 	ld de,0030H
 Loop:
 	push bc
@@ -103,7 +103,7 @@ Loop:
 
 ; ix = this
 MSXMusic_Reset: PROC
-	ld bc,3CH
+	ld b,3CH
 	ld de,0000H
 Loop:
 	push bc

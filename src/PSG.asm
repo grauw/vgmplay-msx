@@ -71,7 +71,7 @@ PSG_Reset: PROC
 	call PSG_WriteRegister
 	ld de,000AH
 	call PSG_WriteRegister
-	ld bc,14
+	ld b,14
 	ld de,0000H
 Loop:
 	push bc
