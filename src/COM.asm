@@ -36,6 +36,7 @@ COM_Main:
 	INCLUDE "Player.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "SFG.asm"
+	INCLUDE "MSXMusic.asm"
 
 	ENDS
 

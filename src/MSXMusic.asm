@@ -1,0 +1,154 @@
+;
+; YM2413 OPLL
+;
+MSXMusic: MACRO
+	ADDRESS: equ 7CH
+	DATA: equ 7DH
+	ID_ADDRESS: equ 401CH
+	ENABLE_ADDRESS: equ 7FF6H
+	found:
+		db 0
+	slot:
+		db 0
+	; e = register
+	; d = value
+	SafeWriteRegister:
+		ld a,e
+	; a = register
+	; d = value
+	WriteRegister:
+		di
+		out (MSXMusic.ADDRESS),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+		ld a,d
+		ei
+		out (MSXMusic.DATA),a
+		ret
+	ENDM
+
+; ix = this
+MSXMusic_Install: PROC
+	call MSXMusic_Detect
+	jr nc,Disable
+	di
+	ld (ix + MSXMusic.slot),a
+	ld (ix + MSXMusic.found),-1
+	ei
+	call MSXMusic_Enable
+	ret
+Disable:
+	ld (ix + MSXMusic.SafeWriteRegister),0C9H  ; ret
+	ld (ix + MSXMusic.WriteRegister),0C9H  ; ret
+	ret
+	ENDP
+
+; ix = this
+MSXMusic_Uninstall:
+	ld a,(ix + MSXMusic.found)
+	and a
+	ret z
+	call MSXMusic_Mute
+	call MSXMusic_Reset
+	ret
+
+; ix = this
+; e = register
+; d = value
+MSXMusic_WriteRegister:
+	push ix
+	pop hl
+	ld bc,MSXMusic.WriteRegister
+	add hl,bc
+	ld a,e
+	jp hl
+
+; ix = this
+; e = register
+; d = value
+MSXMusic_SafeWriteRegister:
+	push ix
+	pop hl
+	ld bc,MSXMusic.SafeWriteRegister
+	add hl,bc
+	jp hl
+
+; ix = this
+MSXMusic_Enable:
+	ld a,(ix + MSXMusic.slot)
+	ld hl,MSXMusic.ENABLE_ADDRESS
+	call Memory_ReadSlot
+	set 0,a
+	ld c,a
+	ld a,(ix + MSXMusic.slot)
+	ld hl,MSXMusic.ENABLE_ADDRESS
+	call Memory_WriteSlot
+	ret
+
+; ix = this
+MSXMusic_Mute: PROC
+	ld bc,9
+	ld de,0030H
+Loop:
+	push bc
+	push de
+	call MSXMusic_SafeWriteRegister
+	pop de
+	pop bc
+	inc e
+	djnz Loop
+	ret
+	ENDP
+
+; ix = this
+MSXMusic_Reset: PROC
+	ld bc,3CH
+	ld de,0000H
+Loop:
+	push bc
+	push de
+	call MSXMusic_SafeWriteRegister
+	pop de
+	pop bc
+	inc e
+	djnz Loop
+	ret
+	ENDP
+
+;
+; Detect MSX Music
+;
+; ix = this
+; f <- c: found
+; a <- slot
+;
+MSXMusic_Detect:
+	ld hl,MSXMusic_MatchID
+	call Memory_SearchSlots
+	ret
+
+;
+; Check slot for MSX Music ID
+;
+; ix = this
+; a = slot id
+; f <- c: found
+;
+MSXMusic_MatchID:
+	ld de,MSXMusic_id
+	ld hl,MSXMusic.ID_ADDRESS
+	ld bc,4
+	call Memory_MatchSlotString
+	ret
+
+MSXMusic_id:
+	db "OPLL"
+
+;
+; Workarea definition
+;
+	SECTION RAM
+
+MSXMusic_instance: MSXMusic
+
+	ENDS

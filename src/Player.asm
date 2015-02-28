@@ -236,6 +236,12 @@ Player_CheckExitCondition:
 	ret
 
 ; ix = this
+Player_YM2413Write:
+	call Player_ReadWord
+	call MSXMusic_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+
+; ix = this
 Player_YM2151Write:
 	call Player_ReadWord
 	call SFG_instance.SafeWriteRegister
@@ -464,7 +470,7 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; 4EH
 	dw Player_UnsupportedCommand  ; 4FH
 	dw Player_UnsupportedCommand  ; 50H
-	dw Player_UnsupportedCommand  ; 51H
+	dw Player_YM2413Write         ; 51H
 	dw Player_UnsupportedCommand  ; 52H
 	dw Player_UnsupportedCommand  ; 53H
 	dw Player_YM2151Write         ; 54H

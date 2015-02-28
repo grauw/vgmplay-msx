@@ -12,6 +12,8 @@ VGMPlay: MACRO
 		dw PSG_instance
 	sfg:
 		dw SFG_instance
+	msxMusic:
+		dw MSXMusic_instance
 	size:
 	ENDM
 
@@ -60,6 +62,10 @@ VGMPlay_Constructor:
 	call VGMPlay_GetSFG
 	call SFG_Install
 	pop ix
+	push ix
+	call VGMPlay_GetMSXMusic
+	call MSXMusic_Install
+	pop ix
 	ret
 
 ; ix = this
@@ -72,6 +78,10 @@ VGMPlay_Destructor:
 	push ix
 	call VGMPlay_GetSFG
 	call SFG_Uninstall
+	pop ix
+	push ix
+	call VGMPlay_GetMSXMusic
+	call MSXMusic_Uninstall
 	pop ix
 	ret
 
@@ -121,6 +131,16 @@ VGMPlay_GetPSG:
 VGMPlay_GetSFG:
 	ld e,(ix + VGMPlay.sfg)
 	ld d,(ix + VGMPlay.sfg + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- MSX Music chip
+; ix <- MSX Music chip
+VGMPlay_GetMSXMusic:
+	ld e,(ix + VGMPlay.msxMusic)
+	ld d,(ix + VGMPlay.msxMusic + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
