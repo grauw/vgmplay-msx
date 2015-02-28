@@ -68,6 +68,7 @@ SFG_Install: PROC
 	ei
 	ret
 Disable:
+	ld (ix + SFG.SafeWriteRegister),0C9H  ; ret
 	ld (ix + SFG.WriteRegister),0C9H  ; ret
 	ret
 	ENDP
