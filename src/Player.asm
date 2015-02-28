@@ -328,6 +328,8 @@ Set50th:
 	ENDP
 
 ; ix = this
+Player_Wait0Samples:
+	jp Player_ProcessNext.NoWait
 Player_Wait1Samples:
 	ld de,1
 	jp Player_WaitSamples
@@ -505,23 +507,23 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; 4CH
 	dw Player_Skip3               ; 4DH
 	dw Player_Skip3               ; 4EH
-	dw Player_UnsupportedCommand  ; 4FH
-	dw Player_UnsupportedCommand  ; 50H
+	dw Player_Skip2               ; 4FH
+	dw Player_Skip2               ; 50H
 	dw Player_YM2413Write         ; 51H
-	dw Player_UnsupportedCommand  ; 52H
-	dw Player_UnsupportedCommand  ; 53H
+	dw Player_Skip3               ; 52H
+	dw Player_Skip3               ; 53H
 	dw Player_YM2151Write         ; 54H
-	dw Player_UnsupportedCommand  ; 55H
-	dw Player_UnsupportedCommand  ; 56H
-	dw Player_UnsupportedCommand  ; 57H
-	dw Player_UnsupportedCommand  ; 58H
-	dw Player_UnsupportedCommand  ; 59H
-	dw Player_UnsupportedCommand  ; 5AH
+	dw Player_Skip3               ; 55H
+	dw Player_Skip3               ; 56H
+	dw Player_Skip3               ; 57H
+	dw Player_Skip3               ; 58H
+	dw Player_Skip3               ; 59H
+	dw Player_Skip3               ; 5AH
 	dw Player_YM3526Write         ; 5BH
 	dw Player_Y8950Write          ; 5CH
-	dw Player_UnsupportedCommand  ; 5DH
-	dw Player_UnsupportedCommand  ; 5EH
-	dw Player_UnsupportedCommand  ; 5FH
+	dw Player_Skip3               ; 5DH
+	dw Player_Skip3               ; 5EH
+	dw Player_Skip3               ; 5FH
 	dw Player_UnsupportedCommand  ; 60H
 	dw Player_WaitNSamples        ; 61H
 	dw Player_Wait735Samples      ; 62H
@@ -554,22 +556,22 @@ Player_commandsJumpTable:
 	dw Player_Wait14Samples       ; 7DH
 	dw Player_Wait15Samples       ; 7EH
 	dw Player_Wait16Samples       ; 7FH
-	dw Player_UnsupportedCommand  ; 80H
-	dw Player_UnsupportedCommand  ; 81H
-	dw Player_UnsupportedCommand  ; 82H
-	dw Player_UnsupportedCommand  ; 83H
-	dw Player_UnsupportedCommand  ; 84H
-	dw Player_UnsupportedCommand  ; 85H
-	dw Player_UnsupportedCommand  ; 86H
-	dw Player_UnsupportedCommand  ; 87H
-	dw Player_UnsupportedCommand  ; 88H
-	dw Player_UnsupportedCommand  ; 89H
-	dw Player_UnsupportedCommand  ; 8AH
-	dw Player_UnsupportedCommand  ; 8BH
-	dw Player_UnsupportedCommand  ; 8CH
-	dw Player_UnsupportedCommand  ; 8DH
-	dw Player_UnsupportedCommand  ; 8EH
-	dw Player_UnsupportedCommand  ; 8FH
+	dw Player_Wait0Samples        ; 80H
+	dw Player_Wait1Samples        ; 81H
+	dw Player_Wait2Samples        ; 82H
+	dw Player_Wait3Samples        ; 83H
+	dw Player_Wait4Samples        ; 84H
+	dw Player_Wait5Samples        ; 85H
+	dw Player_Wait6Samples        ; 86H
+	dw Player_Wait7Samples        ; 87H
+	dw Player_Wait8Samples        ; 88H
+	dw Player_Wait9Samples        ; 89H
+	dw Player_Wait10Samples       ; 8AH
+	dw Player_Wait11Samples       ; 8BH
+	dw Player_Wait12Samples       ; 8CH
+	dw Player_Wait13Samples       ; 8DH
+	dw Player_Wait14Samples       ; 8EH
+	dw Player_Wait15Samples       ; 8FH
 	dw Player_UnsupportedCommand  ; 90H
 	dw Player_UnsupportedCommand  ; 91H
 	dw Player_UnsupportedCommand  ; 92H
@@ -602,27 +604,27 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; ADH
 	dw Player_Skip3               ; AEH
 	dw Player_Skip3               ; AFH
-	dw Player_UnsupportedCommand  ; B0H
-	dw Player_UnsupportedCommand  ; B1H
-	dw Player_UnsupportedCommand  ; B2H
-	dw Player_UnsupportedCommand  ; B3H
-	dw Player_UnsupportedCommand  ; B4H
-	dw Player_UnsupportedCommand  ; B5H
-	dw Player_UnsupportedCommand  ; B6H
-	dw Player_UnsupportedCommand  ; B7H
-	dw Player_UnsupportedCommand  ; B8H
-	dw Player_UnsupportedCommand  ; B9H
-	dw Player_UnsupportedCommand  ; BAH
-	dw Player_UnsupportedCommand  ; BBH
+	dw Player_Skip3               ; B0H
+	dw Player_Skip3               ; B1H
+	dw Player_Skip3               ; B2H
+	dw Player_Skip3               ; B3H
+	dw Player_Skip3               ; B4H
+	dw Player_Skip3               ; B5H
+	dw Player_Skip3               ; B6H
+	dw Player_Skip3               ; B7H
+	dw Player_Skip3               ; B8H
+	dw Player_Skip3               ; B9H
+	dw Player_Skip3               ; BAH
+	dw Player_Skip3               ; BBH
 	dw Player_Skip3               ; BCH
 	dw Player_Skip3               ; BDH
 	dw Player_Skip3               ; BEH
 	dw Player_Skip3               ; BFH
-	dw Player_UnsupportedCommand  ; C0H
-	dw Player_UnsupportedCommand  ; C1H
-	dw Player_UnsupportedCommand  ; C2H
-	dw Player_UnsupportedCommand  ; C3H
-	dw Player_UnsupportedCommand  ; C4H
+	dw Player_Skip4               ; C0H
+	dw Player_Skip4               ; C1H
+	dw Player_Skip4               ; C2H
+	dw Player_Skip4               ; C3H
+	dw Player_Skip4               ; C4H
 	dw Player_Skip4               ; C5H
 	dw Player_Skip4               ; C6H
 	dw Player_Skip4               ; C7H
@@ -634,11 +636,11 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; CDH
 	dw Player_Skip4               ; CEH
 	dw Player_Skip4               ; CFH
-	dw Player_UnsupportedCommand  ; D0H
-	dw Player_UnsupportedCommand  ; D1H
-	dw Player_UnsupportedCommand  ; D2H
-	dw Player_UnsupportedCommand  ; D3H
-	dw Player_UnsupportedCommand  ; D4H
+	dw Player_Skip4               ; D0H
+	dw Player_Skip4               ; D1H
+	dw Player_Skip4               ; D2H
+	dw Player_Skip4               ; D3H
+	dw Player_Skip4               ; D4H
 	dw Player_Skip4               ; D5H
 	dw Player_Skip4               ; D6H
 	dw Player_Skip4               ; D7H
@@ -650,7 +652,7 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; DDH
 	dw Player_Skip4               ; DEH
 	dw Player_Skip4               ; DFH
-	dw Player_UnsupportedCommand  ; E0H
+	dw Player_Skip5               ; E0H
 	dw Player_Skip5               ; E1H
 	dw Player_Skip5               ; E2H
 	dw Player_Skip5               ; E3H
