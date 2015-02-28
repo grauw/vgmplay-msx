@@ -136,8 +136,8 @@ VGMPlay_GetSFG:
 	ret
 
 ; ix = this
-; de <- MSX Music chip
-; ix <- MSX Music chip
+; de <- MSX-MUSIC chip
+; ix <- MSX-MUSIC chip
 VGMPlay_GetMSXMusic:
 	ld e,(ix + VGMPlay.msxMusic)
 	ld d,(ix + VGMPlay.msxMusic + 1)
