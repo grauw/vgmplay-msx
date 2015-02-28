@@ -305,12 +305,16 @@ VGMPlay_TerminateWithDOSError:
 	ld hl,VGMPlay_explainBuffer
 	call System_Print
 	call System_PrintCrLf
-	jp REBOOT
+	ld b,1
+	ld c,_TERM
+	call BDOS
 
 ; hl <- message
 VGMPlay_TerminateWithError:
 	call System_Print
-	jp REBOOT
+	ld b,1
+	ld c,_TERM
+	call BDOS
 
 ;
 	SECTION RAM

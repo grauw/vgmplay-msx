@@ -412,7 +412,9 @@ Player_UnsupportedCommand:
 	pop af
 	call System_PrintHexA
 	call System_PrintCrLf
-	jp REBOOT
+	ld b,1
+	ld c,_TERM
+	call BDOS
 
 ;
 	SECTION RAM
