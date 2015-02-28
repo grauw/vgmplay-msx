@@ -7,7 +7,7 @@ package: all
 	cd bin && zip vgmplay.zip vgmplay.rom README.md LICENSE
 
 run: all
-	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext Yamaha_SFG-05 -script openmsx.tcl
+	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext Yamaha_SFG-05 -ext mbstereo -script openmsx.tcl
 
 run2: all
 	openmsx -machine Yamaha_CX5MII -script openmsx.tcl
