@@ -16,8 +16,6 @@ SFG: MACRO
 	; d = value
 	SafeWriteRegister:
 		ld a,e
-		cp 01H
-		ret z
 		cp 14H
 		jr z,MaskIRQEN
 		cp 1BH
