@@ -152,7 +152,7 @@ Loop:
 	ENDP
 
 ;
-; Detect MIDI interface
+; Detect SFG sound module
 ;
 ; ix = this
 ; f <- c: found
@@ -164,7 +164,7 @@ SFG_Detect:
 	ret
 
 ;
-; Check slot for MIDI ID
+; Check slot for SFG sound module ID
 ;
 ; ix = this
 ; a = slot id
