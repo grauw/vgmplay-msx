@@ -11,3 +11,6 @@ run: all
 
 run2: all
 	openmsx -machine Yamaha_CX5MII -script openmsx.tcl
+
+run3: all
+	openmsx -machine Philips_NMS_8245 -ext slotexpander -ext ram4mb -ext fmpac -ext Yamaha_SFG-05 -script openmsx.tcl
