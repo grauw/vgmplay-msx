@@ -214,7 +214,7 @@ Player_SetPosition:
 Player_ReadByte: equ Reader_instance.ReadByte
 
 ; ix = this
-; hl <- value
+; de <- value
 Player_ReadWord:
 	call Player_ReadByte
 	ld e,a
