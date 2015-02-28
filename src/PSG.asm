@@ -15,7 +15,7 @@ PSG: MACRO
 		cp 7
 		jr z,MaskMixer
 	; a = register
-	; h = value
+	; d = value
 	WriteRegister:
 		di
 		out (PSG.ADDRESS),a
