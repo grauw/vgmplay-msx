@@ -222,6 +222,15 @@ Player_ReadWord:
 	ld d,a
 	ret
 
+; ix = this
+; dehl <- value
+Player_ReadDoubleWord:
+	call Player_ReadWord
+	push de
+	call Player_ReadWord
+	pop hl
+	ret
+
 ; f <- nz: exit condition occurred
 Player_CheckExitCondition:
 	bit 0,(ix + Player.ended)
@@ -233,6 +242,20 @@ Player_CheckExitCondition:
 	ld c,_INNOE
 	call BDOS
 	and a
+	ret
+
+; ix = this
+Player_DataBlock:
+	call Player_ReadByte
+	cp 66H
+	jp nz,Player_UnsupportedCommand
+	call Player_ReadByte
+	; data type
+	push ix
+	call Player_GetReader
+	call Player_ReadDoubleWord
+	call Reader_Skip
+	pop ix
 	ret
 
 ; ix = this
@@ -492,7 +515,7 @@ Player_commandsJumpTable:
 	dw Player_SetWait             ; 64H
 	dw Player_UnsupportedCommand  ; 65H
 	dw Player_EndOfSoundData      ; 66H
-	dw Player_UnsupportedCommand  ; 67H
+	dw Player_DataBlock           ; 67H
 	dw Player_UnsupportedCommand  ; 68H
 	dw Player_UnsupportedCommand  ; 69H
 	dw Player_UnsupportedCommand  ; 6AH

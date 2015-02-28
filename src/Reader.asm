@@ -62,6 +62,42 @@ Reader_SetPosition:
 	call Reader_SelectSegment
 	ret
 
+; ix = this
+; dehl <- address
+Reader_GetPosition:
+	ld l,(ix + Reader.position)
+	ld h,(ix + Reader.position + 1)
+	ld a,(ix + Reader.positionSegmentIndex)
+	rlc h
+	rlc h
+	rrca
+	rr h
+	rrca
+	rr h
+	and 3FH
+	ld e,a
+	ld d,0
+	ret
+
+; ehl = nr of bytes to skip
+; ix = this
+Reader_Skip:
+	ld a,d
+	and a
+	jp nz,Reader_ThrowAddressOutOfBounds
+	push de
+	push hl
+	call Reader_GetPosition
+	pop bc
+	add hl,bc
+	pop bc
+	ex de,hl
+	adc hl,bc
+	ex de,hl
+	jp c,Reader_ThrowAddressOutOfBounds
+	call Reader_SetPosition
+	ret
+
 ; Reads a byte from the current position.
 ; No bounds checks are performed.
 ;
