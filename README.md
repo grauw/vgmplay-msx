@@ -36,6 +36,7 @@ Supported sound chips
   * AY-3-8910 PSG / YM2149 SSG
   * YM-2151 OPM (SFG-01/05)
   * YM-2413 OPLL (MSX-MUSIC, FM-PAC)
+  * YM-3526 OPL (MSX-AUDIO, Music Module)
 
 Support for more chips will be added in the future.
 
