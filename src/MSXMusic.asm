@@ -36,6 +36,7 @@ MSXMusic_Install: PROC
 	ld (ix + MSXMusic.found),-1
 	ei
 	call MSXMusic_Enable
+	call MSXMusic_Reset
 	ret
 Disable:
 	ld (ix + MSXMusic.SafeWriteRegister),0C9H  ; ret
