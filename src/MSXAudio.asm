@@ -114,7 +114,8 @@ Loop:
 ; f <- c: Found
 MSXAudio_Detect:
 	in a,(MSXAudio.STATUS)
-	cp 06H
+	sub 06H
+	and a
 	ret nz
 	scf
 	ret
