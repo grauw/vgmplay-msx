@@ -32,6 +32,21 @@ MoonSound: MACRO
 		cp 8H
 		jr z,WriteRegister
 		ret
+	; e = register
+	; d = value
+	SafeWriteRegister2:
+		ld a,e
+	; a = register
+	; d = value
+	WriteRegister2:
+		di
+		out (MoonSound.FM2_ADDRESS),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+		ld a,d
+		ei
+		out (MoonSound.FM2_DATA),a
+		ret
 	ENDM
 
 ; ix = this
@@ -79,6 +94,27 @@ MoonSound_SafeWriteRegister:
 	jp hl
 
 ; ix = this
+; e = register
+; d = value
+MoonSound_WriteRegister2:
+	push ix
+	pop hl
+	ld bc,MoonSound.WriteRegister2
+	add hl,bc
+	ld a,e
+	jp hl
+
+; ix = this
+; e = register
+; d = value
+MoonSound_SafeWriteRegister2:
+	push ix
+	pop hl
+	ld bc,MoonSound.SafeWriteRegister2
+	add hl,bc
+	jp hl
+
+; ix = this
 MoonSound_Mute: PROC
 	ld b,22
 	ld de,3F40H
@@ -90,6 +126,16 @@ Loop:
 	pop bc
 	inc e
 	djnz Loop
+	ld b,22
+	ld de,3F40H
+Loop2:
+	push bc
+	push de
+	call MoonSound_SafeWriteRegister2
+	pop de
+	pop bc
+	inc e
+	djnz Loop2
 	ret
 	ENDP
 
@@ -105,6 +151,16 @@ Loop:
 	pop bc
 	inc e
 	djnz Loop
+	ld b,0F6H
+	ld de,0000H
+Loop2:
+	push bc
+	push de
+	call MoonSound_SafeWriteRegister2
+	pop de
+	pop bc
+	inc e
+	djnz Loop2
 	ret
 	ENDP
 

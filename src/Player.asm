@@ -288,6 +288,18 @@ Player_Y8950Write:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
+Player_YMF262WritePort0:
+	call Player_ReadWord
+	call MoonSound_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+
+; ix = this
+Player_YMF262WritePort1:
+	call Player_ReadWord
+	call MoonSound_instance.SafeWriteRegister2
+	jp Player_ProcessNext.NoWait
+
+; ix = this
 Player_AY8910Write:
 	call Player_ReadWord
 	call PSG_instance.SafeWriteRegister
@@ -530,8 +542,8 @@ Player_commandsJumpTable:
 	dw Player_YM3526Write         ; 5BH
 	dw Player_Y8950Write          ; 5CH
 	dw Player_Skip3               ; 5DH
-	dw Player_Skip3               ; 5EH
-	dw Player_Skip3               ; 5FH
+	dw Player_YMF262WritePort0    ; 5EH
+	dw Player_YMF262WritePort1    ; 5FH
 	dw Player_UnsupportedCommand  ; 60H
 	dw Player_WaitNSamples        ; 61H
 	dw Player_Wait735Samples      ; 62H
