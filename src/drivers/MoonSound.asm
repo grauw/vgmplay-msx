@@ -155,17 +155,23 @@ MoonSound_Mute:
 ; ix = this
 MoonSound_Reset:
 	call MoonSound_Mute
-	ld b,040H
-	ld de,0000H
+	ld b,020H
+	ld de,0020H
 	call MoonSound_FillRegisters
-	ld b,040H
-	ld de,0000H
+	ld b,020H
+	ld de,0020H
 	call MoonSound_FillRegisters2
 	ld b,096H
 	ld de,0060H
 	call MoonSound_FillRegisters
 	ld b,096H
 	ld de,0060H
+	call MoonSound_FillRegisters2
+	ld b,020H
+	ld de,0000H
+	call MoonSound_FillRegisters
+	ld b,020H
+	ld de,0000H
 	call MoonSound_FillRegisters2
 	ret
 
