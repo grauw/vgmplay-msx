@@ -102,7 +102,6 @@ Player_CheckWait: PROC
 	ret z
 	ld e,(ix + Player.time)
 	ld d,(ix + Player.time + 1)
-	and a
 	sbc hl,de
 	jp c,Done
 	jr z,Done
