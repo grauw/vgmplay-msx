@@ -270,6 +270,12 @@ Player_YM2151Write:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
+Player_YM3812Write:
+	call Player_ReadWord
+	call MoonSound_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+
+; ix = this
 Player_YM3526Write:
 	call Player_ReadWord
 	call MSXAudio_instance.SafeWriteRegister
@@ -520,7 +526,7 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; 57H
 	dw Player_Skip3               ; 58H
 	dw Player_Skip3               ; 59H
-	dw Player_Skip3               ; 5AH
+	dw Player_YM3812Write         ; 5AH
 	dw Player_YM3526Write         ; 5BH
 	dw Player_Y8950Write          ; 5CH
 	dw Player_Skip3               ; 5DH

@@ -37,6 +37,7 @@ Supported sound chips
   * YM2151 OPM (SFG-01/05)
   * YM2413 OPLL (MSX-MUSIC, FM-PAC)
   * YM3526 OPL (MSX-AUDIO, Music Module)
+  * YM3812 OPL2 (MoonSound)
 
 Support for more chips will be added in the future.
 

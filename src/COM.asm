@@ -38,6 +38,7 @@ COM_Main:
 	INCLUDE "SFG.asm"
 	INCLUDE "MSXMusic.asm"
 	INCLUDE "MSXAudio.asm"
+	INCLUDE "MoonSound.asm"
 
 	ENDS
 
