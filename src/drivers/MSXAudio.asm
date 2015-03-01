@@ -80,35 +80,33 @@ MSXAudio_SafeWriteRegister:
 	add hl,bc
 	jp hl
 
+; b = count
+; e = register base
+; d = value
 ; ix = this
-MSXAudio_Mute: PROC
-	ld b,22
-	ld de,3F40H
-Loop:
+MSXAudio_FillRegisters:
 	push bc
 	push de
 	call MSXAudio_SafeWriteRegister
 	pop de
 	pop bc
 	inc e
-	djnz Loop
+	djnz MSXAudio_FillRegisters
 	ret
-	ENDP
 
 ; ix = this
-MSXAudio_Reset: PROC
+MSXAudio_Mute:
+	ld b,22
+	ld de,3F40H
+	call MSXAudio_FillRegisters
+	ret
+
+; ix = this
+MSXAudio_Reset:
 	ld b,0C9H
 	ld de,0000H
-Loop:
-	push bc
-	push de
-	call MSXAudio_SafeWriteRegister
-	pop de
-	pop bc
-	inc e
-	djnz Loop
+	call MSXAudio_FillRegisters
 	ret
-	ENDP
 
 ; ix = this
 ; f <- c: Found

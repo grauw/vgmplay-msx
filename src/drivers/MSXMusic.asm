@@ -86,35 +86,33 @@ MSXMusic_Enable:
 	call Memory_WriteSlot
 	ret
 
+; b = count
+; e = register base
+; d = value
 ; ix = this
-MSXMusic_Mute: PROC
-	ld b,9
-	ld de,0030H
-Loop:
+MSXMusic_FillRegisters:
 	push bc
 	push de
 	call MSXMusic_SafeWriteRegister
 	pop de
 	pop bc
 	inc e
-	djnz Loop
+	djnz MSXMusic_FillRegisters
 	ret
-	ENDP
 
 ; ix = this
-MSXMusic_Reset: PROC
+MSXMusic_Mute:
+	ld b,9
+	ld de,0030H
+	call MSXMusic_FillRegisters
+	ret
+
+; ix = this
+MSXMusic_Reset:
 	ld b,3CH
 	ld de,0000H
-Loop:
-	push bc
-	push de
-	call MSXMusic_SafeWriteRegister
-	pop de
-	pop bc
-	inc e
-	djnz Loop
+	call MSXMusic_FillRegisters
 	ret
-	ENDP
 
 ;
 ; Detect MSX Music

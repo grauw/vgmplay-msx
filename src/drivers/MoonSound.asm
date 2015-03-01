@@ -114,55 +114,53 @@ MoonSound_SafeWriteRegister2:
 	add hl,bc
 	jp hl
 
+; b = count
+; e = register base
+; d = value
 ; ix = this
-MoonSound_Mute: PROC
-	ld b,22
-	ld de,3F40H
-Loop:
+MoonSound_FillRegisters:
 	push bc
 	push de
 	call MoonSound_SafeWriteRegister
 	pop de
 	pop bc
 	inc e
-	djnz Loop
-	ld b,22
-	ld de,3F40H
-Loop2:
+	djnz MoonSound_FillRegisters
+	ret
+
+; b = count
+; e = register base
+; d = value
+; ix = this
+MoonSound_FillRegisters2:
 	push bc
 	push de
 	call MoonSound_SafeWriteRegister2
 	pop de
 	pop bc
 	inc e
-	djnz Loop2
+	djnz MoonSound_FillRegisters2
 	ret
-	ENDP
 
 ; ix = this
-MoonSound_Reset: PROC
-	ld b,0F6H
-	ld de,0000H
-Loop:
-	push bc
-	push de
-	call MoonSound_SafeWriteRegister
-	pop de
-	pop bc
-	inc e
-	djnz Loop
-	ld b,0F6H
-	ld de,0000H
-Loop2:
-	push bc
-	push de
-	call MoonSound_SafeWriteRegister2
-	pop de
-	pop bc
-	inc e
-	djnz Loop2
+MoonSound_Mute:
+	ld b,22
+	ld de,3F40H
+	call MoonSound_FillRegisters
+	ld b,22
+	ld de,3F40H
+	call MoonSound_FillRegisters2
 	ret
-	ENDP
+
+; ix = this
+MoonSound_Reset:
+	ld b,0F6H
+	ld de,0000H
+	call MoonSound_FillRegisters
+	ld b,0F6H
+	ld de,0000H
+	call MoonSound_FillRegisters2
+	ret
 
 ; ix = this
 ; f <- c: Found
