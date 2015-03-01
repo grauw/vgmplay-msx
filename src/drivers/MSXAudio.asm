@@ -96,15 +96,19 @@ MSXAudio_FillRegisters:
 
 ; ix = this
 MSXAudio_Mute:
-	ld b,22
+	ld b,16H
 	ld de,3F40H
 	call MSXAudio_FillRegisters
 	ret
 
 ; ix = this
 MSXAudio_Reset:
-	ld b,0C9H
+	call MSXAudio_Mute
+	ld b,040H
 	ld de,0000H
+	call MSXAudio_FillRegisters
+	ld b,069H
+	ld de,0060H
 	call MSXAudio_FillRegisters
 	ret
 
