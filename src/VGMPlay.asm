@@ -147,8 +147,8 @@ VGMPlay_GetPlayer:
 	ret
 
 ; ix = this
-; de <- PSG chip
-; ix <- PSG chip
+; de <- PSG driver
+; ix <- PSG driver
 VGMPlay_GetPSG:
 	ld e,(ix + VGMPlay.psg)
 	ld d,(ix + VGMPlay.psg + 1)
@@ -157,8 +157,8 @@ VGMPlay_GetPSG:
 	ret
 
 ; ix = this
-; de <- SFG chip
-; ix <- SFG chip
+; de <- SFG driver
+; ix <- SFG driver
 VGMPlay_GetSFG:
 	ld e,(ix + VGMPlay.sfg)
 	ld d,(ix + VGMPlay.sfg + 1)
@@ -167,8 +167,8 @@ VGMPlay_GetSFG:
 	ret
 
 ; ix = this
-; de <- MSX-MUSIC chip
-; ix <- MSX-MUSIC chip
+; de <- MSX-MUSIC driver
+; ix <- MSX-MUSIC driver
 VGMPlay_GetMSXMusic:
 	ld e,(ix + VGMPlay.msxMusic)
 	ld d,(ix + VGMPlay.msxMusic + 1)
@@ -177,8 +177,8 @@ VGMPlay_GetMSXMusic:
 	ret
 
 ; ix = this
-; de <- MSX-AUDIO chip
-; ix <- MSX-AUDIO chip
+; de <- MSX-AUDIO driver
+; ix <- MSX-AUDIO driver
 VGMPlay_GetMSXAudio:
 	ld e,(ix + VGMPlay.msxAudio)
 	ld d,(ix + VGMPlay.msxAudio + 1)

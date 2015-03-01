@@ -1,5 +1,5 @@
 ;
-; YM2413 OPLL
+; MSX-MUSIC YM2413 OPLL driver
 ;
 MSXMusic: MACRO
 	ADDRESS: equ 7CH

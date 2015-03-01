@@ -1,5 +1,5 @@
 ;
-; Y8950 MSX-AUDIO
+; Y8950 MSX-AUDIO driver
 ;
 MSXAudio: MACRO
 	STATUS: equ 0C0H

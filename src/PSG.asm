@@ -1,5 +1,5 @@
 ;
-; AY-3-8910 / YM2149 PSG
+; AY-3-8910 / YM2149 PSG driver
 ;
 PSG: MACRO
 	ADDRESS: equ 0A0H
