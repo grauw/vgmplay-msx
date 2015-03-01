@@ -34,11 +34,7 @@ COM_Main:
 	INCLUDE "GD3.asm"
 	INCLUDE "Reader.asm"
 	INCLUDE "Player.asm"
-	INCLUDE "drivers/PSG.asm"
-	INCLUDE "drivers/SFG.asm"
-	INCLUDE "drivers/MSXMusic.asm"
-	INCLUDE "drivers/MSXAudio.asm"
-	INCLUDE "drivers/MoonSound.asm"
+	INCLUDE "drivers/Drivers.asm"
 
 	ENDS
 

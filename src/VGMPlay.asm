@@ -8,16 +8,8 @@ VGMPlay: MACRO
 		dw Reader_instance
 	player:
 		dw Player_instance
-	psg:
-		dw PSG_instance
-	sfg:
-		dw SFG_instance
-	msxMusic:
-		dw MSXMusic_instance
-	msxAudio:
-		dw MSXAudio_instance
-	moonSound:
-		dw MoonSound_instance
+	drivers:
+		dw Drivers_instance
 	size:
 	ENDM
 
@@ -80,24 +72,8 @@ VGMPlay_SetAbortHandler:
 ; ix <- this
 VGMPlay_Constructor:
 	push ix
-	call VGMPlay_GetPSG
-	call PSG_Install
-	pop ix
-	push ix
-	call VGMPlay_GetSFG
-	call SFG_Install
-	pop ix
-	push ix
-	call VGMPlay_GetMSXMusic
-	call MSXMusic_Install
-	pop ix
-	push ix
-	call VGMPlay_GetMSXAudio
-	call MSXAudio_Install
-	pop ix
-	push ix
-	call VGMPlay_GetMoonSound
-	call MoonSound_Install
+	call VGMPlay_GetDrivers
+	call Drivers_Constructor
 	pop ix
 	ret
 
@@ -105,24 +81,8 @@ VGMPlay_Constructor:
 ; ix <- this
 VGMPlay_Destructor:
 	push ix
-	call VGMPlay_GetPSG
-	call PSG_Uninstall
-	pop ix
-	push ix
-	call VGMPlay_GetSFG
-	call SFG_Uninstall
-	pop ix
-	push ix
-	call VGMPlay_GetMSXMusic
-	call MSXMusic_Uninstall
-	pop ix
-	push ix
-	call VGMPlay_GetMSXAudio
-	call MSXAudio_Uninstall
-	pop ix
-	push ix
-	call VGMPlay_GetMoonSound
-	call MoonSound_Uninstall
+	call VGMPlay_GetDrivers
+	call Drivers_Destructor
 	pop ix
 	ret
 
@@ -157,51 +117,11 @@ VGMPlay_GetPlayer:
 	ret
 
 ; ix = this
-; de <- PSG driver
-; ix <- PSG driver
-VGMPlay_GetPSG:
-	ld e,(ix + VGMPlay.psg)
-	ld d,(ix + VGMPlay.psg + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
-; de <- SFG driver
-; ix <- SFG driver
-VGMPlay_GetSFG:
-	ld e,(ix + VGMPlay.sfg)
-	ld d,(ix + VGMPlay.sfg + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
-; de <- MSX-MUSIC driver
-; ix <- MSX-MUSIC driver
-VGMPlay_GetMSXMusic:
-	ld e,(ix + VGMPlay.msxMusic)
-	ld d,(ix + VGMPlay.msxMusic + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
-; de <- MSX-AUDIO driver
-; ix <- MSX-AUDIO driver
-VGMPlay_GetMSXAudio:
-	ld e,(ix + VGMPlay.msxAudio)
-	ld d,(ix + VGMPlay.msxAudio + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
-; de <- MoonSound driver
-; ix <- MoonSound driver
-VGMPlay_GetMoonSound:
-	ld e,(ix + VGMPlay.moonSound)
-	ld d,(ix + VGMPlay.moonSound + 1)
+; de <- Driver manager
+; ix <- Driver manager
+VGMPlay_GetDrivers:
+	ld e,(ix + VGMPlay.drivers)
+	ld d,(ix + VGMPlay.drivers + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
