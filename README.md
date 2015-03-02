@@ -38,6 +38,7 @@ Supported sound chips
   * YM2413 OPLL (MSX-MUSIC, FM-PAC)
   * YM3526 OPL (MSX-AUDIO, Music Module)
   * YM3812 OPL2 (MoonSound)
+  * K051649 Konami SCC
 
 Support for more chips will be added in the future.
 

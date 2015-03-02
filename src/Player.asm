@@ -306,6 +306,52 @@ Player_AY8910Write:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
+Player_K051649Write: PROC
+	call Player_ReadByte
+	cp 1
+	jr c,Waveform
+	jr z,Frequency
+	cp 3
+	jr c,Amplitude
+	jr z,Mixer
+	cp 5
+	jr c,WaveformSCCPlus
+	jr z,Deformation
+	call Player_ReadWord
+	jp Player_ProcessNext.NoWait
+Waveform:
+	call Player_ReadWord
+	ld a,e
+	call SCC_instance.WriteRegister
+	jp Player_ProcessNext.NoWait
+Frequency:
+	call Player_ReadWord
+	ld a,SCC.FREQUENCY
+	add a,e
+	call SCC_instance.WriteRegister
+	jp Player_ProcessNext.NoWait
+Amplitude:
+	call Player_ReadWord
+	ld a,SCC.AMPLITUDE
+	add a,e
+	call SCC_instance.WriteRegister
+	jp Player_ProcessNext.NoWait
+Mixer:
+	call Player_ReadWord
+	ld a,SCC.MIXER
+	call SCC_instance.WriteRegister
+	jp Player_ProcessNext.NoWait
+WaveformSCCPlus:
+	call Player_ReadWord
+	jp Player_ProcessNext.NoWait
+Deformation:
+	call Player_ReadWord
+	ld a,SCC.DEFORMATION
+	call SCC_instance.WriteRegister
+	jp Player_ProcessNext.NoWait
+	ENDP
+
+; ix = this
 Player_EndOfSoundData: PROC
 	push ix
 	call Player_GetHeader
@@ -658,7 +704,7 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; CFH
 	dw Player_Skip4               ; D0H
 	dw Player_Skip4               ; D1H
-	dw Player_Skip4               ; D2H
+	dw Player_K051649Write        ; D2H
 	dw Player_Skip4               ; D3H
 	dw Player_Skip4               ; D4H
 	dw Player_Skip4               ; D5H
