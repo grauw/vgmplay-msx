@@ -86,8 +86,6 @@ SFG_SetSlot:
 	ld (ix + SFG.preparedSubslot),e
 	ret
 
-	SECTION PAGE1
-
 ; ix = this
 ; e = register
 ; d = value
@@ -98,8 +96,6 @@ SFG_WriteRegister:
 	add hl,bc
 	ld a,e
 	jp hl
-
-	ENDS
 
 ; ix = this
 ; e = register
