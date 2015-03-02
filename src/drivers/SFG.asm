@@ -60,10 +60,8 @@ SFG: MACRO
 SFG_Install: PROC
 	call SFG_Detect
 	jr nc,Disable
-	di
 	call SFG_SetSlot
 	ld (ix + SFG.found),-1
-	ei
 	ret
 Disable:
 	ld (ix + SFG.SafeWriteRegister),0C9H  ; ret
@@ -83,7 +81,6 @@ SFG_Uninstall:
 ; a = slot
 SFG_SetSlot:
 	ld (ix + SFG.slot),a
-
 	call Memory_PrepareSlotPage0
 	ld (ix + SFG.preparedSlot),d
 	ld (ix + SFG.preparedSubslot),e
