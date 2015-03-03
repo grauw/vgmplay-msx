@@ -1,34 +1,64 @@
 ;
 ; Y8950 MSX-AUDIO driver
 ;
+
+; ports
+MSXAudio_STATUS_PORT: equ 0C0H
+MSXAudio_ADDRESS_PORT: equ 0C0H
+MSXAudio_DATA_PORT: equ 0C1H
+
+; registers
+MSXAudio_TEST: equ 01H
+MSXAudio_TIMER_1: equ 02H
+MSXAudio_TIMER_2: equ 03H
+MSXAudio_FLAG_CONTROL: equ 04H
+MSXAudio_KEYBOARD_IN: equ 05H
+MSXAudio_KEYBOARD_OUT: equ 06H
+MSXAudio_ADPCM_CONTROL: equ 07H
+MSXAudio_MISC_CONTROL: equ 08H
+MSXAudio_START_ADDRESS_L: equ 09H
+MSXAudio_START_ADDRESS_H: equ 0AH
+MSXAudio_STOP_ADDRESS_L: equ 0BH
+MSXAudio_STOP_ADDRESS_H: equ 0CH
+MSXAudio_PRESCALE_L: equ 0DH
+MSXAudio_PRESCALE_H: equ 0EH
+MSXAudio_ADPCM_DATA: equ 0FH
+MSXAudio_DELTA_N_L: equ 10H
+MSXAudio_DELTA_N_H: equ 11H
+MSXAudio_ENVELOPE_CONTROL: equ 12H
+MSXAudio_DAC_DATA_L: equ 15H
+MSXAudio_DAC_DATA_H: equ 16H
+MSXAudio_DAC_DATA_SHIFT: equ 17H
+MSXAudio_IO_CONTROL: equ 18H
+MSXAudio_IO_DATA: equ 19H
+MSXAudio_PCM_DATA: equ 1AH
+MSXAudio_FM_BASE: equ 20H
+
 MSXAudio: MACRO
-	STATUS: equ 0C0H
-	ADDRESS: equ 0C0H
-	DATA: equ 0C1H
 	found:
 		db 0
 	; e = register
 	; d = value
 	SafeWriteRegister:
 		ld a,e
-		cp 20H
+		cp MSXAudio_FM_BASE
 		jr c,MaskControl
 	; a = register
 	; d = value
 	WriteRegister:
 		di
-		out (MSXAudio.ADDRESS),a
+		out (MSXAudio_ADDRESS_PORT),a
 		ex (sp),hl  ; wait 12 cycles
 		ex (sp),hl
 		ld a,d
 		ei
-		out (MSXAudio.DATA),a
+		out (MSXAudio_DATA_PORT),a
 		ret
 	MaskControl:
-		cp 8H
-		jr z,MaskROM_64K_DAAD_SAMPLE
+		cp MSXAudio_MISC_CONTROL
+		jr z,MaskMiscControl
 		ret
-	MaskROM_64K_DAAD_SAMPLE:
+	MaskMiscControl:
 		ld a,d
 		and 11000100B
 		ld d,a
@@ -115,7 +145,7 @@ MSXAudio_Reset:
 ; ix = this
 ; f <- c: Found
 MSXAudio_Detect:
-	in a,(MSXAudio.STATUS)
+	in a,(MSXAudio_STATUS_PORT)
 	sub 06H
 	and a
 	ret nz
