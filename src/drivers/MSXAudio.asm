@@ -67,7 +67,6 @@ MSXAudio: MACRO
 		cp MSXAudio_MISC_CONTROL
 		jr z,MaskMiscControl
 		jr c,WriteRegister
-		; add if-rom check
 		cp MSXAudio_START_ADDRESS_H + 1
 		jr c,WriteStartAddress
 		cp MSXAudio_STOP_ADDRESS_H + 1
@@ -87,6 +86,9 @@ MSXAudio: MACRO
 		ld a,e
 		jr WriteRegister
 	WriteStartAddress:
+		ld hl,safeControlMirror + MSXAudio_MISC_CONTROL
+		bit 0,(hl)
+		jr z,WriteRegister
 		ld hl,(safeControlMirror + MSXAudio_START_ADDRESS_L)
 		add hl,hl
 		add hl,hl
@@ -98,6 +100,9 @@ MSXAudio: MACRO
 		ld a,MSXAudio_START_ADDRESS_H
 		jr WriteRegister
 	WriteStopAddress:
+		ld hl,safeControlMirror + MSXAudio_MISC_CONTROL
+		bit 0,(hl)
+		jr z,WriteRegister
 		ld hl,(safeControlMirror + MSXAudio_STOP_ADDRESS_L)
 		add hl,hl
 		add hl,hl
