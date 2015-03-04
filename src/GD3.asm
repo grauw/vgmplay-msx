@@ -89,11 +89,16 @@ SkipFirst:
 	and a
 	jr nz,Unknown
 	ld a,e
+	cp 10
+	jr z,Newline
 	call System_PrintChar
 	jp Loop
 Unknown:
 	ld a,"?"
 	call System_PrintChar
+	jp Loop
+Newline:
+	call System_PrintCrLf
 	jp Loop
 	ENDP
 
