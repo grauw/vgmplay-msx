@@ -96,8 +96,7 @@ MSXAudio: MACRO
 		call WriteRegister
 		ld d,h
 		ld a,MSXAudio_START_ADDRESS_H
-		call WriteRegister
-		ret
+		jr WriteRegister
 	WriteStopAddress:
 		ld hl,(safeControlMirror + MSXAudio_STOP_ADDRESS_L)
 		add hl,hl
@@ -110,7 +109,7 @@ MSXAudio: MACRO
 		call WriteRegister
 		ld d,h
 		ld a,MSXAudio_STOP_ADDRESS_H
-		jp WriteRegister
+		jr WriteRegister
 	ENDM
 
 ; ix = this
