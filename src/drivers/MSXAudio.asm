@@ -117,21 +117,50 @@ MSXAudio: MACRO
 	; bc = count
 	; hl = source
 	WriteADPCMData: PROC
-		ld a,MSXAudio_ADPCM_DATA
+		di
+		ld a,MSXAudio_FLAG_CONTROL
 		out (MSXAudio_ADDRESS_PORT),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+		ld a,00H
+		out (MSXAudio_DATA_PORT),a
 		dec bc
 		inc b
 		inc c
-		ld a,b
+		ld e,b
 		ld b,c
 		ld c,MSXAudio_DATA_PORT
-	Loop:
-		push hl  ; wait 12 cycles
-		pop hl
+		jr Wait
+	Next:
+		ld a,MSXAudio_FLAG_CONTROL
+		out (MSXAudio_ADDRESS_PORT),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+		ld a,80H
+		out (MSXAudio_DATA_PORT),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+	Wait:
+		in a,(MSXAudio_STATUS_PORT)
+		bit 3,a
+		jr z,Wait
+		ld a,MSXAudio_ADPCM_DATA
+		out (MSXAudio_ADDRESS_PORT),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
 		outi
-		jr nz,Loop
-		dec a
-		jr nz,Loop
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+		jr nz,Next
+		dec e
+		jr nz,Next
+		ld a,MSXAudio_FLAG_CONTROL
+		out (MSXAudio_ADDRESS_PORT),a
+		ex (sp),hl  ; wait 12 cycles
+		ex (sp),hl
+		ld a,78H
+		out (MSXAudio_DATA_PORT),a
+		ei
 		ret
 		ENDP
 	ENDM
