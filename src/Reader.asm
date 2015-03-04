@@ -98,6 +98,20 @@ Reader_Skip:
 	call Reader_SetPosition
 	ret
 
+; bc = nr of bytes to skip
+; ix = this
+; Modifies: af, bc, de, hl
+Reader_SkipBC:
+	call Reader_GetPosition
+	add hl,bc
+	ex de,hl
+	ld bc,0
+	adc hl,bc
+	ex de,hl
+	jp c,Reader_ThrowAddressOutOfBounds
+	call Reader_SetPosition
+	ret
+
 ; Reads a byte from the current position.
 ; No bounds checks are performed.
 ;
@@ -140,6 +154,50 @@ Loop:
 	or c
 	jp nz,Loop
 	ret
+	ENDP
+
+; ehl = bytes count
+; iy = processing callback (hl = source, bc = bytes)
+; ix = this
+Reader_ReadAndProcessBlock: PROC
+Loop:
+	push hl
+	ld hl,Reader.BASE_ADDRESS + 4000H
+	ld c,(ix + Reader.position)
+	ld b,(ix + Reader.position + 1)
+	and a
+	sbc hl,bc
+	ex (sp),hl
+	pop bc
+	sbc hl,bc
+	jr z,Process
+	jp nc,Continue
+	dec e
+	jp m,FinalLap
+Continue:
+	push de
+	push hl
+	call Process
+	pop hl
+	pop de
+	jp Loop
+FinalLap:
+	add hl,bc
+	ret z
+	ld c,l
+	ld b,h
+	jp Process
+; bc = bytes, iy = processing callback, ix = this
+Process:
+	ld l,(ix + Reader.position)
+	ld h,(ix + Reader.position + 1)
+	push bc
+	call CallIY
+	pop bc
+	call Reader_SkipBC
+	ret
+CallIY:
+	jp iy
 	ENDP
 
 ; ehl = address

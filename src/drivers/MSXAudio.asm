@@ -113,6 +113,27 @@ MSXAudio: MACRO
 		ld d,h
 		ld a,MSXAudio_STOP_ADDRESS_H
 		jr WriteRegister
+
+	; bc = count
+	; hl = source
+	WriteADPCMData: PROC
+		ld a,MSXAudio_ADPCM_DATA
+		out (MSXAudio_ADDRESS_PORT),a
+		dec bc
+		inc b
+		inc c
+		ld a,b
+		ld b,c
+		ld c,MSXAudio_DATA_PORT
+	Loop:
+		push hl  ; wait 12 cycles
+		pop hl
+		outi
+		jr nz,Loop
+		dec a
+		jr nz,Loop
+		ret
+		ENDP
 	ENDM
 
 ; ix = this
@@ -199,6 +220,42 @@ MSXAudio_Detect:
 	and a
 	ret nz
 	scf
+	ret
+
+; ehl = write address
+; ix = this
+MSXAudio_SetADPCMWriteAddress:
+	srl e
+	rr h
+	rr l
+	jp c,System_ThrowException
+	srl e
+	rr h
+	rr l
+	jp c,System_ThrowException
+	ld a,e
+	or d
+	jp nz,System_ThrowException
+	push hl
+	ld d,l
+	ld e,MSXAudio_START_ADDRESS_L
+	call MSXAudio_WriteRegister
+	pop hl
+	ld d,h
+	ld e,MSXAudio_START_ADDRESS_H
+	call MSXAudio_WriteRegister
+	ld d,0FFH
+	ld e,MSXAudio_STOP_ADDRESS_L
+	call MSXAudio_WriteRegister
+	ld d,07FH
+	ld e,MSXAudio_STOP_ADDRESS_H
+	call MSXAudio_WriteRegister
+	ld d,01H
+	ld e,MSXAudio_ADPCM_CONTROL
+	call MSXAudio_WriteRegister
+	ld d,60H
+	ld e,MSXAudio_ADPCM_CONTROL
+	call MSXAudio_WriteRegister
 	ret
 
 ;

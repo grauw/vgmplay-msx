@@ -271,31 +271,10 @@ Player_Y8950DataBlock: PROC
 	push hl
 	call Player_ReadDoubleWord  ; total rom size
 	call Player_ReadDoubleWord  ; start address
-	srl e
-	rr h
-	rr l
-	jp c,System_ThrowException
-	srl e
-	rr h
-	rr l
-	jp c,System_ThrowException
-	ld a,e
-	or d
-	jp nz,System_ThrowException
-	push hl
-	ld d,l
-	ld a,MSXAudio_START_ADDRESS_L
-	call MSXAudio_instance.WriteRegister
-	pop hl
-	ld d,h
-	ld a,MSXAudio_START_ADDRESS_H
-	call MSXAudio_instance.WriteRegister
-	ld d,0FFH
-	ld a,MSXAudio_STOP_ADDRESS_L
-	call MSXAudio_instance.WriteRegister
-	ld d,07FH
-	ld a,MSXAudio_STOP_ADDRESS_H
-	call MSXAudio_instance.WriteRegister
+	push ix
+	ld ix,MSXAudio_instance
+	call MSXAudio_SetADPCMWriteAddress
+	pop ix
 	pop hl
 	pop de
 	ld bc,8  ; subtract header from block size
@@ -307,43 +286,13 @@ Player_Y8950DataBlock: PROC
 	ex de,hl
 	jp c,System_ThrowException
 	ret z
-	ld bc,1  ; one more for easier looping
-	and a
-	sbc hl,bc
-	ld bc,0
-	ex de,hl
-	sbc hl,bc
-	ex de,hl
+	push ix
 	push de
-	push hl
-	ld d,01H
-	ld a,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_instance.WriteRegister
-	ld d,60H
-	ld a,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_instance.WriteRegister
-	pop hl
+	call Player_GetReader
 	pop de
-Loop:
-	push de
-Loop2:
-	push hl
-	call Player_ReadByte
-	ld d,a
-	ld a,MSXAudio_ADPCM_DATA
-	call MSXAudio_instance.WriteRegister
-	pop hl
-	dec hl
-	ld a,l
-	and h
-	inc a
-	jp nz,Loop2
-	pop de
-	dec de
-	ld a,e
-	and d
-	inc a
-	jp nz,Loop
+	ld iy,MSXAudio_instance.WriteADPCMData
+	call Reader_ReadAndProcessBlock
+	pop ix
 	ld a,01H
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_instance.WriteRegister
