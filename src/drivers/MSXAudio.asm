@@ -118,12 +118,9 @@ MSXAudio: MACRO
 	; hl = source
 	WriteADPCMData: PROC
 		di
+		ld d,00H
 		ld a,MSXAudio_FLAG_CONTROL
-		out (MSXAudio_ADDRESS_PORT),a
-		push hl  ; wait 12 cycles
-		pop hl
-		ld a,00H
-		out (MSXAudio_DATA_PORT),a
+		call WriteRegister
 		dec bc
 		inc b
 		inc c
@@ -132,14 +129,9 @@ MSXAudio: MACRO
 		ld c,MSXAudio_DATA_PORT
 		jr Wait
 	Next:
+		ld d,80H
 		ld a,MSXAudio_FLAG_CONTROL
-		out (MSXAudio_ADDRESS_PORT),a
-		push hl  ; wait 12 cycles
-		pop hl
-		ld a,80H
-		out (MSXAudio_DATA_PORT),a
-		push hl  ; wait 12 cycles
-		pop hl
+		call WriteRegister
 	Wait:
 		in a,(MSXAudio_STATUS_PORT)
 		bit 3,a
@@ -149,17 +141,12 @@ MSXAudio: MACRO
 		push hl  ; wait 12 cycles
 		pop hl
 		outi
-		push hl  ; wait 12 cycles
-		pop hl
 		jr nz,Next
 		dec e
 		jr nz,Next
+		ld d,78H
 		ld a,MSXAudio_FLAG_CONTROL
-		out (MSXAudio_ADDRESS_PORT),a
-		push hl  ; wait 12 cycles
-		pop hl
-		ld a,78H
-		out (MSXAudio_DATA_PORT),a
+		call WriteRegister
 		ei
 		ret
 		ENDP
