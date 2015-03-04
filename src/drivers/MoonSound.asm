@@ -20,12 +20,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegister:
-		di
 		out (MoonSound.FM_ADDRESS),a
 		ex (sp),hl  ; wait 12 cycles
 		ex (sp),hl
 		ld a,d
-		ei
 		out (MoonSound.FM_DATA),a
 		ret
 	MaskControl:

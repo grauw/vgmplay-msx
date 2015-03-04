@@ -48,12 +48,10 @@ MSXAudio: MACRO
 	; a = register
 	; d = value
 	WriteRegister:
-		di
 		out (MSXAudio_ADDRESS_PORT),a
 		ex (sp),hl  ; wait 12 cycles
 		ex (sp),hl
 		ld a,d
-		ei
 		out (MSXAudio_DATA_PORT),a
 		ret
 	MaskControl:
