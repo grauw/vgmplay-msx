@@ -55,9 +55,18 @@ MSXAudio: MACRO
 		out (MSXAudio_DATA_PORT),a
 		ret
 	MaskControl:
+		cp MSXAudio_FLAG_CONTROL
+		jr z,MaskFlagControl
 		cp MSXAudio_MISC_CONTROL
 		jr z,MaskMiscControl
 		ret
+	MaskFlagControl:
+		ld a,d
+		and 00000111B
+		or 01111000B
+		ld d,a
+		ld a,e
+		jr WriteRegister
 	MaskMiscControl:
 		ld a,d
 		and 11000100B
