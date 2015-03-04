@@ -220,7 +220,7 @@ Reader_LoadFile:
 	call BDOS
 	call VGMPlay_CheckDOSError
 	push bc
-	call Reader_ReadAllData
+	call Reader_LoadAllData
 	pop bc
 	ld c,_CLOSE
 	call BDOS
@@ -231,7 +231,7 @@ Reader_LoadFile:
 
 ; b = file handle
 ; ix = this
-Reader_ReadAllData: PROC
+Reader_LoadAllData: PROC
 	ld c,0
 	ld hl,0
 	push hl
