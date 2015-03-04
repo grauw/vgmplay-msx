@@ -59,7 +59,7 @@ MSXAudio: MACRO
 		jr z,MaskFlagControl
 		cp MSXAudio_MISC_CONTROL
 		jr z,MaskMiscControl
-		ret
+		jr WriteRegister
 	MaskFlagControl:
 		ld a,d
 		and 00000111B
