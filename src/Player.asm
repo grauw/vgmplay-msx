@@ -285,6 +285,10 @@ Player_Y8950DataBlock: PROC
 	sbc hl,bc
 	ex de,hl
 	jp c,System_ThrowException
+	ld a,h
+	or l
+	or e
+	or d
 	ret z
 	push ix
 	push de
