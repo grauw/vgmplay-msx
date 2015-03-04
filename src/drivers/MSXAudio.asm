@@ -37,6 +37,10 @@ MSXAudio_FM_BASE: equ 20H
 MSXAudio: MACRO
 	found:
 		db 0
+	startAddressMirror:
+		dw 0
+	stopAddressMirror:
+		dw 0
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -59,6 +63,14 @@ MSXAudio: MACRO
 		jr z,MaskFlagControl
 		cp MSXAudio_MISC_CONTROL
 		jr z,MaskMiscControl
+		jr c,WriteRegister
+		; add if-rom check
+		cp MSXAudio_START_ADDRESS_H
+		jr c,MaskStartAddressL
+		jr z,MaskStartAddressH
+		cp MSXAudio_STOP_ADDRESS_H
+		jr c,MaskStopAddressL
+		jr z,MaskStopAddressH
 		jr WriteRegister
 	MaskFlagControl:
 		ld a,d
@@ -73,6 +85,45 @@ MSXAudio: MACRO
 		ld d,a
 		ld a,e
 		jr WriteRegister
+	MaskStartAddressL:
+		ld a,d
+		ld (startAddressMirror),a
+		jr WriteStartAddress
+	MaskStartAddressH:
+		ld a,d
+		ld (startAddressMirror + 1),a
+	WriteStartAddress:
+		ld hl,(startAddressMirror)
+		add hl,hl
+		add hl,hl
+		add hl,hl
+		ld d,l
+		ld a,MSXAudio_START_ADDRESS_L
+		call WriteRegister
+		ld d,h
+		ld a,MSXAudio_START_ADDRESS_H
+		call WriteRegister
+		ret
+	MaskStopAddressL:
+		ld a,d
+		ld (stopAddressMirror),a
+		jr WriteStopAddress
+	MaskStopAddressH:
+		ld a,d
+		ld (stopAddressMirror + 1),a
+	WriteStopAddress:
+		ld hl,(stopAddressMirror)
+		add hl,hl
+		add hl,hl
+		add hl,hl
+		ld a,l
+		or 00000111B
+		ld d,a
+		ld a,MSXAudio_STOP_ADDRESS_L
+		call WriteRegister
+		ld d,h
+		ld a,MSXAudio_STOP_ADDRESS_H
+		jp WriteRegister
 	ENDM
 
 ; ix = this
