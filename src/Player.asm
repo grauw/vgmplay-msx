@@ -347,6 +347,26 @@ Player_YMF262WritePort1:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
+Player_YMF278BWrite: PROC
+	call Player_ReadByte
+	cp 1
+	jr c,FM1
+	jp z,FM2
+Wave:
+	call Player_ReadWord
+	call MoonSound_instance.SafeWriteRegisterWave
+	jp Player_ProcessNext.NoWait
+FM1:
+	call Player_ReadWord
+	call MoonSound_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+FM2:
+	call Player_ReadWord
+	call MoonSound_instance.SafeWriteRegister2
+	jp Player_ProcessNext.NoWait
+	ENDP
+
+; ix = this
 Player_AY8910Write:
 	call Player_ReadWord
 	call PSG_instance.SafeWriteRegister
@@ -749,7 +769,7 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; CDH
 	dw Player_Skip4               ; CEH
 	dw Player_Skip4               ; CFH
-	dw Player_Skip4               ; D0H
+	dw Player_YMF278BWrite        ; D0H
 	dw Player_Skip4               ; D1H
 	dw Player_K051649Write        ; D2H
 	dw Player_Skip4               ; D3H
