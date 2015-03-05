@@ -22,8 +22,7 @@ MoonSound: MACRO
 	; d = value
 	WriteRegister:
 		out (MoonSound.FM_ADDRESS),a
-		ex (sp),hl  ; wait 12 cycles
-		ex (sp),hl
+		nop     ; wait 56 cycles (11.8 R800 cycles)
 		ld a,d
 		out (MoonSound.FM_DATA),a
 		ret
@@ -40,8 +39,7 @@ MoonSound: MACRO
 	; d = value
 	WriteRegister2:
 		out (MoonSound.FM2_ADDRESS),a
-		ex (sp),hl  ; wait 12 cycles
-		ex (sp),hl
+		nop     ; wait 56 cycles (11.8 R800 cycles)
 		ld a,d
 		out (MoonSound.FM2_DATA),a
 		ret
@@ -56,8 +54,7 @@ MoonSound: MACRO
 	; d = value
 	WriteRegisterWave:
 		out (MoonSound.WAVE_ADDRESS),a
-		ex (sp),hl  ; wait 12 cycles
-		ex (sp),hl
+		cp (ix)  ; wait 88 cycles (18.6 R800 cycles, but 18 works)
 		ld a,d
 		out (MoonSound.WAVE_DATA),a
 		ret
