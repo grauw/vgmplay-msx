@@ -11,6 +11,7 @@ MoonSound: MACRO
 	WAVE_DATA: equ 07FH
 	found:
 		db 0
+
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -30,6 +31,7 @@ MoonSound: MACRO
 		cp 8H
 		jr z,WriteRegister
 		ret
+
 	; e = register
 	; d = value
 	SafeWriteRegister2:
@@ -37,12 +39,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegister2:
-		di
 		out (MoonSound.FM2_ADDRESS),a
 		ex (sp),hl  ; wait 12 cycles
 		ex (sp),hl
 		ld a,d
-		ei
 		out (MoonSound.FM2_DATA),a
 		ret
 	ENDM
