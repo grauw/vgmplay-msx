@@ -50,6 +50,8 @@ MoonSound: MACRO
 	; d = value
 	SafeWriteRegisterWave:
 		ld a,e
+		cp 8H
+		ret c
 	; a = register
 	; d = value
 	WriteRegisterWave:
