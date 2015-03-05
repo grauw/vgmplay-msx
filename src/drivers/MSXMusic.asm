@@ -18,12 +18,10 @@ MSXMusic: MACRO
 	; a = register
 	; d = value
 	WriteRegister:
-		di
 		out (MSXMusic.ADDRESS),a
 		ex (sp),hl  ; wait 12 cycles
 		ex (sp),hl
 		ld a,d
-		ei
 		out (MSXMusic.DATA),a
 		ret
 	ENDM
