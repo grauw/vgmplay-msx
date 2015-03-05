@@ -6,6 +6,7 @@ PSG: MACRO
 	DATA: equ 0A1H
 	found:
 		db -1
+
 	; e = register
 	; d = value
 	SafeWriteRegister:

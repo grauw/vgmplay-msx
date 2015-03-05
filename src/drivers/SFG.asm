@@ -12,6 +12,7 @@ SFG: MACRO
 		db 0
 	slot:
 		db 0
+
 	; e = register
 	; d = value
 	SafeWriteRegister:

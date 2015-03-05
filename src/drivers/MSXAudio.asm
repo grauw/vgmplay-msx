@@ -39,6 +39,7 @@ MSXAudio: MACRO
 		db 0
 	safeControlMirror:
 		ds MSXAudio_FM_BASE
+
 	; e = register
 	; d = value
 	SafeWriteRegister:
