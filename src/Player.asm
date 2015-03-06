@@ -305,6 +305,12 @@ Player_Y8950DataBlock: PROC
 	ENDP
 
 ; ix = this
+Player_SN76489Write:
+	call Player_ReadByte
+	call SN76489_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+
+; ix = this
 Player_YM2413Write:
 	call Player_ReadWord
 	call MSXMusic_instance.SafeWriteRegister
@@ -641,7 +647,7 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; 4DH
 	dw Player_Skip3               ; 4EH
 	dw Player_Skip2               ; 4FH
-	dw Player_Skip2               ; 50H
+	dw Player_SN76489Write        ; 50H
 	dw Player_YM2413Write         ; 51H
 	dw Player_Skip3               ; 52H
 	dw Player_Skip3               ; 53H

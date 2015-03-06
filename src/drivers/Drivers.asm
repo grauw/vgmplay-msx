@@ -8,6 +8,7 @@
 	INCLUDE "MSXAudio.asm"
 	INCLUDE "MoonSound.asm"
 	INCLUDE "SCC.asm"
+	INCLUDE "SN76489.asm"
 
 Drivers: MACRO
 	psg:
@@ -22,6 +23,8 @@ Drivers: MACRO
 		dw MoonSound_instance
 	scc:
 		dw SCC_instance
+	sn76489:
+		dw SN76489_instance
 	size:
 	ENDM
 
@@ -52,6 +55,10 @@ Drivers_Constructor:
 	call Drivers_GetSCC
 	call SCC_Install
 	pop ix
+	push ix
+	call Drivers_GetSN76489
+	call SN76489_Install
+	pop ix
 	ret
 
 ; ix = this
@@ -80,6 +87,10 @@ Drivers_Destructor:
 	push ix
 	call Drivers_GetSCC
 	call SCC_Uninstall
+	pop ix
+	push ix
+	call Drivers_GetSN76489
+	call SN76489_Uninstall
 	pop ix
 	ret
 
@@ -139,6 +150,16 @@ Drivers_GetMoonSound:
 Drivers_GetSCC:
 	ld e,(ix + Drivers.scc)
 	ld d,(ix + Drivers.scc + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- SN76489 driver
+; ix <- SN76489 driver
+Drivers_GetSN76489:
+	ld e,(ix + Drivers.sn76489)
+	ld d,(ix + Drivers.sn76489 + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
