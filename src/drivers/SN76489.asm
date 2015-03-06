@@ -16,6 +16,8 @@ SN76489: MACRO
 
 ; ix = this
 SN76489_Install:
+	ld a,0FFH
+	out (40H),a  ; make sure no known switched I/O device is listening
 	call SN76489_Reset
 	ret
 
