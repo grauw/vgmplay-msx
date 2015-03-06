@@ -19,8 +19,8 @@ MSXMusic: MACRO
 	; d = value
 	WriteRegister:
 		out (MSXMusic.ADDRESS),a
-		ex (sp),hl  ; wait 12 cycles
-		ex (sp),hl
+		push ix  ; wait 12 cycles
+		pop ix
 		ld a,d
 		out (MSXMusic.DATA),a
 		ret
