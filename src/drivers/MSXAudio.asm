@@ -50,7 +50,7 @@ MSXAudio: MACRO
 	; d = value
 	WriteRegister:
 		out (MSXAudio_ADDRESS_PORT),a
-		push hl  ; wait 12 cycles
+		push hl  ; wait 11 cycles (12 officially)
 		pop hl
 		ld a,d
 		out (MSXAudio_DATA_PORT),a
