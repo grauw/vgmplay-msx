@@ -283,6 +283,19 @@ System_IsTurboR:
 	cp 3
 	ret
 
+; hl <- current timer value, in 14 cycle increments
+; Modifies: af, hl
+System_GetHighResTimerValue:
+	in a,(0E7H)
+	ld h,a
+	in a,(0E6H)
+	ld l,a
+	and a
+	ret m
+	in a,(0E7H)
+	ld h,a
+	ret
+
 System_Stop:
 	di
 	halt
