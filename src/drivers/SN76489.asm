@@ -2,7 +2,7 @@
 ; SN76489 DCSG driver
 ;
 SN76489: MACRO
-	DATA: equ 048H
+	DATA: equ 049H
 	found:
 		db -1
 
