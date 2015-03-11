@@ -89,15 +89,22 @@ MSXMusic_Enable:
 ; e = register base
 ; d = value
 ; ix = this
-MSXMusic_FillRegisters:
+MSXMusic_FillRegisters: PROC
 	push bc
 	push de
 	call MSXMusic_SafeWriteRegister
+	call R800Wait
 	pop de
 	pop bc
 	inc e
 	djnz MSXMusic_FillRegisters
 	ret
+R800Wait:
+	in a,(09AH)
+	in a,(09AH)  ; ~54 cycles
+	in a,(09AH)  ; ~54 cycles
+	ret
+	ENDP
 
 ; ix = this
 MSXMusic_Mute:

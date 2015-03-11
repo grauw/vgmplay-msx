@@ -201,15 +201,22 @@ MSXAudio_SafeWriteRegister:
 ; e = register base
 ; d = value
 ; ix = this
-MSXAudio_FillRegisters:
+MSXAudio_FillRegisters: PROC
 	push bc
 	push de
 	call MSXAudio_SafeWriteRegister
+	call R800Wait
 	pop de
 	pop bc
 	inc e
 	djnz MSXAudio_FillRegisters
 	ret
+R800Wait:
+	in a,(09AH)
+	in a,(09AH)  ; ~54 cycles
+	in a,(09AH)  ; ~54 cycles
+	ret
+	ENDP
 
 ; ix = this
 MSXAudio_Mute:
