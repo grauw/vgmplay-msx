@@ -1,7 +1,7 @@
 all:
 	java -jar tools/glass.jar -I gen src/COM.asm bin/vgmplay.com bin/vgmplay.sym
 
-package: all
+dist: all
 	cp README.md LICENSE bin/
 	rm -f bin/vgmplay.zip
 	cd bin && zip vgmplay.zip vgmplay.rom README.md LICENSE
