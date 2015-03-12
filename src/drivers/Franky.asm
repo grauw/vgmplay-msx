@@ -33,7 +33,6 @@ Franky_WriteRegister:
 	pop hl
 	ld bc,Franky.WriteRegister
 	add hl,bc
-	ld a,e
 	jp hl
 
 ; a = value
@@ -47,6 +46,14 @@ Franky_SafeWriteRegister:
 
 ; ix = this
 Franky_Reset:
+	ld a,9FH
+	call MMM_WriteRegister
+	ld a,0BFH
+	call MMM_WriteRegister
+	ld a,0DFH
+	call MMM_WriteRegister
+	ld a,0FFH
+	call MMM_WriteRegister
 	ret
 
 ;
