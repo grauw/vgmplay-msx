@@ -1,3 +1,5 @@
+COPY_TARGET = /Volumes/MSXDOS2
+
 all:
 	java -jar tools/glass.jar -I gen src/COM.asm bin/vgmplay.com bin/vgmplay.sym
 
@@ -5,6 +7,10 @@ dist: all
 	cp README.md LICENSE bin/
 	rm -f bin/vgmplay.zip
 	cd bin && zip vgmplay.zip vgmplay.rom README.md LICENSE
+
+copy: all
+	cp bin/vgmplay.com $(COPY_TARGET)/
+	diskutil umountDisk `mount | grep $(COPY_TARGET) | cut -d" " -f 1`
 
 run: all
 	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext ide -ext Yamaha_SFG-05 -ext mbstereo -ext moonsound -ext Konami_Snatcher_Sound_Cartridge -script openmsx.tcl
