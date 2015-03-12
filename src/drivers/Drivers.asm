@@ -8,7 +8,7 @@
 	INCLUDE "MSXAudio.asm"
 	INCLUDE "MoonSound.asm"
 	INCLUDE "SCC.asm"
-	INCLUDE "SN76489.asm"
+	INCLUDE "Franky.asm"
 
 Drivers: MACRO
 	psg:
@@ -23,8 +23,8 @@ Drivers: MACRO
 		dw MoonSound_instance
 	scc:
 		dw SCC_instance
-	sn76489:
-		dw SN76489_instance
+	franky:
+		dw Franky_instance
 	size:
 	ENDM
 
@@ -56,8 +56,8 @@ Drivers_Constructor:
 	call SCC_Install
 	pop ix
 	push ix
-	call Drivers_GetSN76489
-	call SN76489_Install
+	call Drivers_GetFranky
+	call Franky_Install
 	pop ix
 	ret
 
@@ -89,8 +89,8 @@ Drivers_Destructor:
 	call SCC_Uninstall
 	pop ix
 	push ix
-	call Drivers_GetSN76489
-	call SN76489_Uninstall
+	call Drivers_GetFranky
+	call Franky_Uninstall
 	pop ix
 	ret
 
@@ -155,11 +155,11 @@ Drivers_GetSCC:
 	ret
 
 ; ix = this
-; de <- SN76489 driver
-; ix <- SN76489 driver
-Drivers_GetSN76489:
-	ld e,(ix + Drivers.sn76489)
-	ld d,(ix + Drivers.sn76489 + 1)
+; de <- Franky driver
+; ix <- Franky driver
+Drivers_GetFranky:
+	ld e,(ix + Drivers.franky)
+	ld d,(ix + Drivers.franky + 1)
 	ld ixl,e
 	ld ixh,d
 	ret

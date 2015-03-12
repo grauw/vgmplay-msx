@@ -307,7 +307,7 @@ Player_Y8950DataBlock: PROC
 ; ix = this
 Player_SN76489Write:
 	call Player_ReadByte
-	call SN76489_instance.SafeWriteRegister
+	call Franky_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
 
 ; ix = this

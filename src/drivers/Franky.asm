@@ -1,7 +1,7 @@
 ;
-; SN76489 DCSG driver
+; Franky / Playsoniq SN76489 DCSG driver
 ;
-SN76489: MACRO
+Franky: MACRO
 	DATA: equ 049H
 	found:
 		db -1
@@ -10,43 +10,43 @@ SN76489: MACRO
 	SafeWriteRegister:
 	; a = value
 	WriteRegister:
-		out (SN76489.DATA),a
+		out (Franky.DATA),a
 		ret
 	ENDM
 
 ; ix = this
-SN76489_Install:
+Franky_Install:
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
-	call SN76489_Reset
+	call Franky_Reset
 	ret
 
 ; ix = this
-SN76489_Uninstall:
-	call SN76489_Reset
+Franky_Uninstall:
+	call Franky_Reset
 	ret
 
 ; a = value
 ; ix = this
-SN76489_WriteRegister:
+Franky_WriteRegister:
 	push ix
 	pop hl
-	ld bc,SN76489.WriteRegister
+	ld bc,Franky.WriteRegister
 	add hl,bc
 	ld a,e
 	jp hl
 
 ; a = value
 ; ix = this
-SN76489_SafeWriteRegister:
+Franky_SafeWriteRegister:
 	push ix
 	pop hl
-	ld bc,SN76489.SafeWriteRegister
+	ld bc,Franky.SafeWriteRegister
 	add hl,bc
 	jp hl
 
 ; ix = this
-SN76489_Reset:
+Franky_Reset:
 	ret
 
 ;
@@ -54,6 +54,6 @@ SN76489_Reset:
 ;
 	SECTION RAM
 
-SN76489_instance: SN76489
+Franky_instance: Franky
 
 	ENDS
