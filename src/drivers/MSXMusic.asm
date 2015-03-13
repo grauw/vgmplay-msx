@@ -50,6 +50,7 @@ MSXMusic_Uninstall:
 	ret z
 	call MSXMusic_Mute
 	call MSXMusic_Reset
+	call MSXMusic_Disable
 	ret
 
 ; ix = this
@@ -79,6 +80,18 @@ MSXMusic_Enable:
 	ld hl,MSXMusic.ENABLE_ADDRESS
 	call Memory_ReadSlot
 	set 0,a
+	ld c,a
+	ld a,(ix + MSXMusic.slot)
+	ld hl,MSXMusic.ENABLE_ADDRESS
+	call Memory_WriteSlot
+	ret
+
+; ix = this
+MSXMusic_Disable:
+	ld a,(ix + MSXMusic.slot)
+	ld hl,MSXMusic.ENABLE_ADDRESS
+	call Memory_ReadSlot
+	res 0,a
 	ld c,a
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic.ENABLE_ADDRESS
