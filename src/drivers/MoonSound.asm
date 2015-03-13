@@ -65,6 +65,7 @@ MoonSound_Install: PROC
 	call MoonSound_Detect
 	jr nc,Disable
 	ld (ix + MoonSound.found),-1
+	call MoonSound_Reset
 	ret
 Disable:
 	ld (ix + MoonSound.SafeWriteRegister),0C9H  ; ret

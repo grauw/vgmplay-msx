@@ -158,6 +158,7 @@ MSXAudio_Install: PROC
 	call MSXAudio_Detect
 	jr nc,Disable
 	ld (ix + MSXAudio.found),-1
+	call MSXAudio_Reset
 	ret
 Disable:
 	ld (ix + MSXAudio.SafeWriteRegister),0C9H  ; ret

@@ -50,6 +50,7 @@ SCC_Install: PROC
 	call SCC_SetSlot
 	call SCC_SelectBank
 	ld (ix + SCC.found),-1
+	call SCC_Reset
 	ret
 Disable:
 	ld (ix + SCC.SafeWriteRegister),0C9H  ; ret

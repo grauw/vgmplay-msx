@@ -63,6 +63,7 @@ SFG_Install: PROC
 	jr nc,Disable
 	call SFG_SetSlot
 	ld (ix + SFG.found),-1
+	call SFG_Reset
 	ret
 Disable:
 	ld (ix + SFG.SafeWriteRegister),0C9H  ; ret
