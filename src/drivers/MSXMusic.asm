@@ -30,10 +30,8 @@ MSXMusic: MACRO
 MSXMusic_Install: PROC
 	call MSXMusic_Detect
 	jr nc,Disable
-	di
 	ld (ix + MSXMusic.slot),a
 	ld (ix + MSXMusic.found),-1
-	ei
 	call MSXMusic_Enable
 	call MSXMusic_Reset
 	ret
