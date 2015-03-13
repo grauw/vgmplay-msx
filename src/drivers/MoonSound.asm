@@ -64,9 +64,7 @@ MoonSound: MACRO
 MoonSound_Install: PROC
 	call MoonSound_Detect
 	jr nc,Disable
-	di
 	ld (ix + MoonSound.found),-1
-	ei
 	ret
 Disable:
 	ld (ix + MoonSound.SafeWriteRegister),0C9H  ; ret

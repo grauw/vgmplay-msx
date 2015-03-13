@@ -157,9 +157,7 @@ MSXAudio: MACRO
 MSXAudio_Install: PROC
 	call MSXAudio_Detect
 	jr nc,Disable
-	di
 	ld (ix + MSXAudio.found),-1
-	ei
 	ret
 Disable:
 	ld (ix + MSXAudio.SafeWriteRegister),0C9H  ; ret
