@@ -132,25 +132,17 @@ SCC_Mute:
 	call SCC_FillRegisters
 	ret
 
-;
-; Detect SCC
-;
 ; ix = this
 ; f <- c: found
 ; a <- slot
-;
 SCC_Detect:
 	ld hl,SCC_MatchSlot
 	call Memory_SearchSlots
 	ret
 
-;
-; Check slot for SCC
-;
-; ix = this
 ; a = slot id
+; ix = this
 ; f <- c: found
-;
 SCC_MatchSlot: PROC
 	ex af,af'
 	call Memory_GetSlotPage2

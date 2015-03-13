@@ -120,25 +120,17 @@ MSXMusic_Reset:
 	call MSXMusic_FillRegisters
 	ret
 
-;
-; Detect MSX Music
-;
 ; ix = this
 ; f <- c: found
 ; a <- slot
-;
 MSXMusic_Detect:
 	ld hl,MSXMusic_MatchID
 	call Memory_SearchSlots
 	ret
 
-;
-; Check slot for MSX Music ID
-;
-; ix = this
 ; a = slot id
+; ix = this
 ; f <- c: found
-;
 MSXMusic_MatchID:
 	ld de,MSXMusic_id
 	ld hl,MSXMusic.ID_ADDRESS

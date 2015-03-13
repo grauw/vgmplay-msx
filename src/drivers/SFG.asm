@@ -144,25 +144,17 @@ Loop:
 	ret
 	ENDP
 
-;
-; Detect SFG sound module
-;
 ; ix = this
 ; f <- c: found
 ; a <- slot
-;
 SFG_Detect:
 	ld hl,SFG_MatchID
 	call Memory_SearchSlots
 	ret
 
-;
-; Check slot for SFG sound module ID
-;
-; ix = this
 ; a = slot id
+; ix = this
 ; f <- c: found
-;
 SFG_MatchID:
 	ld de,SFG_id
 	ld hl,SFG.ID_ADDRESS
