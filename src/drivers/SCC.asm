@@ -62,7 +62,6 @@ SCC_Uninstall:
 	ld a,(ix + SCC.found)
 	and a
 	ret z
-	call SCC_Mute
 	call SCC_Reset
 	ret
 
@@ -120,6 +119,7 @@ SCC_FillRegisters:
 
 ; ix = this
 SCC_Reset:
+	call SCC_Mute
 	ld b,0
 	ld de,0000H
 	call SCC_FillRegisters
