@@ -81,7 +81,6 @@ MoonSound_Uninstall:
 	ld a,(ix + MoonSound.found)
 	and a
 	ret z
-	call MoonSound_Mute
 	call MoonSound_Reset
 	ret
 
