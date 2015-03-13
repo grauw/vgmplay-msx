@@ -4,7 +4,7 @@
 Franky: MACRO
 	DATA: equ 049H
 	found:
-		db -1
+		db 0
 
 	; a = value
 	SafeWriteRegister:
@@ -16,6 +16,7 @@ Franky: MACRO
 
 ; ix = this
 Franky_Install:
+	ld (ix + Franky.found),-1
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset

@@ -5,7 +5,7 @@ PSG: MACRO
 	ADDRESS: equ 0A0H
 	DATA: equ 0A1H
 	found:
-		db -1
+		db 0
 
 	; e = register
 	; d = value
@@ -35,6 +35,7 @@ PSG: MACRO
 
 ; ix = this
 PSG_Install:
+	ld (ix + PSG.found),-1
 	call PSG_Reset
 	ret
 
