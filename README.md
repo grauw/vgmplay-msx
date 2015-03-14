@@ -42,6 +42,7 @@ Supported sound chips
   * YM3812 OPL2 (MoonSound)
   * Y8950 MSX-AUDIO (Music Module, 256K sample RAM recommended)
   * K051649 Konami SCC
+  * SN76489 DCSG (Franky, Playsoniq, Musical Memory Mapper)
 
 Support for more chips will be added in the future.
 

@@ -305,10 +305,20 @@ Player_Y8950DataBlock: PROC
 	ENDP
 
 ; ix = this
-Player_SN76489Write:
+Player_SN76489Write: PROC
 	call Player_ReadByte
+	ex af,af'
+	ld a,(MMM_instance.found)
+	and a
+	jr z,Franky
+	ex af,af'
+	call MMM_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+Franky:
+	ex af,af'
 	call Franky_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
+	ENDP
 
 ; ix = this
 Player_YM2413Write:

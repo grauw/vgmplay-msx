@@ -9,6 +9,7 @@
 	INCLUDE "MoonSound.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "Franky.asm"
+	INCLUDE "MMM.asm"
 
 Drivers: MACRO
 	psg:
@@ -25,6 +26,8 @@ Drivers: MACRO
 		dw SCC_instance
 	franky:
 		dw Franky_instance
+	mmm:
+		dw MMM_instance
 	size:
 	ENDM
 
@@ -59,6 +62,10 @@ Drivers_Constructor:
 	call Drivers_GetFranky
 	call Franky_Install
 	pop ix
+	push ix
+	call Drivers_GetMMM
+	call MMM_Install
+	pop ix
 	ret
 
 ; ix = this
@@ -91,6 +98,10 @@ Drivers_Destructor:
 	push ix
 	call Drivers_GetFranky
 	call Franky_Uninstall
+	pop ix
+	push ix
+	call Drivers_GetMMM
+	call MMM_Uninstall
 	pop ix
 	ret
 
@@ -160,6 +171,16 @@ Drivers_GetSCC:
 Drivers_GetFranky:
 	ld e,(ix + Drivers.franky)
 	ld d,(ix + Drivers.franky + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- Musical Memory Mapper driver
+; ix <- Musical Memory Mapper driver
+Drivers_GetMMM:
+	ld e,(ix + Drivers.mmm)
+	ld d,(ix + Drivers.mmm + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
