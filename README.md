@@ -3,7 +3,7 @@ VGMPlay for MSX
 
 Copyright 2015 Laurens Holst
 
-Thanks go to l_oliveira for support.
+Thanks go to l_oliveira and popolon(fr) for support.
 
 Project information
 -------------------
