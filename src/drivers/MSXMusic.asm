@@ -126,7 +126,7 @@ MSXMusic_Mute:
 ; ix = this
 MSXMusic_Reset:
 	call MSXMusic_Mute
-	ld b,3CH
+	ld b,39H
 	ld de,0000H
 	call MSXMusic_FillRegisters
 	ret
