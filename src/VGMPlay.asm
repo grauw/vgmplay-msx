@@ -160,6 +160,12 @@ VGMPlay_ParseCLI:
 	push ix
 	call VGMPlay_GetCLI
 	call CLI_Parse
+	ld l,(ix + CLI.path)
+	ld h,(ix + CLI.path + 1)
+	ld a,l
+	or h
+	ld hl,VGMPlay_invalidFilenameError
+	call z,VGMPlay_TerminateWithError
 	pop ix
 	ret
 
@@ -167,15 +173,11 @@ VGMPlay_ParseCLI:
 VGMPlay_LoadFile: PROC
 	push ix
 	call VGMPlay_GetCLI
-	ld e,(ix + CLI.path)
-	ld d,(ix + CLI.path + 1)
-	ld a,e
-	or d
-	ld hl,VGMPlay_invalidFilenameError
-	call z,VGMPlay_TerminateWithError
+	ld l,(ix + CLI.path)
+	ld h,(ix + CLI.path + 1)
 	pop ix
 	push ix
-	push de
+	push hl
 	ld hl,VGMPlay_loadingFile
 	call System_Print
 	pop hl
