@@ -5,7 +5,7 @@ CLI: MACRO
 	path:
 		dw 0
 	buffer:
-		ds 128
+		ds 255
 	size:
 	ENDM
 
@@ -14,10 +14,10 @@ CLI: MACRO
 ; ix <- this
 CLI_Constructor:
 	call CLI_GetBuffer
-	ld bc,127
-	ldir
-	ld a,0
-	ld (de),a
+	ld hl,CLI_parametersEnvName
+	ld b,255
+	ld c,_GENV
+	call BDOS
 	ret
 
 ; ix = this
@@ -62,6 +62,9 @@ Loop:
 	SECTION RAM
 
 CLI_instance: CLI
+
+CLI_parametersEnvName:
+	db "PARAMETERS",0
 
 CLI_invalidFilenameError:
 	db "Invalid file name.",13,10,0
