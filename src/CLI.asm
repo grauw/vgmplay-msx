@@ -6,6 +6,8 @@ CLI: MACRO
 		dw 0
 	frequency:
 		db 0
+	loops:
+		db 2
 	blackout:
 		db 0
 	buffer:
@@ -72,6 +74,8 @@ CLI_ParseOption: PROC
 	cp "6"
 	jr z,Option60Hz
 	and 11011111B  ; upper-case
+	cp "L"
+	jr z,OptionLoops
 	cp "B"
 	jr z,OptionBlackout
 	ld hl,CLI_unknownOptionError
@@ -83,6 +87,11 @@ Option50Hz:
 Option60Hz:
 	ld (ix + CLI.frequency),60
 	inc de
+	jp Next
+OptionLoops:
+	inc de
+	call CLI_ParseNumber
+	ld (ix + CLI.loops),c
 	jp Next
 OptionBlackout:
 	ld (ix + CLI.blackout),-1
@@ -116,6 +125,44 @@ CLI_ParsePath:
 	ld (de),a
 	inc de
 	ret
+
+; de = buffer position
+; ix = this
+; c <- value
+CLI_ParseNumber: PROC
+	ld c,0
+	ld hl,CLI_unknownOptionError
+Loop:
+	ld a,(de)
+	and a
+	ret z
+	cp " "
+	ret z
+	sub "0"
+	jp c,VGMPlay_TerminateWithError
+	cp 10
+	jp nc,VGMPlay_TerminateWithError
+	call Multiply10AndAdd
+	inc de
+	jp Loop
+Multiply10AndAdd:
+	ld b,a
+	ld a,c
+	ld c,b
+	add a,a
+	jp c,VGMPlay_TerminateWithError
+	ld b,a
+	add a,a
+	jp c,VGMPlay_TerminateWithError
+	add a,a
+	jp c,VGMPlay_TerminateWithError
+	add a,b
+	jp c,VGMPlay_TerminateWithError
+	add a,c
+	jp c,VGMPlay_TerminateWithError
+	ld c,a
+	ret
+	ENDP
 
 ;
 	SECTION RAM

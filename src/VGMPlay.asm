@@ -247,7 +247,13 @@ VGMPlay_Play:
 	ld h,(ix + VGMPlay.header + 1)
 	push ix
 	push de
+	push ix
+	call VGMPlay_GetCLI
+	ld c,(ix + CLI.loops)
+	pop ix
+	push bc
 	call VGMPlay_GetPlayer
+	pop bc
 	pop de
 	call Player_Constructor
 	call Player_Play

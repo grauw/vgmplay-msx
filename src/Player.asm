@@ -30,6 +30,7 @@ Player: MACRO
 	size:
 	ENDM
 
+; c = max loops
 ; de = data reader
 ; hl = VGM header
 ; ix = this
@@ -39,6 +40,7 @@ Player_Constructor:
 	ld (ix + Player.reader + 1),d
 	ld (ix + Player.header),l
 	ld (ix + Player.header + 1),h
+	ld (ix + Player.maxLoops),c
 	ret
 
 ; Shuffles the commands jump table so that the LSB and MSB are separated.
