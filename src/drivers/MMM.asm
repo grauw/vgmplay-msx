@@ -166,4 +166,12 @@ MMM_instance: MMM
 MMM_detectValues:
 	db 0CH, 13H, 2FH, 3DH
 
+	IF $ > 4000H
+		ERROR "Must not be in pages 1-2."
+	ENDIF
+
 	ENDS
+
+	IF $ > 4000H
+		ERROR "Must not be in pages 1-2."
+	ENDIF
