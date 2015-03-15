@@ -14,8 +14,10 @@ CLI: MACRO
 ; ix <- this
 CLI_Constructor:
 	call CLI_GetBuffer
-	ld bc,128
+	ld bc,127
 	ldir
+	ld a,0
+	ld (de),a
 	ret
 
 ; ix = this
@@ -38,6 +40,7 @@ CLI_GetBuffer:
 ; ix = this
 CLI_Parse: PROC
 	call CLI_GetBuffer
+	dec de
 Loop:
 	inc de
 	ld a,(de)

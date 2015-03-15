@@ -74,7 +74,7 @@ VGMPlay_SetAbortHandler:
 ; ix <- this
 VGMPlay_Constructor:
 	push ix
-	ld hl,DTA
+	ld hl,DTA + 1
 	call VGMPlay_GetCLI
 	call CLI_Constructor
 	call CLI_Parse
