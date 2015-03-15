@@ -2,6 +2,8 @@
 ; Top-level VGMPlay program class
 ;
 VGMPlay: MACRO
+	cli:
+		dw CLI_instance
 	header:
 		dw Header_instance
 	reader:
@@ -72,6 +74,12 @@ VGMPlay_SetAbortHandler:
 ; ix <- this
 VGMPlay_Constructor:
 	push ix
+	ld hl,DTA
+	call VGMPlay_GetCLI
+	call CLI_Constructor
+	call CLI_Parse
+	pop ix
+	push ix
 	call VGMPlay_GetDrivers
 	call Drivers_Constructor
 	pop ix
@@ -81,9 +89,23 @@ VGMPlay_Constructor:
 ; ix <- this
 VGMPlay_Destructor:
 	push ix
+	call VGMPlay_GetCLI
+	call CLI_Destructor
+	pop ix
+	push ix
 	call VGMPlay_GetDrivers
 	call Drivers_Destructor
 	pop ix
+	ret
+
+; ix = this
+; de <- Command-line interface
+; ix <- Command-line interface
+VGMPlay_GetCLI:
+	ld e,(ix + VGMPlay.cli)
+	ld d,(ix + VGMPlay.cli + 1)
+	ld ixl,e
+	ld ixh,d
 	ret
 
 ; ix = this
@@ -137,20 +159,12 @@ VGMPlay_EnterMainLoop:
 ; ix = this
 VGMPlay_LoadFile: PROC
 	push ix
-	ld de,DTA
-Loop:
-	inc de
-	ld a,(de)
-	and a
-	ld hl,VGMPlay_invalidFilenameError
-	call z,VGMPlay_TerminateWithError
-	cp " "
-	jr z,Loop
-	push de
-	ld c,_PARSE
-	call BDOS
-	xor a
-	ld (de),a
+	call VGMPlay_GetCLI
+	ld l,(ix + CLI.path)
+	ld h,(ix + CLI.path + 1)
+	pop ix
+	push ix
+	push hl
 	ld hl,VGMPlay_loadingFile
 	call System_Print
 	pop hl
@@ -260,9 +274,6 @@ VGMPlay_playing:
 
 VGMPlay_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
-
-VGMPlay_invalidFilenameError:
-	db "Invalid file name.",13,10,0
 
 VGMPlay_explainBuffer:
 	ds 64,0

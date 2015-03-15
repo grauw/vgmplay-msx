@@ -30,6 +30,7 @@ COM_Main:
 	INCLUDE "Heap.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "VGMPlay.asm"
+	INCLUDE "CLI.asm"
 	INCLUDE "Header.asm"
 	INCLUDE "GD3.asm"
 	INCLUDE "Reader.asm"
