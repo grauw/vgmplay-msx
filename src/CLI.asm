@@ -6,6 +6,8 @@ CLI: MACRO
 		dw 0
 	frequency:
 		db 0
+	blackout:
+		db 0
 	buffer:
 		ds 255
 	size:
@@ -69,6 +71,9 @@ CLI_ParseOption: PROC
 	jr z,Option50Hz
 	cp "6"
 	jr z,Option60Hz
+	and 11011111B  ; upper-case
+	cp "B"
+	jr z,OptionBlackout
 	ld hl,CLI_unknownOptionError
 	jp VGMPlay_TerminateWithError
 Option50Hz:
@@ -77,6 +82,10 @@ Option50Hz:
 	jp Next
 Option60Hz:
 	ld (ix + CLI.frequency),60
+	inc de
+	jp Next
+OptionBlackout:
+	ld (ix + CLI.blackout),-1
 	inc de
 	jp Next
 Next:

@@ -57,6 +57,7 @@ VGMPlay_Abort:
 	call VGMPlay_Destructor
 	ld ix,Mapper_instance
 	call Mapper_Destructor
+	call VGMPlay_ExitBlackout
 	pop bc
 	pop af
 	ret
@@ -150,6 +151,7 @@ VGMPlay_EnterMainLoop:
 	call VGMPlay_LoadFile
 	call VGMPlay_ReadHeader
 	call VGMPlay_ShowInfo
+	call VGMPlay_EnterBlackout
 	call VGMPlay_Play
 	ret
 
@@ -250,6 +252,27 @@ VGMPlay_Play:
 	call Player_Constructor
 	call Player_Play
 	pop ix
+	ret
+
+; If enabled, blacks out the screen to minimise audio output interference.
+; ix = this
+VGMPlay_EnterBlackout:
+	push ix
+	call VGMPlay_GetCLI
+	ld a,(ix + CLI.blackout)
+	pop ix
+	and a
+	ret z
+	ld a,00H
+	call VDP_SetColor
+	call VDP_EnableBlank
+	ret
+
+; ix = this
+VGMPlay_ExitBlackout:
+	ld a,(VDP_MIRROR_0 + 7)
+	call VDP_SetColor
+	call VDP_DisableBlank
 	ret
 
 ; a <- DOS error code

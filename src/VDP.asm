@@ -98,6 +98,22 @@ VDP_Enable212Lines:
 	call VDP_SetRegister
 	ret
 
+VDP_EnableBlank:
+	ld a,(VDP_MIRROR_0 + 1)
+	and 10111111B
+	ld (VDP_MIRROR_0 + 1),a
+	ld b,1
+	call VDP_SetRegister
+	ret
+
+VDP_DisableBlank:
+	ld a,(VDP_MIRROR_0 + 1)
+	or 01000000B
+	ld (VDP_MIRROR_0 + 1),a
+	ld b,1
+	call VDP_SetRegister
+	ret
+
 VDP_Enable50Hz:
 	ld a,(VDP_MIRROR_8 + 9)
 	or 00000010B
