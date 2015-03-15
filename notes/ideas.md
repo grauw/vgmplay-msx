@@ -5,6 +5,10 @@ Options:
 
   * Wait n seconds before and after playing to prevent disk interference
 
+Higher resolution clock
+
+  * Line ints (MSX2 and up), OP* timers, R800 timer
+
 Multi-chip support:
 
   * 2x PSG on MSX PSG + MegaFlashROM SCC+ SD
