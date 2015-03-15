@@ -46,7 +46,7 @@ MSXMusic_Uninstall:
 	ld a,(ix + MSXMusic.found)
 	and a
 	ret z
-	call MSXMusic_Reset
+	call MSXMusic_Mute
 	call MSXMusic_Disable
 	ret
 
@@ -118,14 +118,24 @@ R800Wait:
 
 ; ix = this
 MSXMusic_Mute:
+	ld de,000EH
+	call MSXMusic_SafeWriteRegister
+	ld b,4
+	ld de,0FF04H
+	call MSXMusic_FillRegisters
 	ld b,9
 	ld de,0030H
+	call MSXMusic_FillRegisters
+	ld b,9
+	ld de,0010H
+	call MSXMusic_FillRegisters
+	ld b,9
+	ld de,0020H
 	call MSXMusic_FillRegisters
 	ret
 
 ; ix = this
 MSXMusic_Reset:
-	call MSXMusic_Mute
 	ld b,39H
 	ld de,0000H
 	call MSXMusic_FillRegisters
