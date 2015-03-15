@@ -22,8 +22,6 @@ VGMPlay_Main:
 	call c,VGMPlay_TerminateWithError
 
 	call VDP_InitMirrorsOnVDPUpgrades
-	call VDP_GetVersion
-	call nz,VDP_Enable60Hz
 
 	ld hl,VGMPlay_welcome
 	call System_Print
@@ -156,7 +154,7 @@ VGMPlay_EnterMainLoop:
 	ret
 
 ; ix = this
-VGMPlay_ParseCLI:
+VGMPlay_ParseCLI: PROC
 	push ix
 	call VGMPlay_GetCLI
 	call CLI_Parse
@@ -166,8 +164,17 @@ VGMPlay_ParseCLI:
 	or h
 	ld hl,VGMPlay_invalidFilenameError
 	call z,VGMPlay_TerminateWithError
+	call Frequency
 	pop ix
 	ret
+Frequency:
+	call VDP_GetVersion
+	ret z
+	ld a,(ix + CLI.frequency)
+	cp 50
+	jp z,VDP_Enable50Hz
+	jp VDP_Enable60Hz
+	ENDP
 
 ; ix = this
 VGMPlay_LoadFile: PROC

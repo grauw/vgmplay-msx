@@ -4,6 +4,8 @@
 CLI: MACRO
 	path:
 		dw 0
+	frequency:
+		db 0
 	buffer:
 		ds 255
 	size:
@@ -60,10 +62,32 @@ Path:
 
 ; de = buffer position
 ; ix = this
-CLI_ParseOption:
+CLI_ParseOption: PROC
+	inc de
+	ld a,(de)
+	cp "5"
+	jr z,Option50Hz
+	cp "6"
+	jr z,Option60Hz
 	ld hl,CLI_unknownOptionError
-	call VGMPlay_TerminateWithError
-	ret
+	jp VGMPlay_TerminateWithError
+Option50Hz:
+	ld (ix + CLI.frequency),50
+	inc de
+	jp Next
+Option60Hz:
+	ld (ix + CLI.frequency),60
+	inc de
+	jp Next
+Next:
+	ld a,(de)
+	and a
+	ret z
+	cp " "
+	ret z
+	ld hl,CLI_unknownOptionError
+	jp VGMPlay_TerminateWithError
+	ENDP
 
 ; de = buffer position
 ; ix = this
