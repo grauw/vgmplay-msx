@@ -241,11 +241,11 @@ VGMPlay_ShowInfo:
 VGMPlay_Play:
 	ld hl,VGMPlay_playing
 	call System_Print
-	push ix
 	ld e,(ix + VGMPlay.reader)
 	ld d,(ix + VGMPlay.reader + 1)
 	ld l,(ix + VGMPlay.header)
 	ld h,(ix + VGMPlay.header + 1)
+	push ix
 	push de
 	call VGMPlay_GetPlayer
 	pop de
