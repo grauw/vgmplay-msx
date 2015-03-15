@@ -44,14 +44,26 @@ Loop:
 	ld a,(de)
 	and a
 	ret z
+	cp "/"
+	jr z,Option
 	cp " "
 	jr nz,Path
 	inc de
+	jp Loop
+Option:
+	call CLI_ParseOption
 	jp Loop
 Path:
 	call CLI_ParsePath
 	jp Loop
 	ENDP
+
+; de = buffer position
+; ix = this
+CLI_ParseOption:
+	ld hl,CLI_unknownOptionError
+	call VGMPlay_TerminateWithError
+	ret
 
 ; de = buffer position
 ; ix = this
@@ -79,6 +91,9 @@ CLI_instance: CLI
 
 CLI_parametersEnvName:
 	db "PARAMETERS",0
+
+CLI_unknownOptionError:
+	db "Unknown command line option.",13,10,0
 
 CLI_multiplePathsError:
 	db "Can not specify more than one file path.",13,10,0
