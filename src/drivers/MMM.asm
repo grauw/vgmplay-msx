@@ -52,10 +52,14 @@ MMM_Enable:
 	ld a,(ix + MMM.slot)
 	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	call Memory_WriteSlot
+	ld a,0
+	out (MMM_CONTROL),a
 	ret
 
 ; ix = this
 MMM_Disable:
+	ld a,080H
+	out (MMM_CONTROL),a
 	ld c,080H
 	ld a,(ix + MMM.slot)
 	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
