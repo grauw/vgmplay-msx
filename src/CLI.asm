@@ -40,22 +40,37 @@ CLI_GetBuffer:
 ; ix = this
 CLI_Parse: PROC
 	call CLI_GetBuffer
-	dec de
 Loop:
-	inc de
 	ld a,(de)
 	and a
 	ret z
 	cp " "
-	jr z,Loop
+	jr nz,Path
+	inc de
+	jp Loop
+Path:
+	call CLI_ParsePath
+	jp Loop
+	ENDP
+
+; de = buffer position
+; ix = this
+CLI_ParsePath:
+	ld a,(ix + CLI.path)
+	or (ix + CLI.path + 1)
+	ld hl,CLI_multiplePathsError
+	call nz,VGMPlay_TerminateWithError
 	ld (ix + CLI.path),e
 	ld (ix + CLI.path + 1),d
 	ld c,_PARSE
 	call BDOS
-	xor a
+	ld a,(de)
+	and a
+	ret z
+	ld a,0
 	ld (de),a
+	inc de
 	ret
-	ENDP
 
 ;
 	SECTION RAM
@@ -64,5 +79,8 @@ CLI_instance: CLI
 
 CLI_parametersEnvName:
 	db "PARAMETERS",0
+
+CLI_multiplePathsError:
+	db "Can not specify more than one file path.",13,10,0
 
 	ENDS
