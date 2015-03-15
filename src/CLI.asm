@@ -15,7 +15,6 @@ CLI: MACRO
 	size:
 	ENDM
 
-; hl = input buffer
 ; ix = this
 ; ix <- this
 CLI_Constructor:
