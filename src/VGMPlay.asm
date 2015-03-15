@@ -159,11 +159,15 @@ VGMPlay_EnterMainLoop:
 VGMPlay_LoadFile: PROC
 	push ix
 	call VGMPlay_GetCLI
-	ld l,(ix + CLI.path)
-	ld h,(ix + CLI.path + 1)
+	ld e,(ix + CLI.path)
+	ld d,(ix + CLI.path + 1)
+	ld a,e
+	or d
+	ld hl,VGMPlay_invalidFilenameError
+	call z,VGMPlay_TerminateWithError
 	pop ix
 	push ix
-	push hl
+	push de
 	ld hl,VGMPlay_loadingFile
 	call System_Print
 	pop hl
@@ -273,6 +277,9 @@ VGMPlay_playing:
 
 VGMPlay_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
+
+VGMPlay_invalidFilenameError:
+	db "Invalid file name.",13,10,0
 
 VGMPlay_explainBuffer:
 	ds 64,0

@@ -45,8 +45,7 @@ Loop:
 	inc de
 	ld a,(de)
 	and a
-	ld hl,CLI_invalidFilenameError
-	call z,VGMPlay_TerminateWithError
+	ret z
 	cp " "
 	jr z,Loop
 	ld (ix + CLI.path),e
@@ -65,8 +64,5 @@ CLI_instance: CLI
 
 CLI_parametersEnvName:
 	db "PARAMETERS",0
-
-CLI_invalidFilenameError:
-	db "Invalid file name.",13,10,0
 
 	ENDS
