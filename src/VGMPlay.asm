@@ -76,7 +76,6 @@ VGMPlay_Constructor:
 	push ix
 	call VGMPlay_GetCLI
 	call CLI_Constructor
-	call CLI_Parse
 	pop ix
 	push ix
 	call VGMPlay_GetDrivers
@@ -149,10 +148,19 @@ VGMPlay_GetDrivers:
 
 ; ix = this
 VGMPlay_EnterMainLoop:
+	call VGMPlay_ParseCLI
 	call VGMPlay_LoadFile
 	call VGMPlay_ReadHeader
 	call VGMPlay_ShowInfo
 	call VGMPlay_Play
+	ret
+
+; ix = this
+VGMPlay_ParseCLI:
+	push ix
+	call VGMPlay_GetCLI
+	call CLI_Parse
+	pop ix
 	ret
 
 ; ix = this
