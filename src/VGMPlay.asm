@@ -164,7 +164,7 @@ VGMPlay_ParseCLI: PROC
 	ld h,(ix + CLI.path + 1)
 	ld a,l
 	or h
-	ld hl,VGMPlay_invalidFilenameError
+	ld hl,VGMPlay_usageInstructions
 	call z,VGMPlay_TerminateWithError
 	call Frequency
 	pop ix
@@ -324,8 +324,13 @@ VGMPlay_playing:
 VGMPlay_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
 
-VGMPlay_invalidFilenameError:
-	db "Invalid file name.",13,10,0
+VGMPlay_usageInstructions:
+	db "Usage: vgmplay [options] <file.vgm>",13,10
+	db 13,10
+	db "Options:",13,10
+	db "  /l  Number of playback loops. Default: 2.",13,10
+	db "  /5  50 Hz screen frequency (V9938 and up only).",13,10
+	db "  /b  Enter blackout mode during playback.",13,10,0
 
 VGMPlay_explainBuffer:
 	ds 64,0
