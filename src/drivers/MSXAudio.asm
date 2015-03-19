@@ -54,6 +54,8 @@ MSXAudio: MACRO
 		pop hl
 		ld a,d
 		out (MSXAudio_DATA_PORT),a
+		in a,(09AH)  ; R800 wait: ~72 cycles
+		in a,(09AH)
 		ret
 	MaskControl:
 		ld hl,safeControlMirror
@@ -200,22 +202,16 @@ MSXAudio_SafeWriteRegister:
 ; e = register base
 ; d = value
 ; ix = this
-MSXAudio_FillRegisters: PROC
+MSXAudio_FillRegisters:
 	push bc
 	push de
 	call MSXAudio_SafeWriteRegister
-	call R800Wait
+	in a,(09AH)  ; R800 wait: ~62 cycles - 5 (ret)
 	pop de
 	pop bc
 	inc e
 	djnz MSXAudio_FillRegisters
 	ret
-R800Wait:
-	in a,(09AH)
-	in a,(09AH)  ; ~54 cycles
-	in a,(09AH)  ; ~54 cycles
-	ret
-	ENDP
 
 ; ix = this
 MSXAudio_Mute:

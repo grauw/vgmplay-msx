@@ -23,6 +23,8 @@ MSXMusic: MACRO
 		pop ix
 		ld a,d
 		out (MSXMusic.DATA),a
+		in a,(09AH)  ; R800 wait: ~72 cycles
+		in a,(09AH)
 		ret
 	ENDM
 
@@ -99,22 +101,16 @@ MSXMusic_Disable:
 ; e = register base
 ; d = value
 ; ix = this
-MSXMusic_FillRegisters: PROC
+MSXMusic_FillRegisters:
 	push bc
 	push de
 	call MSXMusic_SafeWriteRegister
-	call R800Wait
+	in a,(09AH)  ; R800 wait: ~62 cycles - 5 (ret)
 	pop de
 	pop bc
 	inc e
 	djnz MSXMusic_FillRegisters
 	ret
-R800Wait:
-	in a,(09AH)
-	in a,(09AH)  ; ~54 cycles
-	in a,(09AH)  ; ~54 cycles
-	ret
-	ENDP
 
 ; ix = this
 MSXMusic_Mute:
