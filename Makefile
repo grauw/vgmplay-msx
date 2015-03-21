@@ -6,7 +6,7 @@ all:
 dist: all
 	cp README.md LICENSE bin/
 	rm -f bin/vgmplay.zip
-	cd bin && zip vgmplay.zip vgmplay.rom README.md LICENSE
+	cd bin && zip vgmplay.zip vgmplay.com README.md LICENSE
 
 copy: all
 	cp bin/vgmplay.com $(COPY_TARGET)/
