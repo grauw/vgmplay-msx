@@ -51,16 +51,15 @@ Supported sound chips
 Usage instructions
 ------------------
 
-Run VGMPlay from MSX-DOS, specifying the VGM file as the first command line
-argument.
+Run VGMPlay from MSX-DOS 2, specifying the VGM file to play on the command line.
 
 Usage:
 
     vgmplay [options] <file.vgm>
 
-The compressed VGZ format is not supported, rename the file to .vgm.gz and
-extract it using gzip or your favourite decompression software to retrieve the
-uncompressed VGM file.
+Note that the compressed VGZ format is not supported, rename the file to .vgm.gz
+and extract it using gzip or your favourite decompression software to retrieve
+the uncompressed VGM file.
 
 Options:
 
@@ -85,6 +84,10 @@ Options:
     This setting makes the screen go black during playback. For machines with a
     lot of VDP interference on the audio output, this may reduce the amount of
     interference.
+
+To configure Multi Mente to play VGM files, add the following line to MMRET.DAT:
+
+    .VGM    VGMPLAY $T
 
 
 Development information
