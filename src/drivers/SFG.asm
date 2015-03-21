@@ -35,6 +35,7 @@ SFG: MACRO
 		ld (hl),0
 	preparedSubslot: equ $ - 1
 		ld (SFG.YM2151_ADDRESS),a
+		cp (hl)  ; R800 wait: ~4 bus cycles
 		ld a,d
 		ld (SFG.YM2151_DATA),a
 		ld a,e
