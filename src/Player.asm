@@ -341,10 +341,17 @@ Player_YM3812Write:
 	jp Player_ProcessNext.NoWait
 
 ; ix = this
-Player_YM3526Write:
+Player_YM3526Write: PROC
 	call Player_ReadWord
+	ld a,(MSXAudio_instance.found)
+	and a
+	jr z,MoonSound
 	call MSXAudio_instance.SafeWriteRegister
 	jp Player_ProcessNext.NoWait
+MoonSound:
+	call MoonSound_instance.SafeWriteRegister
+	jp Player_ProcessNext.NoWait
+	ENDP
 
 ; ix = this
 Player_Y8950Write:

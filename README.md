@@ -39,7 +39,7 @@ Supported sound chips
   * AY-3-8910 PSG / YM2149 SSG
   * YM2151 OPM (SFG-01/05)
   * YM2413 OPLL (MSX-MUSIC, FM-PAC)
-  * YM3526 OPL (MSX-AUDIO, Music Module)
+  * YM3526 OPL (MSX-AUDIO, Music Module, MoonSound)
   * YM3812 OPL2 (MoonSound)
   * YMF262 OPL3 (MoonSound)
   * YMF278B OPL4 (MoonSound)
