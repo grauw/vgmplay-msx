@@ -41,6 +41,8 @@ Supported sound chips
   * YM2413 OPLL (MSX-MUSIC, FM-PAC)
   * YM3526 OPL (MSX-AUDIO, Music Module)
   * YM3812 OPL2 (MoonSound)
+  * YMF262 OPL3 (MoonSound)
+  * YMF278B OPL4 (MoonSound)
   * Y8950 MSX-AUDIO (Music Module, 256K sample RAM recommended)
   * K051649 Konami SCC
   * SN76489 DCSG (Franky, Playsoniq, Musical Memory Mapper)
