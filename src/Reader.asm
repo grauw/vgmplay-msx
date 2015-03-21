@@ -23,10 +23,9 @@ Reader: MACRO
 		ld (position),hl
 		bit 6,h
 		ret z
+		ld h,BASE_ADDRESS >> 8
+		ld (position),hl
 		push af
-		ld a,h
-		and 10111111B
-		ld (position + 1),a
 		push ix
 		ld ix,this
 		call Reader_SelectNextSegment
