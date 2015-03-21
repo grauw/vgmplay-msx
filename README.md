@@ -63,14 +63,14 @@ the uncompressed VGM file.
 
 Options:
 
-  * /l  Number of playback loops. Default: 2.
+  * `/l` Number of playback loops. Default: 2.
     
     Many VGM music loops once the end of the song is reached. With this setting
     you can specify how many times VGMPlay should play the repeating part before
     exiting. The amount is specified like `/L15`. Use `/L` or `/L0` to loop
     infinitely. This setting will have no effect for songs which don’t loop.
     
-  * /5  50 Hz screen frequency (V9938 and up only).
+  * `/5` 50 Hz screen frequency (V9938 and up only).
     
     The player’s internal timer currently runs in sync with the display
     frequency. For the best playback, the timer should match the playback
@@ -79,7 +79,7 @@ Options:
     to override this behaviour in case the VGM file was recorded at 50 Hz or
     your monitor does not support 60 Hz.
     
-  * /b  Enter blackout mode during playback.
+  * `/b` Enter blackout mode during playback.
     
     This setting makes the screen go black during playback. For machines with a
     lot of VDP interference on the audio output, this may reduce the amount of
