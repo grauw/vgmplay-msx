@@ -16,7 +16,10 @@ Reader: MACRO
 		ld hl,BASE_ADDRESS
 	position: equ $ - 2
 		ld a,(hl)
-		inc hl
+		inc l
+		ld (position),hl
+		ret nz
+		inc h
 		ld (position),hl
 		bit 6,h
 		ret z
