@@ -261,8 +261,6 @@ Reader_AllocateSegment:
 	call Mapper_instance.Allocate
 	ld hl,Reader_outOfMemoryError
 	call c,VGMPlay_TerminateWithError
-	and a  ; skip segment 0, as 3FFFH gets overwritten by subslot selection
-	jp z,Reader_AllocateSegment
 	ret
 
 ; ix = this
