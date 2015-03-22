@@ -142,7 +142,18 @@ Page23:
 ; hl <- SLTTBL entry
 ; Modifies: af, bc, de, hl
 ;
-Memory_PrepareSlotPage0:
+Memory_PrepareSlotPage0: PROC
+	and a
+	jp m,Expanded
+	call Expanded
+	ld a,d
+	and 00111111B  ; writing to 0FFFFH in slot 0 should be safe
+	ld d,a
+	ld a,(SLTTBL)
+	ld e,a
+	ld c,SLTTBL & 0FFH
+	ret
+Expanded:
 	ld c,a
 	and 00001100B
 	rrca
@@ -174,6 +185,7 @@ Memory_PrepareSlotPage0:
 	ld e,a
 	ld c,l
 	ret
+	ENDP
 
 ;
 ; Prepares a slot selection in page 1.
@@ -184,7 +196,18 @@ Memory_PrepareSlotPage0:
 ; hl <- SLTTBL entry
 ; Modifies: af, bc, de, hl
 ;
-Memory_PrepareSlotPage1:
+Memory_PrepareSlotPage1: PROC
+	and a
+	jp m,Expanded
+	call Expanded
+	ld a,d
+	and 00111111B  ; writing to 0FFFFH in slot 0 should be safe
+	ld d,a
+	ld a,(SLTTBL)
+	ld e,a
+	ld c,SLTTBL & 0FFH
+	ret
+Expanded:
 	ld c,a
 	and 00001100B
 	ld e,a
@@ -219,6 +242,7 @@ Memory_PrepareSlotPage1:
 	ld e,a
 	ld c,l
 	ret
+	ENDP
 
 ;
 ; Prepares a slot selection in page 2.
@@ -229,7 +253,18 @@ Memory_PrepareSlotPage1:
 ; hl <- SLTTBL entry
 ; Modifies: af, bc, de, hl
 ;
-Memory_PrepareSlotPage2:
+Memory_PrepareSlotPage2: PROC
+	and a
+	jp m,Expanded
+	call Expanded
+	ld a,d
+	and 00111111B  ; writing to 0FFFFH in slot 0 should be safe
+	ld d,a
+	ld a,(SLTTBL)
+	ld e,a
+	ld c,SLTTBL & 0FFH
+	ret
+Expanded:
 	ld c,a
 	and 00001100B
 	rlca
@@ -266,6 +301,7 @@ Memory_PrepareSlotPage2:
 	ld e,a
 	ld c,l
 	ret
+	ENDP
 
 ;
 ; Sets a slot in the page specified by h.
