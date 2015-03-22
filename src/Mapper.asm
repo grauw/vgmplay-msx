@@ -98,6 +98,63 @@ Mapper_Destructor:
 	call Mapper_instance.PutP2
 	ret
 
+; ix = this
+Mapper_PrintInfo: PROC
+	push ix
+	ld a,0
+	ld de,0401H
+	call EXTBIO
+	pop ix
+	ex de,hl
+Loop:
+	ld a,(de)
+	inc de
+	and a
+	ret z
+	ld hl,Mapper_slotLabel
+	call System_Print
+	push af
+	and 3H
+	call System_PrintHex
+	pop af
+	and a
+	jr z,NotExpanded
+	rrca
+	rrca
+	push af
+	ld a,"-"
+	call System_PrintChar
+	pop af
+	and 3H
+	call System_PrintHex
+NotExpanded:
+	ld hl,Mapper_sizeLabel
+	call System_Print
+	ld a,(de)
+	inc de
+	call System_PrintDecA
+	ld hl,Mapper_freeLabel
+	call System_Print
+	ld a,(de)
+	inc de
+	call System_PrintDecA
+	ld hl,Mapper_systemLabel
+	call System_Print
+	ld a,(de)
+	inc de
+	call System_PrintDecA
+	ld hl,Mapper_userLabel
+	call System_Print
+	ld a,(de)
+	inc de
+	call System_PrintDecA
+	call System_PrintCrLf
+	inc de
+	inc de
+	inc de
+	jp Loop
+	ENDP
+
 ;
 	SECTION RAM
 
@@ -105,5 +162,15 @@ Mapper_instance: Mapper
 
 Mapper_noMapperSupportError:
 	db "No mapper support routines available.",13,10,0
+Mapper_slotLabel:
+	db "Mapper in slot ",0
+Mapper_sizeLabel:
+	db ":",13,10,"  Total segments: ",0
+Mapper_freeLabel:
+	db 13,10,"  Free segments: ",0
+Mapper_systemLabel:
+	db 13,10,"  System segments: ",0
+Mapper_userLabel:
+	db 13,10,"  User segments: ",0
 
 	ENDS
