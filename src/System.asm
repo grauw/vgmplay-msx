@@ -206,7 +206,7 @@ Print:
 	jp p,System_PrintChar
 	cp "0" + 80H
 	ret z
-	and 3FH
+	and 7FH
 	jp System_PrintChar
 	ENDP
 
