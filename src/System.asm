@@ -176,6 +176,7 @@ System_PrintDecDEHL: PROC
 	call Digit
 	ld bc,1 >> 16
 	ld de,1 & 0FFFFH
+	and 7FH
 	call DigitReverse
 	pop iy
 	pop hl
