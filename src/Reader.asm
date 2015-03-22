@@ -308,15 +308,9 @@ Loop:
 	call Reader_AllocateSegment
 FirstSegment:
 	call Reader_AddSegment
-	call Reader_SelectSegment
 	pop bc
 	push bc
-	ld de,Reader.BASE_ADDRESS
-	ld hl,4000H
-	ld c,_READ
-	call BDOS
-	cp .EOF
-	call nz,VGMPlay_CheckDOSError
+	call Reader_LoadSegment
 	ex de,hl
 	pop bc
 	pop hl
@@ -333,6 +327,19 @@ Done:
 	ld (ix + Reader.end + 2),c
 	ret
 	ENDP
+
+; a = segment index
+; b = file handle
+; hl <- bytes loaded
+Reader_LoadSegment:
+	call Reader_SelectSegment
+	ld de,Reader.BASE_ADDRESS
+	ld hl,4000H
+	ld c,_READ
+	call BDOS
+	cp .EOF
+	call nz,VGMPlay_CheckDOSError
+	ret
 
 Reader_ThrowAddressOutOfBounds:
 	ld hl,Reader_addressOutOfBoundsError
