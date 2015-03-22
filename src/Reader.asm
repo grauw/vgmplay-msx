@@ -277,8 +277,6 @@ Reader_AddSegment:
 ; ix = this
 ; ix <- this
 Reader_LoadFile:
-	call Mapper_instance.GetP2
-	push af
 	ex de,hl
 	ld a,00000001B  ; read-only
 	ld c,_OPEN
@@ -290,8 +288,9 @@ Reader_LoadFile:
 	ld c,_CLOSE
 	call BDOS
 	call VGMPlay_CheckDOSError
-	pop af
-	call Mapper_instance.PutP2
+	ld de,0
+	ld hl,0
+	call Reader_SetPosition
 	ret
 
 ; b = file handle
