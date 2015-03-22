@@ -135,6 +135,25 @@ System_NibbleToHexDigit:
 	daa
 	ret
 
+; a = value
+; Modifies: none
+System_PrintDecA:
+	push hl
+	ld l,a
+	ld h,0
+	call System_PrintDecHL
+	pop hl
+	ret
+
+; hl = value
+; Modifies: none
+System_PrintDecHL:
+	push de
+	ld de,0
+	call System_PrintDecDEHL
+	pop de
+	ret
+
 ; dehl = value
 ; Modifies: none
 System_PrintDecDEHL: PROC
