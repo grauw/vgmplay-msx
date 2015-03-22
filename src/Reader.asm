@@ -254,10 +254,12 @@ Reader_AllocateSegment:
 ; ix = this
 ; a = segment number
 ; b = slot id
+; a <- new segment index
 ; Modifies: de, hl
 Reader_AddSegment:
 	ld e,(ix + Reader.lastSegment)
 	ld d,0
+	push de
 	push ix
 	add ix,de
 	ld (ix + Reader.segments),a
@@ -267,6 +269,8 @@ Reader_AddSegment:
 	bit 0,d
 	ld hl,Reader_outOfMemoryError
 	call nz,VGMPlay_TerminateWithError
+	pop de
+	ld a,e
 	ret
 
 ; hl = filename
@@ -305,7 +309,7 @@ Loop:
 	call Reader_AllocateSegment
 FirstSegment:
 	call Reader_AddSegment
-	call Mapper_instance.PutP2
+	call Reader_SelectSegment
 	pop bc
 	push bc
 	ld de,Reader.BASE_ADDRESS
