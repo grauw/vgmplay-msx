@@ -33,7 +33,7 @@ Reader: MACRO
 		pop af
 		ret
 	segments:
-		ds 256
+		ds 256 * 2
 	size:
 	ENDM
 
@@ -227,6 +227,7 @@ Reader_SelectSegment:
 	ld e,a
 	ld d,0
 	add ix,de
+	add ix,de
 	ld a,(ix + Reader.segments)
 	call Mapper_instance.PutP2
 	pop ix
@@ -243,9 +244,11 @@ Reader_SelectNextSegment:
 
 ; ix = this
 ; a <- segment number
+; b <- slot id
 Reader_AllocateSegment:
+	ld a,(Mapper_instance.primaryMapperSlot)
+	ld b,a
 	ld a,0
-	ld b,0
 	call Mapper_instance.Allocate
 	ld hl,Reader_outOfMemoryError
 	call c,VGMPlay_TerminateWithError
@@ -262,7 +265,9 @@ Reader_AddSegment:
 	push de
 	push ix
 	add ix,de
+	add ix,de
 	ld (ix + Reader.segments),a
+	ld (ix + Reader.segments + 1),b
 	pop ix
 	inc de
 	ld (ix + Reader.lastSegment),e
@@ -300,6 +305,8 @@ Reader_LoadAllData: PROC
 	ld hl,0
 	push hl
 	push bc
+	ld a,(Mapper_instance.primaryMapperSlot)
+	ld b,a
 	call Mapper_instance.GetP2
 	jp FirstSegment
 Loop:
