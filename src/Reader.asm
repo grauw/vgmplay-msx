@@ -222,16 +222,23 @@ Reader_IsValidAddress:
 ; a <- segment
 ; Modifies: af
 Reader_SelectSegment:
+	push bc
 	push de
+	push hl
 	push ix
 	ld e,a
 	ld d,0
 	add ix,de
 	add ix,de
+	ld a,(ix + Reader.segments + 1)
+	ld h,Reader.BASE_ADDRESS >> 8
+	call Memory_SetSlot
 	ld a,(ix + Reader.segments)
 	call Mapper_instance.PutP2
 	pop ix
+	pop hl
 	pop de
+	pop bc
 	ret
 
 ; ix = this
@@ -247,11 +254,15 @@ Reader_SelectNextSegment:
 ; b <- slot id
 Reader_AllocateSegment:
 	ld a,(Mapper_instance.primaryMapperSlot)
+	and 10001111B
+	or 00100000B  ; allocate primary slot, or another
 	ld b,a
 	ld a,0
 	call Mapper_instance.Allocate
 	ld hl,Reader_outOfMemoryError
 	call c,VGMPlay_TerminateWithError
+	and a  ; skip segment 0, as 3FFFH gets overwritten by subslot selection
+	jp z,Reader_AllocateSegment
 	ret
 
 ; ix = this
@@ -338,8 +349,16 @@ Done:
 ; a = segment index
 ; b = file handle
 ; hl <- bytes loaded
-Reader_LoadSegment:
+Reader_LoadSegment: PROC
+	push bc
 	call Reader_SelectSegment
+	ld hl,Reader.BASE_ADDRESS
+	call Memory_GetSlot
+	ld b,a
+	ld a,(Mapper_instance.primaryMapperSlot)
+	cp b
+	pop bc
+	jr nz,NonPrimary
 	ld de,Reader.BASE_ADDRESS
 	ld hl,4000H
 	ld c,_READ
@@ -347,6 +366,50 @@ Reader_LoadSegment:
 	cp .EOF
 	call nz,VGMPlay_CheckDOSError
 	ret
+NonPrimary:  ; Can not load directly into nonprimary mapper slots
+	push bc
+	ld de,SCRATCH
+	ld hl,2000H
+	ld c,_READ
+	call BDOS
+	cp .EOF
+	call nz,VGMPlay_CheckDOSError
+	ld a,l
+	or h
+	jr z,SkipLDIR1
+	push hl
+	ld c,l
+	ld b,h
+	ld hl,SCRATCH
+	ld de,Reader.BASE_ADDRESS
+	call System_FastLDIR
+	pop hl
+SkipLDIR1:
+	pop bc
+	ld a,h
+	cp 20H
+	ret nz
+	ld de,SCRATCH
+	ld hl,2000H
+	ld c,_READ
+	call BDOS
+	cp .EOF
+	call nz,VGMPlay_CheckDOSError
+	ld a,l
+	or h
+	jr z,SkipLDIR2
+	push hl
+	ld c,l
+	ld b,h
+	ld hl,SCRATCH
+	ld de,Reader.BASE_ADDRESS + 2000H
+	call System_FastLDIR
+	pop hl
+SkipLDIR2:
+	ld de,2000H
+	add hl,de
+	ret
+	ENDP
 
 Reader_ThrowAddressOutOfBounds:
 	ld hl,Reader_addressOutOfBoundsError

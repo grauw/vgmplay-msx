@@ -13,7 +13,7 @@ copy: all
 	diskutil umountDisk `mount | grep $(COPY_TARGET) | cut -d" " -f 1`
 
 run: all
-	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext ide -ext Yamaha_SFG-05 -ext mbstereo -ext moonsound -ext Konami_Snatcher_Sound_Cartridge -script openmsx.tcl
+	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext slotexpander -ext ide -ext Yamaha_SFG-05 -ext mbstereo -ext moonsound -ext Konami_Snatcher_Sound_Cartridge -ext ram1mb -script openmsx.tcl
 
 run2: all
 	openmsx -machine Yamaha_CX5MII -script openmsx.tcl

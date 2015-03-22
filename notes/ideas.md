@@ -23,8 +23,6 @@ Print notice about OPM when VGM format version is 1.01.
 
 Detect gzip compression and show informative message.
 
-Allocate memory in secondary mappers if primary mapper runs out.
-
 VGZ decompression
 
   * Decompression after loading
