@@ -253,7 +253,8 @@ Reader_AllocateSegment:
 
 ; ix = this
 ; a = segment number
-; a <- segment number
+; b = slot id
+; Modifies: de, hl
 Reader_AddSegment:
 	ld e,(ix + Reader.lastSegment)
 	ld d,0
