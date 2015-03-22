@@ -264,7 +264,7 @@ Player_DataBlock:
 	call Player_ReadDoubleWord
 	call Reader_Skip
 	pop ix
-	ret
+	jp Player_ProcessNext.NoWait
 
 ; Y8950 DELTA-T ROM data
 Player_Y8950DataBlock: PROC
@@ -303,7 +303,7 @@ Player_Y8950DataBlock: PROC
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_instance.WriteRegister
 	call Player_ResetTimer
-	ret
+	jp Player_ProcessNext.NoWait
 	ENDP
 
 ; ix = this
