@@ -552,6 +552,14 @@ Player_WaitNSamples:
 	jp Player_ProcessNext
 
 ; ix = this
+Player_Skip11:
+	call Player_ReadByte
+	call Player_ReadByte
+	call Player_ReadByte
+	call Player_ReadByte
+	call Player_ReadByte
+Player_Skip6:
+	call Player_ReadByte
 Player_Skip5:
 	call Player_ReadByte
 Player_Skip4:
@@ -730,12 +738,12 @@ Player_commandsJumpTable:
 	dw Player_Wait13Samples       ; 8DH
 	dw Player_Wait14Samples       ; 8EH
 	dw Player_Wait15Samples       ; 8FH
-	dw Player_UnsupportedCommand  ; 90H
-	dw Player_UnsupportedCommand  ; 91H
-	dw Player_UnsupportedCommand  ; 92H
-	dw Player_UnsupportedCommand  ; 93H
-	dw Player_UnsupportedCommand  ; 94H
-	dw Player_UnsupportedCommand  ; 95H
+	dw Player_Skip5               ; 90H
+	dw Player_Skip5               ; 91H
+	dw Player_Skip6               ; 92H
+	dw Player_Skip11              ; 93H
+	dw Player_Skip2               ; 94H
+	dw Player_Skip5               ; 95H
 	dw Player_UnsupportedCommand  ; 96H
 	dw Player_UnsupportedCommand  ; 97H
 	dw Player_UnsupportedCommand  ; 98H
