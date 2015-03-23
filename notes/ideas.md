@@ -35,3 +35,7 @@ Show song length
   * Next step: show current playback position
 
 Play OPLL songs on OPL4
+
+Wildcard support
+
+Playlist support (m3u)
