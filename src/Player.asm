@@ -97,33 +97,27 @@ NoWait:
 ; ix = this
 ; f <- c: waiting
 Player_CheckWait: PROC
-	ld l,(ix + Player.wait)
-	ld h,(ix + Player.wait + 1)
-	ld a,l
-	or h
-	ret z
-	ld e,(ix + Player.time)
-	ld d,(ix + Player.time + 1)
+	ld e,(ix + Player.wait)
+	ld d,(ix + Player.wait + 1)
+	ld l,(ix + Player.time)
+	ld h,(ix + Player.time + 1)
+	and a
 	sbc hl,de
-	jp c,Done
-	jr z,Done
+	jp nc,Done
+	ex de,hl
+	ld hl,0
+	ld (ix + Player.time),l
+	ld (ix + Player.time + 1),h
+	and a
+	sbc hl,de
 	ld (ix + Player.wait),l
 	ld (ix + Player.wait + 1),h
-	ld (ix + Player.time),0
-	ld (ix + Player.time + 1),0
-	scf
 	ret
 Done:
+	ld (ix + Player.time),l
+	ld (ix + Player.time + 1),h
 	ld (ix + Player.wait),0
 	ld (ix + Player.wait + 1),0
-	dec hl
-	ld a,l
-	cpl
-	ld (ix + Player.time),a
-	ld a,h
-	cpl
-	ld (ix + Player.time + 1),a
-	and a
 	ret
 	ENDP
 
