@@ -34,7 +34,7 @@ Player: MACRO
 		and a
 		sbc hl,de
 		ld (time),hl
-		jp nc,Player_ProcessNext.NoWait
+		jp nc,Player_ProcessNext
 	Yield:
 		ex de,hl
 		ld hl,0
@@ -89,7 +89,7 @@ Player_Play: PROC
 	call Player_ResetPosition
 	call Player_InitialiseTimer
 Loop:
-	call Player_ProcessNext
+	call Player_Continue
 	call Player_CheckExitCondition
 	ret nz
 	call Player_UpdateTimer
@@ -97,11 +97,13 @@ Loop:
 	ENDP
 
 ; ix = this
-Player_ProcessNext: PROC
+Player_Continue:
 	ld e,(ix + Player.wait)
 	ld d,(ix + Player.wait + 1)
 	jp Player_instance.Wait
-NoWait:
+
+; ix = this
+Player_ProcessNext:
 	call Player_ReadByte
 	ld l,a
 	ld h,Player_commandsJumpTable >> 8
@@ -110,7 +112,6 @@ NoWait:
 	ld d,(hl)
 	ex de,hl
 	jp hl
-	ENDP
 
 ; ix = this
 Player_UpdateTimer: PROC
@@ -249,7 +250,7 @@ Player_DataBlock:
 	call Player_ReadDoubleWord
 	call Reader_Skip
 	pop ix
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; Y8950 DELTA-T ROM data
 Player_Y8950DataBlock: PROC
@@ -288,7 +289,7 @@ Player_Y8950DataBlock: PROC
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_instance.WriteRegister
 	call Player_ResetTimer
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 	ENDP
 
 ; ix = this
@@ -300,30 +301,30 @@ Player_SN76489Write: PROC
 	jr z,Franky
 	ex af,af'
 	call MMM_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Franky:
 	ex af,af'
 	call Franky_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 	ENDP
 
 ; ix = this
 Player_YM2413Write:
 	call Player_ReadWord
 	call MSXMusic_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_YM2151Write:
 	call Player_ReadWord
 	call SFG_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_YM3812Write:
 	call Player_ReadWord
 	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_YM3526Write: PROC
@@ -332,29 +333,29 @@ Player_YM3526Write: PROC
 	and a
 	jr z,MoonSound
 	call MSXAudio_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 MoonSound:
 	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 	ENDP
 
 ; ix = this
 Player_Y8950Write:
 	call Player_ReadWord
 	call MSXAudio_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_YMF262WritePort0:
 	call Player_ReadWord
 	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_YMF262WritePort1:
 	call Player_ReadWord
 	call MoonSound_instance.SafeWriteRegister2
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_YMF278BWrite: PROC
@@ -365,22 +366,22 @@ Player_YMF278BWrite: PROC
 Wave:
 	call Player_ReadWord
 	call MoonSound_instance.SafeWriteRegisterWave
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 FM1:
 	call Player_ReadWord
 	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 FM2:
 	call Player_ReadWord
 	call MoonSound_instance.SafeWriteRegister2
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 	ENDP
 
 ; ix = this
 Player_AY8910Write:
 	call Player_ReadWord
 	call PSG_instance.SafeWriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_K051649Write: PROC
@@ -395,37 +396,37 @@ Player_K051649Write: PROC
 	jr c,WaveformSCCPlus
 	jr z,Deformation
 	call Player_ReadWord
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Waveform:
 	call Player_ReadWord
 	ld a,e
 	call SCC_instance.WriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Frequency:
 	call Player_ReadWord
 	ld a,SCC.FREQUENCY
 	add a,e
 	call SCC_instance.WriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Amplitude:
 	call Player_ReadWord
 	ld a,SCC.AMPLITUDE
 	add a,e
 	call SCC_instance.WriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Mixer:
 	call Player_ReadWord
 	ld a,SCC.MIXER
 	call SCC_instance.WriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 WaveformSCCPlus:
 	call Player_ReadWord
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Deformation:
 	call Player_ReadWord
 	ld a,SCC.DEFORMATION
 	call SCC_instance.WriteRegister
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 	ENDP
 
 ; ix = this
@@ -439,9 +440,9 @@ Player_EndOfSoundData: PROC
 	inc (ix + Player.loopCount)
 	ld a,(ix + Player.maxLoops)
 	and a
-	jp z,Player_ProcessNext.NoWait
+	jp z,Player_ProcessNext
 	cp (ix + Player.loopCount)
-	jp nz,Player_ProcessNext.NoWait
+	jp nz,Player_ProcessNext
 NoLoop:
 	ld (ix + Player.ended),-1
 	ret
@@ -459,17 +460,17 @@ Set60th:
 	call Player_ReadWord
 	ld (ix + Player.wait60th),e
 	ld (ix + Player.wait60th + 1),d
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Set50th:
 	call Player_ReadWord
 	ld (ix + Player.wait50th),e
 	ld (ix + Player.wait50th + 1),d
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 	ENDP
 
 ; ix = this
 Player_Wait0Samples:
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 Player_Wait1Samples:
 	ld de,1
 	jp Player_instance.Wait
@@ -548,7 +549,7 @@ Player_Skip3:
 Player_Skip2:
 	call Player_ReadByte
 Player_Skip1:
-	jp Player_ProcessNext.NoWait
+	jp Player_ProcessNext
 
 ; ix = this
 Player_UnsupportedCommand:
