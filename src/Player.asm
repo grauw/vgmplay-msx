@@ -98,8 +98,9 @@ Loop:
 
 ; ix = this
 Player_ProcessNext: PROC
-	call Player_CheckWait
-	ret c
+	ld e,(ix + Player.wait)
+	ld d,(ix + Player.wait + 1)
+	jp Player_instance.Wait
 NoWait:
 	call Player_ReadByte
 	ld l,a
@@ -109,33 +110,6 @@ NoWait:
 	ld d,(hl)
 	ex de,hl
 	jp hl
-	ENDP
-
-; ix = this
-; f <- c: waiting
-Player_CheckWait: PROC
-	ld e,(ix + Player.wait)
-	ld d,(ix + Player.wait + 1)
-	ld l,(ix + Player.time)
-	ld h,(ix + Player.time + 1)
-	and a
-	sbc hl,de
-	jp nc,Done
-	ex de,hl
-	ld hl,0
-	ld (ix + Player.time),l
-	ld (ix + Player.time + 1),h
-	and a
-	sbc hl,de
-	ld (ix + Player.wait),l
-	ld (ix + Player.wait + 1),h
-	ret
-Done:
-	ld (ix + Player.time),l
-	ld (ix + Player.time + 1),h
-	ld (ix + Player.wait),0
-	ld (ix + Player.wait + 1),0
-	ret
 	ENDP
 
 ; ix = this
