@@ -11,8 +11,6 @@ Player: MACRO
 		dw 0
 	header:
 		dw 0
-	time:
-		dw 0
 	wait:
 		dw 0
 	lastJiffy:
@@ -27,6 +25,25 @@ Player: MACRO
 		db 2  ; 0: loop infinitely
 	ended:
 		db 0
+
+	; ix = this
+	; de = wait period
+	Wait:
+		ld hl,0
+	time: equ $ - 2
+		and a
+		sbc hl,de
+		ld (time),hl
+		jp nc,Player_ProcessNext.NoWait
+	Yield:
+		ex de,hl
+		ld hl,0
+		ld (time),hl
+		and a
+		sbc hl,de
+		ld (wait),hl
+		ret
+
 	size:
 	ENDM
 
@@ -480,70 +497,64 @@ Set50th:
 Player_Wait0Samples:
 	jp Player_ProcessNext.NoWait
 Player_Wait1Samples:
-	ld (ix + Player.wait),1
-	jp Player_ProcessNext
+	ld de,1
+	jp Player_instance.Wait
 Player_Wait2Samples:
-	ld (ix + Player.wait),2
-	jp Player_ProcessNext
+	ld de,2
+	jp Player_instance.Wait
 Player_Wait3Samples:
-	ld (ix + Player.wait),3
-	jp Player_ProcessNext
+	ld de,3
+	jp Player_instance.Wait
 Player_Wait4Samples:
-	ld (ix + Player.wait),4
-	jp Player_ProcessNext
+	ld de,4
+	jp Player_instance.Wait
 Player_Wait5Samples:
-	ld (ix + Player.wait),5
-	jp Player_ProcessNext
+	ld de,5
+	jp Player_instance.Wait
 Player_Wait6Samples:
-	ld (ix + Player.wait),6
-	jp Player_ProcessNext
+	ld de,6
+	jp Player_instance.Wait
 Player_Wait7Samples:
-	ld (ix + Player.wait),7
-	jp Player_ProcessNext
+	ld de,7
+	jp Player_instance.Wait
 Player_Wait8Samples:
-	ld (ix + Player.wait),8
-	jp Player_ProcessNext
+	ld de,8
+	jp Player_instance.Wait
 Player_Wait9Samples:
-	ld (ix + Player.wait),9
-	jp Player_ProcessNext
+	ld de,9
+	jp Player_instance.Wait
 Player_Wait10Samples:
-	ld (ix + Player.wait),10
-	jp Player_ProcessNext
+	ld de,10
+	jp Player_instance.Wait
 Player_Wait11Samples:
-	ld (ix + Player.wait),11
-	jp Player_ProcessNext
+	ld de,11
+	jp Player_instance.Wait
 Player_Wait12Samples:
-	ld (ix + Player.wait),12
-	jp Player_ProcessNext
+	ld de,12
+	jp Player_instance.Wait
 Player_Wait13Samples:
-	ld (ix + Player.wait),13
-	jp Player_ProcessNext
+	ld de,13
+	jp Player_instance.Wait
 Player_Wait14Samples:
-	ld (ix + Player.wait),14
-	jp Player_ProcessNext
+	ld de,14
+	jp Player_instance.Wait
 Player_Wait15Samples:
-	ld (ix + Player.wait),15
-	jp Player_ProcessNext
+	ld de,15
+	jp Player_instance.Wait
 Player_Wait16Samples:
-	ld (ix + Player.wait),16
-	jp Player_ProcessNext
+	ld de,16
+	jp Player_instance.Wait
 Player_Wait735Samples:
 	ld e,(ix + Player.wait60th)
 	ld d,(ix + Player.wait60th + 1)
-	ld (ix + Player.wait),e
-	ld (ix + Player.wait + 1),d
-	jp Player_ProcessNext
+	jp Player_instance.Wait
 Player_Wait882Samples:
 	ld e,(ix + Player.wait50th)
 	ld d,(ix + Player.wait50th + 1)
-	ld (ix + Player.wait),e
-	ld (ix + Player.wait + 1),d
-	jp Player_ProcessNext
+	jp Player_instance.Wait
 Player_WaitNSamples:
 	call Player_ReadWord
-	ld (ix + Player.wait),e
-	ld (ix + Player.wait + 1),d
-	jp Player_ProcessNext
+	jp Player_instance.Wait
 
 ; ix = this
 Player_Skip11:
