@@ -137,8 +137,8 @@ Loop:
 	ld de,Player.SAMPLES_CAP
 	sbc hl,de
 	ret c
-	ld (ix + Player.time),Player.SAMPLES_CAP & 0FFH
-	ld (ix + Player.time + 1),Player.SAMPLES_CAP >> 8
+	ld (ix + Player.time),e
+	ld (ix + Player.time + 1),d
 	ret
 	ENDP
 
