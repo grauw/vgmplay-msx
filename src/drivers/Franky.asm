@@ -48,13 +48,13 @@ Franky_SafeWriteRegister:
 ; ix = this
 Franky_Reset:
 	ld a,9FH
-	call MMM_WriteRegister
+	call Franky_WriteRegister
 	ld a,0BFH
-	call MMM_WriteRegister
+	call Franky_WriteRegister
 	ld a,0DFH
-	call MMM_WriteRegister
+	call Franky_WriteRegister
 	ld a,0FFH
-	call MMM_WriteRegister
+	call Franky_WriteRegister
 	ret
 
 ;
