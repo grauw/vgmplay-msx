@@ -36,6 +36,14 @@ Show song length
 
 Play OPLL songs on OPL4
 
+DOS1 support
+
 Wildcard support
 
 Playlist support (m3u)
+
+Reset SFG-01/05 before playback
+
+  * Had a case with noise playing during some songs due to lack of reset
+
+Mute FM chips by setting ADSR to 0FH.
