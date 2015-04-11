@@ -8,6 +8,9 @@
 
 DEBUG: equ 1
 
+HEAP: equ 0C000H
+HEAP_SIZE: equ 1000H
+
 	org 100H
 
 TPA: ds 02F00H
@@ -29,6 +32,7 @@ COM_Main:
 	INCLUDE "Mapper.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
+	INCLUDE "HeapTest.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "VGMPlay.asm"
 	INCLUDE "CLI.asm"
@@ -43,5 +47,13 @@ COM_Main:
 	SECTION PAGE1
 
 	INCLUDE "Memory.asm"
+	INCLUDE "MemoryTest.asm"
+
+	ENDS
+
+	SECTION RAM
+
+Heap_main:
+	Heap HEAP, HEAP_SIZE
 
 	ENDS

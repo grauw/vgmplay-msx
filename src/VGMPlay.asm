@@ -31,13 +31,11 @@ VGMPlay_Main:
 
 	ld ix,Mapper_instance
 	call Mapper_Constructor
-	ld ix,Heap_heap
-	call Heap_Constructor
-	ld ix,Heap_heapUpper
+	ld ix,Heap_main
 	call Heap_Constructor
 
-	call Memory_UnitTest
-	call Heap_UnitTest
+	call MemoryTest_Test
+	call HeapTest_Test
 
 	call Player_InitCommandsJumpTable
 
