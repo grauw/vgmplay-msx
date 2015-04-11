@@ -130,7 +130,7 @@ Header: MACRO
 Header_Constructor:
 	call Header_CheckID
 	ld hl,Header_noVGMFileError
-	call nz,VGMPlay_TerminateWithError
+	call nz,Application_TerminateWithError
 	call Header_ClearPastDataOffset
 	ret
 

@@ -24,7 +24,7 @@ SCRATCH: ds VIRTUAL 2000H
 ; Program entry point
 ;
 COM_Main:
-	jp VGMPlay_Main
+	jp Application_Main
 
 	INCLUDE "DOS.asm"
 	INCLUDE "BIOS.asm"
@@ -34,7 +34,7 @@ COM_Main:
 	INCLUDE "Heap.asm"
 	INCLUDE "HeapTest.asm"
 	INCLUDE "Class.asm"
-	INCLUDE "VGMPlay.asm"
+	INCLUDE "Application.asm"
 	INCLUDE "CLI.asm"
 	INCLUDE "Header.asm"
 	INCLUDE "GD3.asm"

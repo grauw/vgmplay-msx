@@ -260,7 +260,7 @@ Reader_AllocateSegment:
 	ld a,0
 	call Mapper_instance.Allocate
 	ld hl,Reader_outOfMemoryError
-	call c,VGMPlay_TerminateWithError
+	call c,Application_TerminateWithError
 	ret
 
 ; ix = this
@@ -282,7 +282,7 @@ Reader_AddSegment:
 	ld (ix + Reader.lastSegment),e
 	bit 0,d
 	ld hl,Reader_outOfMemoryError
-	call nz,VGMPlay_TerminateWithError
+	call nz,Application_TerminateWithError
 	pop de
 	ld a,e
 	ret
@@ -295,13 +295,13 @@ Reader_LoadFile:
 	ld a,00000001B  ; read-only
 	ld c,_OPEN
 	call BDOS
-	call VGMPlay_CheckDOSError
+	call Application_CheckDOSError
 	push bc
 	call Reader_LoadAllData
 	pop bc
 	ld c,_CLOSE
 	call BDOS
-	call VGMPlay_CheckDOSError
+	call Application_CheckDOSError
 	ld de,0
 	ld hl,0
 	call Reader_SetPosition
@@ -362,7 +362,7 @@ Reader_LoadSegment: PROC
 	ld c,_READ
 	call BDOS
 	cp .EOF
-	call nz,VGMPlay_CheckDOSError
+	call nz,Application_CheckDOSError
 	ret
 NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	push bc
@@ -371,7 +371,7 @@ NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	ld c,_READ
 	call BDOS
 	cp .EOF
-	call nz,VGMPlay_CheckDOSError
+	call nz,Application_CheckDOSError
 	ld a,l
 	or h
 	jr z,SkipLDIR1
@@ -392,7 +392,7 @@ SkipLDIR1:
 	ld c,_READ
 	call BDOS
 	cp .EOF
-	call nz,VGMPlay_CheckDOSError
+	call nz,Application_CheckDOSError
 	ld a,l
 	or h
 	jr z,SkipLDIR2

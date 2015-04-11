@@ -78,7 +78,7 @@ CLI_ParseOption: PROC
 	cp "B"
 	jr z,OptionBlackout
 	ld hl,CLI_unknownOptionError
-	jp VGMPlay_TerminateWithError
+	jp Application_TerminateWithError
 Option50Hz:
 	ld (ix + CLI.frequency),50
 	inc de
@@ -103,7 +103,7 @@ Next:
 	cp " "
 	ret z
 	ld hl,CLI_unknownOptionError
-	jp VGMPlay_TerminateWithError
+	jp Application_TerminateWithError
 	ENDP
 
 ; de = buffer position
@@ -112,7 +112,7 @@ CLI_ParsePath:
 	ld a,(ix + CLI.path)
 	or (ix + CLI.path + 1)
 	ld hl,CLI_multiplePathsError
-	call nz,VGMPlay_TerminateWithError
+	call nz,Application_TerminateWithError
 	ld (ix + CLI.path),e
 	ld (ix + CLI.path + 1),d
 	ld c,_PARSE
@@ -138,9 +138,9 @@ Loop:
 	cp " "
 	ret z
 	sub "0"
-	jp c,VGMPlay_TerminateWithError
+	jp c,Application_TerminateWithError
 	cp 10
-	jp nc,VGMPlay_TerminateWithError
+	jp nc,Application_TerminateWithError
 	call Multiply10AndAdd
 	inc de
 	jp Loop
@@ -149,16 +149,16 @@ Multiply10AndAdd:
 	ld a,c
 	ld c,b
 	add a,a
-	jp c,VGMPlay_TerminateWithError
+	jp c,Application_TerminateWithError
 	ld b,a
 	add a,a
-	jp c,VGMPlay_TerminateWithError
+	jp c,Application_TerminateWithError
 	add a,a
-	jp c,VGMPlay_TerminateWithError
+	jp c,Application_TerminateWithError
 	add a,b
-	jp c,VGMPlay_TerminateWithError
+	jp c,Application_TerminateWithError
 	add a,c
-	jp c,VGMPlay_TerminateWithError
+	jp c,Application_TerminateWithError
 	ld c,a
 	ret
 	ENDP

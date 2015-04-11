@@ -1,7 +1,7 @@
 ;
-; Top-level VGMPlay program class
+; Top-level application program class
 ;
-VGMPlay: MACRO
+Application: MACRO
 	cli:
 		dw CLI_instance
 	header:
@@ -16,14 +16,14 @@ VGMPlay: MACRO
 	ENDM
 
 ;
-VGMPlay_Main:
+Application_Main:
 	call DOS_IsDOS2
-	ld hl,VGMPlay_dos2RequiredError
-	call c,VGMPlay_TerminateWithError
+	ld hl,Application_dos2RequiredError
+	call c,Application_TerminateWithError
 
 	call VDP_InitMirrorsOnVDPUpgrades
 
-	ld hl,VGMPlay_welcome
+	ld hl,Application_welcome
 	call System_Print
 
 	call System_EnableTurbo
@@ -39,56 +39,56 @@ VGMPlay_Main:
 
 	call Player_InitCommandsJumpTable
 
-	ld ix,VGMPlay_instance
-	call VGMPlay_Constructor
-	ld de,VGMPlay_Abort
-	call VGMPlay_SetAbortHandler
-	call VGMPlay_EnterMainLoop
-	call VGMPlay_Abort
+	ld ix,Application_instance
+	call Application_Constructor
+	ld de,Application_Abort
+	call Application_SetAbortHandler
+	call Application_EnterMainLoop
+	call Application_Abort
 	ret
 
 ; DOS error or abort handler
-VGMPlay_Abort:
+Application_Abort:
 	push af
 	push bc
-	ld ix,VGMPlay_instance
-	call VGMPlay_Destructor
+	ld ix,Application_instance
+	call Application_Destructor
 	ld ix,Mapper_instance
 	call Mapper_Destructor
-	call VGMPlay_ExitBlackout
+	call Application_ExitBlackout
 	pop bc
 	pop af
 	ret
 
 ; de = abort handler
 ; ix = this
-VGMPlay_SetAbortHandler:
+Application_SetAbortHandler:
 	ld c,_DEFAB
 	call BDOS
 	ret
 
 ; ix = this
 ; ix <- this
-VGMPlay_Constructor:
+Application_Constructor:
 	push ix
-	call VGMPlay_GetCLI
+	call Application_GetCLI
 	call CLI_Constructor
 	pop ix
 	push ix
-	call VGMPlay_GetDrivers
+	call Application_GetDrivers
 	call Drivers_Constructor
 	pop ix
 	ret
 
 ; ix = this
 ; ix <- this
-VGMPlay_Destructor:
+Application_Destructor:
 	push ix
-	call VGMPlay_GetCLI
+	call Application_GetCLI
 	call CLI_Destructor
 	pop ix
 	push ix
-	call VGMPlay_GetDrivers
+	call Application_GetDrivers
 	call Drivers_Destructor
 	pop ix
 	ret
@@ -96,9 +96,9 @@ VGMPlay_Destructor:
 ; ix = this
 ; de <- Command-line interface
 ; ix <- Command-line interface
-VGMPlay_GetCLI:
-	ld e,(ix + VGMPlay.cli)
-	ld d,(ix + VGMPlay.cli + 1)
+Application_GetCLI:
+	ld e,(ix + Application.cli)
+	ld d,(ix + Application.cli + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
@@ -106,9 +106,9 @@ VGMPlay_GetCLI:
 ; ix = this
 ; de <- VGM header
 ; ix <- VGM header
-VGMPlay_GetHeader:
-	ld e,(ix + VGMPlay.header)
-	ld d,(ix + VGMPlay.header + 1)
+Application_GetHeader:
+	ld e,(ix + Application.header)
+	ld d,(ix + Application.header + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
@@ -116,9 +116,9 @@ VGMPlay_GetHeader:
 ; ix = this
 ; de <- VGM data reader
 ; ix <- VGM data reader
-VGMPlay_GetReader:
-	ld e,(ix + VGMPlay.reader)
-	ld d,(ix + VGMPlay.reader + 1)
+Application_GetReader:
+	ld e,(ix + Application.reader)
+	ld d,(ix + Application.reader + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
@@ -126,9 +126,9 @@ VGMPlay_GetReader:
 ; ix = this
 ; de <- VGM data
 ; ix <- VGM data
-VGMPlay_GetPlayer:
-	ld e,(ix + VGMPlay.player)
-	ld d,(ix + VGMPlay.player + 1)
+Application_GetPlayer:
+	ld e,(ix + Application.player)
+	ld d,(ix + Application.player + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
@@ -136,34 +136,34 @@ VGMPlay_GetPlayer:
 ; ix = this
 ; de <- Driver manager
 ; ix <- Driver manager
-VGMPlay_GetDrivers:
-	ld e,(ix + VGMPlay.drivers)
-	ld d,(ix + VGMPlay.drivers + 1)
+Application_GetDrivers:
+	ld e,(ix + Application.drivers)
+	ld d,(ix + Application.drivers + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
 
 ; ix = this
-VGMPlay_EnterMainLoop:
-	call VGMPlay_ParseCLI
-	call VGMPlay_LoadFile
-	call VGMPlay_ReadHeader
-	call VGMPlay_ShowInfo
-	call VGMPlay_EnterBlackout
-	call VGMPlay_Play
+Application_EnterMainLoop:
+	call Application_ParseCLI
+	call Application_LoadFile
+	call Application_ReadHeader
+	call Application_ShowInfo
+	call Application_EnterBlackout
+	call Application_Play
 	ret
 
 ; ix = this
-VGMPlay_ParseCLI: PROC
+Application_ParseCLI: PROC
 	push ix
-	call VGMPlay_GetCLI
+	call Application_GetCLI
 	call CLI_Parse
 	ld l,(ix + CLI.path)
 	ld h,(ix + CLI.path + 1)
 	ld a,l
 	or h
-	ld hl,VGMPlay_usageInstructions
-	call z,VGMPlay_TerminateWithError
+	ld hl,Application_usageInstructions
+	call z,Application_TerminateWithError
 	call Frequency
 	pop ix
 	ret
@@ -177,22 +177,22 @@ Frequency:
 	ENDP
 
 ; ix = this
-VGMPlay_LoadFile: PROC
+Application_LoadFile: PROC
 	push ix
-	call VGMPlay_GetCLI
+	call Application_GetCLI
 	ld l,(ix + CLI.path)
 	ld h,(ix + CLI.path + 1)
 	pop ix
 	push ix
 	push hl
-	ld hl,VGMPlay_loadingFile
+	ld hl,Application_loadingFile
 	call System_Print
 	pop hl
 	push hl
 	call System_Print
-	ld hl,VGMPlay_dotDotDot
+	ld hl,Application_dotDotDot
 	call System_Print
-	call VGMPlay_GetReader
+	call Application_GetReader
 	pop hl
 	call Reader_Constructor
 	pop ix
@@ -200,57 +200,57 @@ VGMPlay_LoadFile: PROC
 	ENDP
 
 ; ix = this
-VGMPlay_ReadHeader:
+Application_ReadHeader:
 	push ix
 	ld bc,256
-	ld l,(ix + VGMPlay.header)
-	ld h,(ix + VGMPlay.header + 1)
-	call VGMPlay_GetReader
+	ld l,(ix + Application.header)
+	ld h,(ix + Application.header + 1)
+	call Application_GetReader
 	ex de,hl
 	call Reader_ReadBlock
 	pop ix
 	push ix
-	call VGMPlay_GetHeader
+	call Application_GetHeader
 	call Header_Constructor
 	pop ix
 	ret
 
 ; ix = this
-VGMPlay_ShowInfo:
+Application_ShowInfo:
 	push ix
-	call VGMPlay_GetHeader
+	call Application_GetHeader
 	call Header_GetGD3Offset
 	pop ix
 	push ix
 	push de
-	call VGMPlay_GetReader
+	call Application_GetReader
 	pop de
 	call nz,System_PrintCrLf
 	call nz,GD3_ShowTagInfoEnglish
 	pop ix
 	push ix
-	call VGMPlay_GetHeader
+	call Application_GetHeader
 	call System_PrintCrLf
 	call Header_ShowInfo
 	pop ix
 	ret
 
 ; ix = this
-VGMPlay_Play:
-	ld hl,VGMPlay_playing
+Application_Play:
+	ld hl,Application_playing
 	call System_Print
-	ld e,(ix + VGMPlay.reader)
-	ld d,(ix + VGMPlay.reader + 1)
-	ld l,(ix + VGMPlay.header)
-	ld h,(ix + VGMPlay.header + 1)
+	ld e,(ix + Application.reader)
+	ld d,(ix + Application.reader + 1)
+	ld l,(ix + Application.header)
+	ld h,(ix + Application.header + 1)
 	push ix
 	push de
 	push ix
-	call VGMPlay_GetCLI
+	call Application_GetCLI
 	ld c,(ix + CLI.loops)
 	pop ix
 	push bc
-	call VGMPlay_GetPlayer
+	call Application_GetPlayer
 	pop bc
 	pop de
 	call Player_Constructor
@@ -260,9 +260,9 @@ VGMPlay_Play:
 
 ; If enabled, blacks out the screen to minimise audio output interference.
 ; ix = this
-VGMPlay_EnterBlackout:
+Application_EnterBlackout:
 	push ix
-	call VGMPlay_GetCLI
+	call Application_GetCLI
 	ld a,(ix + CLI.blackout)
 	pop ix
 	and a
@@ -273,22 +273,22 @@ VGMPlay_EnterBlackout:
 	ret
 
 ; ix = this
-VGMPlay_ExitBlackout:
+Application_ExitBlackout:
 	ld a,(VDP_MIRROR_0 + 7)
 	call VDP_SetColor
 	call VDP_DisableBlank
 	ret
 
 ; a <- DOS error code
-VGMPlay_CheckDOSError:
+Application_CheckDOSError:
 	and a
 	ret z
-VGMPlay_TerminateWithDOSError:
+Application_TerminateWithDOSError:
 	ld b,a
 	ld c,_EXPLAIN
-	ld de,VGMPlay_explainBuffer
+	ld de,Application_explainBuffer
 	call BDOS
-	ld hl,VGMPlay_explainBuffer
+	ld hl,Application_explainBuffer
 	call System_Print
 	call System_PrintCrLf
 	ld b,1
@@ -296,7 +296,7 @@ VGMPlay_TerminateWithDOSError:
 	call BDOS
 
 ; hl <- message
-VGMPlay_TerminateWithError:
+Application_TerminateWithError:
 	call System_Print
 	ld b,1
 	ld c,_TERM
@@ -305,24 +305,24 @@ VGMPlay_TerminateWithError:
 ;
 	SECTION RAM
 
-VGMPlay_instance: VGMPlay
+Application_instance: Application
 
-VGMPlay_welcome:
+Application_welcome:
 	db "VGMPlay 1.0 by Grauw",13,10,10,0
 
-VGMPlay_loadingFile:
+Application_loadingFile:
 	db "Loading ",0
 
-VGMPlay_dotDotDot:
+Application_dotDotDot:
 	db "...",13,10,0
 
-VGMPlay_playing:
+Application_playing:
 	db 13,10,"Playing...",13,10,0
 
-VGMPlay_dos2RequiredError:
+Application_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
 
-VGMPlay_usageInstructions:
+Application_usageInstructions:
 	db "Usage: vgmplay [options] <file.vgm>",13,10
 	db 13,10
 	db "Options:",13,10
@@ -330,7 +330,7 @@ VGMPlay_usageInstructions:
 	db "  /5  50 Hz screen frequency (V9938 and up only).",13,10
 	db "  /b  Enter blackout mode during playback.",13,10,0
 
-VGMPlay_explainBuffer:
+Application_explainBuffer:
 	ds 64,0
 
 	ENDS
