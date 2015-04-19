@@ -5,7 +5,7 @@ namespace eval vgm {
 	variable start_time
 	variable ticks
 	variable music_data
-	variable file_handle
+	variable file_name
 	variable watchpoint_psg_address
 	variable watchpoint_psg_data
 	variable watchpoint_opll_address
@@ -22,14 +22,14 @@ namespace eval vgm {
 		string repeat "\0" $value
 	}
 
-	proc vgm_startrec {{file_name "music.vgm"}} {
+	proc vgm_startrec {{filename "music.vgm"}} {
 		variable active
 		variable psg_register
 		variable fm_register
 		variable start_time
 		variable ticks
 		variable music_data
-		variable file_handle
+		variable file_name
 		variable watchpoint_psg_address
 		variable watchpoint_psg_data
 		variable watchpoint_opll_address
@@ -45,8 +45,7 @@ namespace eval vgm {
 		set start_time [machine_info time]
 		set ticks 0
 		set music_data ""
-		set file_handle [open $file_name "w"]
-		fconfigure $file_handle -encoding binary
+		set file_name $filename
 
 		set watchpoint_psg_address [debug set_watchpoint write_io 0xA0 {} {vgm::write_psg_address}]
 		set watchpoint_psg_data [debug set_watchpoint write_io 0xA1 {} {vgm::write_psg_data}]
@@ -101,7 +100,7 @@ namespace eval vgm {
 		variable active
 		variable ticks
 		variable music_data
-		variable file_handle
+		variable file_name
 		variable watchpoint_psg_address
 		variable watchpoint_psg_data
 		variable watchpoint_opll_address
@@ -137,6 +136,9 @@ namespace eval vgm {
 		# AY8910 clock
 		append header [little_endian 1789773]
 		append header [zeros 136]
+
+		set file_handle [open $file_name "w"]
+		fconfigure $file_handle -encoding binary
 		puts -nonewline $file_handle $header
 		puts -nonewline $file_handle $music_data
 		close $file_handle
