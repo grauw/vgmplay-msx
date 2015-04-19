@@ -22,7 +22,7 @@ namespace eval vgm {
 		string repeat "\0" $value
 	}
 
-	proc vgm_startrec {} {
+	proc vgm_startrec {{file_name "music.vgm"}} {
 		variable active
 		variable psg_register
 		variable fm_register
@@ -45,7 +45,7 @@ namespace eval vgm {
 		set start_time [machine_info time]
 		set ticks 0
 		set music_data ""
-		set file_handle [open "music.vgm" "w"]
+		set file_handle [open $file_name "w"]
 		fconfigure $file_handle -encoding binary
 
 		set watchpoint_psg_address [debug set_watchpoint write_io 0xA0 {} {vgm::write_psg_address}]
