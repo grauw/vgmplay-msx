@@ -63,8 +63,8 @@ namespace eval vgm {
 	proc write_psg_data {} {
 		variable psg_register
 		variable music_data
-		update_time
 		if {$psg_register >= 0 && $psg_register < 14} {
+			update_time
 			append music_data [format %c%c%c 0xA0 $psg_register $::wp_last_value]
 		}
 	}
@@ -77,8 +77,8 @@ namespace eval vgm {
 	proc write_opll_data {} {
 		variable opll_register
 		variable music_data
-		update_time
 		if {$opll_register >= 0} {
+			update_time
 			append music_data [format %c%c%c 0x51 $opll_register $::wp_last_value]
 		}
 	}
