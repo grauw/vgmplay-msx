@@ -16,7 +16,7 @@ run: all
 	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext slotexpander -ext ide -ext Yamaha_SFG-05 -ext mbstereo -ext moonsound -ext Konami_Snatcher_Sound_Cartridge -ext ram1mb -script openmsx.tcl
 
 run2: all
-	openmsx -machine Yamaha_CX5MII -script openmsx.tcl
+	openmsx -machine Yamaha_CX5MII -ext MegaFlashROM_SCC\+_SD -ext slotexpander -ext ram4mb -ext mbstereo -ext moonsound -ext Konami_Snatcher_Sound_Cartridge -script openmsx.tcl
 
 run3: all
 	openmsx -machine Philips_NMS_8245 -ext slotexpander -ext slotexpander -ext ide -ext ram4mb -ext mbstereo -ext Yamaha_SFG-05 -ext moonsound -ext Konami_Snatcher_Sound_Cartridge -script openmsx.tcl
