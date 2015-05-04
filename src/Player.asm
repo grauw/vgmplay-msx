@@ -81,7 +81,7 @@ Player_Constructor:
 	push ix
 	call Player_GetTimer
 	ld hl,Player_instance.Update
-	call Timer_Constructor
+	call VBlankTimer_Constructor
 	pop ix
 	ret
 
@@ -561,7 +561,7 @@ Player_UnsupportedCommand:
 
 Player_instance: Player
 
-Player_timer: Timer
+Player_timer: VBlankTimer
 
 Player_unsupportedCommandError:
 	db "Unsupported command: ",0

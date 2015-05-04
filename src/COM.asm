@@ -40,7 +40,7 @@ COM_Main:
 	INCLUDE "GD3.asm"
 	INCLUDE "Reader.asm"
 	INCLUDE "Player.asm"
-	INCLUDE "Timer.asm"
+	INCLUDE "timers/Timer.asm"
 	INCLUDE "drivers/Drivers.asm"
 
 	ENDS
