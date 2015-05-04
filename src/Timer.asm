@@ -40,6 +40,9 @@ Timer_Update:
 	call Timer_UpdateTimePassed
 	ld e,(ix + Timer.time)
 	ld d,(ix + Timer.time + 1)
+	ld a,e
+	or d
+	ret z
 	ld l,(ix + Timer.callback)
 	ld h,(ix + Timer.callback + 1)
 	ld (ix + Timer.time),0
