@@ -4,6 +4,7 @@
 ; Time and wait codes are in units of 44100 Hz samples
 ;
 Player: MACRO
+	this:
 	SAMPLES_60HZ: equ 735
 	SAMPLES_50HZ: equ 882
 	SAMPLES_CAP: equ 1000
@@ -11,10 +12,10 @@ Player: MACRO
 		dw 0
 	header:
 		dw 0
+	timer:
+		dw Player_timer
 	wait:
 		dw 0
-	lastJiffy:
-		db 0
 	wait60th:
 		dw SAMPLES_60HZ
 	wait50th:
@@ -25,6 +26,14 @@ Player: MACRO
 		db 2  ; 0: loop infinitely
 	ended:
 		db 0
+
+	; de = time passed
+	; ix = this
+	Update:
+		ld ix,this
+		ld (time),de
+		ld de,(wait)
+		jp Wait
 
 	; de = wait period
 	; ix = this
@@ -58,6 +67,11 @@ Player_Constructor:
 	ld (ix + Player.header),l
 	ld (ix + Player.header + 1),h
 	ld (ix + Player.maxLoops),c
+	push ix
+	call Player_GetTimer
+	ld hl,Player_instance.Update
+	call Timer_Constructor
+	pop ix
 	ret
 
 ; Shuffles the commands jump table so that the LSB and MSB are separated.
@@ -87,20 +101,23 @@ LSBExtractionLoop:
 ; ix = this
 Player_Play: PROC
 	call Player_ResetPosition
-	call Player_InitialiseTimer
+	push ix
+	call Player_GetTimer
+	call Timer_Start
+	pop ix
 Loop:
-	call Player_Continue
+	push ix
+	call Player_GetTimer
+	call Timer_Update
+	pop ix
 	call Player_CheckExitCondition
-	ret nz
-	call Player_UpdateTimer
-	jp Loop
+	jp z,Loop
+	push ix
+	call Player_GetTimer
+	call Timer_Stop
+	pop ix
+	ret
 	ENDP
-
-; ix = this
-Player_Continue:
-	ld e,(ix + Player.wait)
-	ld d,(ix + Player.wait + 1)
-	jp Player_instance.Wait
 
 ; ix = this
 Player_ProcessNext:
@@ -112,55 +129,6 @@ Player_ProcessNext:
 	ld d,(hl)
 	ex de,hl
 	jp hl
-
-; ix = this
-Player_UpdateTimer: PROC
-	ld b,(ix + Player.lastJiffy)
-Wait:
-	ld a,(JIFFY)
-	cp b
-	jp z,Wait
-	ld (ix + Player.lastJiffy),a
-	sub b
-	ld b,a
-	ld l,(ix + Player.time)
-	ld h,(ix + Player.time + 1)
-	call VDP_Is60Hz
-	ld de,Player.SAMPLES_60HZ
-	jr z,Loop
-	ld de,Player.SAMPLES_50HZ
-Loop:
-	add hl,de
-	djnz Loop
-	ld (ix + Player.time),l
-	ld (ix + Player.time + 1),h
-	ld de,Player.SAMPLES_CAP
-	sbc hl,de
-	ret c
-	ld (ix + Player.time),e
-	ld (ix + Player.time + 1),d
-	ret
-	ENDP
-
-; Waits for timer interrupt to maximise the time available in the first frame.
-; ix = this
-Player_InitialiseTimer: PROC
-	ld hl,JIFFY
-	ld a,(hl)
-SyncWait:
-	halt
-	cp (hl)
-	jp z,SyncWait
-	ld a,(hl)
-	ld (ix + Player.lastJiffy),a
-	ret
-	ENDP
-
-; ix = this
-Player_ResetTimer:
-	ld a,(JIFFY)
-	ld (ix + Player.lastJiffy),a
-	ret
 
 ; ix = this
 ; de <- VGM data reader
@@ -178,6 +146,16 @@ Player_GetReader:
 Player_GetHeader:
 	ld e,(ix + Player.header)
 	ld d,(ix + Player.header + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- VGM header
+; ix <- VGM header
+Player_GetTimer:
+	ld e,(ix + Player.timer)
+	ld d,(ix + Player.timer + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
@@ -288,7 +266,10 @@ Player_Y8950DataBlock: PROC
 	ld a,01H
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_instance.WriteRegister
-	call Player_ResetTimer
+	push ix
+	call Player_GetTimer
+	call Timer_Reset
+	pop ix
 	jp Player_ProcessNext
 	ENDP
 
@@ -568,6 +549,8 @@ Player_UnsupportedCommand:
 	SECTION RAM
 
 Player_instance: Player
+
+Player_timer: Timer
 
 Player_unsupportedCommandError:
 	db "Unsupported command: ",0
