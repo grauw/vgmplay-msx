@@ -10,7 +10,7 @@
 Timer: MACRO
 	SAMPLES_60HZ: equ 735
 	SAMPLES_50HZ: equ 882
-	SAMPLES_CAP: equ 1000
+	SAMPLES_CAP: equ 1 << 10  ; 1024
 	callback:
 		dw 0
 	time:
@@ -38,11 +38,10 @@ Timer_Stop:
 ; ix = this
 Timer_Update:
 	call Timer_UpdateTimePassed
-	ld e,(ix + Timer.time)
-	ld d,(ix + Timer.time + 1)
-	ld a,e
-	or d
+	ld a,l
+	or h
 	ret z
+	ex de,hl
 	ld l,(ix + Timer.callback)
 	ld h,(ix + Timer.callback + 1)
 	ld (ix + Timer.time),0
@@ -50,6 +49,7 @@ Timer_Update:
 	jp hl
 
 ; ix = this
+; hl <- time passed
 Timer_UpdateTimePassed: PROC
 	ld b,(ix + Timer.lastTimer)
 Wait:
@@ -70,11 +70,12 @@ Loop:
 	djnz Loop
 	ld (ix + Timer.time),l
 	ld (ix + Timer.time + 1),h
-	ld de,Timer.SAMPLES_CAP
-	sbc hl,de
-	ret c
-	ld (ix + Timer.time),e
-	ld (ix + Timer.time + 1),d
+	ld a,h
+	and ~((Timer.SAMPLES_CAP - 1) >> 8)
+	ret z
+	ld hl,Timer.SAMPLES_CAP
+	ld (ix + Timer.time),l
+	ld (ix + Timer.time + 1),h
 	ret
 	ENDP
 
