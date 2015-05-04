@@ -82,4 +82,6 @@ Loop:
 Timer_Reset:
 	ld a,(JIFFY)
 	ld (ix + Timer.lastJiffy),a
+	ld (ix + Timer.time),0
+	ld (ix + Timer.time + 1),0
 	ret
