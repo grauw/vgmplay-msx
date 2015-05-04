@@ -18,7 +18,7 @@ VBlankTimer: MACRO
 ; hl = callback
 ; ix = this
 VBlankTimer_Constructor:
-	call Timer_Constructor;
+	call Timer_Constructor
 	ret
 
 ; ix = this

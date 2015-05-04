@@ -19,7 +19,7 @@ TurboRTimer: MACRO
 ; hl = callback
 ; ix = this
 TurboRTimer_Constructor:
-	call Timer_Constructor;
+	call Timer_Constructor
 	ret
 
 ; ix = this
