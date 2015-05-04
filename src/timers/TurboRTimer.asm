@@ -1,13 +1,11 @@
 ;
 ; Turbo R high res timer
 ;
-; 1000 Hz resolution
+; 4000 Hz resolution
 ;
 ; There is a slight deviation of +1 second every 5 minutes (+0.35%).
 ;
-TurboRTimer_LSB_PORT: equ 0E6H
-TurboRTimer_MSB_PORT: equ 0E7H
-TurboRTimer_SAMPLES: equ 44  ; every 256 timer cycles = 44 samples
+TurboRTimer_SAMPLES: equ 11  ; every 64 timer cycles = 11 samples
 TurboRTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 TurboRTimer: MACRO
@@ -35,7 +33,7 @@ TurboRTimer_Stop:
 
 ; ix = this
 TurboRTimer_Reset:
-	in a,(TurboRTimer_MSB_PORT)
+	call TurboRTimer_GetTimerValue
 	ld (ix + TurboRTimer.lastTimer),a
 	ld (ix + TurboRTimer.time),0
 	ld (ix + TurboRTimer.time + 1),0
@@ -57,7 +55,7 @@ TurboRTimer_Update:
 TurboRTimer_UpdateTimePassed: PROC
 	ld b,(ix + TurboRTimer.lastTimer)
 Wait:
-	in a,(TurboRTimer_MSB_PORT)
+	call TurboRTimer_GetTimerValue
 	cp b
 	jp z,Wait
 	ld (ix + TurboRTimer.lastTimer),a
@@ -79,3 +77,14 @@ Loop:
 	ld (ix + TurboRTimer.time + 1),h
 	ret
 	ENDP
+
+; ix = this
+; a <- 3995 Hz timer value
+TurboRTimer_GetTimerValue:
+	call System_GetHighResTimerValue
+	ld a,h
+	rl l
+	rla
+	rl l
+	rla
+	ret
