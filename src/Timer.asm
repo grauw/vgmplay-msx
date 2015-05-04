@@ -15,7 +15,7 @@ Timer: MACRO
 		dw 0
 	time:
 		dw 0
-	lastJiffy:
+	lastTimer:
 		db 0
 	ENDM
 
@@ -51,12 +51,12 @@ Timer_Update:
 
 ; ix = this
 Timer_UpdateTimePassed: PROC
-	ld b,(ix + Timer.lastJiffy)
+	ld b,(ix + Timer.lastTimer)
 Wait:
 	ld a,(JIFFY)
 	cp b
 	jp z,Wait
-	ld (ix + Timer.lastJiffy),a
+	ld (ix + Timer.lastTimer),a
 	sub b
 	ld b,a
 	ld l,(ix + Timer.time)
@@ -81,7 +81,7 @@ Loop:
 ; ix = this
 Timer_Reset:
 	ld a,(JIFFY)
-	ld (ix + Timer.lastJiffy),a
+	ld (ix + Timer.lastTimer),a
 	ld (ix + Timer.time),0
 	ld (ix + Timer.time + 1),0
 	ret
