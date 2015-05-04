@@ -32,17 +32,15 @@ Player: MACRO
 	Update:
 		IF DEBUG
 		ld a,0F6H
-		ld b,7
-		call VDP_SetRegister
+		call VDP_SetColor
 		ENDIF
 		ld ix,this
 		ld (time),de
 		ld de,(wait)
 		IF DEBUG
 		call Wait
-		ld a,0F4H
-		ld b,7
-		call VDP_SetRegister
+		ld a,(VDP_MIRROR_0 + 7)
+		call VDP_SetColor
 		ret
 		ELSE
 		jp Wait
