@@ -8,6 +8,7 @@
 ; Time is in units of 44100 Hz samples
 ;
 	INCLUDE "VBlankTimer.asm"
+	INCLUDE "TurboRTimer.asm"
 
 Timer: MACRO ?start, ?stop, ?reset, ?update
 	start:
