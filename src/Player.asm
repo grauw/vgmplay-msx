@@ -24,6 +24,8 @@ Player: MACRO
 		db 0
 	maxLoops:
 		db 2  ; 0: loop infinitely
+	lastJiffy:
+		db 0
 	ended:
 		db 0
 
@@ -217,6 +219,10 @@ Player_ReadDoubleWord:
 Player_CheckExitCondition:
 	bit 0,(ix + Player.ended)
 	ret nz
+	ld a,(JIFFY)
+	cp (ix + Player.lastJiffy)
+	ret z
+	ld (ix + Player.lastJiffy),a
 	ld c,_CONST
 	call BDOS
 	and a
