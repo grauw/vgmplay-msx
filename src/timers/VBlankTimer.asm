@@ -3,11 +3,12 @@
 ;
 ; 50 / 60 Hz resolution
 ;
+VBlankTimer_SAMPLES_60HZ: equ 735
+VBlankTimer_SAMPLES_50HZ: equ 882
+VBlankTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
+
 VBlankTimer: MACRO
 	super: Timer VBlankTimer_Start, VBlankTimer_Stop, VBlankTimer_Reset, VBlankTimer_Update
-	SAMPLES_60HZ: equ 735
-	SAMPLES_50HZ: equ 882
-	SAMPLES_CAP: equ 1 << 10  ; 1024
 	time:
 		dw 0
 	lastTimer:
@@ -62,18 +63,18 @@ Wait:
 	ld l,(ix + VBlankTimer.time)
 	ld h,(ix + VBlankTimer.time + 1)
 	call VDP_Is60Hz
-	ld de,VBlankTimer.SAMPLES_60HZ
+	ld de,VBlankTimer_SAMPLES_60HZ
 	jr z,Loop
-	ld de,VBlankTimer.SAMPLES_50HZ
+	ld de,VBlankTimer_SAMPLES_50HZ
 Loop:
 	add hl,de
 	djnz Loop
 	ld (ix + VBlankTimer.time),l
 	ld (ix + VBlankTimer.time + 1),h
 	ld a,h
-	and ~((VBlankTimer.SAMPLES_CAP - 1) >> 8)
+	and ~((VBlankTimer_SAMPLES_CAP - 1) >> 8)
 	ret z
-	ld hl,VBlankTimer.SAMPLES_CAP
+	ld hl,VBlankTimer_SAMPLES_CAP
 	ld (ix + VBlankTimer.time),l
 	ld (ix + VBlankTimer.time + 1),h
 	ret
