@@ -30,10 +30,23 @@ Player: MACRO
 	; de = time passed
 	; ix = this
 	Update:
+		IF DEBUG
+		ld a,0F6H
+		ld b,7
+		call VDP_SetRegister
+		ENDIF
 		ld ix,this
 		ld (time),de
 		ld de,(wait)
+		IF DEBUG
+		call Wait
+		ld a,0F4H
+		ld b,7
+		call VDP_SetRegister
+		ret
+		ELSE
 		jp Wait
+		ENDIF
 
 	; de = wait period
 	; ix = this
