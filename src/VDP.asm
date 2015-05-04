@@ -276,14 +276,18 @@ Wait:
 
 ; a = value
 ; b = register
-; Modifies: af
+; Modifies: af, c
 VDP_SetRegister:
+	ld c,a
+	ld a,r
+	ld a,c
 	di
 	out (VDP_PORT_1),a
 	ld a,b
-	or VDP_REGISTER
-	ei
+	set 7,a
 	out (VDP_PORT_1),a
+	ret po
+	ei
 	ret
 
 ; Set the palette referenced by hl.
