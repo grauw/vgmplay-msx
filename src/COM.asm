@@ -6,7 +6,7 @@
 
 	INCLUDE "Macros.asm"
 
-DEBUG: equ 1
+DEBUG: equ 0
 
 HEAP: equ 0C000H
 HEAP_SIZE: equ 1000H
