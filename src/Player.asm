@@ -3,10 +3,11 @@
 ;
 ; Time and wait codes are in units of 44100 Hz samples
 ;
+Player_SAMPLES_60HZ: equ 735
+Player_SAMPLES_50HZ: equ 882
+
 Player: MACRO
 	this:
-	SAMPLES_60HZ: equ 735
-	SAMPLES_50HZ: equ 882
 	reader:
 		dw 0
 	header:
@@ -16,9 +17,9 @@ Player: MACRO
 	wait:
 		dw 0
 	wait60th:
-		dw SAMPLES_60HZ
+		dw Player_SAMPLES_60HZ
 	wait50th:
-		dw SAMPLES_50HZ
+		dw Player_SAMPLES_50HZ
 	loopCount:
 		db 0
 	maxLoops:
