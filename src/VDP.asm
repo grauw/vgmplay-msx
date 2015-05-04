@@ -160,11 +160,8 @@ VDP_DisableLineInt:
 	ret
 
 VDP_SetColor:
-	di
-	out (VDP_PORT_1),a
-	ld a,7 | VDP_REGISTER
-	ei
-	out (VDP_PORT_1),a
+	ld b,7
+	call VDP_SetRegister
 	ret
 
 VDP_EnableBlink: PROC
@@ -294,11 +291,8 @@ VDP_SetRegister:
 ; Modifies: af, bc, hl
 VDP_SetPalette:
 	xor a
-	di
-	out (VDP_PORT_1),a
-	ld a,16 | VDP_REGISTER
-	ei
-	out (VDP_PORT_1),a
+	ld b,16
+	call VDP_SetRegister
 	ld bc,32 << 8 | 9AH
 	otir
 	ret
