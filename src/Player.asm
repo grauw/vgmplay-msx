@@ -7,7 +7,6 @@ Player: MACRO
 	this:
 	SAMPLES_60HZ: equ 735
 	SAMPLES_50HZ: equ 882
-	SAMPLES_CAP: equ 1000
 	reader:
 		dw 0
 	header:
