@@ -293,7 +293,7 @@ VDP_SetPalette:
 	xor a
 	ld b,16
 	call VDP_SetRegister
-	ld bc,32 << 8 | 9AH
+	ld bc,32 << 8 | VDP_PORT_2
 	otir
 	ret
 
