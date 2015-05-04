@@ -36,6 +36,14 @@ Timer_Stop:
 	ret
 
 ; ix = this
+Timer_Reset:
+	ld a,(JIFFY)
+	ld (ix + Timer.lastTimer),a
+	ld (ix + Timer.time),0
+	ld (ix + Timer.time + 1),0
+	ret
+
+; ix = this
 Timer_Update:
 	call Timer_UpdateTimePassed
 	ld a,l
@@ -78,11 +86,3 @@ Loop:
 	ld (ix + Timer.time + 1),h
 	ret
 	ENDP
-
-; ix = this
-Timer_Reset:
-	ld a,(JIFFY)
-	ld (ix + Timer.lastTimer),a
-	ld (ix + Timer.time),0
-	ld (ix + Timer.time + 1),0
-	ret
