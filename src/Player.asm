@@ -13,7 +13,7 @@ Player: MACRO
 	header:
 		dw 0
 	timer:
-		dw Player_timer
+		dw 0
 	wait:
 		dw 0
 	wait60th:
@@ -81,10 +81,11 @@ Player_Constructor:
 	ld (ix + Player.header + 1),h
 	ld (ix + Player.maxLoops),c
 	push ix
-	call Player_GetTimer
 	ld hl,Player_instance.Update
-	call VBlankTimer_Constructor
+	call TimerFactory_CreateTimer
 	pop ix
+	ld (ix + Player.timer),e
+	ld (ix + Player.timer + 1),d
 	ret
 
 ; Shuffles the commands jump table so that the LSB and MSB are separated.
@@ -566,8 +567,6 @@ Player_UnsupportedCommand:
 	SECTION RAM
 
 Player_instance: Player
-
-Player_timer: VBlankTimer
 
 Player_unsupportedCommandError:
 	db "Unsupported command: ",0

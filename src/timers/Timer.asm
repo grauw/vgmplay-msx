@@ -7,6 +7,7 @@
 ;
 ; Time is in units of 44100 Hz samples
 ;
+	INCLUDE "TimerFactory.asm"
 	INCLUDE "VBlankTimer.asm"
 	INCLUDE "TurboRTimer.asm"
 

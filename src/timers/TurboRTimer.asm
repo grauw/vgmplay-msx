@@ -88,3 +88,9 @@ TurboRTimer_GetTimerValue:
 	rl l
 	rla
 	ret
+
+; f <- c: found
+TurboRTimer_Detect:
+	call System_IsTurboR
+	ccf
+	ret
