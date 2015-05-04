@@ -26,8 +26,8 @@ Player: MACRO
 	ended:
 		db 0
 
-	; ix = this
 	; de = wait period
+	; ix = this
 	Wait:
 		ld hl,0
 	time: equ $ - 2
