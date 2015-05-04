@@ -42,10 +42,10 @@ Timer_Update:
 	or h
 	ret z
 	ex de,hl
-	ld l,(ix + Timer.callback)
-	ld h,(ix + Timer.callback + 1)
 	ld (ix + Timer.time),0
 	ld (ix + Timer.time + 1),0
+	ld l,(ix + Timer.callback)
+	ld h,(ix + Timer.callback + 1)
 	jp hl
 
 ; ix = this
