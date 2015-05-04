@@ -28,7 +28,7 @@ Timer_Constructor:
 
 ; ix = this
 Timer_Start:
-	call Timer_Initialise
+	call Timer_Reset
 	ret
 
 ; ix = this
@@ -75,20 +75,6 @@ Loop:
 	ret c
 	ld (ix + Timer.time),e
 	ld (ix + Timer.time + 1),d
-	ret
-	ENDP
-
-; Waits for timer interrupt to maximise the time available in the first frame.
-; ix = this
-Timer_Initialise: PROC
-	ld hl,JIFFY
-	ld a,(hl)
-SyncWait:
-	halt
-	cp (hl)
-	jp z,SyncWait
-	ld a,(hl)
-	ld (ix + Timer.lastJiffy),a
 	ret
 	ENDP
 
