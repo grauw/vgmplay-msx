@@ -22,6 +22,7 @@ http://www.smspower.org/Music/VGMFileFormat
 For a collection of VGM music see:  
 http://vgmrips.net/  
 http://www.smspower.org/Music/VGMs
+http://opl.wafflenet.com/
 
 
 System Requirements
