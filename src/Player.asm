@@ -88,6 +88,36 @@ Player_Constructor:
 	ld (ix + Player.timer + 1),d
 	ret
 
+; ix = this
+; de <- VGM data reader
+; ix <- VGM data reader
+Player_GetReader:
+	ld e,(ix + Player.reader)
+	ld d,(ix + Player.reader + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- VGM header
+; ix <- VGM header
+Player_GetHeader:
+	ld e,(ix + Player.header)
+	ld d,(ix + Player.header + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
+; de <- VGM header
+; ix <- VGM header
+Player_GetTimer:
+	ld e,(ix + Player.timer)
+	ld d,(ix + Player.timer + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
 ; Shuffles the commands jump table so that the LSB and MSB are separated.
 ; This allows faster table value lookups.
 Player_InitCommandsJumpTable: PROC
@@ -143,36 +173,6 @@ Player_ProcessNext:
 	ld d,(hl)
 	ex de,hl
 	jp hl
-
-; ix = this
-; de <- VGM data reader
-; ix <- VGM data reader
-Player_GetReader:
-	ld e,(ix + Player.reader)
-	ld d,(ix + Player.reader + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
-; de <- VGM header
-; ix <- VGM header
-Player_GetHeader:
-	ld e,(ix + Player.header)
-	ld d,(ix + Player.header + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
-; de <- VGM header
-; ix <- VGM header
-Player_GetTimer:
-	ld e,(ix + Player.timer)
-	ld d,(ix + Player.timer + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
 
 ; ix = this
 Player_ResetPosition:
