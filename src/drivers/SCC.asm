@@ -41,6 +41,52 @@ SCC: MACRO
 		ei
 		out (c),b
 		ret
+
+	; ix = player
+	ProcessK051649Command: PROC
+		call Player_ReadByte
+		cp 1
+		jr c,Waveform
+		jr z,Frequency
+		cp 3
+		jr c,Amplitude
+		jr z,Mixer
+		cp 5
+		jr c,WaveformSCCPlus
+		jr z,Deformation
+		call Player_ReadWord
+		jp Player_ProcessNext
+	Waveform:
+		call Player_ReadWord
+		ld a,e
+		call WriteRegister
+		jp Player_ProcessNext
+	Frequency:
+		call Player_ReadWord
+		ld a,SCC.FREQUENCY
+		add a,e
+		call WriteRegister
+		jp Player_ProcessNext
+	Amplitude:
+		call Player_ReadWord
+		ld a,SCC.AMPLITUDE
+		add a,e
+		call WriteRegister
+		jp Player_ProcessNext
+	Mixer:
+		call Player_ReadWord
+		ld a,SCC.MIXER
+		call WriteRegister
+		jp Player_ProcessNext
+	WaveformSCCPlus:
+		call Player_ReadWord
+		jp Player_ProcessNext
+	Deformation:
+		call Player_ReadWord
+		ld a,SCC.DEFORMATION
+		call WriteRegister
+		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -64,6 +110,17 @@ SCC_Destructor:
 	and a
 	ret z
 	call SCC_Reset
+	ret
+
+; ix = this
+; iy = player
+SCC_Install:
+	ld a,(ix + SCC.found)
+	and a
+	ret z
+	ld hl,SCC.ProcessK051649Command
+	ld a,0D2H
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this

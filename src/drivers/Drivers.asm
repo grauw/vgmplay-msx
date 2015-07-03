@@ -106,6 +106,44 @@ Drivers_Destructor:
 	ret
 
 ; ix = this
+; iy = player
+; ix <- this
+Drivers_Install:
+	push ix
+	call Drivers_GetPSG
+	call PSG_Install
+	pop ix
+	push ix
+	call Drivers_GetSFG
+	call SFG_Install
+	pop ix
+	push ix
+	call Drivers_GetMSXMusic
+	call MSXMusic_Install
+	pop ix
+	push ix
+	call Drivers_GetMoonSound
+	call MoonSound_Install
+	pop ix
+	push ix
+	call Drivers_GetMSXAudio
+	call MSXAudio_Install
+	pop ix
+	push ix
+	call Drivers_GetSCC
+	call SCC_Install
+	pop ix
+	push ix
+	call Drivers_GetFranky
+	call Franky_Install
+	pop ix
+	push ix
+	call Drivers_GetMMM
+	call MMM_Install
+	pop ix
+	ret
+
+; ix = this
 ; de <- PSG driver
 ; ix <- PSG driver
 Drivers_GetPSG:

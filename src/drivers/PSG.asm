@@ -31,6 +31,12 @@ PSG: MACRO
 		ld d,a
 		ld a,e
 		jr WriteRegister
+
+	; ix = player
+	ProcessAY8910Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -42,6 +48,17 @@ PSG_Constructor:
 ; ix = this
 PSG_Destructor:
 	call PSG_Reset
+	ret
+
+; ix = this
+; iy = player
+PSG_Install:
+	ld a,(ix + PSG.found)
+	and a
+	ret z
+	ld hl,PSG.ProcessAY8910Command
+	ld a,0A0H
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this

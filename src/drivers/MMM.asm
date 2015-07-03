@@ -21,6 +21,12 @@ MMM: MACRO
 	WriteRegister:
 		out (MMM_SN76489),a
 		ret
+
+	; ix = player
+	ProcessSN76489Command:
+		call Player_ReadByte
+		call SafeWriteRegister
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -42,6 +48,17 @@ Disable:
 MMM_Destructor:
 	call MMM_Reset
 	call MMM_Disable
+	ret
+
+; ix = this
+; iy = player
+MMM_Install:
+	ld a,(ix + MMM.found)
+	and a
+	ret z
+	ld hl,MMM.ProcessSN76489Command
+	ld a,50H
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this

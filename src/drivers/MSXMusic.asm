@@ -26,6 +26,12 @@ MSXMusic: MACRO
 		in a,(09AH)  ; R800 wait: ~72 cycles
 		in a,(09AH)
 		ret
+
+	; ix = player
+	ProcessYM2413Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -50,6 +56,17 @@ MSXMusic_Destructor:
 	ret z
 	call MSXMusic_Mute
 	call MSXMusic_Disable
+	ret
+
+; ix = this
+; iy = player
+MSXMusic_Install:
+	ld a,(ix + MSXMusic.found)
+	and a
+	ret z
+	ld hl,MSXMusic.ProcessYM2413Command
+	ld a,51H
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this

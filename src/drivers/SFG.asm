@@ -56,6 +56,12 @@ SFG: MACRO
 		ld d,a
 		ld a,e
 		jr WriteRegister
+
+	; ix = player
+	ProcessYM2151Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -78,6 +84,17 @@ SFG_Destructor:
 	and a
 	ret z
 	call SFG_Reset
+	ret
+
+; ix = this
+; iy = player
+SFG_Install:
+	ld a,(ix + SFG.found)
+	and a
+	ret z
+	ld hl,SFG.ProcessYM2151Command
+	ld a,54H
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this

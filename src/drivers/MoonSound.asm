@@ -58,6 +58,50 @@ MoonSound: MACRO
 		ld a,d
 		out (MoonSound.WAVE_DATA),a
 		ret
+
+	; ix = player
+	ProcessYMF278BCommand: PROC
+		call Player_ReadByte
+		cp 1
+		jr c,FM1
+		jp z,FM2
+	Wave:
+		call Player_ReadWord
+		call SafeWriteRegisterWave
+		jp Player_ProcessNext
+	FM1:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
+	FM2:
+		call Player_ReadWord
+		call SafeWriteRegister2
+		jp Player_ProcessNext
+		ENDP
+
+	; ix = player
+	ProcessYMF262Port0Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
+
+	; ix = player
+	ProcessYMF262Port1Command:
+		call Player_ReadWord
+		call SafeWriteRegister2
+		jp Player_ProcessNext
+
+	; ix = player
+	ProcessYM3812Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
+
+	; ix = player
+	ProcessYM3526Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -83,6 +127,29 @@ MoonSound_Destructor:
 	and a
 	ret z
 	call MoonSound_Reset
+	ret
+
+; ix = this
+; iy = player
+MoonSound_Install:
+	ld a,(ix + MoonSound.found)
+	and a
+	ret z
+	ld hl,MoonSound.ProcessYMF278BCommand
+	ld a,0D0H
+	call Player_InstallCommandHandler_IXOffset
+	ld hl,MoonSound.ProcessYMF262Port0Command
+	ld a,5EH
+	call Player_InstallCommandHandler_IXOffset
+	ld hl,MoonSound.ProcessYMF262Port1Command
+	ld a,5FH
+	call Player_InstallCommandHandler_IXOffset
+	ld hl,MoonSound.ProcessYM3812Command
+	ld a,5AH
+	call Player_InstallCommandHandler_IXOffset
+	ld hl,MoonSound.ProcessYM3526Command
+	ld a,5BH
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this

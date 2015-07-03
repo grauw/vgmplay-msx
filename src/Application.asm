@@ -254,6 +254,14 @@ Application_Play:
 	pop bc
 	pop de
 	call Player_Constructor
+	ex (sp),ix
+	pop iy
+	push ix
+	call Application_GetDrivers
+	call Drivers_Install
+	pop ix
+	push ix
+	call Application_GetPlayer
 	call Player_Play
 	pop ix
 	ret

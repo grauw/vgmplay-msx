@@ -142,6 +142,29 @@ LSBExtractionLoop:
 	ret
 	ENDP
 
+; a = command number
+; de = handler address
+; iy = this
+Player_InstallCommandHandler:
+	ld l,a
+	ld h,Player_commandsJumpTable >> 8
+	ld (hl),e
+	inc h
+	ld (hl),d
+	ret
+
+; a = command number
+; ix = handler object
+; hl = handler offset
+; iy = this
+Player_InstallCommandHandler_IXOffset:
+	ld e,ixl
+	ld d,ixh
+	add hl,de
+	ex de,hl
+	call Player_InstallCommandHandler
+	ret
+
 ; ix = this
 Player_Play: PROC
 	call Player_ResetPosition
@@ -288,143 +311,6 @@ Player_Y8950DataBlock: PROC
 	call Player_GetTimer
 	call Timer_Reset
 	pop ix
-	jp Player_ProcessNext
-	ENDP
-
-; ix = this
-Player_SN76489Write: PROC
-	call Player_ReadByte
-	ex af,af'
-	ld a,(MMM_instance.found)
-	and a
-	jr z,Franky
-	ex af,af'
-	call MMM_instance.SafeWriteRegister
-	jp Player_ProcessNext
-Franky:
-	ex af,af'
-	call Franky_instance.SafeWriteRegister
-	jp Player_ProcessNext
-	ENDP
-
-; ix = this
-Player_YM2413Write:
-	call Player_ReadWord
-	call MSXMusic_instance.SafeWriteRegister
-	jp Player_ProcessNext
-
-; ix = this
-Player_YM2151Write:
-	call Player_ReadWord
-	call SFG_instance.SafeWriteRegister
-	jp Player_ProcessNext
-
-; ix = this
-Player_YM3812Write:
-	call Player_ReadWord
-	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext
-
-; ix = this
-Player_YM3526Write: PROC
-	call Player_ReadWord
-	ld a,(MSXAudio_instance.found)
-	and a
-	jr z,MoonSound
-	call MSXAudio_instance.SafeWriteRegister
-	jp Player_ProcessNext
-MoonSound:
-	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext
-	ENDP
-
-; ix = this
-Player_Y8950Write:
-	call Player_ReadWord
-	call MSXAudio_instance.SafeWriteRegister
-	jp Player_ProcessNext
-
-; ix = this
-Player_YMF262WritePort0:
-	call Player_ReadWord
-	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext
-
-; ix = this
-Player_YMF262WritePort1:
-	call Player_ReadWord
-	call MoonSound_instance.SafeWriteRegister2
-	jp Player_ProcessNext
-
-; ix = this
-Player_YMF278BWrite: PROC
-	call Player_ReadByte
-	cp 1
-	jr c,FM1
-	jp z,FM2
-Wave:
-	call Player_ReadWord
-	call MoonSound_instance.SafeWriteRegisterWave
-	jp Player_ProcessNext
-FM1:
-	call Player_ReadWord
-	call MoonSound_instance.SafeWriteRegister
-	jp Player_ProcessNext
-FM2:
-	call Player_ReadWord
-	call MoonSound_instance.SafeWriteRegister2
-	jp Player_ProcessNext
-	ENDP
-
-; ix = this
-Player_AY8910Write:
-	call Player_ReadWord
-	call PSG_instance.SafeWriteRegister
-	jp Player_ProcessNext
-
-; ix = this
-Player_K051649Write: PROC
-	call Player_ReadByte
-	cp 1
-	jr c,Waveform
-	jr z,Frequency
-	cp 3
-	jr c,Amplitude
-	jr z,Mixer
-	cp 5
-	jr c,WaveformSCCPlus
-	jr z,Deformation
-	call Player_ReadWord
-	jp Player_ProcessNext
-Waveform:
-	call Player_ReadWord
-	ld a,e
-	call SCC_instance.WriteRegister
-	jp Player_ProcessNext
-Frequency:
-	call Player_ReadWord
-	ld a,SCC.FREQUENCY
-	add a,e
-	call SCC_instance.WriteRegister
-	jp Player_ProcessNext
-Amplitude:
-	call Player_ReadWord
-	ld a,SCC.AMPLITUDE
-	add a,e
-	call SCC_instance.WriteRegister
-	jp Player_ProcessNext
-Mixer:
-	call Player_ReadWord
-	ld a,SCC.MIXER
-	call SCC_instance.WriteRegister
-	jp Player_ProcessNext
-WaveformSCCPlus:
-	call Player_ReadWord
-	jp Player_ProcessNext
-Deformation:
-	call Player_ReadWord
-	ld a,SCC.DEFORMATION
-	call SCC_instance.WriteRegister
 	jp Player_ProcessNext
 	ENDP
 
@@ -653,22 +539,22 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; 4DH
 	dw Player_Skip3               ; 4EH
 	dw Player_Skip2               ; 4FH
-	dw Player_SN76489Write        ; 50H
-	dw Player_YM2413Write         ; 51H
+	dw Player_Skip2               ; 50H
+	dw Player_Skip3               ; 51H
 	dw Player_Skip3               ; 52H
 	dw Player_Skip3               ; 53H
-	dw Player_YM2151Write         ; 54H
+	dw Player_Skip3               ; 54H
 	dw Player_Skip3               ; 55H
 	dw Player_Skip3               ; 56H
 	dw Player_Skip3               ; 57H
 	dw Player_Skip3               ; 58H
 	dw Player_Skip3               ; 59H
-	dw Player_YM3812Write         ; 5AH
-	dw Player_YM3526Write         ; 5BH
-	dw Player_Y8950Write          ; 5CH
+	dw Player_Skip3               ; 5AH
+	dw Player_Skip3               ; 5BH
+	dw Player_Skip3               ; 5CH
 	dw Player_Skip3               ; 5DH
-	dw Player_YMF262WritePort0    ; 5EH
-	dw Player_YMF262WritePort1    ; 5FH
+	dw Player_Skip3               ; 5EH
+	dw Player_Skip3               ; 5FH
 	dw Player_UnsupportedCommand  ; 60H
 	dw Player_WaitNSamples        ; 61H
 	dw Player_Wait735Samples      ; 62H
@@ -733,7 +619,7 @@ Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 9DH
 	dw Player_UnsupportedCommand  ; 9EH
 	dw Player_UnsupportedCommand  ; 9FH
-	dw Player_AY8910Write         ; A0H
+	dw Player_Skip3               ; A0H
 	dw Player_Skip3               ; A1H
 	dw Player_Skip3               ; A2H
 	dw Player_Skip3               ; A3H
@@ -781,9 +667,9 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; CDH
 	dw Player_Skip4               ; CEH
 	dw Player_Skip4               ; CFH
-	dw Player_YMF278BWrite        ; D0H
+	dw Player_Skip4               ; D0H
 	dw Player_Skip4               ; D1H
-	dw Player_K051649Write        ; D2H
+	dw Player_Skip4               ; D2H
 	dw Player_Skip4               ; D3H
 	dw Player_Skip4               ; D4H
 	dw Player_Skip4               ; D5H

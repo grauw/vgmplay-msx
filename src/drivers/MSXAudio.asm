@@ -153,6 +153,18 @@ MSXAudio: MACRO
 		ei
 		ret
 		ENDP
+
+	; ix = player
+	ProcessY8950Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
+
+	; ix = player
+	ProcessYM3526Command:
+		call Player_ReadWord
+		call SafeWriteRegister
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -175,6 +187,20 @@ MSXAudio_Destructor:
 	ret z
 	call MSXAudio_Mute
 	call MSXAudio_Reset
+	ret
+
+; ix = this
+; iy = player
+MSXAudio_Install:
+	ld a,(ix + MSXAudio.found)
+	and a
+	ret z
+	ld hl,MSXAudio.ProcessY8950Command
+	ld a,5CH
+	call Player_InstallCommandHandler_IXOffset
+	ld hl,MSXAudio.ProcessYM3526Command
+	ld a,5BH
+	call Player_InstallCommandHandler_IXOffset
 	ret
 
 ; ix = this
