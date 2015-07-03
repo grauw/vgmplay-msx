@@ -44,7 +44,7 @@ SCC: MACRO
 	ENDM
 
 ; ix = this
-SCC_Install: PROC
+SCC_Constructor: PROC
 	call SCC_Detect
 	jr nc,Disable
 	call SCC_SetSlot
@@ -59,7 +59,7 @@ Disable:
 	ENDP
 
 ; ix = this
-SCC_Uninstall:
+SCC_Destructor:
 	ld a,(ix + SCC.found)
 	and a
 	ret z

@@ -29,7 +29,7 @@ MSXMusic: MACRO
 	ENDM
 
 ; ix = this
-MSXMusic_Install: PROC
+MSXMusic_Constructor: PROC
 	call MSXMusic_Detect
 	jr nc,Disable
 	ld (ix + MSXMusic.slot),a
@@ -44,7 +44,7 @@ Disable:
 	ENDP
 
 ; ix = this
-MSXMusic_Uninstall:
+MSXMusic_Destructor:
 	ld a,(ix + MSXMusic.found)
 	and a
 	ret z

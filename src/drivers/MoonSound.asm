@@ -61,7 +61,7 @@ MoonSound: MACRO
 	ENDM
 
 ; ix = this
-MoonSound_Install: PROC
+MoonSound_Constructor: PROC
 	call MoonSound_Detect
 	jr nc,Disable
 	ld (ix + MoonSound.found),-1
@@ -78,7 +78,7 @@ Disable:
 	ENDP
 
 ; ix = this
-MoonSound_Uninstall:
+MoonSound_Destructor:
 	ld a,(ix + MoonSound.found)
 	and a
 	ret z

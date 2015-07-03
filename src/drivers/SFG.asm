@@ -59,7 +59,7 @@ SFG: MACRO
 	ENDM
 
 ; ix = this
-SFG_Install: PROC
+SFG_Constructor: PROC
 	call SFG_Detect
 	jr nc,Disable
 	call SFG_SetSlot
@@ -73,7 +73,7 @@ Disable:
 	ENDP
 
 ; ix = this
-SFG_Uninstall:
+SFG_Destructor:
 	ld a,(ix + SFG.found)
 	and a
 	ret z

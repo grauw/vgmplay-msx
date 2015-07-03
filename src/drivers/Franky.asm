@@ -15,7 +15,7 @@ Franky: MACRO
 	ENDM
 
 ; ix = this
-Franky_Install:
+Franky_Constructor:
 	ld (ix + Franky.found),-1
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
@@ -23,7 +23,7 @@ Franky_Install:
 	ret
 
 ; ix = this
-Franky_Uninstall:
+Franky_Destructor:
 	call Franky_Reset
 	ret
 

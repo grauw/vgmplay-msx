@@ -34,13 +34,13 @@ PSG: MACRO
 	ENDM
 
 ; ix = this
-PSG_Install:
+PSG_Constructor:
 	ld (ix + PSG.found),-1
 	call PSG_Reset
 	ret
 
 ; ix = this
-PSG_Uninstall:
+PSG_Destructor:
 	call PSG_Reset
 	ret
 

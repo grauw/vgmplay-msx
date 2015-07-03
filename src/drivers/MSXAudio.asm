@@ -156,7 +156,7 @@ MSXAudio: MACRO
 	ENDM
 
 ; ix = this
-MSXAudio_Install: PROC
+MSXAudio_Constructor: PROC
 	call MSXAudio_Detect
 	jr nc,Disable
 	ld (ix + MSXAudio.found),-1
@@ -169,7 +169,7 @@ Disable:
 	ENDP
 
 ; ix = this
-MSXAudio_Uninstall:
+MSXAudio_Destructor:
 	ld a,(ix + MSXAudio.found)
 	and a
 	ret z

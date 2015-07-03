@@ -36,35 +36,35 @@ Drivers: MACRO
 Drivers_Constructor:
 	push ix
 	call Drivers_GetPSG
-	call PSG_Install
+	call PSG_Constructor
 	pop ix
 	push ix
 	call Drivers_GetSFG
-	call SFG_Install
+	call SFG_Constructor
 	pop ix
 	push ix
 	call Drivers_GetMSXMusic
-	call MSXMusic_Install
+	call MSXMusic_Constructor
 	pop ix
 	push ix
 	call Drivers_GetMSXAudio
-	call MSXAudio_Install
+	call MSXAudio_Constructor
 	pop ix
 	push ix
 	call Drivers_GetMoonSound
-	call MoonSound_Install
+	call MoonSound_Constructor
 	pop ix
 	push ix
 	call Drivers_GetSCC
-	call SCC_Install
+	call SCC_Constructor
 	pop ix
 	push ix
 	call Drivers_GetFranky
-	call Franky_Install
+	call Franky_Constructor
 	pop ix
 	push ix
 	call Drivers_GetMMM
-	call MMM_Install
+	call MMM_Constructor
 	pop ix
 	ret
 
@@ -73,35 +73,35 @@ Drivers_Constructor:
 Drivers_Destructor:
 	push ix
 	call Drivers_GetPSG
-	call PSG_Uninstall
+	call PSG_Destructor
 	pop ix
 	push ix
 	call Drivers_GetSFG
-	call SFG_Uninstall
+	call SFG_Destructor
 	pop ix
 	push ix
 	call Drivers_GetMSXMusic
-	call MSXMusic_Uninstall
+	call MSXMusic_Destructor
 	pop ix
 	push ix
 	call Drivers_GetMSXAudio
-	call MSXAudio_Uninstall
+	call MSXAudio_Destructor
 	pop ix
 	push ix
 	call Drivers_GetMoonSound
-	call MoonSound_Uninstall
+	call MoonSound_Destructor
 	pop ix
 	push ix
 	call Drivers_GetSCC
-	call SCC_Uninstall
+	call SCC_Destructor
 	pop ix
 	push ix
 	call Drivers_GetFranky
-	call Franky_Uninstall
+	call Franky_Destructor
 	pop ix
 	push ix
 	call Drivers_GetMMM
-	call MMM_Uninstall
+	call MMM_Destructor
 	pop ix
 	ret
 

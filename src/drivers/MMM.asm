@@ -24,7 +24,7 @@ MMM: MACRO
 	ENDM
 
 ; ix = this
-MMM_Install: PROC
+MMM_Constructor: PROC
 	call MMM_Detect
 	jr nc,Disable
 	call MMM_SetSlot
@@ -39,7 +39,7 @@ Disable:
 	ENDP
 
 ; ix = this
-MMM_Uninstall:
+MMM_Destructor:
 	call MMM_Reset
 	call MMM_Disable
 	ret
