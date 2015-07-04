@@ -3,8 +3,6 @@
 ;
 Franky: MACRO
 	DATA: equ 049H
-	found:
-		db 0
 
 	; a = value
 	SafeWriteRegister:
@@ -20,9 +18,17 @@ Franky: MACRO
 		jp Player_ProcessNext
 	ENDM
 
+; ix <- instance or null
+; de <- instance or null
+Franky_TryCreate:
+	ld ix,Franky_instance
+	call Franky_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
 ; ix = this
 Franky_Constructor:
-	ld (ix + Franky.found),-1
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset
@@ -36,9 +42,6 @@ Franky_Destructor:
 ; ix = this
 ; iy = player
 Franky_Install:
-	ld a,(ix + Franky.found)
-	and a
-	ret z
 	ld hl,Franky.ProcessSN76489Command
 	ld a,50H
 	call Player_InstallCommandHandler_IXOffset

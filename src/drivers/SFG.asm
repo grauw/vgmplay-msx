@@ -8,8 +8,7 @@ SFG: MACRO
 	YM2151_ADDRESS: equ 3FF0H
 	YM2151_DATA: equ 3FF1H
 	ID_ADDRESS: equ 80H
-	found:
-		db 0
+
 	slot:
 		db 0
 
@@ -64,34 +63,34 @@ SFG: MACRO
 		jp Player_ProcessNext
 	ENDM
 
-; ix = this
-SFG_Constructor: PROC
+; ix <- instance or null
+; de <- instance or null
+SFG_TryCreate:
 	call SFG_Detect
-	jr nc,Disable
+	ld ix,0
+	ld de,0
+	ret nc
+	ld ix,SFG_instance
+	call SFG_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; a = slot
+; ix = this
+SFG_Constructor:
 	call SFG_SetSlot
-	ld (ix + SFG.found),-1
 	call SFG_Reset
 	ret
-Disable:
-	ld (ix + SFG.SafeWriteRegister),0C9H  ; ret
-	ld (ix + SFG.WriteRegister),0C9H  ; ret
-	ret
-	ENDP
 
 ; ix = this
 SFG_Destructor:
-	ld a,(ix + SFG.found)
-	and a
-	ret z
 	call SFG_Reset
 	ret
 
 ; ix = this
 ; iy = player
 SFG_Install:
-	ld a,(ix + SFG.found)
-	and a
-	ret z
 	ld hl,SFG.ProcessYM2151Command
 	ld a,54H
 	call Player_InstallCommandHandler_IXOffset
@@ -163,7 +162,6 @@ Loop:
 	ret
 	ENDP
 
-; ix = this
 ; f <- c: found
 ; a <- slot
 SFG_Detect:
@@ -172,7 +170,6 @@ SFG_Detect:
 	ret
 
 ; a = slot id
-; ix = this
 ; f <- c: found
 SFG_MatchID:
 	ld de,SFG_id

@@ -6,8 +6,7 @@ MSXMusic: MACRO
 	DATA: equ 7DH
 	ID_ADDRESS: equ 401CH
 	ENABLE_ADDRESS: equ 7FF6H
-	found:
-		db 0
+
 	slot:
 		db 0
 
@@ -34,26 +33,29 @@ MSXMusic: MACRO
 		jp Player_ProcessNext
 	ENDM
 
-; ix = this
-MSXMusic_Constructor: PROC
+; ix <- instance or null
+; de <- instance or null
+MSXMusic_TryCreate:
 	call MSXMusic_Detect
-	jr nc,Disable
+	ld ix,0
+	ld de,0
+	ret nc
+	ld ix,MSXMusic_instance
+	call MSXMusic_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; a = slot
+; ix = this
+MSXMusic_Constructor:
 	ld (ix + MSXMusic.slot),a
-	ld (ix + MSXMusic.found),-1
 	call MSXMusic_Enable
 	call MSXMusic_Reset
 	ret
-Disable:
-	ld (ix + MSXMusic.SafeWriteRegister),0C9H  ; ret
-	ld (ix + MSXMusic.WriteRegister),0C9H  ; ret
-	ret
-	ENDP
 
 ; ix = this
 MSXMusic_Destructor:
-	ld a,(ix + MSXMusic.found)
-	and a
-	ret z
 	call MSXMusic_Mute
 	call MSXMusic_Disable
 	ret
@@ -61,9 +63,6 @@ MSXMusic_Destructor:
 ; ix = this
 ; iy = player
 MSXMusic_Install:
-	ld a,(ix + MSXMusic.found)
-	and a
-	ret z
 	ld hl,MSXMusic.ProcessYM2413Command
 	ld a,51H
 	call Player_InstallCommandHandler_IXOffset
@@ -154,7 +153,6 @@ MSXMusic_Reset:
 	call MSXMusic_FillRegisters
 	ret
 
-; ix = this
 ; f <- c: found
 ; a <- slot
 MSXMusic_Detect:
@@ -163,7 +161,6 @@ MSXMusic_Detect:
 	ret
 
 ; a = slot id
-; ix = this
 ; f <- c: found
 MSXMusic_MatchID:
 	ld de,MSXMusic_id

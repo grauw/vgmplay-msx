@@ -10,8 +10,6 @@ MMM_PAGE2: equ 0FEH
 MMM_PAGE3: equ 0FFH
 
 MMM: MACRO
-	found:
-		db 0
 	slot:
 		db 0
 
@@ -29,20 +27,26 @@ MMM: MACRO
 		jp Player_ProcessNext
 	ENDM
 
-; ix = this
-MMM_Constructor: PROC
+; ix <- instance or null
+; de <- instance or null
+MMM_TryCreate:
 	call MMM_Detect
-	jr nc,Disable
+	ld ix,0
+	ld de,0
+	ret nc
+	ld ix,MMM_instance
+	call MMM_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; a = slot
+; ix = this
+MMM_Constructor:
 	call MMM_SetSlot
 	call MMM_Enable
 	call MMM_Reset
-	ld (ix + MMM.found),-1
 	ret
-Disable:
-	ld (ix + MMM.SafeWriteRegister),0C9H  ; ret
-	ld (ix + MMM.WriteRegister),0C9H  ; ret
-	ret
-	ENDP
 
 ; ix = this
 MMM_Destructor:
@@ -53,9 +57,6 @@ MMM_Destructor:
 ; ix = this
 ; iy = player
 MMM_Install:
-	ld a,(ix + MMM.found)
-	and a
-	ret z
 	ld hl,MMM.ProcessSN76489Command
 	ld a,50H
 	call Player_InstallCommandHandler_IXOffset
@@ -121,7 +122,6 @@ MMM_Reset:
 	call MMM_WriteRegister
 	ret
 
-; ix = this
 ; f <- c: found
 ; a <- slot
 MMM_Detect:
@@ -130,7 +130,6 @@ MMM_Detect:
 	ret
 
 ; a = slot id
-; ix = this
 ; f <- c: found
 MMM_MatchSlot: PROC
 	ld hl,MMM_detectValues

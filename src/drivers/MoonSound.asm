@@ -9,8 +9,6 @@ MoonSound: MACRO
 	FM2_DATA: equ 0C7H
 	WAVE_ADDRESS: equ 07EH
 	WAVE_DATA: equ 07FH
-	found:
-		db 0
 
 	; e = register
 	; d = value
@@ -104,37 +102,32 @@ MoonSound: MACRO
 		jp Player_ProcessNext
 	ENDM
 
-; ix = this
-MoonSound_Constructor: PROC
+; ix <- instance or null
+; de <- instance or null
+MoonSound_TryCreate:
 	call MoonSound_Detect
-	jr nc,Disable
-	ld (ix + MoonSound.found),-1
+	ld ix,0
+	ld de,0
+	ret nc
+	ld ix,MoonSound_instance
+	call MoonSound_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; ix = this
+MoonSound_Constructor:
 	call MoonSound_Reset
 	ret
-Disable:
-	ld (ix + MoonSound.SafeWriteRegister),0C9H  ; ret
-	ld (ix + MoonSound.WriteRegister),0C9H  ; ret
-	ld (ix + MoonSound.SafeWriteRegister2),0C9H  ; ret
-	ld (ix + MoonSound.WriteRegister2),0C9H  ; ret
-	ld (ix + MoonSound.SafeWriteRegisterWave),0C9H  ; ret
-	ld (ix + MoonSound.WriteRegisterWave),0C9H  ; ret
-	ret
-	ENDP
 
 ; ix = this
 MoonSound_Destructor:
-	ld a,(ix + MoonSound.found)
-	and a
-	ret z
 	call MoonSound_Reset
 	ret
 
 ; ix = this
 ; iy = player
 MoonSound_Install:
-	ld a,(ix + MoonSound.found)
-	and a
-	ret z
 	ld hl,MoonSound.ProcessYMF278BCommand
 	ld a,0D0H
 	call Player_InstallCommandHandler_IXOffset
@@ -301,7 +294,6 @@ MoonSound_Reset:
 	call MoonSound_FillRegisters2
 	ret
 
-; ix = this
 ; f <- c: Found
 MoonSound_Detect:
 	in a,(MoonSound.STATUS)

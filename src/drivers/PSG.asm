@@ -4,8 +4,6 @@
 PSG: MACRO
 	ADDRESS: equ 0A0H
 	DATA: equ 0A1H
-	found:
-		db 0
 
 	; e = register
 	; d = value
@@ -39,9 +37,17 @@ PSG: MACRO
 		jp Player_ProcessNext
 	ENDM
 
+; ix <- instance or null
+; de <- instance or null
+PSG_TryCreate:
+	ld ix,PSG_instance
+	call PSG_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
 ; ix = this
 PSG_Constructor:
-	ld (ix + PSG.found),-1
 	call PSG_Reset
 	ret
 
@@ -53,9 +59,6 @@ PSG_Destructor:
 ; ix = this
 ; iy = player
 PSG_Install:
-	ld a,(ix + PSG.found)
-	and a
-	ret z
 	ld hl,PSG.ProcessAY8910Command
 	ld a,0A0H
 	call Player_InstallCommandHandler_IXOffset

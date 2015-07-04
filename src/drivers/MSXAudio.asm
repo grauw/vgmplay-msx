@@ -35,8 +35,6 @@ MSXAudio_PCM_DATA: equ 1AH
 MSXAudio_FM_BASE: equ 20H
 
 MSXAudio: MACRO
-	found:
-		db 0
 	safeControlMirror:
 		ds MSXAudio_FM_BASE
 
@@ -167,24 +165,26 @@ MSXAudio: MACRO
 		jp Player_ProcessNext
 	ENDM
 
-; ix = this
-MSXAudio_Constructor: PROC
+; ix <- instance or null
+; de <- instance or null
+MSXAudio_TryCreate:
 	call MSXAudio_Detect
-	jr nc,Disable
-	ld (ix + MSXAudio.found),-1
+	ld ix,0
+	ld de,0
+	ret nc
+	ld ix,MSXAudio_instance
+	call MSXAudio_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; ix = this
+MSXAudio_Constructor:
 	call MSXAudio_Reset
 	ret
-Disable:
-	ld (ix + MSXAudio.SafeWriteRegister),0C9H  ; ret
-	ld (ix + MSXAudio.WriteRegister),0C9H  ; ret
-	ret
-	ENDP
 
 ; ix = this
 MSXAudio_Destructor:
-	ld a,(ix + MSXAudio.found)
-	and a
-	ret z
 	call MSXAudio_Mute
 	call MSXAudio_Reset
 	ret
@@ -192,9 +192,6 @@ MSXAudio_Destructor:
 ; ix = this
 ; iy = player
 MSXAudio_Install:
-	ld a,(ix + MSXAudio.found)
-	and a
-	ret z
 	ld hl,MSXAudio.ProcessY8950Command
 	ld a,5CH
 	call Player_InstallCommandHandler_IXOffset
@@ -338,7 +335,6 @@ MSXAudio_SetADPCMWriteAddress:
 	call MSXAudio_WriteRegister
 	ret
 
-; ix = this
 ; f <- c: Found
 MSXAudio_Detect:
 	in a,(MSXAudio_STATUS_PORT)

@@ -10,8 +10,7 @@ SCC: MACRO
 	DEFORMATION: equ 0E0H
 	BANK_SELECT: equ 9000H
 	BANK: equ 3FH
-	found:
-		db 0
+
 	slot:
 		db 0
 
@@ -89,35 +88,35 @@ SCC: MACRO
 		ENDP
 	ENDM
 
-; ix = this
-SCC_Constructor: PROC
+; ix <- instance or null
+; de <- instance or null
+SCC_TryCreate:
 	call SCC_Detect
-	jr nc,Disable
+	ld ix,0
+	ld de,0
+	ret nc
+	ld ix,SCC_instance
+	call SCC_Constructor
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; a = slot
+; ix = this
+SCC_Constructor:
 	call SCC_SetSlot
 	call SCC_SelectBank
-	ld (ix + SCC.found),-1
 	call SCC_Reset
 	ret
-Disable:
-	ld (ix + SCC.SafeWriteRegister),0C9H  ; ret
-	ld (ix + SCC.WriteRegister),0C9H  ; ret
-	ret
-	ENDP
 
 ; ix = this
 SCC_Destructor:
-	ld a,(ix + SCC.found)
-	and a
-	ret z
 	call SCC_Reset
 	ret
 
 ; ix = this
 ; iy = player
 SCC_Install:
-	ld a,(ix + SCC.found)
-	and a
-	ret z
 	ld hl,SCC.ProcessK051649Command
 	ld a,0D2H
 	call Player_InstallCommandHandler_IXOffset
@@ -190,7 +189,6 @@ SCC_Mute:
 	call SCC_FillRegisters
 	ret
 
-; ix = this
 ; f <- c: found
 ; a <- slot
 SCC_Detect:
@@ -199,7 +197,6 @@ SCC_Detect:
 	ret
 
 ; a = slot id
-; ix = this
 ; f <- c: found
 SCC_MatchSlot: PROC
 	ex af,af'
