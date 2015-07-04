@@ -257,16 +257,6 @@ MSXAudio_Reset:
 	call MSXAudio_FillRegisters
 	ret
 
-; ix = this
-; f <- c: Found
-MSXAudio_Detect:
-	in a,(MSXAudio_STATUS_PORT)
-	sub 06H
-	and a
-	ret nz
-	scf
-	ret
-
 ; ehl = write address
 ; ix = this
 MSXAudio_SetADPCMWriteAddress:
@@ -301,6 +291,16 @@ MSXAudio_SetADPCMWriteAddress:
 	ld d,60H
 	ld e,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_WriteRegister
+	ret
+
+; ix = this
+; f <- c: Found
+MSXAudio_Detect:
+	in a,(MSXAudio_STATUS_PORT)
+	sub 06H
+	and a
+	ret nz
+	scf
 	ret
 
 ;
