@@ -198,6 +198,9 @@ MSXAudio_Install:
 	ld hl,MSXAudio.ProcessY8950Command
 	ld a,5CH
 	call Player_InstallCommandHandler_IXOffset
+	ld de,MSXAudio_ProcessY8950DataBlock
+	ld a,88H
+	call Player_InstallDataBlockHandler
 	ld hl,MSXAudio.ProcessYM3526Command
 	ld a,5BH
 	call Player_InstallCommandHandler_IXOffset
@@ -256,6 +259,48 @@ MSXAudio_Reset:
 	ld de,0060H
 	call MSXAudio_FillRegisters
 	ret
+
+; ix = player
+MSXAudio_ProcessY8950DataBlock:
+	call Player_ReadDoubleWord  ; block size
+	push de
+	push hl
+	call Player_ReadDoubleWord  ; total rom size
+	call Player_ReadDoubleWord  ; start address
+	push ix
+	ld ix,MSXAudio_instance
+	call MSXAudio_SetADPCMWriteAddress
+	pop ix
+	pop hl
+	pop de
+	ld bc,8  ; subtract header from block size
+	and a
+	sbc hl,bc
+	ld bc,0
+	ex de,hl
+	sbc hl,bc
+	ex de,hl
+	jp c,System_ThrowException
+	ld a,h
+	or l
+	or e
+	or d
+	ret z
+	push ix
+	push de
+	call Player_GetReader
+	pop de
+	ld iy,MSXAudio_instance.WriteADPCMData
+	call Reader_ReadAndProcessBlock
+	pop ix
+	ld a,01H
+	ld a,MSXAudio_ADPCM_CONTROL
+	call MSXAudio_instance.WriteRegister
+	push ix
+	call Player_GetTimer
+	call Timer_Reset
+	pop ix
+	jp Player_ProcessNext
 
 ; ehl = write address
 ; ix = this

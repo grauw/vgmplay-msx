@@ -165,6 +165,17 @@ Player_InstallCommandHandler_IXOffset:
 	call Player_InstallCommandHandler
 	ret
 
+; a = command number
+; de = handler address
+; iy = this
+Player_InstallDataBlockHandler:
+	ld l,a
+	ld h,Player_dataBlockJumpTable >> 8
+	ld (hl),e
+	inc h
+	ld (hl),d
+	ret
+
 ; ix = this
 Player_Play: PROC
 	call Player_ResetPosition
@@ -262,57 +273,21 @@ Player_DataBlock:
 	cp 66H
 	jp nz,Player_UnsupportedCommand
 	call Player_ReadByte
-	cp 88h
-	jp z,Player_Y8950DataBlock
+	ld l,a
+	ld h,Player_dataBlockJumpTable >> 8
+	ld e,(hl)
+	inc h
+	ld d,(hl)
+	ex de,hl
+	jp hl
+
+Player_SkipDataBlock:
 	push ix
 	call Player_GetReader
 	call Player_ReadDoubleWord
 	call Reader_Skip
 	pop ix
 	jp Player_ProcessNext
-
-; Y8950 DELTA-T ROM data
-Player_Y8950DataBlock: PROC
-	call Player_ReadDoubleWord  ; block size
-	push de
-	push hl
-	call Player_ReadDoubleWord  ; total rom size
-	call Player_ReadDoubleWord  ; start address
-	push ix
-	ld ix,MSXAudio_instance
-	call MSXAudio_SetADPCMWriteAddress
-	pop ix
-	pop hl
-	pop de
-	ld bc,8  ; subtract header from block size
-	and a
-	sbc hl,bc
-	ld bc,0
-	ex de,hl
-	sbc hl,bc
-	ex de,hl
-	jp c,System_ThrowException
-	ld a,h
-	or l
-	or e
-	or d
-	ret z
-	push ix
-	push de
-	call Player_GetReader
-	pop de
-	ld iy,MSXAudio_instance.WriteADPCMData
-	call Reader_ReadAndProcessBlock
-	pop ix
-	ld a,01H
-	ld a,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_instance.WriteRegister
-	push ix
-	call Player_GetTimer
-	call Timer_Reset
-	pop ix
-	jp Player_ProcessNext
-	ENDP
 
 ; ix = this
 Player_EndOfSoundData: PROC
@@ -715,6 +690,15 @@ Player_commandsJumpTable:
 	dw Player_Skip5               ; FDH
 	dw Player_Skip5               ; FEH
 	dw Player_Skip5               ; FFH
+
+	ALIGN 256
+Player_dataBlockJumpTable:
+	REPT 256
+	db Player_SkipDataBlock & 0FFH
+	ENDM
+	REPT 256
+	db Player_SkipDataBlock >> 8
+	ENDM
 
 Player_scratch:
 	ds 256
