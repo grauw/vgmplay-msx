@@ -3,12 +3,12 @@
 ;
 ; The SFG module uses the YM2151.
 ;
-SFG: MACRO
-	YM2151_STATUS: equ 3FF1H
-	YM2151_ADDRESS: equ 3FF0H
-	YM2151_DATA: equ 3FF1H
-	ID_ADDRESS: equ 80H
+SFG_YM2151_STATUS: equ 3FF1H
+SFG_YM2151_ADDRESS: equ 3FF0H
+SFG_YM2151_DATA: equ 3FF1H
+SFG_ID_ADDRESS: equ 80H
 
+SFG: MACRO
 	slot:
 		db 0
 
@@ -33,10 +33,10 @@ SFG: MACRO
 		ld e,(hl)
 		ld (hl),0
 	preparedSubslot: equ $ - 1
-		ld (SFG.YM2151_ADDRESS),a
+		ld (SFG_YM2151_ADDRESS),a
 		cp (hl)  ; R800 wait: ~4 bus cycles
 		ld a,d
-		ld (SFG.YM2151_DATA),a
+		ld (SFG_YM2151_DATA),a
 		ld a,e
 		cpl
 		ld (hl),a
@@ -173,7 +173,7 @@ SFG_Detect:
 ; f <- c: found
 SFG_MatchID:
 	ld de,SFG_id
-	ld hl,SFG.ID_ADDRESS
+	ld hl,SFG_ID_ADDRESS
 	ld bc,6
 	call Memory_MatchSlotString
 	ret

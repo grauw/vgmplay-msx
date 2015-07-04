@@ -1,10 +1,10 @@
 ;
 ; AY-3-8910 PSG / YM2149 SSG driver
 ;
-PSG: MACRO
-	ADDRESS: equ 0A0H
-	DATA: equ 0A1H
+PSG_ADDRESS: equ 0A0H
+PSG_DATA: equ 0A1H
 
+PSG: MACRO
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -17,10 +17,10 @@ PSG: MACRO
 	; d = value
 	WriteRegister:
 		di
-		out (PSG.ADDRESS),a
+		out (PSG_ADDRESS),a
 		ld a,d
 		ei
-		out (PSG.DATA),a
+		out (PSG_DATA),a
 		ret
 	MaskMixer:
 		ld a,d

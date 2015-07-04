@@ -1,16 +1,16 @@
 ;
 ; K051649 Konami SCC
 ;
-SCC: MACRO
-	REGISTER_BASE: equ 9800H
-	WAVEFORM: equ 00H
-	FREQUENCY: equ 80H
-	AMPLITUDE: equ 8AH
-	MIXER: equ 8FH
-	DEFORMATION: equ 0E0H
-	BANK_SELECT: equ 9000H
-	BANK: equ 3FH
+SCC_REGISTER_BASE: equ 9800H
+SCC_WAVEFORM: equ 00H
+SCC_FREQUENCY: equ 80H
+SCC_AMPLITUDE: equ 8AH
+SCC_MIXER: equ 8FH
+SCC_DEFORMATION: equ 0E0H
+SCC_BANK_SELECT: equ 9000H
+SCC_BANK: equ 3FH
 
+SCC: MACRO
 	slot:
 		db 0
 
@@ -31,7 +31,7 @@ SCC: MACRO
 		ld e,(hl)
 		ld (hl),0
 	preparedSubslot: equ $ - 1
-		ld h,REGISTER_BASE >> 8
+		ld h,SCC_REGISTER_BASE >> 8
 		ld l,a
 		ld (hl),d
 		ld a,e
@@ -62,19 +62,19 @@ SCC: MACRO
 		jp Player_ProcessNext
 	Frequency:
 		call Player_ReadWord
-		ld a,SCC.FREQUENCY
+		ld a,SCC_FREQUENCY
 		add a,e
 		call WriteRegister
 		jp Player_ProcessNext
 	Amplitude:
 		call Player_ReadWord
-		ld a,SCC.AMPLITUDE
+		ld a,SCC_AMPLITUDE
 		add a,e
 		call WriteRegister
 		jp Player_ProcessNext
 	Mixer:
 		call Player_ReadWord
-		ld a,SCC.MIXER
+		ld a,SCC_MIXER
 		call WriteRegister
 		jp Player_ProcessNext
 	WaveformSCCPlus:
@@ -82,7 +82,7 @@ SCC: MACRO
 		jp Player_ProcessNext
 	Deformation:
 		call Player_ReadWord
-		ld a,SCC.DEFORMATION
+		ld a,SCC_DEFORMATION
 		call WriteRegister
 		jp Player_ProcessNext
 		ENDP
@@ -133,8 +133,8 @@ SCC_SetSlot:
 
 ; ix = this
 SCC_SelectBank:
-	ld hl,SCC.BANK_SELECT
-	ld c,SCC.BANK
+	ld hl,SCC_BANK_SELECT
+	ld c,SCC_BANK
 	ld a,(ix + SCC.slot)
 	call Memory_WriteSlot
 	ret
@@ -185,7 +185,7 @@ SCC_Reset:
 ; ix = this
 SCC_Mute:
 	ld b,6
-	ld de,0 << 8 | (SCC.AMPLITUDE & 0FFH)
+	ld de,0 << 8 | (SCC_AMPLITUDE & 0FFH)
 	call SCC_FillRegisters
 	ret
 
@@ -205,11 +205,11 @@ SCC_MatchSlot: PROC
 	ex af,af'
 	ld h,80H
 	call Memory_SetSlot
-	ld a,(SCC.BANK_SELECT)
+	ld a,(SCC_BANK_SELECT)
 	ld d,a
-	ld a,SCC.BANK
-	ld (SCC.BANK_SELECT),a
-	ld hl,SCC.REGISTER_BASE
+	ld a,SCC_BANK
+	ld (SCC_BANK_SELECT),a
+	ld hl,SCC_REGISTER_BASE
 	ld e,(hl)
 	xor a
 	ld (hl),a
@@ -221,15 +221,15 @@ SCC_MatchSlot: PROC
 	ld a,(hl)
 	inc a
 	jr nz,NoSCC
-	ld a,(SCC.BANK_SELECT)
-	cp SCC.BANK
+	ld a,(SCC_BANK_SELECT)
+	cp SCC_BANK
 	jr z,NoSCC
 	xor a
 	jr Found
 NoSCC:
 	ld (hl),e
 	ld a,d
-	ld (SCC.BANK_SELECT),a
+	ld (SCC_BANK_SELECT),a
 	pop af
 	ld h,80H
 	call Memory_SetSlot

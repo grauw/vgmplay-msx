@@ -1,6 +1,8 @@
 ;
 ; Franky / Playsoniq SN76489 DCSG driver
 ;
+Franky_DATA: equ 049H
+
 Franky: MACRO
 	DATA: equ 049H
 
@@ -8,7 +10,7 @@ Franky: MACRO
 	SafeWriteRegister:
 	; a = value
 	WriteRegister:
-		out (Franky.DATA),a
+		out (Franky_DATA),a
 		ret
 
 	; ix = player

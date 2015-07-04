@@ -1,12 +1,12 @@
 ;
 ; MSX-MUSIC YM2413 OPLL driver
 ;
-MSXMusic: MACRO
-	ADDRESS: equ 7CH
-	DATA: equ 7DH
-	ID_ADDRESS: equ 401CH
-	ENABLE_ADDRESS: equ 7FF6H
+MSXMusic_ADDRESS: equ 7CH
+MSXMusic_DATA: equ 7DH
+MSXMusic_ID_ADDRESS: equ 401CH
+MSXMusic_ENABLE_ADDRESS: equ 7FF6H
 
+MSXMusic: MACRO
 	slot:
 		db 0
 
@@ -17,11 +17,11 @@ MSXMusic: MACRO
 	; a = register
 	; d = value
 	WriteRegister:
-		out (MSXMusic.ADDRESS),a
+		out (MSXMusic_ADDRESS),a
 		push ix  ; wait 12 cycles
 		pop ix
 		ld a,d
-		out (MSXMusic.DATA),a
+		out (MSXMusic_DATA),a
 		in a,(09AH)  ; R800 wait: ~72 cycles
 		in a,(09AH)
 		ret
@@ -92,24 +92,24 @@ MSXMusic_SafeWriteRegister:
 ; ix = this
 MSXMusic_Enable:
 	ld a,(ix + MSXMusic.slot)
-	ld hl,MSXMusic.ENABLE_ADDRESS
+	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_ReadSlot
 	set 0,a
 	ld c,a
 	ld a,(ix + MSXMusic.slot)
-	ld hl,MSXMusic.ENABLE_ADDRESS
+	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_WriteSlot
 	ret
 
 ; ix = this
 MSXMusic_Disable:
 	ld a,(ix + MSXMusic.slot)
-	ld hl,MSXMusic.ENABLE_ADDRESS
+	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_ReadSlot
 	res 0,a
 	ld c,a
 	ld a,(ix + MSXMusic.slot)
-	ld hl,MSXMusic.ENABLE_ADDRESS
+	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_WriteSlot
 	ret
 
@@ -164,7 +164,7 @@ MSXMusic_Detect:
 ; f <- c: found
 MSXMusic_MatchID:
 	ld de,MSXMusic_id
-	ld hl,MSXMusic.ID_ADDRESS
+	ld hl,MSXMusic_ID_ADDRESS
 	ld bc,4
 	call Memory_MatchSlotString
 	ret

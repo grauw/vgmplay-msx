@@ -1,15 +1,15 @@
 ;
 ; MoonSound YMF278B OPL4
 ;
-MoonSound: MACRO
-	STATUS: equ 0C4H
-	FM_ADDRESS: equ 0C4H
-	FM_DATA: equ 0C5H
-	FM2_ADDRESS: equ 0C6H
-	FM2_DATA: equ 0C7H
-	WAVE_ADDRESS: equ 07EH
-	WAVE_DATA: equ 07FH
+MoonSound_STATUS: equ 0C4H
+MoonSound_FM_ADDRESS: equ 0C4H
+MoonSound_FM_DATA: equ 0C5H
+MoonSound_FM2_ADDRESS: equ 0C6H
+MoonSound_FM2_DATA: equ 0C7H
+MoonSound_WAVE_ADDRESS: equ 07EH
+MoonSound_WAVE_DATA: equ 07FH
 
+MoonSound: MACRO
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -19,10 +19,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegister:
-		out (MoonSound.FM_ADDRESS),a
+		out (MoonSound_FM_ADDRESS),a
 		nop     ; wait 56 cycles (11.8 R800 cycles)
 		ld a,d
-		out (MoonSound.FM_DATA),a
+		out (MoonSound_FM_DATA),a
 		ret
 	MaskControl:
 		cp 8H
@@ -36,10 +36,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegister2:
-		out (MoonSound.FM2_ADDRESS),a
+		out (MoonSound_FM2_ADDRESS),a
 		nop     ; wait 56 cycles (11.8 R800 cycles)
 		ld a,d
-		out (MoonSound.FM2_DATA),a
+		out (MoonSound_FM2_DATA),a
 		ret
 
 	; e = register
@@ -51,10 +51,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegisterWave:
-		out (MoonSound.WAVE_ADDRESS),a
+		out (MoonSound_WAVE_ADDRESS),a
 		cp (ix)  ; wait 88 cycles (18.6 R800 cycles, but 18 works)
 		ld a,d
-		out (MoonSound.WAVE_DATA),a
+		out (MoonSound_WAVE_DATA),a
 		ret
 
 	; ix = player
@@ -296,7 +296,7 @@ MoonSound_Reset:
 
 ; f <- c: Found
 MoonSound_Detect:
-	in a,(MoonSound.STATUS)
+	in a,(MoonSound_STATUS)
 	and 11111101B  ; sometimes LD is set
 	sub 00H
 	and a
