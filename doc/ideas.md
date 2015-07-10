@@ -5,9 +5,10 @@ Options:
 
   * Wait n seconds before and after playing to prevent disk interference
 
-Higher resolution clock
+Higher resolution clocks:
 
-  * Line ints (MSX2 and up), OP* timers, R800 timer
+  * Line ints (MSX2 and up)
+  * OP* timers
 
 Multi-chip support:
 
