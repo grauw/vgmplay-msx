@@ -8,13 +8,13 @@ Thanks go to l_oliveira and popolon(fr) for support.
 Project information
 -------------------
 
+Plays back VGM music files on MSX with the supported sound chips.
+
 Author: Laurens Holst <laurens.nospam@grauw.nl>  
 Site: <https://bitbucket.org/grauw/vgmplay-msx>  
 Issues: <https://bitbucket.org/grauw/vgmplay-msx/issues>  
 Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>  
 License: Simplified BSD License
-
-Plays back VGM music files on MSX on the appropriate or emulated sound chips.
 
 For more information on the VGM format see:  
 <http://www.smspower.org/Music/VGMFileFormat>
