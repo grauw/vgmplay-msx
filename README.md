@@ -29,8 +29,8 @@ System Requirements
 -------------------
 
   * MSX, MSX2, MSX2+ or MSX turboR
-  * 16kB video RAM
-  * 128kB main RAM
+  * 16K video RAM
+  * 128K main RAM
   * MSX-DOS 2
 
 
