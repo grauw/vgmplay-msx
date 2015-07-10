@@ -1,6 +1,7 @@
 COPY_TARGET = /Volumes/MSXDOS2
 
 all:
+	mkdir -p bin
 	java -jar tools/glass.jar -I gen src/COM.asm bin/vgmplay.com bin/vgmplay.sym
 
 dist: all
