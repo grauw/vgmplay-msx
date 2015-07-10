@@ -13,6 +13,7 @@ Plays back VGM music files on MSX with the supported sound chips.
 Author: Laurens Holst <laurens.nospam@grauw.nl>  
 Site: <https://bitbucket.org/grauw/vgmplay-msx>  
 Downloads: <https://bitbucket.org/grauw/vgmplay-msx/downloads>  
+History: <https://bitbucket.org/grauw/vgmplay-msx/src/default/CHANGES.md>  
 Issues: <https://bitbucket.org/grauw/vgmplay-msx/issues>  
 Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>  
 License: Simplified BSD License
