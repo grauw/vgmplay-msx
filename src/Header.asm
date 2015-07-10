@@ -163,8 +163,8 @@ Header_ClearPastDataOffset:
 ; ix = this
 ; dehl <- VGM data offset
 Header_GetDataOffset: PROC
-	ld h,(ix + Header.version + 1)
 	ld l,(ix + Header.version)
+	ld h,(ix + Header.version + 1)
 	ld bc,-150H
 	add hl,bc
 	jp nc,Pre1_50
@@ -297,8 +297,8 @@ Header_PrintYM2612Info:
 	jp Header_PrintClock
 
 Header_PrintYM2151Info: PROC
-	ld h,(ix + Header.version + 1)
 	ld l,(ix + Header.version)
+	ld h,(ix + Header.version + 1)
 	ld bc,-102H
 	add hl,bc
 	jr nc,Pre1_02
