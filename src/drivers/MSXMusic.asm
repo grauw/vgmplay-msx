@@ -3,11 +3,13 @@
 ;
 MSXMusic_ADDRESS: equ 7CH
 MSXMusic_DATA: equ 7DH
-MSXMusic_ID_ADDRESS: equ 401CH
+MSXMusic_ID_ADDRESS: equ 4018H
 MSXMusic_ENABLE_ADDRESS: equ 7FF6H
 
 MSXMusic: MACRO
 	slot:
+		db 0
+	internal:
 		db 0
 
 	; e = register
@@ -47,9 +49,11 @@ MSXMusic_TryCreate:
 	ret
 
 ; a = slot
+; b = internal
 ; ix = this
 MSXMusic_Constructor:
 	ld (ix + MSXMusic.slot),a
+	ld (ix + MSXMusic.internal),b
 	call MSXMusic_Enable
 	call MSXMusic_Reset
 	ret
@@ -91,6 +95,8 @@ MSXMusic_SafeWriteRegister:
 
 ; ix = this
 MSXMusic_Enable:
+	bit 0,(ix + MSXMusic.internal)
+	ret nz
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_ReadSlot
@@ -103,6 +109,8 @@ MSXMusic_Enable:
 
 ; ix = this
 MSXMusic_Disable:
+	bit 0,(ix + MSXMusic.internal)
+	ret nz
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_ReadSlot
@@ -155,21 +163,40 @@ MSXMusic_Reset:
 
 ; f <- c: found
 ; a <- slot
+; b <- 0: external, -1: internal
 MSXMusic_Detect:
-	ld hl,MSXMusic_MatchID
+	ld hl,MSXMusic_MatchInternalID
 	call Memory_SearchSlots
+	ld b,-1
+	ret c
+	ld hl,MSXMusic_MatchExternalID
+	call Memory_SearchSlots
+	ld b,0
 	ret
 
 ; a = slot id
 ; f <- c: found
-MSXMusic_MatchID:
-	ld de,MSXMusic_id
+MSXMusic_MatchInternalID:
+	ld de,MSXMusic_internalId
 	ld hl,MSXMusic_ID_ADDRESS
+	ld bc,8
+	call Memory_MatchSlotString
+	ret
+
+; a = slot id
+; ix = this
+; f <- c: found
+MSXMusic_MatchExternalID:
+	ld de,MSXMusic_externalId
+	ld hl,MSXMusic_ID_ADDRESS + 4
 	ld bc,4
 	call Memory_MatchSlotString
 	ret
 
-MSXMusic_id:
+MSXMusic_internalId:
+	db "APRLOPLL"
+
+MSXMusic_externalId:
 	db "OPLL"
 
 ;
