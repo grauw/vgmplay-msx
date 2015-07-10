@@ -21,8 +21,6 @@ Print notice about OPM when VGM format version is 1.01.
 
   * Better: pick OPLL or OPM by scanning first 1K of song data for OPM commands
 
-Detect gzip compression and show informative message.
-
 VGZ decompression
 
   * Decompression after loading

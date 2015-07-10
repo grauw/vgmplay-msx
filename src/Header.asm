@@ -128,6 +128,9 @@ Header: MACRO
 ; ix = this
 ; ix <- this
 Header_Constructor:
+	call Header_CheckGZIP
+	ld hl,Header_gzippedFileError
+	call z,Application_TerminateWithError
 	call Header_CheckID
 	ld hl,Header_noVGMFileError
 	call nz,Application_TerminateWithError
@@ -656,6 +659,16 @@ Header_CheckID:
 	cp " "
 	ret
 
+; ix = this
+; f <- z: gzipped
+Header_CheckGZIP:
+	ld a,(ix + Header.identification)
+	cp 31
+	ret nz
+	ld a,(ix + Header.identification + 1)
+	cp 139
+	ret
+
 ;
 	SECTION RAM
 
@@ -795,5 +808,8 @@ Header_hz:
 
 Header_noVGMFileError:
 	db "Not a VGM file.",13,10,0
+
+Header_gzippedFileError:
+	db "File is gzipped, please extract before playback.",13,10,0
 
 	ENDS
