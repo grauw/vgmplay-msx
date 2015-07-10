@@ -17,12 +17,12 @@ License: Simplified BSD License
 Plays back VGM music files on MSX on the appropriate or emulated sound chips.
 
 For more information on the VGM format see:  
-http://www.smspower.org/Music/VGMFileFormat
+<http://www.smspower.org/Music/VGMFileFormat>
 
 For a collection of VGM music see:  
-http://vgmrips.net/  
-http://www.smspower.org/Music/VGMs  
-http://opl.wafflenet.com/
+<http://vgmrips.net/>  
+<http://www.smspower.org/Music/VGMs>  
+<http://opl.wafflenet.com/>
 
 
 System Requirements
