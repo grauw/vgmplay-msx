@@ -288,13 +288,26 @@ Header_PrintYM2413Info:
 	ld bc,Header_ym2413Name
 	jp Header_PrintClock
 
-Header_PrintYM2612Info:
+Header_PrintYM2612Info: PROC
+	ld l,(ix + Header.version)
+	ld h,(ix + Header.version + 1)
+	ld bc,-102H
+	add hl,bc
+	jr nc,Pre1_02
 	ld l,(ix + Header.ym2612Clock)
 	ld h,(ix + Header.ym2612Clock + 1)
 	ld e,(ix + Header.ym2612Clock + 2)
 	ld d,(ix + Header.ym2612Clock + 3)
+	jp Continue
+Pre1_02:
+	ld l,(ix + Header.ym2413Clock)
+	ld h,(ix + Header.ym2413Clock + 1)
+	ld e,(ix + Header.ym2413Clock + 2)
+	ld d,(ix + Header.ym2413Clock + 3)
+Continue:
 	ld bc,Header_ym2612Name
 	jp Header_PrintClock
+	ENDP
 
 Header_PrintYM2151Info: PROC
 	ld l,(ix + Header.version)
