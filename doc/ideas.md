@@ -33,7 +33,12 @@ Show song length
   * When infinite repeat is on: 2:13 + infinite
   * Next step: show current playback position
 
-Play OPLL songs on OPL4
+Chip emulations
+
+  * Play OPLL on OPL4 (with current best known instrument settings)
+  * Play OPL on VM2413 (a fallback option for OPL2?)
+  * Play OPN family on OPM + PSG (though OPM misses the OPN’s SSG EG)
+  * Play PCM chips on OPL4 (C140, OKIM, and SegaPCM which is similar to OPL4)
 
 DOS1 support
 
