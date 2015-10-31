@@ -112,7 +112,7 @@ CLI_ParsePath:
 	ld a,(ix + CLI.path)
 	or (ix + CLI.path + 1)
 	ld hl,CLI_multiplePathsError
-	call nz,Application_TerminateWithError
+	jp nz,Application_TerminateWithError
 	ld (ix + CLI.path),e
 	ld (ix + CLI.path + 1),d
 	ld c,_PARSE

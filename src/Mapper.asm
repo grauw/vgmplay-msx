@@ -50,7 +50,7 @@ Mapper_Constructor:
 	ld a,(HOKVLD)
 	bit 0,a
 	ld hl,Mapper_noMapperSupportError
-	call z,Application_TerminateWithError
+	jp z,Application_TerminateWithError
 	push ix
 	ld a,0
 	ld de,0402H
@@ -59,7 +59,7 @@ Mapper_Constructor:
 	push hl
 	and a
 	ld hl,Mapper_noMapperSupportError
-	call z,Application_TerminateWithError
+	jp z,Application_TerminateWithError
 	pop hl
 	ld (ix + Mapper.primaryMapperSlot),b
 	ld e,ixl

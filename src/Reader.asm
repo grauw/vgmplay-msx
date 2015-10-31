@@ -260,7 +260,7 @@ Reader_AllocateSegment:
 	ld a,0
 	call Mapper_instance.Allocate
 	ld hl,Reader_outOfMemoryError
-	call c,Application_TerminateWithError
+	jp c,Application_TerminateWithError
 	ret
 
 ; ix = this
@@ -282,7 +282,7 @@ Reader_AddSegment:
 	ld (ix + Reader.lastSegment),e
 	bit 0,d
 	ld hl,Reader_outOfMemoryError
-	call nz,Application_TerminateWithError
+	jp nz,Application_TerminateWithError
 	pop de
 	ld a,e
 	ret

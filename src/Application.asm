@@ -19,7 +19,7 @@ Application: MACRO
 Application_Main:
 	call DOS_IsDOS2
 	ld hl,Application_dos2RequiredError
-	call c,Application_TerminateWithError
+	jp c,Application_TerminateWithError
 
 	call VDP_InitMirrorsOnVDPUpgrades
 
@@ -163,7 +163,7 @@ Application_ParseCLI: PROC
 	ld a,l
 	or h
 	ld hl,Application_usageInstructions
-	call z,Application_TerminateWithError
+	jp z,Application_TerminateWithError
 	call Frequency
 	pop ix
 	ret
