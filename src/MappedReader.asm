@@ -4,11 +4,11 @@
 MappedReader: MACRO
 	BASE_ADDRESS: equ 8000H
 	this:
+	buffer:
+		dw MappedBuffer_instance
 	end:
 		dd 0
 	positionSegmentIndex:
-		db 0
-	lastSegment:
 		db 0
 	; a <- value
 	; Modifies: af, hl
@@ -32,8 +32,6 @@ MappedReader: MACRO
 		pop ix
 		pop af
 		ret
-	segments:
-		ds 256 * 2
 	size:
 	ENDM
 
@@ -42,6 +40,16 @@ MappedReader: MACRO
 ; ix <- this
 MappedReader_Construct:
 	call MappedReader_LoadFile
+	ret
+
+; ix = this
+; de <- buffer
+; ix <- buffer
+MappedReader_GetBuffer:
+	ld e,(ix + MappedReader.buffer)
+	ld d,(ix + MappedReader.buffer + 1)
+	ld ixl,e
+	ld ixh,d
 	ret
 
 ; ehl = address
@@ -61,7 +69,11 @@ MappedReader_SetPosition:
 	rl e
 	ld (ix + MappedReader.positionSegmentIndex),e
 	ld a,e
-	call MappedReader_SelectSegment
+	push ix
+	call MappedReader_GetBuffer
+	ld h,MappedReader.BASE_ADDRESS >> 8
+	call MappedBuffer_SelectSegment
+	pop ix
 	ret
 
 ; ix = this
@@ -135,7 +147,13 @@ MappedReader_ReadByte:
 	ld a,(ix + MappedReader.positionSegmentIndex)
 	inc a
 	ld (ix + MappedReader.positionSegmentIndex),a
-	call MappedReader_SelectSegment
+	push ix
+	push de
+	call MappedReader_GetBuffer
+	ld h,MappedReader.BASE_ADDRESS >> 8
+	call MappedBuffer_SelectSegment
+	pop de
+	pop ix
 	pop af
 	ret
 
@@ -217,74 +235,18 @@ MappedReader_IsValidAddress:
 	cp (ix + MappedReader.end)
 	ret
 
-; a = segment index
-; ix = this
-; a <- segment
-; Modifies: af
-MappedReader_SelectSegment:
-	push bc
-	push de
-	push hl
-	push ix
-	ld e,a
-	ld d,0
-	add ix,de
-	add ix,de
-	ld a,(ix + MappedReader.segments + 1)
-	ld h,MappedReader.BASE_ADDRESS >> 8
-	call Memory_SetSlot
-	ld a,(ix + MappedReader.segments)
-	call Mapper_instance.PutP2
-	pop ix
-	pop hl
-	pop de
-	pop bc
-	ret
-
 ; ix = this
 MappedReader_SelectNextSegment:
 	ld a,(ix + MappedReader.positionSegmentIndex)
 	inc a
 	ld (ix + MappedReader.positionSegmentIndex),a
-	call MappedReader_SelectSegment
-	ret
-
-; ix = this
-; a <- segment number
-; b <- slot id
-MappedReader_AllocateSegment:
-	ld a,(Mapper_instance.primaryMapperSlot)
-	and 10001111B
-	or 00100000B  ; allocate primary slot, or another
-	ld b,a
-	ld a,0
-	call Mapper_instance.Allocate
-	ld hl,MappedReader_outOfMemoryError
-	jp c,Application_TerminateWithError
-	ret
-
-; ix = this
-; a = segment number
-; b = slot id
-; a <- new segment index
-; Modifies: de, hl
-MappedReader_AddSegment:
-	ld e,(ix + MappedReader.lastSegment)
-	ld d,0
-	push de
 	push ix
-	add ix,de
-	add ix,de
-	ld (ix + MappedReader.segments),a
-	ld (ix + MappedReader.segments + 1),b
-	pop ix
-	inc de
-	ld (ix + MappedReader.lastSegment),e
-	bit 0,d
-	ld hl,MappedReader_outOfMemoryError
-	jp nz,Application_TerminateWithError
+	push de
+	call MappedReader_GetBuffer
+	ld h,MappedReader.BASE_ADDRESS >> 8
+	call MappedBuffer_SelectSegment
 	pop de
-	ld a,e
+	pop ix
 	ret
 
 ; hl = filename
@@ -321,9 +283,15 @@ MappedReader_LoadAllData: PROC
 Loop:
 	push hl
 	push bc
-	call MappedReader_AllocateSegment
+	push ix
+	call MappedReader_GetBuffer
+	call MappedBuffer_AllocateSegment
+	pop ix
 FirstSegment:
-	call MappedReader_AddSegment
+	push ix
+	call MappedReader_GetBuffer
+	call MappedBuffer_AddSegment
+	pop ix
 	pop bc
 	push bc
 	call MappedReader_LoadSegment
@@ -349,7 +317,11 @@ Done:
 ; hl <- bytes loaded
 MappedReader_LoadSegment: PROC
 	push bc
-	call MappedReader_SelectSegment
+	push ix
+	call MappedReader_GetBuffer
+	ld h,MappedReader.BASE_ADDRESS >> 8
+	call MappedBuffer_SelectSegment
+	pop ix
 	ld hl,MappedReader.BASE_ADDRESS
 	call Memory_GetSlot
 	ld b,a
@@ -420,9 +392,6 @@ MappedReader_ThrowAddressOutOfBounds:
 MappedReader_instance: MappedReader
 
 	ENDS
-
-MappedReader_outOfMemoryError:
-	db "Not enough memory.",13,10,0
 
 MappedReader_addressOutOfBoundsError:
 	db "Address out of bounds.",13,10,0
