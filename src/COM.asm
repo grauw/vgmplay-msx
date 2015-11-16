@@ -39,6 +39,7 @@ COM_Main:
 	INCLUDE "Header.asm"
 	INCLUDE "GD3.asm"
 	INCLUDE "MappedBuffer.asm"
+	INCLUDE "MappedBufferLoader.asm"
 	INCLUDE "MappedReader.asm"
 	INCLUDE "Player.asm"
 	INCLUDE "timers/Timer.asm"

@@ -6,6 +6,8 @@ Application: MACRO
 		dw CLI_instance
 	header:
 		dw Header_instance
+	loader:
+		dw MappedBufferLoader_instance
 	reader:
 		dw MappedReader_instance
 	player:
@@ -114,6 +116,16 @@ Application_GetHeader:
 	ret
 
 ; ix = this
+; de <- VGM data loader
+; ix <- VGM data loader
+Application_GetLoader:
+	ld e,(ix + Application.loader)
+	ld d,(ix + Application.loader + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
 ; de <- VGM data reader
 ; ix <- VGM data reader
 Application_GetReader:
@@ -192,8 +204,12 @@ Application_LoadFile: PROC
 	call System_Print
 	ld hl,Application_dotDotDot
 	call System_Print
-	call Application_GetReader
+	call Application_GetLoader
 	pop hl
+	call MappedBufferLoader_Construct
+	pop ix
+	push ix
+	call Application_GetReader
 	call MappedReader_Construct
 	pop ix
 	ret
