@@ -124,8 +124,8 @@ Application_GetReader:
 	ret
 
 ; ix = this
-; de <- VGM data
-; ix <- VGM data
+; de <- VGM player
+; ix <- VGM player
 Application_GetPlayer:
 	ld e,(ix + Application.player)
 	ld d,(ix + Application.player + 1)
