@@ -2,6 +2,8 @@
 ; Memory-mapped buffer
 ;
 MappedBuffer: MACRO
+	size:
+		dd 0
 	lastSegment:
 		db 0
 	segments:
@@ -77,6 +79,29 @@ MappedBuffer_AddSegment:
 	jp nz,Application_TerminateWithError
 	pop de
 	ld a,e
+	ret
+
+; ehl = size
+; ix = this
+MappedBuffer_SetSize:
+	ld (ix + MappedBuffer.size),l
+	ld (ix + MappedBuffer.size + 1),h
+	ld (ix + MappedBuffer.size + 2),e
+	ret
+
+; ehl = position
+; ix = this
+; f <- nc: position points past the end
+; Modifies: af
+MappedBuffer_IsValidPosition:
+	ld a,e
+	cp (ix + MappedBuffer.size + 2)
+	ret c
+	ld a,h
+	cp (ix + MappedBuffer.size + 1)
+	ret c
+	ld a,l
+	cp (ix + MappedBuffer.size)
 	ret
 
 ;

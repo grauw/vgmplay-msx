@@ -6,8 +6,6 @@ MappedReader: MACRO
 	this:
 	buffer:
 		dw MappedBuffer_instance
-	end:
-		dd 0
 	positionSegmentIndex:
 		db 0
 	; a <- value
@@ -55,7 +53,12 @@ MappedReader_GetBuffer:
 ; ehl = address
 ; ix = this
 MappedReader_SetPosition:
-	call MappedReader_IsValidAddress
+	push ix
+	ld a,e
+	call MappedReader_GetBuffer
+	ld e,a
+	call MappedBuffer_IsValidPosition
+	pop ix
 	jp nc,MappedReader_ThrowAddressOutOfBounds
 	ld a,h
 	and 3FH
@@ -220,21 +223,6 @@ CallIY:
 	jp iy
 	ENDP
 
-; ehl = address
-; ix = this
-; f <- nc: address points past the end
-; Modifies: af
-MappedReader_IsValidAddress:
-	ld a,e
-	cp (ix + MappedReader.end + 2)
-	ret c
-	ld a,h
-	cp (ix + MappedReader.end + 1)
-	ret c
-	ld a,l
-	cp (ix + MappedReader.end)
-	ret
-
 ; ix = this
 MappedReader_SelectNextSegment:
 	ld a,(ix + MappedReader.positionSegmentIndex)
@@ -306,9 +294,11 @@ NoCarry:
 	cp 40H
 	jp z,Loop
 Done:
-	ld (ix + MappedReader.end),l
-	ld (ix + MappedReader.end + 1),h
-	ld (ix + MappedReader.end + 2),c
+	push ix
+	call MappedReader_GetBuffer
+	ld e,c
+	call MappedBuffer_SetSize
+	pop ix
 	ret
 	ENDP
 
