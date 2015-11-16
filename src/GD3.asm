@@ -5,7 +5,7 @@
 ; dehl = GD3 offset
 ; ix = reader
 GD3_ShowTagInfoEnglish:
-	call Reader_SetPosition
+	call MappedReader_SetPosition
 	call GD3_CheckVersion
 	ret nz
 	ld hl,GD3_name
@@ -31,33 +31,33 @@ GD3_ShowTagInfoEnglish:
 ; ix = reader
 ; f <- z: tag recognised
 GD3_CheckVersion:
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp "G"
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp "d"
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp "3"
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp " "
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp 0
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp 1
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp 0
 	ret nz
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	cp 0
-	call Reader_ReadByte
-	call Reader_ReadByte
-	call Reader_ReadByte
-	call Reader_ReadByte
+	call MappedReader_ReadByte
+	call MappedReader_ReadByte
+	call MappedReader_ReadByte
+	call MappedReader_ReadByte
 	xor a
 	ret
 
@@ -66,9 +66,9 @@ GD3_CheckVersion:
 ; Modifies: af, de, hl
 GD3_PrintTag: PROC
 	push hl
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	ld e,a
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	ld d,a
 	pop hl
 	or e
@@ -78,9 +78,9 @@ GD3_PrintTag: PROC
 	call System_PrintCrLf
 	ret
 Loop:
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	ld e,a
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	ld d,a
 	or e
 	ret z
@@ -106,9 +106,9 @@ Newline:
 ; ix = reader
 ; Modifies: af, de, hl
 GD3_SkipTag:
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	ld e,a
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	or e
 	jp nz,GD3_SkipTag
 	ret

@@ -1,7 +1,7 @@
 ;
 ; Buffers an entire file in memory.
 ;
-Reader: MACRO
+MappedReader: MACRO
 	BASE_ADDRESS: equ 8000H
 	this:
 	end:
@@ -28,7 +28,7 @@ Reader: MACRO
 		push af
 		push ix
 		ld ix,this
-		call Reader_SelectNextSegment
+		call MappedReader_SelectNextSegment
 		pop ix
 		pop af
 		ret
@@ -40,36 +40,36 @@ Reader: MACRO
 ; hl = filename
 ; ix = this
 ; ix <- this
-Reader_Constructor:
-	call Reader_LoadFile
+MappedReader_Constructor:
+	call MappedReader_LoadFile
 	ret
 
 ; ehl = address
 ; ix = this
-Reader_SetPosition:
-	call Reader_IsValidAddress
-	jp nc,Reader_ThrowAddressOutOfBounds
+MappedReader_SetPosition:
+	call MappedReader_IsValidAddress
+	jp nc,MappedReader_ThrowAddressOutOfBounds
 	ld a,h
 	and 3FH
 	or 80H
-	ld (ix + Reader.position),l
-	ld (ix + Reader.position + 1),a
+	ld (ix + MappedReader.position),l
+	ld (ix + MappedReader.position + 1),a
 	ld a,h
 	rla
 	rl e
 	rla
 	rl e
-	ld (ix + Reader.positionSegmentIndex),e
+	ld (ix + MappedReader.positionSegmentIndex),e
 	ld a,e
-	call Reader_SelectSegment
+	call MappedReader_SelectSegment
 	ret
 
 ; ix = this
 ; dehl <- address
-Reader_GetPosition:
-	ld l,(ix + Reader.position)
-	ld h,(ix + Reader.position + 1)
-	ld a,(ix + Reader.positionSegmentIndex)
+MappedReader_GetPosition:
+	ld l,(ix + MappedReader.position)
+	ld h,(ix + MappedReader.position + 1)
+	ld a,(ix + MappedReader.positionSegmentIndex)
 	rlc h
 	rlc h
 	rrca
@@ -83,35 +83,35 @@ Reader_GetPosition:
 
 ; ehl = nr of bytes to skip
 ; ix = this
-Reader_Skip:
+MappedReader_Skip:
 	ld a,d
 	and a
-	jp nz,Reader_ThrowAddressOutOfBounds
+	jp nz,MappedReader_ThrowAddressOutOfBounds
 	push de
 	push hl
-	call Reader_GetPosition
+	call MappedReader_GetPosition
 	pop bc
 	add hl,bc
 	pop bc
 	ex de,hl
 	adc hl,bc
 	ex de,hl
-	jp c,Reader_ThrowAddressOutOfBounds
-	call Reader_SetPosition
+	jp c,MappedReader_ThrowAddressOutOfBounds
+	call MappedReader_SetPosition
 	ret
 
 ; bc = nr of bytes to skip
 ; ix = this
 ; Modifies: af, bc, de, hl
-Reader_SkipBC:
-	call Reader_GetPosition
+MappedReader_SkipBC:
+	call MappedReader_GetPosition
 	add hl,bc
 	ex de,hl
 	ld bc,0
 	adc hl,bc
 	ex de,hl
-	jp c,Reader_ThrowAddressOutOfBounds
-	call Reader_SetPosition
+	jp c,MappedReader_ThrowAddressOutOfBounds
+	call MappedReader_SetPosition
 	ret
 
 ; Reads a byte from the current position.
@@ -120,33 +120,33 @@ Reader_SkipBC:
 ; ix = this
 ; a <- value
 ; Modifies: af, hl
-Reader_ReadByte:
-	ld l,(ix + Reader.position)
-	ld h,(ix + Reader.position + 1)
+MappedReader_ReadByte:
+	ld l,(ix + MappedReader.position)
+	ld h,(ix + MappedReader.position + 1)
 	ld a,(hl)
 	inc hl
-	ld (ix + Reader.position),l
-	ld (ix + Reader.position + 1),h
+	ld (ix + MappedReader.position),l
+	ld (ix + MappedReader.position + 1),h
 	bit 6,h
 	ret z
 	res 6,h
-	ld (ix + Reader.position + 1),h
+	ld (ix + MappedReader.position + 1),h
 	push af
-	ld a,(ix + Reader.positionSegmentIndex)
+	ld a,(ix + MappedReader.positionSegmentIndex)
 	inc a
-	ld (ix + Reader.positionSegmentIndex),a
-	call Reader_SelectSegment
+	ld (ix + MappedReader.positionSegmentIndex),a
+	call MappedReader_SelectSegment
 	pop af
 	ret
 
 ; de = destination address
 ; bc = bytes count
 ; ix = this
-Reader_ReadBlock: PROC
+MappedReader_ReadBlock: PROC
 Loop:
 	push bc
 	push de
-	call Reader_ReadByte
+	call MappedReader_ReadByte
 	pop de
 	pop bc
 	ld (de),a
@@ -161,12 +161,12 @@ Loop:
 ; ehl = bytes count
 ; iy = processing callback (hl = source, bc = bytes)
 ; ix = this
-Reader_ReadAndProcessBlock: PROC
+MappedReader_ReadAndProcessBlock: PROC
 Loop:
 	push hl
-	ld hl,Reader.BASE_ADDRESS + 4000H
-	ld c,(ix + Reader.position)
-	ld b,(ix + Reader.position + 1)
+	ld hl,MappedReader.BASE_ADDRESS + 4000H
+	ld c,(ix + MappedReader.position)
+	ld b,(ix + MappedReader.position + 1)
 	and a
 	sbc hl,bc
 	ex (sp),hl
@@ -191,12 +191,12 @@ FinalLap:
 	jp Process
 ; bc = bytes, iy = processing callback, ix = this
 Process:
-	ld l,(ix + Reader.position)
-	ld h,(ix + Reader.position + 1)
+	ld l,(ix + MappedReader.position)
+	ld h,(ix + MappedReader.position + 1)
 	push bc
 	call CallIY
 	pop bc
-	call Reader_SkipBC
+	call MappedReader_SkipBC
 	ret
 CallIY:
 	jp iy
@@ -206,22 +206,22 @@ CallIY:
 ; ix = this
 ; f <- nc: address points past the end
 ; Modifies: af
-Reader_IsValidAddress:
+MappedReader_IsValidAddress:
 	ld a,e
-	cp (ix + Reader.end + 2)
+	cp (ix + MappedReader.end + 2)
 	ret c
 	ld a,h
-	cp (ix + Reader.end + 1)
+	cp (ix + MappedReader.end + 1)
 	ret c
 	ld a,l
-	cp (ix + Reader.end)
+	cp (ix + MappedReader.end)
 	ret
 
 ; a = segment index
 ; ix = this
 ; a <- segment
 ; Modifies: af
-Reader_SelectSegment:
+MappedReader_SelectSegment:
 	push bc
 	push de
 	push hl
@@ -230,10 +230,10 @@ Reader_SelectSegment:
 	ld d,0
 	add ix,de
 	add ix,de
-	ld a,(ix + Reader.segments + 1)
-	ld h,Reader.BASE_ADDRESS >> 8
+	ld a,(ix + MappedReader.segments + 1)
+	ld h,MappedReader.BASE_ADDRESS >> 8
 	call Memory_SetSlot
-	ld a,(ix + Reader.segments)
+	ld a,(ix + MappedReader.segments)
 	call Mapper_instance.PutP2
 	pop ix
 	pop hl
@@ -242,24 +242,24 @@ Reader_SelectSegment:
 	ret
 
 ; ix = this
-Reader_SelectNextSegment:
-	ld a,(ix + Reader.positionSegmentIndex)
+MappedReader_SelectNextSegment:
+	ld a,(ix + MappedReader.positionSegmentIndex)
 	inc a
-	ld (ix + Reader.positionSegmentIndex),a
-	call Reader_SelectSegment
+	ld (ix + MappedReader.positionSegmentIndex),a
+	call MappedReader_SelectSegment
 	ret
 
 ; ix = this
 ; a <- segment number
 ; b <- slot id
-Reader_AllocateSegment:
+MappedReader_AllocateSegment:
 	ld a,(Mapper_instance.primaryMapperSlot)
 	and 10001111B
 	or 00100000B  ; allocate primary slot, or another
 	ld b,a
 	ld a,0
 	call Mapper_instance.Allocate
-	ld hl,Reader_outOfMemoryError
+	ld hl,MappedReader_outOfMemoryError
 	jp c,Application_TerminateWithError
 	ret
 
@@ -268,20 +268,20 @@ Reader_AllocateSegment:
 ; b = slot id
 ; a <- new segment index
 ; Modifies: de, hl
-Reader_AddSegment:
-	ld e,(ix + Reader.lastSegment)
+MappedReader_AddSegment:
+	ld e,(ix + MappedReader.lastSegment)
 	ld d,0
 	push de
 	push ix
 	add ix,de
 	add ix,de
-	ld (ix + Reader.segments),a
-	ld (ix + Reader.segments + 1),b
+	ld (ix + MappedReader.segments),a
+	ld (ix + MappedReader.segments + 1),b
 	pop ix
 	inc de
-	ld (ix + Reader.lastSegment),e
+	ld (ix + MappedReader.lastSegment),e
 	bit 0,d
-	ld hl,Reader_outOfMemoryError
+	ld hl,MappedReader_outOfMemoryError
 	jp nz,Application_TerminateWithError
 	pop de
 	ld a,e
@@ -290,26 +290,26 @@ Reader_AddSegment:
 ; hl = filename
 ; ix = this
 ; ix <- this
-Reader_LoadFile:
+MappedReader_LoadFile:
 	ex de,hl
 	ld a,00000001B  ; read-only
 	ld c,_OPEN
 	call BDOS
 	call Application_CheckDOSError
 	push bc
-	call Reader_LoadAllData
+	call MappedReader_LoadAllData
 	pop bc
 	ld c,_CLOSE
 	call BDOS
 	call Application_CheckDOSError
 	ld de,0
 	ld hl,0
-	call Reader_SetPosition
+	call MappedReader_SetPosition
 	ret
 
 ; b = file handle
 ; ix = this
-Reader_LoadAllData: PROC
+MappedReader_LoadAllData: PROC
 	ld c,0
 	ld hl,0
 	push hl
@@ -321,12 +321,12 @@ Reader_LoadAllData: PROC
 Loop:
 	push hl
 	push bc
-	call Reader_AllocateSegment
+	call MappedReader_AllocateSegment
 FirstSegment:
-	call Reader_AddSegment
+	call MappedReader_AddSegment
 	pop bc
 	push bc
-	call Reader_LoadSegment
+	call MappedReader_LoadSegment
 	ex de,hl
 	pop bc
 	pop hl
@@ -338,26 +338,26 @@ NoCarry:
 	cp 40H
 	jp z,Loop
 Done:
-	ld (ix + Reader.end),l
-	ld (ix + Reader.end + 1),h
-	ld (ix + Reader.end + 2),c
+	ld (ix + MappedReader.end),l
+	ld (ix + MappedReader.end + 1),h
+	ld (ix + MappedReader.end + 2),c
 	ret
 	ENDP
 
 ; a = segment index
 ; b = file handle
 ; hl <- bytes loaded
-Reader_LoadSegment: PROC
+MappedReader_LoadSegment: PROC
 	push bc
-	call Reader_SelectSegment
-	ld hl,Reader.BASE_ADDRESS
+	call MappedReader_SelectSegment
+	ld hl,MappedReader.BASE_ADDRESS
 	call Memory_GetSlot
 	ld b,a
 	ld a,(Mapper_instance.primaryMapperSlot)
 	cp b
 	pop bc
 	jr nz,NonPrimary
-	ld de,Reader.BASE_ADDRESS
+	ld de,MappedReader.BASE_ADDRESS
 	ld hl,4000H
 	ld c,_READ
 	call BDOS
@@ -379,7 +379,7 @@ NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	ld c,l
 	ld b,h
 	ld hl,SCRATCH
-	ld de,Reader.BASE_ADDRESS
+	ld de,MappedReader.BASE_ADDRESS
 	call System_FastLDIR
 	pop hl
 SkipLDIR1:
@@ -400,7 +400,7 @@ SkipLDIR1:
 	ld c,l
 	ld b,h
 	ld hl,SCRATCH
-	ld de,Reader.BASE_ADDRESS + 2000H
+	ld de,MappedReader.BASE_ADDRESS + 2000H
 	call System_FastLDIR
 	pop hl
 SkipLDIR2:
@@ -409,20 +409,20 @@ SkipLDIR2:
 	ret
 	ENDP
 
-Reader_ThrowAddressOutOfBounds:
-	ld hl,Reader_addressOutOfBoundsError
+MappedReader_ThrowAddressOutOfBounds:
+	ld hl,MappedReader_addressOutOfBoundsError
 	call System_ThrowExceptionWithMessage
 	ret
 
 ;
 	SECTION RAM
 
-Reader_instance: Reader
+MappedReader_instance: MappedReader
 
 	ENDS
 
-Reader_outOfMemoryError:
+MappedReader_outOfMemoryError:
 	db "Not enough memory.",13,10,0
 
-Reader_addressOutOfBoundsError:
+MappedReader_addressOutOfBoundsError:
 	db "Address out of bounds.",13,10,0

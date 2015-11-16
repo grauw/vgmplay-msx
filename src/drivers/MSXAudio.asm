@@ -288,7 +288,7 @@ MSXAudio_ProcessY8950DataBlock:
 	call Player_GetReader
 	pop de
 	ld iy,MSXAudio_instance.WriteADPCMData
-	call Reader_ReadAndProcessBlock
+	call MappedReader_ReadAndProcessBlock
 	pop ix
 	ld a,01H
 	ld a,MSXAudio_ADPCM_CONTROL

@@ -223,14 +223,14 @@ Player_SetPosition:
 	push de
 	call Player_GetReader
 	pop de
-	call Reader_SetPosition
+	call MappedReader_SetPosition
 	pop ix
 	ret
 
 ; ix = this
 ; a <- value
 ; Modifies: af, hl
-Player_ReadByte: equ Reader_instance.ReadByte
+Player_ReadByte: equ MappedReader_instance.ReadByte
 
 ; ix = this
 ; de <- value
@@ -285,7 +285,7 @@ Player_SkipDataBlock:
 	push ix
 	call Player_GetReader
 	call Player_ReadDoubleWord
-	call Reader_Skip
+	call MappedReader_Skip
 	pop ix
 	jp Player_ProcessNext
 

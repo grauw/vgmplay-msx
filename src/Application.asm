@@ -7,7 +7,7 @@ Application: MACRO
 	header:
 		dw Header_instance
 	reader:
-		dw Reader_instance
+		dw MappedReader_instance
 	player:
 		dw Player_instance
 	drivers:
@@ -194,7 +194,7 @@ Application_LoadFile: PROC
 	call System_Print
 	call Application_GetReader
 	pop hl
-	call Reader_Constructor
+	call MappedReader_Constructor
 	pop ix
 	ret
 	ENDP
@@ -207,7 +207,7 @@ Application_ReadHeader:
 	ld h,(ix + Application.header + 1)
 	call Application_GetReader
 	ex de,hl
-	call Reader_ReadBlock
+	call MappedReader_ReadBlock
 	pop ix
 	push ix
 	call Application_GetHeader
