@@ -687,6 +687,8 @@ Header_CheckGZIP:
 
 Header_instance: Header
 
+	ENDS
+
 Header_versionLabel:
 	db "VGM version: ",0
 
@@ -824,5 +826,3 @@ Header_noVGMFileError:
 
 Header_gzippedFileError:
 	db "File is gzipped, please extract before playback.",13,10,0
-
-	ENDS

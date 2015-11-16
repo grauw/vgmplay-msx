@@ -429,9 +429,6 @@ Player_UnsupportedCommand:
 
 Player_instance: Player
 
-Player_unsupportedCommandError:
-	db "Unsupported command: ",0
-
 	ALIGN 256
 Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 00H
@@ -704,3 +701,6 @@ Player_scratch:
 	ds 256
 
 	ENDS
+
+Player_unsupportedCommandError:
+	db "Unsupported command: ",0

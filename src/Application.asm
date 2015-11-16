@@ -315,6 +315,11 @@ Application_TerminateWithError:
 
 Application_instance: Application
 
+Application_explainBuffer:
+	ds 64,0
+
+	ENDS
+
 Application_welcome:
 	db "VGMPlay 1.1 by Grauw",13,10,10,0
 
@@ -337,8 +342,3 @@ Application_usageInstructions:
 	db "  /l  Number of playback loops. Default: 2.",13,10
 	db "  /5  50 Hz screen frequency (V9938 and up only).",13,10
 	db "  /b  Enter blackout mode during playback.",13,10,0
-
-Application_explainBuffer:
-	ds 64,0
-
-	ENDS

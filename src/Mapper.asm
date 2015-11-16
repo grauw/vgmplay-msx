@@ -160,6 +160,8 @@ NotExpanded:
 
 Mapper_instance: Mapper
 
+	ENDS
+
 Mapper_noMapperSupportError:
 	db "No mapper support routines available.",13,10,0
 Mapper_slotLabel:
@@ -172,5 +174,3 @@ Mapper_systemLabel:
 	db 13,10,"  System segments: ",0
 Mapper_userLabel:
 	db 13,10,"  User segments: ",0
-
-	ENDS

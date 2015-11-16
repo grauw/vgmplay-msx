@@ -168,6 +168,8 @@ Multiply10AndAdd:
 
 CLI_instance: CLI
 
+	ENDS
+
 CLI_parametersEnvName:
 	db "PARAMETERS",0
 
@@ -176,5 +178,3 @@ CLI_unknownOptionError:
 
 CLI_multiplePathsError:
 	db "Can not specify more than one file path.",13,10,0
-
-	ENDS

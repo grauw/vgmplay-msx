@@ -419,10 +419,10 @@ Reader_ThrowAddressOutOfBounds:
 
 Reader_instance: Reader
 
+	ENDS
+
 Reader_outOfMemoryError:
 	db "Not enough memory.",13,10,0
 
 Reader_addressOutOfBoundsError:
 	db "Address out of bounds.",13,10,0
-
-	ENDS
