@@ -26,7 +26,7 @@ Timer: MACRO ?start, ?stop, ?reset, ?update
 
 ; hl = callback
 ; ix = this
-Timer_Constructor:
+Timer_Construct:
 	ld (ix + Timer.callback),l
 	ld (ix + Timer.callback + 1),h
 	ret

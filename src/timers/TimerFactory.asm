@@ -22,7 +22,7 @@ TimerFactory_CreateVBlankTimer:
 	ld a,(ix + Timer.callback)
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException
-	call VBlankTimer_Constructor
+	call VBlankTimer_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
@@ -35,7 +35,7 @@ TimerFactory_CreateTurboRTimer:
 	ld a,(ix + Timer.callback)
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException
-	call TurboRTimer_Constructor
+	call TurboRTimer_Construct
 	ld e,ixl
 	ld d,ixh
 	ret

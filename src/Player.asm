@@ -74,7 +74,7 @@ Player: MACRO
 ; hl = VGM header
 ; ix = this
 ; ix <- this
-Player_Constructor:
+Player_Construct:
 	ld (ix + Player.reader),e
 	ld (ix + Player.reader + 1),d
 	ld (ix + Player.header),l

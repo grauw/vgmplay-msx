@@ -30,9 +30,9 @@ Application_Main:
 ;	call System_DisableTurbo
 
 	ld ix,Mapper_instance
-	call Mapper_Constructor
+	call Mapper_Construct
 	ld ix,Heap_main
-	call Heap_Constructor
+	call Heap_Construct
 
 	call MemoryTest_Test
 	call HeapTest_Test
@@ -40,7 +40,7 @@ Application_Main:
 	call Player_InitCommandsJumpTable
 
 	ld ix,Application_instance
-	call Application_Constructor
+	call Application_Construct
 	ld de,Application_Abort
 	call Application_SetAbortHandler
 	call Application_EnterMainLoop
@@ -52,9 +52,9 @@ Application_Abort:
 	push af
 	push bc
 	ld ix,Application_instance
-	call Application_Destructor
+	call Application_Destruct
 	ld ix,Mapper_instance
-	call Mapper_Destructor
+	call Mapper_Destruct
 	call Application_ExitBlackout
 	pop bc
 	pop af
@@ -69,27 +69,27 @@ Application_SetAbortHandler:
 
 ; ix = this
 ; ix <- this
-Application_Constructor:
+Application_Construct:
 	push ix
 	call Application_GetCLI
-	call CLI_Constructor
+	call CLI_Construct
 	pop ix
 	push ix
 	call Application_GetDrivers
-	call Drivers_Constructor
+	call Drivers_Construct
 	pop ix
 	ret
 
 ; ix = this
 ; ix <- this
-Application_Destructor:
+Application_Destruct:
 	push ix
 	call Application_GetCLI
-	call CLI_Destructor
+	call CLI_Destruct
 	pop ix
 	push ix
 	call Application_GetDrivers
-	call Drivers_Destructor
+	call Drivers_Destruct
 	pop ix
 	ret
 
@@ -194,7 +194,7 @@ Application_LoadFile: PROC
 	call System_Print
 	call Application_GetReader
 	pop hl
-	call MappedReader_Constructor
+	call MappedReader_Construct
 	pop ix
 	ret
 	ENDP
@@ -211,7 +211,7 @@ Application_ReadHeader:
 	pop ix
 	push ix
 	call Application_GetHeader
-	call Header_Constructor
+	call Header_Construct
 	pop ix
 	ret
 
@@ -253,7 +253,7 @@ Application_Play:
 	call Application_GetPlayer
 	pop bc
 	pop de
-	call Player_Constructor
+	call Player_Construct
 	ex (sp),ix
 	pop iy
 	push ix

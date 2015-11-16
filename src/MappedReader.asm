@@ -40,7 +40,7 @@ MappedReader: MACRO
 ; hl = filename
 ; ix = this
 ; ix <- this
-MappedReader_Constructor:
+MappedReader_Construct:
 	call MappedReader_LoadFile
 	ret
 

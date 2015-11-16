@@ -127,7 +127,7 @@ Header: MACRO
 
 ; ix = this
 ; ix <- this
-Header_Constructor:
+Header_Construct:
 	call Header_CheckGZIP
 	ld hl,Header_gzippedFileError
 	jp z,Application_TerminateWithError

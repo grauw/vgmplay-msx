@@ -43,7 +43,7 @@ MSXMusic_TryCreate:
 	ld de,0
 	ret nc
 	ld ix,MSXMusic_instance
-	call MSXMusic_Constructor
+	call MSXMusic_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
@@ -51,7 +51,7 @@ MSXMusic_TryCreate:
 ; a = slot
 ; b = internal
 ; ix = this
-MSXMusic_Constructor:
+MSXMusic_Construct:
 	ld (ix + MSXMusic.slot),a
 	ld (ix + MSXMusic.internal),b
 	call MSXMusic_Enable
@@ -59,7 +59,7 @@ MSXMusic_Constructor:
 	ret
 
 ; ix = this
-MSXMusic_Destructor:
+MSXMusic_Destruct:
 	call MSXMusic_Mute
 	call MSXMusic_Disable
 	ret

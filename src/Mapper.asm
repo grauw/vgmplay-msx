@@ -46,7 +46,7 @@ Mapper: MACRO
 
 ; ix = this
 ; ix <- this
-Mapper_Constructor:
+Mapper_Construct:
 	ld a,(HOKVLD)
 	bit 0,a
 	ld hl,Mapper_noMapperSupportError
@@ -80,7 +80,7 @@ Mapper_Constructor:
 
 ; ix = this
 ; ix <- this
-Mapper_Destructor:
+Mapper_Destruct:
 	ld a,(ix + Mapper.primaryMapperSlot)
 	ld h,00H
 	call Memory_SetSlot

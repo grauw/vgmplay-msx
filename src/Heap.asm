@@ -29,7 +29,7 @@ HeapBlock: MACRO
 	ENDM
 
 ; ix = this
-Heap_Constructor:
+Heap_Construct:
 	ld l,(ix + Heap.start)
 	ld h,(ix + Heap.start + 1)
 	ld c,(ix + Heap.capacity)

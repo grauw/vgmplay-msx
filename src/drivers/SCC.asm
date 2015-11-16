@@ -96,21 +96,21 @@ SCC_TryCreate:
 	ld de,0
 	ret nc
 	ld ix,SCC_instance
-	call SCC_Constructor
+	call SCC_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; a = slot
 ; ix = this
-SCC_Constructor:
+SCC_Construct:
 	call SCC_SetSlot
 	call SCC_SelectBank
 	call SCC_Reset
 	ret
 
 ; ix = this
-SCC_Destructor:
+SCC_Destruct:
 	call SCC_Reset
 	ret
 

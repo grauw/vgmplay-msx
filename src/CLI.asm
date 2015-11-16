@@ -17,7 +17,7 @@ CLI: MACRO
 
 ; ix = this
 ; ix <- this
-CLI_Constructor:
+CLI_Construct:
 	call CLI_GetBuffer
 	ld hl,CLI_parametersEnvName
 	ld b,255
@@ -27,7 +27,7 @@ CLI_Constructor:
 
 ; ix = this
 ; ix <- this
-CLI_Destructor:
+CLI_Destruct:
 	ret
 
 ; ix = this

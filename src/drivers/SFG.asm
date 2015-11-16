@@ -71,20 +71,20 @@ SFG_TryCreate:
 	ld de,0
 	ret nc
 	ld ix,SFG_instance
-	call SFG_Constructor
+	call SFG_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; a = slot
 ; ix = this
-SFG_Constructor:
+SFG_Construct:
 	call SFG_SetSlot
 	call SFG_Reset
 	ret
 
 ; ix = this
-SFG_Destructor:
+SFG_Destruct:
 	call SFG_Reset
 	ret
 

@@ -41,18 +41,18 @@ PSG: MACRO
 ; de <- instance or null
 PSG_TryCreate:
 	ld ix,PSG_instance
-	call PSG_Constructor
+	call PSG_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; ix = this
-PSG_Constructor:
+PSG_Construct:
 	call PSG_Reset
 	ret
 
 ; ix = this
-PSG_Destructor:
+PSG_Destruct:
 	call PSG_Reset
 	ret
 

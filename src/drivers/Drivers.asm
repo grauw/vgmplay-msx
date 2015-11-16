@@ -33,7 +33,7 @@ Drivers: MACRO
 
 ; ix = this
 ; ix <- this
-Drivers_Constructor:
+Drivers_Construct:
 	push ix
 	call PSG_TryCreate
 	pop ix
@@ -78,38 +78,38 @@ Drivers_Constructor:
 
 ; ix = this
 ; ix <- this
-Drivers_Destructor:
+Drivers_Destruct:
 	push ix
 	call Drivers_GetPSG
-	call nz,PSG_Destructor
+	call nz,PSG_Destruct
 	pop ix
 	push ix
 	call Drivers_GetSFG
-	call nz,SFG_Destructor
+	call nz,SFG_Destruct
 	pop ix
 	push ix
 	call Drivers_GetMSXMusic
-	call nz,MSXMusic_Destructor
+	call nz,MSXMusic_Destruct
 	pop ix
 	push ix
 	call Drivers_GetMSXAudio
-	call nz,MSXAudio_Destructor
+	call nz,MSXAudio_Destruct
 	pop ix
 	push ix
 	call Drivers_GetMoonSound
-	call nz,MoonSound_Destructor
+	call nz,MoonSound_Destruct
 	pop ix
 	push ix
 	call Drivers_GetSCC
-	call nz,SCC_Destructor
+	call nz,SCC_Destruct
 	pop ix
 	push ix
 	call Drivers_GetFranky
-	call nz,Franky_Destructor
+	call nz,Franky_Destruct
 	pop ix
 	push ix
 	call Drivers_GetMMM
-	call nz,MMM_Destructor
+	call nz,MMM_Destruct
 	pop ix
 	ret
 

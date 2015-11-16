@@ -24,20 +24,20 @@ Franky: MACRO
 ; de <- instance or null
 Franky_TryCreate:
 	ld ix,Franky_instance
-	call Franky_Constructor
+	call Franky_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; ix = this
-Franky_Constructor:
+Franky_Construct:
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset
 	ret
 
 ; ix = this
-Franky_Destructor:
+Franky_Destruct:
 	call Franky_Reset
 	ret
 

@@ -35,21 +35,21 @@ MMM_TryCreate:
 	ld de,0
 	ret nc
 	ld ix,MMM_instance
-	call MMM_Constructor
+	call MMM_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; a = slot
 ; ix = this
-MMM_Constructor:
+MMM_Construct:
 	call MMM_SetSlot
 	call MMM_Enable
 	call MMM_Reset
 	ret
 
 ; ix = this
-MMM_Destructor:
+MMM_Destruct:
 	call MMM_Reset
 	call MMM_Disable
 	ret

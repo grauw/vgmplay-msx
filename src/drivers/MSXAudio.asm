@@ -173,18 +173,18 @@ MSXAudio_TryCreate:
 	ld de,0
 	ret nc
 	ld ix,MSXAudio_instance
-	call MSXAudio_Constructor
+	call MSXAudio_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; ix = this
-MSXAudio_Constructor:
+MSXAudio_Construct:
 	call MSXAudio_Reset
 	ret
 
 ; ix = this
-MSXAudio_Destructor:
+MSXAudio_Destruct:
 	call MSXAudio_Mute
 	call MSXAudio_Reset
 	ret

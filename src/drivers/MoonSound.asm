@@ -110,18 +110,18 @@ MoonSound_TryCreate:
 	ld de,0
 	ret nc
 	ld ix,MoonSound_instance
-	call MoonSound_Constructor
+	call MoonSound_Construct
 	ld e,ixl
 	ld d,ixh
 	ret
 
 ; ix = this
-MoonSound_Constructor:
+MoonSound_Construct:
 	call MoonSound_Reset
 	ret
 
 ; ix = this
-MoonSound_Destructor:
+MoonSound_Destruct:
 	call MoonSound_Reset
 	ret
 
