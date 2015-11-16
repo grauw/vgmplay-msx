@@ -345,8 +345,6 @@ MSXAudio_Detect:
 	ret
 
 ;
-; Workarea definition
-;
 	SECTION RAM
 
 MSXAudio_instance: MSXAudio

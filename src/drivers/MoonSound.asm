@@ -305,8 +305,6 @@ MoonSound_Detect:
 	ret
 
 ;
-; Workarea definition
-;
 	SECTION RAM
 
 MoonSound_instance: MoonSound

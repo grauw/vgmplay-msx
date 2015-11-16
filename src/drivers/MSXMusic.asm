@@ -200,8 +200,6 @@ MSXMusic_externalId:
 	db "OPLL"
 
 ;
-; Workarea definition
-;
 	SECTION RAM
 
 MSXMusic_instance: MSXMusic

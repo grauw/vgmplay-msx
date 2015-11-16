@@ -80,8 +80,6 @@ Franky_Reset:
 	ret
 
 ;
-; Workarea definition
-;
 	SECTION RAM
 
 Franky_instance: Franky

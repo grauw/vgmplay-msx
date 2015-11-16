@@ -244,8 +244,6 @@ Found:
 	ENDP
 
 ;
-; Workarea definition
-;
 	SECTION PAGE1
 
 SCC_instance: SCC

@@ -107,8 +107,6 @@ Loop:
 	ENDP
 
 ;
-; Workarea definition
-;
 	SECTION RAM
 
 PSG_instance: PSG

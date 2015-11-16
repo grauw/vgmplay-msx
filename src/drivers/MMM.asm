@@ -173,8 +173,6 @@ TestValue:
 	ENDP
 
 ;
-; Workarea definition
-;
 	SECTION RAM
 
 MMM_instance: MMM

@@ -182,8 +182,6 @@ SFG_id:
 	db "MCHFM0"
 
 ;
-; Workarea definition
-;
 	SECTION PAGE1
 
 SFG_instance: SFG
