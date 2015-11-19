@@ -33,7 +33,6 @@ COM_Main:
 	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "HeapTest.asm"
-	INCLUDE "Class.asm"
 	INCLUDE "Application.asm"
 	INCLUDE "CLI.asm"
 	INCLUDE "Header.asm"
