@@ -93,7 +93,7 @@ SFG_Destruct:
 SFG_Install:
 	ld hl,SFG.ProcessYM2151Command
 	ld a,54H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

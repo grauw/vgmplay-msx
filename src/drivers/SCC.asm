@@ -119,7 +119,7 @@ SCC_Destruct:
 SCC_Install:
 	ld hl,SCC.ProcessK051649Command
 	ld a,0D2H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

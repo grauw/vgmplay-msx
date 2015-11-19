@@ -59,7 +59,7 @@ MMM_Destruct:
 MMM_Install:
 	ld hl,MMM.ProcessSN76489Command
 	ld a,50H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

@@ -46,7 +46,7 @@ Franky_Destruct:
 Franky_Install:
 	ld hl,Franky.ProcessSN76489Command
 	ld a,50H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; a = value

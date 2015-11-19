@@ -194,13 +194,13 @@ MSXAudio_Destruct:
 MSXAudio_Install:
 	ld hl,MSXAudio.ProcessY8950Command
 	ld a,5CH
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ld de,MSXAudio_ProcessY8950DataBlock
 	ld a,88H
-	call Player_InstallDataBlockHandler
+	call Player_InstallDataBlockHandler_IY
 	ld hl,MSXAudio.ProcessYM3526Command
 	ld a,5BH
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

@@ -61,7 +61,7 @@ PSG_Destruct:
 PSG_Install:
 	ld hl,PSG.ProcessAY8910Command
 	ld a,0A0H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

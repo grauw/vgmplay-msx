@@ -130,19 +130,19 @@ MoonSound_Destruct:
 MoonSound_Install:
 	ld hl,MoonSound.ProcessYMF278BCommand
 	ld a,0D0H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ld hl,MoonSound.ProcessYMF262Port0Command
 	ld a,5EH
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ld hl,MoonSound.ProcessYMF262Port1Command
 	ld a,5FH
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ld hl,MoonSound.ProcessYM3812Command
 	ld a,5AH
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ld hl,MoonSound.ProcessYM3526Command
 	ld a,5BH
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

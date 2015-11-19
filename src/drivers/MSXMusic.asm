@@ -69,7 +69,7 @@ MSXMusic_Destruct:
 MSXMusic_Install:
 	ld hl,MSXMusic.ProcessYM2413Command
 	ld a,51H
-	call Player_InstallCommandHandler_IXOffset
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

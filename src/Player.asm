@@ -145,7 +145,7 @@ LSBExtractionLoop:
 ; a = command number
 ; de = handler address
 ; iy = this
-Player_InstallCommandHandler:
+Player_InstallCommandHandler_IY:
 	ld l,a
 	ld h,Player_commandsJumpTable >> 8
 	ld (hl),e
@@ -157,18 +157,18 @@ Player_InstallCommandHandler:
 ; ix = handler object
 ; hl = handler offset
 ; iy = this
-Player_InstallCommandHandler_IXOffset:
+Player_InstallCommandHandler_IY_IXOffset:
 	ld e,ixl
 	ld d,ixh
 	add hl,de
 	ex de,hl
-	call Player_InstallCommandHandler
+	call Player_InstallCommandHandler_IY
 	ret
 
 ; a = command number
 ; de = handler address
 ; iy = this
-Player_InstallDataBlockHandler:
+Player_InstallDataBlockHandler_IY:
 	ld l,a
 	ld h,Player_dataBlockJumpTable >> 8
 	ld (hl),e
