@@ -29,6 +29,7 @@ MSXMusic: MACRO
 		ret
 
 	; ix = player
+	; iy = reader
 	ProcessYM2413Command:
 		call Player_ReadWord
 		call SafeWriteRegister

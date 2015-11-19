@@ -58,8 +58,9 @@ MoonSound: MACRO
 		ret
 
 	; ix = player
+	; iy = reader
 	ProcessYMF278BCommand: PROC
-		call Player_ReadByte
+		call MappedReader_Read_IY
 		cp 1
 		jr c,FM1
 		jp z,FM2
@@ -78,24 +79,28 @@ MoonSound: MACRO
 		ENDP
 
 	; ix = player
+	; iy = reader
 	ProcessYMF262Port0Command:
 		call Player_ReadWord
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
 	; ix = player
+	; iy = reader
 	ProcessYMF262Port1Command:
 		call Player_ReadWord
 		call SafeWriteRegister2
 		jp Player_ProcessNext
 
 	; ix = player
+	; iy = reader
 	ProcessYM3812Command:
 		call Player_ReadWord
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
 	; ix = player
+	; iy = reader
 	ProcessYM3526Command:
 		call Player_ReadWord
 		call SafeWriteRegister

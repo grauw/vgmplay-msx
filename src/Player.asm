@@ -211,7 +211,7 @@ Loop:
 ; ix = this
 ; iy = reader
 Player_ProcessNext:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 	ld l,a
 	ld h,Player_commandsJumpTable >> 8
 	ld e,(hl)
@@ -241,16 +241,11 @@ Player_SetPosition:
 
 ; ix = this
 ; iy = reader
-; a <- value
-Player_ReadByte: equ MappedReader_Read_IY
-
-; ix = this
-; iy = reader
 ; de <- value
 Player_ReadWord:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 	ld e,a
-	call Player_ReadByte
+	call MappedReader_Read_IY
 	ld d,a
 	ret
 
@@ -284,10 +279,10 @@ Player_CheckExitCondition:
 ; ix = this
 ; iy = reader
 Player_DataBlock:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 	cp 66H
 	jp nz,Player_UnsupportedCommand
-	call Player_ReadByte
+	call MappedReader_Read_IY
 	ld l,a
 	ld h,Player_dataBlockJumpTable >> 8
 	ld e,(hl)
@@ -329,7 +324,7 @@ NoLoop:
 ; ix = this
 ; iy = reader
 Player_SetWait: PROC
-	call Player_ReadByte
+	call MappedReader_Read_IY
 	cp 62H
 	jp z,Set60th
 	cp 63H
@@ -414,21 +409,21 @@ Player_WaitNSamples:
 ; ix = this
 ; iy = reader
 Player_Skip11:
-	call Player_ReadByte
-	call Player_ReadByte
-	call Player_ReadByte
-	call Player_ReadByte
-	call Player_ReadByte
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
 Player_Skip6:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 Player_Skip5:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 Player_Skip4:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 Player_Skip3:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 Player_Skip2:
-	call Player_ReadByte
+	call MappedReader_Read_IY
 Player_Skip1:
 	jp Player_ProcessNext
 

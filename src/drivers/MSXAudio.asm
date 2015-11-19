@@ -153,12 +153,14 @@ MSXAudio: MACRO
 		ENDP
 
 	; ix = player
+	; iy = reader
 	ProcessY8950Command:
 		call Player_ReadWord
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
 	; ix = player
+	; iy = reader
 	ProcessYM3526Command:
 		call Player_ReadWord
 		call SafeWriteRegister

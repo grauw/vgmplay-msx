@@ -57,6 +57,7 @@ SFG: MACRO
 		jr WriteRegister
 
 	; ix = player
+	; iy = reader
 	ProcessYM2151Command:
 		call Player_ReadWord
 		call SafeWriteRegister

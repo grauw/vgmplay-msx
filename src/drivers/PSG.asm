@@ -31,6 +31,7 @@ PSG: MACRO
 		jr WriteRegister
 
 	; ix = player
+	; iy = reader
 	ProcessAY8910Command:
 		call Player_ReadWord
 		call SafeWriteRegister

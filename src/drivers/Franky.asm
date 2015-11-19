@@ -14,8 +14,9 @@ Franky: MACRO
 		ret
 
 	; ix = player
+	; iy = reader
 	ProcessSN76489Command:
-		call Player_ReadByte
+		call MappedReader_Read_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 	ENDM
