@@ -3,9 +3,9 @@
 ;
 
 ; dehl = GD3 offset
-; ix = reader
+; iy = reader
 GD3_ShowTagInfoEnglish:
-	call MappedReader_SetPosition
+	call MappedReader_SetPosition_IY
 	call GD3_CheckVersion
 	ret nz
 	ld hl,GD3_name
@@ -28,47 +28,47 @@ GD3_ShowTagInfoEnglish:
 	call GD3_PrintTag
 	ret
 
-; ix = reader
+; iy = reader
 ; f <- z: tag recognised
 GD3_CheckVersion:
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp "G"
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp "d"
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp "3"
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp " "
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp 0
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp 1
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp 0
 	ret nz
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	cp 0
-	call MappedReader_Read
-	call MappedReader_Read
-	call MappedReader_Read
-	call MappedReader_Read
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
+	call MappedReader_Read_IY
 	xor a
 	ret
 
 ; hl = field name
-; ix = reader
+; iy = reader
 ; Modifies: af, de, hl
 GD3_PrintTag: PROC
 	push hl
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	ld e,a
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	ld d,a
 	pop hl
 	or e
@@ -78,9 +78,9 @@ GD3_PrintTag: PROC
 	call System_PrintCrLf
 	ret
 Loop:
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	ld e,a
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	ld d,a
 	or e
 	ret z
@@ -103,12 +103,12 @@ Newline:
 	ENDP
 
 ; hl = field name
-; ix = reader
+; iy = reader
 ; Modifies: af, de, hl
 GD3_SkipTag:
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	ld e,a
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	or e
 	jp nz,GD3_SkipTag
 	ret

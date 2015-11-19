@@ -136,6 +136,16 @@ Application_GetReader:
 	ret
 
 ; ix = this
+; de <- reader
+; iy <- reader
+Application_GetReaderIY:
+	ld e,(ix + Application.reader)
+	ld d,(ix + Application.reader + 1)
+	ld iyl,e
+	ld iyh,d
+	ret
+
+; ix = this
 ; de <- VGM player
 ; ix <- VGM player
 Application_GetPlayer:
@@ -217,14 +227,12 @@ Application_LoadFile: PROC
 
 ; ix = this
 Application_ReadHeader:
-	push ix
 	ld bc,256
 	ld l,(ix + Application.header)
 	ld h,(ix + Application.header + 1)
-	call Application_GetReader
+	call Application_GetReaderIY
 	ex de,hl
-	call MappedReader_ReadBlock
-	pop ix
+	call MappedReader_ReadBlock_IY
 	push ix
 	call Application_GetHeader
 	call Header_Construct
@@ -237,13 +245,11 @@ Application_ShowInfo:
 	call Application_GetHeader
 	call Header_GetGD3Offset
 	pop ix
-	push ix
 	push de
-	call Application_GetReader
+	call Application_GetReaderIY
 	pop de
 	call nz,System_PrintCrLf
 	call nz,GD3_ShowTagInfoEnglish
-	pop ix
 	push ix
 	call Application_GetHeader
 	call System_PrintCrLf

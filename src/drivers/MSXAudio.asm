@@ -286,13 +286,8 @@ MSXAudio_ProcessY8950DataBlock:
 	or d
 	ret z
 	push ix
-	push iy
-	push de
-	call Player_GetReader
-	pop de
-	ld iy,MSXAudio_instance.WriteADPCMData
-	call MappedReader_ReadAndProcessBlock
-	pop iy
+	ld ix,MSXAudio_instance.WriteADPCMData
+	call MappedReader_ReadAndProcessBlock_IY
 	pop ix
 	ld a,01H
 	ld a,MSXAudio_ADPCM_CONTROL

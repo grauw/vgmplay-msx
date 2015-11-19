@@ -89,16 +89,6 @@ Player_Construct:
 	ret
 
 ; ix = this
-; de <- VGM data reader
-; ix <- VGM data reader
-Player_GetReader:
-	ld e,(ix + Player.reader)
-	ld d,(ix + Player.reader + 1)
-	ld ixl,e
-	ld ixh,d
-	ret
-
-; ix = this
 ; de <- reader
 ; iy <- reader
 Player_GetReaderIY:
@@ -221,22 +211,13 @@ Player_ProcessNext:
 	jp hl
 
 ; ix = this
+; iy = reader
 Player_ResetPosition:
 	push ix
 	call Player_GetHeader
 	call Header_GetDataOffset
 	pop ix
-	call Player_SetPosition
-	ret
-
-; ix = this
-Player_SetPosition:
-	push ix
-	push de
-	call Player_GetReader
-	pop de
-	call MappedReader_SetPosition
-	pop ix
+	call MappedReader_SetPosition_IY
 	ret
 
 ; f <- nz: exit condition occurred
@@ -274,11 +255,8 @@ Player_DataBlock:
 ; ix = this
 ; iy = reader
 Player_SkipDataBlock:
-	push ix
 	call MappedReader_ReadDoubleWord_IY
-	call Player_GetReader
-	call MappedReader_Skip
-	pop ix
+	call MappedReader_Skip_IY
 	jp Player_ProcessNext
 
 ; ix = this
@@ -289,7 +267,7 @@ Player_EndOfSoundData: PROC
 	call Header_GetLoopOffset
 	pop ix
 	jr z,NoLoop
-	call Player_SetPosition
+	call MappedReader_SetPosition_IY
 	inc (ix + Player.loopCount)
 	ld a,(ix + Player.maxLoops)
 	and a

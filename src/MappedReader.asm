@@ -25,54 +25,55 @@ MappedReader: MACRO
 MappedReader_Construct:
 	ld de,0
 	ld hl,0
-	call MappedReader_SetPosition
+	push ix
+	ex (sp),iy
+	call MappedReader_SetPosition_IY
+	ex (sp),iy
+	pop ix
 	ret
 
-; ix = this
+; iy = this
 ; de <- buffer
 ; ix <- buffer
-MappedReader_GetBuffer:
-	ld e,(ix + MappedReader.buffer)
-	ld d,(ix + MappedReader.buffer + 1)
+MappedReader_GetBuffer_IY:
+	ld e,(iy + MappedReader.buffer)
+	ld d,(iy + MappedReader.buffer + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
 
 ; ehl = address
-; ix = this
-MappedReader_SetPosition:
+; iy = this
+MappedReader_SetPosition_IY:
 	push ix
 	ld a,e
-	call MappedReader_GetBuffer
+	call MappedReader_GetBuffer_IY
 	ld e,a
 	call MappedBuffer_IsValidPosition
-	pop ix
 	jp nc,MappedReader_ThrowAddressOutOfBounds
 	ld a,h
 	and 3FH
 	or 80H
-	ld (ix + MappedReader.position),l
-	ld (ix + MappedReader.position + 1),a
+	ld (iy + MappedReader.position),l
+	ld (iy + MappedReader.position + 1),a
 	ld a,h
 	rla
 	rl e
 	rla
 	rl e
-	ld (ix + MappedReader.positionSegmentIndex),e
+	ld (iy + MappedReader.positionSegmentIndex),e
 	ld a,e
-	push ix
-	call MappedReader_GetBuffer
 	ld h,MappedReader_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop ix
 	ret
 
-; ix = this
+; iy = this
 ; dehl <- address
-MappedReader_GetPosition:
-	ld l,(ix + MappedReader.position)
-	ld h,(ix + MappedReader.position + 1)
-	ld a,(ix + MappedReader.positionSegmentIndex)
+MappedReader_GetPosition_IY:
+	ld l,(iy + MappedReader.position)
+	ld h,(iy + MappedReader.position + 1)
+	ld a,(iy + MappedReader.positionSegmentIndex)
 	rlc h
 	rlc h
 	rrca
@@ -85,14 +86,14 @@ MappedReader_GetPosition:
 	ret
 
 ; ehl = nr of bytes to skip
-; ix = this
-MappedReader_Skip:
+; iy = this
+MappedReader_Skip_IY:
 	ld a,d
 	and a
 	jp nz,MappedReader_ThrowAddressOutOfBounds
 	push de
 	push hl
-	call MappedReader_GetPosition
+	call MappedReader_GetPosition_IY
 	pop bc
 	add hl,bc
 	pop bc
@@ -100,21 +101,21 @@ MappedReader_Skip:
 	adc hl,bc
 	ex de,hl
 	jp c,MappedReader_ThrowAddressOutOfBounds
-	call MappedReader_SetPosition
+	call MappedReader_SetPosition_IY
 	ret
 
 ; bc = nr of bytes to skip
-; ix = this
+; iy = this
 ; Modifies: af, bc, de, hl
-MappedReader_SkipBC:
-	call MappedReader_GetPosition
+MappedReader_SkipBC_IY:
+	call MappedReader_GetPosition_IY
 	add hl,bc
 	ex de,hl
 	ld bc,0
 	adc hl,bc
 	ex de,hl
 	jp c,MappedReader_ThrowAddressOutOfBounds
-	call MappedReader_SetPosition
+	call MappedReader_SetPosition_IY
 	ret
 
 ; iy = this
@@ -133,11 +134,7 @@ Continue:
 	ret
 FinishBlock:
 	ld (iy + MappedReader.position + 1),MappedReader_BASE_ADDRESS >> 8
-	push iy
-	ex (sp),ix
-	call MappedReader_SelectNextSegment
-	ex (sp),ix
-	pop iy
+	call MappedReader_SelectNextSegment_IY
 	pop af
 	ret
 	ENDP
@@ -164,45 +161,14 @@ MappedReader_ReadDoubleWord_IY:
 	ld d,a
 	ret
 
-; Reads a byte from the current position.
-; No bounds checks are performed.
-;
-; ix = this
-; a <- value
-; Modifies: af, hl
-MappedReader_Read:
-	ld l,(ix + MappedReader.position)
-	ld h,(ix + MappedReader.position + 1)
-	ld a,(hl)
-	inc hl
-	ld (ix + MappedReader.position),l
-	ld (ix + MappedReader.position + 1),h
-	bit 6,h
-	ret z
-	res 6,h
-	ld (ix + MappedReader.position + 1),h
-	push af
-	ld a,(ix + MappedReader.positionSegmentIndex)
-	inc a
-	ld (ix + MappedReader.positionSegmentIndex),a
-	push ix
-	push de
-	call MappedReader_GetBuffer
-	ld h,MappedReader_BASE_ADDRESS >> 8
-	call MappedBuffer_SelectSegment
-	pop de
-	pop ix
-	pop af
-	ret
-
 ; de = destination address
 ; bc = bytes count
-; ix = this
-MappedReader_ReadBlock: PROC
+; iy = this
+MappedReader_ReadBlock_IY: PROC
 Loop:
 	push bc
 	push de
-	call MappedReader_Read
+	call MappedReader_Read_IY
 	pop de
 	pop bc
 	ld (de),a
@@ -215,14 +181,14 @@ Loop:
 	ENDP
 
 ; ehl = bytes count
-; iy = processing callback (hl = source, bc = bytes)
-; ix = this
-MappedReader_ReadAndProcessBlock: PROC
+; ix = processing callback (hl = source, bc = bytes)
+; iy = this
+MappedReader_ReadAndProcessBlock_IY: PROC
 Loop:
 	push hl
 	ld hl,MappedReader_BASE_ADDRESS + 4000H
-	ld c,(ix + MappedReader.position)
-	ld b,(ix + MappedReader.position + 1)
+	ld c,(iy + MappedReader.position)
+	ld b,(iy + MappedReader.position + 1)
 	and a
 	sbc hl,bc
 	ex (sp),hl
@@ -245,27 +211,27 @@ FinalLap:
 	ld c,l
 	ld b,h
 	jp Process
-; bc = bytes, iy = processing callback, ix = this
+; bc = bytes, ix = processing callback, iy = this
 Process:
-	ld l,(ix + MappedReader.position)
-	ld h,(ix + MappedReader.position + 1)
+	ld l,(iy + MappedReader.position)
+	ld h,(iy + MappedReader.position + 1)
 	push bc
-	call CallIY
+	call CallIX
 	pop bc
-	call MappedReader_SkipBC
+	call MappedReader_SkipBC_IY
 	ret
-CallIY:
-	jp iy
+CallIX:
+	jp ix
 	ENDP
 
-; ix = this
-MappedReader_SelectNextSegment:
-	ld a,(ix + MappedReader.positionSegmentIndex)
+; iy = this
+MappedReader_SelectNextSegment_IY:
+	ld a,(iy + MappedReader.positionSegmentIndex)
 	inc a
-	ld (ix + MappedReader.positionSegmentIndex),a
+	ld (iy + MappedReader.positionSegmentIndex),a
 	push ix
 	push de
-	call MappedReader_GetBuffer
+	call MappedReader_GetBuffer_IY
 	ld h,MappedReader_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop de
