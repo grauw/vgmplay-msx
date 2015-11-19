@@ -10,7 +10,7 @@ MappedReader: MACRO
 		db 0
 	; a <- value
 	; Modifies: af, hl
-	ReadByte:
+	Read:
 		ld hl,BASE_ADDRESS
 	position: equ $ - 2
 		ld a,(hl)
@@ -136,7 +136,7 @@ MappedReader_SkipBC:
 ; ix = this
 ; a <- value
 ; Modifies: af, hl
-MappedReader_ReadByte:
+MappedReader_Read:
 	ld l,(ix + MappedReader.position)
 	ld h,(ix + MappedReader.position + 1)
 	ld a,(hl)
@@ -168,7 +168,7 @@ MappedReader_ReadBlock: PROC
 Loop:
 	push bc
 	push de
-	call MappedReader_ReadByte
+	call MappedReader_Read
 	pop de
 	pop bc
 	ld (de),a

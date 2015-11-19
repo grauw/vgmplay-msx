@@ -230,7 +230,7 @@ Player_SetPosition:
 ; ix = this
 ; a <- value
 ; Modifies: af, hl
-Player_ReadByte: equ MappedReader_instance.ReadByte
+Player_ReadByte: equ MappedReader_instance.Read
 
 ; ix = this
 ; de <- value
