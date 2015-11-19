@@ -142,6 +142,28 @@ FinishBlock:
 	ret
 	ENDP
 
+; iy = this
+; de <- value
+MappedReader_ReadWord_IY:
+	call MappedReader_Read_IY
+	ld e,a
+	call MappedReader_Read_IY
+	ld d,a
+	ret
+
+; iy = this
+; dehl <- value
+MappedReader_ReadDoubleWord_IY:
+	call MappedReader_Read_IY
+	ld l,a
+	call MappedReader_Read_IY
+	ld h,a
+	call MappedReader_Read_IY
+	ld e,a
+	call MappedReader_Read_IY
+	ld d,a
+	ret
+
 ; Reads a byte from the current position.
 ; No bounds checks are performed.
 ;

@@ -54,35 +54,35 @@ SCC: MACRO
 		cp 5
 		jr c,WaveformSCCPlus
 		jr z,Deformation
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		jp Player_ProcessNext
 	Waveform:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		ld a,e
 		call WriteRegister
 		jp Player_ProcessNext
 	Frequency:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		ld a,SCC_FREQUENCY
 		add a,e
 		call WriteRegister
 		jp Player_ProcessNext
 	Amplitude:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		ld a,SCC_AMPLITUDE
 		add a,e
 		call WriteRegister
 		jp Player_ProcessNext
 	Mixer:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		ld a,SCC_MIXER
 		call WriteRegister
 		jp Player_ProcessNext
 	WaveformSCCPlus:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		jp Player_ProcessNext
 	Deformation:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		ld a,SCC_DEFORMATION
 		call WriteRegister
 		jp Player_ProcessNext

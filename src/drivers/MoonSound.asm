@@ -65,15 +65,15 @@ MoonSound: MACRO
 		jr c,FM1
 		jp z,FM2
 	Wave:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegisterWave
 		jp Player_ProcessNext
 	FM1:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 	FM2:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister2
 		jp Player_ProcessNext
 		ENDP
@@ -81,28 +81,28 @@ MoonSound: MACRO
 	; ix = player
 	; iy = reader
 	ProcessYMF262Port0Command:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
 	; ix = player
 	; iy = reader
 	ProcessYMF262Port1Command:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister2
 		jp Player_ProcessNext
 
 	; ix = player
 	; iy = reader
 	ProcessYM3812Command:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
 	; ix = player
 	; iy = reader
 	ProcessYM3526Command:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 	ENDM

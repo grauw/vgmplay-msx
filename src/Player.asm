@@ -239,26 +239,6 @@ Player_SetPosition:
 	pop ix
 	ret
 
-; ix = this
-; iy = reader
-; de <- value
-Player_ReadWord:
-	call MappedReader_Read_IY
-	ld e,a
-	call MappedReader_Read_IY
-	ld d,a
-	ret
-
-; ix = this
-; iy = reader
-; dehl <- value
-Player_ReadDoubleWord:
-	call Player_ReadWord
-	push de
-	call Player_ReadWord
-	pop hl
-	ret
-
 ; f <- nz: exit condition occurred
 Player_CheckExitCondition:
 	bit 0,(ix + Player.ended)
@@ -295,7 +275,7 @@ Player_DataBlock:
 ; iy = reader
 Player_SkipDataBlock:
 	push ix
-	call Player_ReadDoubleWord
+	call MappedReader_ReadDoubleWord_IY
 	call Player_GetReader
 	call MappedReader_Skip
 	pop ix
@@ -331,12 +311,12 @@ Player_SetWait: PROC
 	jp z,Set50th
 	call System_ThrowException
 Set60th:
-	call Player_ReadWord
+	call MappedReader_ReadWord_IY
 	ld (ix + Player.wait60th),e
 	ld (ix + Player.wait60th + 1),d
 	jp Player_ProcessNext
 Set50th:
-	call Player_ReadWord
+	call MappedReader_ReadWord_IY
 	ld (ix + Player.wait50th),e
 	ld (ix + Player.wait50th + 1),d
 	jp Player_ProcessNext
@@ -403,7 +383,7 @@ Player_Wait882Samples:
 	ld d,(ix + Player.wait50th + 1)
 	jp Player_instance.Wait
 Player_WaitNSamples:
-	call Player_ReadWord
+	call MappedReader_ReadWord_IY
 	jp Player_instance.Wait
 
 ; ix = this

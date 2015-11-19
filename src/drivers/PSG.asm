@@ -33,7 +33,7 @@ PSG: MACRO
 	; ix = player
 	; iy = reader
 	ProcessAY8910Command:
-		call Player_ReadWord
+		call MappedReader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 	ENDM
