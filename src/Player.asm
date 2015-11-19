@@ -109,8 +109,8 @@ Player_GetHeader:
 	ret
 
 ; ix = this
-; de <- VGM header
-; ix <- VGM header
+; de <- timer
+; ix <- timer
 Player_GetTimer:
 	ld e,(ix + Player.timer)
 	ld d,(ix + Player.timer + 1)
