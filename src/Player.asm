@@ -81,7 +81,10 @@ Player_Construct:
 	ld (ix + Player.header + 1),h
 	ld (ix + Player.maxLoops),c
 	push ix
-	ld hl,Player_instance.Update
+	ld e,ixl
+	ld d,ixh
+	ld hl,Player.Update
+	add hl,de
 	call TimerFactory_CreateTimer
 	pop ix
 	ld (ix + Player.timer),e
