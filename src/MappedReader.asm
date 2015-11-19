@@ -4,33 +4,19 @@
 MappedReader_BASE_ADDRESS: equ 8000H
 
 MappedReader: MACRO
-	this:
+	; iy = this
+	; a <- value
+	Read_IY:
+		ld a,(0)
+	position: equ $ - 2
+		inc (iy + MappedReader.position)
+		ret nz
+		jp MappedReader_Read_IY.Continue
+
 	buffer:
 		dw MappedBuffer_instance
 	positionSegmentIndex:
 		db 0
-	; a <- value
-	; Modifies: af, hl
-	Read:
-		ld hl,MappedReader_BASE_ADDRESS
-	position: equ $ - 2
-		ld a,(hl)
-		inc l
-		ld (position),hl
-		ret nz
-		inc h
-		ld (position),hl
-		bit 6,h
-		ret z
-		ld h,MappedReader_BASE_ADDRESS >> 8
-		ld (position),hl
-		push af
-		push ix
-		ld ix,this
-		call MappedReader_SelectNextSegment
-		pop ix
-		pop af
-		ret
 	size:
 	ENDM
 
@@ -130,6 +116,31 @@ MappedReader_SkipBC:
 	jp c,MappedReader_ThrowAddressOutOfBounds
 	call MappedReader_SetPosition
 	ret
+
+; iy = this
+; a <- value
+; Modifies: f
+MappedReader_Read_IY: PROC
+	jp iy
+Continue:
+	push af
+	ld a,(iy + MappedReader.position + 1)
+	inc a
+	ld (iy + MappedReader.position + 1),a
+	cp (MappedReader_BASE_ADDRESS + 4000H) >> 8
+	jr z,FinishBlock
+	pop af
+	ret
+FinishBlock:
+	ld (iy + MappedReader.position + 1),MappedReader_BASE_ADDRESS >> 8
+	push iy
+	ex (sp),ix
+	call MappedReader_SelectNextSegment
+	ex (sp),ix
+	pop iy
+	pop af
+	ret
+	ENDP
 
 ; Reads a byte from the current position.
 ; No bounds checks are performed.

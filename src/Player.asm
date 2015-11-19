@@ -99,6 +99,16 @@ Player_GetReader:
 	ret
 
 ; ix = this
+; de <- reader
+; iy <- reader
+Player_GetReaderIY:
+	ld e,(ix + Player.reader)
+	ld d,(ix + Player.reader + 1)
+	ld iyl,e
+	ld iyh,d
+	ret
+
+; ix = this
 ; de <- VGM header
 ; ix <- VGM header
 Player_GetHeader:
@@ -178,6 +188,7 @@ Player_InstallDataBlockHandler_IY:
 
 ; ix = this
 Player_Play: PROC
+	call Player_GetReaderIY
 	call Player_ResetPosition
 	push ix
 	call Player_GetTimer
@@ -198,6 +209,7 @@ Loop:
 	ENDP
 
 ; ix = this
+; iy = reader
 Player_ProcessNext:
 	call Player_ReadByte
 	ld l,a
@@ -228,11 +240,12 @@ Player_SetPosition:
 	ret
 
 ; ix = this
+; iy = reader
 ; a <- value
-; Modifies: af, hl
-Player_ReadByte: equ MappedReader_instance.Read
+Player_ReadByte: equ MappedReader_Read_IY
 
 ; ix = this
+; iy = reader
 ; de <- value
 Player_ReadWord:
 	call Player_ReadByte
@@ -242,6 +255,7 @@ Player_ReadWord:
 	ret
 
 ; ix = this
+; iy = reader
 ; dehl <- value
 Player_ReadDoubleWord:
 	call Player_ReadWord
@@ -268,6 +282,7 @@ Player_CheckExitCondition:
 	ret
 
 ; ix = this
+; iy = reader
 Player_DataBlock:
 	call Player_ReadByte
 	cp 66H
@@ -281,15 +296,18 @@ Player_DataBlock:
 	ex de,hl
 	jp hl
 
+; ix = this
+; iy = reader
 Player_SkipDataBlock:
 	push ix
-	call Player_GetReader
 	call Player_ReadDoubleWord
+	call Player_GetReader
 	call MappedReader_Skip
 	pop ix
 	jp Player_ProcessNext
 
 ; ix = this
+; iy = reader
 Player_EndOfSoundData: PROC
 	push ix
 	call Player_GetHeader
@@ -309,6 +327,7 @@ NoLoop:
 	ENDP
 
 ; ix = this
+; iy = reader
 Player_SetWait: PROC
 	call Player_ReadByte
 	cp 62H
@@ -329,6 +348,7 @@ Set50th:
 	ENDP
 
 ; ix = this
+; iy = reader
 Player_Wait0Samples:
 	jp Player_ProcessNext
 Player_Wait1Samples:
@@ -392,6 +412,7 @@ Player_WaitNSamples:
 	jp Player_instance.Wait
 
 ; ix = this
+; iy = reader
 Player_Skip11:
 	call Player_ReadByte
 	call Player_ReadByte
