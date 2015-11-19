@@ -70,8 +70,8 @@ Player: MACRO
 	ENDM
 
 ; c = max loops
-; de = data reader
-; hl = VGM header
+; de = reader
+; hl = header
 ; ix = this
 ; ix <- this
 Player_Construct:
@@ -99,8 +99,8 @@ Player_GetReaderIY:
 	ret
 
 ; ix = this
-; de <- VGM header
-; ix <- VGM header
+; de <- header
+; ix <- header
 Player_GetHeader:
 	ld e,(ix + Player.header)
 	ld d,(ix + Player.header + 1)

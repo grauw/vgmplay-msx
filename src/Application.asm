@@ -106,8 +106,8 @@ Application_GetCLI:
 	ret
 
 ; ix = this
-; de <- VGM header
-; ix <- VGM header
+; de <- header
+; ix <- header
 Application_GetHeader:
 	ld e,(ix + Application.header)
 	ld d,(ix + Application.header + 1)
@@ -116,8 +116,8 @@ Application_GetHeader:
 	ret
 
 ; ix = this
-; de <- VGM data loader
-; ix <- VGM data loader
+; de <- loader
+; ix <- loader
 Application_GetLoader:
 	ld e,(ix + Application.loader)
 	ld d,(ix + Application.loader + 1)
@@ -126,8 +126,8 @@ Application_GetLoader:
 	ret
 
 ; ix = this
-; de <- VGM data reader
-; ix <- VGM data reader
+; de <- reader
+; ix <- reader
 Application_GetReader:
 	ld e,(ix + Application.reader)
 	ld d,(ix + Application.reader + 1)
@@ -146,8 +146,8 @@ Application_GetReaderIY:
 	ret
 
 ; ix = this
-; de <- VGM player
-; ix <- VGM player
+; de <- player
+; ix <- player
 Application_GetPlayer:
 	ld e,(ix + Application.player)
 	ld d,(ix + Application.player + 1)

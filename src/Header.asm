@@ -161,7 +161,7 @@ Header_ClearPastDataOffset:
 	ret
 
 ; ix = this
-; dehl <- VGM data offset
+; dehl <- data offset
 Header_GetDataOffset: PROC
 	ld l,(ix + Header.version)
 	ld h,(ix + Header.version + 1)
