@@ -8,6 +8,25 @@ Player_SAMPLES_50HZ: equ 882
 
 Player: MACRO
 	this:
+
+	; de = wait period
+	; ix = this
+	Wait:
+		ld hl,0
+	time: equ $ - 2
+		and a
+		sbc hl,de
+		ld (time),hl
+		jp nc,Player_ProcessNext
+	Yield:
+		ex de,hl
+		ld hl,0
+		ld (time),hl
+		and a
+		sbc hl,de
+		ld (wait),hl
+		ret
+
 	reader:
 		dw 0
 	header:
@@ -47,24 +66,6 @@ Player: MACRO
 		ELSE
 		jp Wait
 		ENDIF
-
-	; de = wait period
-	; ix = this
-	Wait:
-		ld hl,0
-	time: equ $ - 2
-		and a
-		sbc hl,de
-		ld (time),hl
-		jp nc,Player_ProcessNext
-	Yield:
-		ex de,hl
-		ld hl,0
-		ld (time),hl
-		and a
-		sbc hl,de
-		ld (wait),hl
-		ret
 
 	size:
 	ENDM
@@ -201,6 +202,10 @@ Loop:
 	ret
 	ENDP
 
+Player_Wait_JP_INLINE: MACRO
+	jp ix
+	ENDM
+
 ; ix = this
 ; iy = reader
 Player_ProcessNext:
@@ -309,63 +314,63 @@ Player_Wait0Samples:
 	jp Player_ProcessNext
 Player_Wait1Samples:
 	ld de,1
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait2Samples:
 	ld de,2
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait3Samples:
 	ld de,3
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait4Samples:
 	ld de,4
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait5Samples:
 	ld de,5
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait6Samples:
 	ld de,6
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait7Samples:
 	ld de,7
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait8Samples:
 	ld de,8
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait9Samples:
 	ld de,9
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait10Samples:
 	ld de,10
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait11Samples:
 	ld de,11
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait12Samples:
 	ld de,12
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait13Samples:
 	ld de,13
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait14Samples:
 	ld de,14
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait15Samples:
 	ld de,15
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait16Samples:
 	ld de,16
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait735Samples:
 	ld e,(ix + Player.wait60th)
 	ld d,(ix + Player.wait60th + 1)
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_Wait882Samples:
 	ld e,(ix + Player.wait50th)
 	ld d,(ix + Player.wait50th + 1)
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 Player_WaitNSamples:
 	call MappedReader_ReadWord_IY
-	jp Player_instance.Wait
+	Player_Wait_JP_INLINE
 
 ; ix = this
 ; iy = reader
