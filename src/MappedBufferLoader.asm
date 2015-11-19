@@ -1,8 +1,9 @@
 ;
 ; Buffers an entire file in memory.
 ;
+MappedBufferLoader_BASE_ADDRESS: equ 8000H
+
 MappedBufferLoader: MACRO
-	BASE_ADDRESS: equ 8000H
 	buffer:
 		dw MappedBuffer_instance
 	size:
@@ -94,17 +95,17 @@ MappedBufferLoader_LoadSegment: PROC
 	push bc
 	push ix
 	call MappedBufferLoader_GetBuffer
-	ld h,MappedBufferLoader.BASE_ADDRESS >> 8
+	ld h,MappedBufferLoader_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop ix
-	ld hl,MappedBufferLoader.BASE_ADDRESS
+	ld hl,MappedBufferLoader_BASE_ADDRESS
 	call Memory_GetSlot
 	ld b,a
 	ld a,(Mapper_instance.primaryMapperSlot)
 	cp b
 	pop bc
 	jr nz,NonPrimary
-	ld de,MappedBufferLoader.BASE_ADDRESS
+	ld de,MappedBufferLoader_BASE_ADDRESS
 	ld hl,4000H
 	ld c,_READ
 	call BDOS
@@ -126,7 +127,7 @@ NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	ld c,l
 	ld b,h
 	ld hl,SCRATCH
-	ld de,MappedBufferLoader.BASE_ADDRESS
+	ld de,MappedBufferLoader_BASE_ADDRESS
 	call System_FastLDIR
 	pop hl
 SkipLDIR1:
@@ -147,7 +148,7 @@ SkipLDIR1:
 	ld c,l
 	ld b,h
 	ld hl,SCRATCH
-	ld de,MappedBufferLoader.BASE_ADDRESS + 2000H
+	ld de,MappedBufferLoader_BASE_ADDRESS + 2000H
 	call System_FastLDIR
 	pop hl
 SkipLDIR2:

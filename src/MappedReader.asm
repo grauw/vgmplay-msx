@@ -1,8 +1,9 @@
 ;
 ; Buffers an entire file in memory.
 ;
+MappedReader_BASE_ADDRESS: equ 8000H
+
 MappedReader: MACRO
-	BASE_ADDRESS: equ 8000H
 	this:
 	buffer:
 		dw MappedBuffer_instance
@@ -11,7 +12,7 @@ MappedReader: MACRO
 	; a <- value
 	; Modifies: af, hl
 	Read:
-		ld hl,BASE_ADDRESS
+		ld hl,MappedReader_BASE_ADDRESS
 	position: equ $ - 2
 		ld a,(hl)
 		inc l
@@ -21,7 +22,7 @@ MappedReader: MACRO
 		ld (position),hl
 		bit 6,h
 		ret z
-		ld h,BASE_ADDRESS >> 8
+		ld h,MappedReader_BASE_ADDRESS >> 8
 		ld (position),hl
 		push af
 		push ix
@@ -75,7 +76,7 @@ MappedReader_SetPosition:
 	ld a,e
 	push ix
 	call MappedReader_GetBuffer
-	ld h,MappedReader.BASE_ADDRESS >> 8
+	ld h,MappedReader_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop ix
 	ret
@@ -154,7 +155,7 @@ MappedReader_Read:
 	push ix
 	push de
 	call MappedReader_GetBuffer
-	ld h,MappedReader.BASE_ADDRESS >> 8
+	ld h,MappedReader_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop de
 	pop ix
@@ -186,7 +187,7 @@ Loop:
 MappedReader_ReadAndProcessBlock: PROC
 Loop:
 	push hl
-	ld hl,MappedReader.BASE_ADDRESS + 4000H
+	ld hl,MappedReader_BASE_ADDRESS + 4000H
 	ld c,(ix + MappedReader.position)
 	ld b,(ix + MappedReader.position + 1)
 	and a
@@ -232,7 +233,7 @@ MappedReader_SelectNextSegment:
 	push ix
 	push de
 	call MappedReader_GetBuffer
-	ld h,MappedReader.BASE_ADDRESS >> 8
+	ld h,MappedReader_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop de
 	pop ix
