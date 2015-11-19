@@ -271,9 +271,7 @@ Application_Play:
 	call Application_GetCLI
 	ld c,(ix + CLI.loops)
 	pop ix
-	push bc
 	call Application_GetPlayer
-	pop bc
 	pop de
 	call Player_Construct
 	ex (sp),ix
