@@ -244,11 +244,5 @@ MappedReader_ThrowAddressOutOfBounds:
 	ret
 
 ;
-	SECTION RAM
-
-MappedReader_instance: MappedReader
-
-	ENDS
-
 MappedReader_addressOutOfBoundsError:
 	db "Address out of bounds.",13,10,0

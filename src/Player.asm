@@ -409,8 +409,6 @@ Player_UnsupportedCommand:
 ;
 	SECTION RAM
 
-Player_instance: Player
-
 	ALIGN 256
 Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 00H

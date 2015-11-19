@@ -254,10 +254,3 @@ Drivers_GetMMM:
 	ld a,e
 	or d
 	ret
-
-;
-	SECTION RAM
-
-Drivers_instance: Drivers
-
-	ENDS

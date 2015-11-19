@@ -3,17 +3,17 @@
 ;
 Application: MACRO
 	cli:
-		dw CLI_instance
+		CLI
 	header:
-		dw Header_instance
+		Header
 	loader:
-		dw MappedBufferLoader_instance
+		MappedBufferLoader
 	reader:
-		dw MappedReader_instance
+		MappedReader
 	player:
-		dw Player_instance
+		Player
 	drivers:
-		dw Drivers_instance
+		Drivers
 	size:
 	ENDM
 
@@ -96,73 +96,63 @@ Application_Destruct:
 	ret
 
 ; ix = this
-; de <- Command-line interface
 ; ix <- Command-line interface
 Application_GetCLI:
-	ld e,(ix + Application.cli)
-	ld d,(ix + Application.cli + 1)
-	ld ixl,e
-	ld ixh,d
+	ld de,Application.cli
+	add ix,de
 	ret
 
 ; ix = this
-; de <- header
 ; ix <- header
 Application_GetHeader:
-	ld e,(ix + Application.header)
-	ld d,(ix + Application.header + 1)
-	ld ixl,e
-	ld ixh,d
+	ld de,Application.header
+	add ix,de
 	ret
 
 ; ix = this
-; de <- loader
+; hl <- header
+Application_GetHeaderHL:
+	ld e,ixl
+	ld d,ixh
+	ld hl,Application.header
+	add hl,de
+	ret
+
+; ix = this
 ; ix <- loader
 Application_GetLoader:
-	ld e,(ix + Application.loader)
-	ld d,(ix + Application.loader + 1)
-	ld ixl,e
-	ld ixh,d
+	ld de,Application.loader
+	add ix,de
 	ret
 
 ; ix = this
-; de <- reader
 ; ix <- reader
 Application_GetReader:
-	ld e,(ix + Application.reader)
-	ld d,(ix + Application.reader + 1)
-	ld ixl,e
-	ld ixh,d
+	ld de,Application.reader
+	add ix,de
 	ret
 
 ; ix = this
-; de <- reader
 ; iy <- reader
 Application_GetReaderIY:
-	ld e,(ix + Application.reader)
-	ld d,(ix + Application.reader + 1)
-	ld iyl,e
-	ld iyh,d
+	push ix
+	pop iy
+	ld de,Application.reader
+	add iy,de
 	ret
 
 ; ix = this
-; de <- player
 ; ix <- player
 Application_GetPlayer:
-	ld e,(ix + Application.player)
-	ld d,(ix + Application.player + 1)
-	ld ixl,e
-	ld ixh,d
+	ld de,Application.player
+	add ix,de
 	ret
 
 ; ix = this
-; de <- Driver manager
-; ix <- Driver manager
+; ix <- driver manager
 Application_GetDrivers:
-	ld e,(ix + Application.drivers)
-	ld d,(ix + Application.drivers + 1)
-	ld ixl,e
-	ld ixh,d
+	ld de,Application.drivers
+	add ix,de
 	ret
 
 ; ix = this
@@ -228,8 +218,7 @@ Application_LoadFile: PROC
 ; ix = this
 Application_ReadHeader:
 	ld bc,256
-	ld l,(ix + Application.header)
-	ld h,(ix + Application.header + 1)
+	call Application_GetHeaderHL
 	call Application_GetReaderIY
 	ex de,hl
 	call MappedReader_ReadBlock_IY
@@ -261,18 +250,16 @@ Application_ShowInfo:
 Application_Play:
 	ld hl,Application_playing
 	call System_Print
-	ld e,(ix + Application.reader)
-	ld d,(ix + Application.reader + 1)
-	ld l,(ix + Application.header)
-	ld h,(ix + Application.header + 1)
+	call Application_GetHeaderHL
+	call Application_GetReaderIY
 	push ix
-	push de
 	push ix
 	call Application_GetCLI
 	ld c,(ix + CLI.loops)
 	pop ix
 	call Application_GetPlayer
-	pop de
+	ld e,iyl
+	ld d,iyh
 	call Player_Construct
 	ex (sp),ix
 	pop iy

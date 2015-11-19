@@ -164,12 +164,6 @@ Multiply10AndAdd:
 	ENDP
 
 ;
-	SECTION RAM
-
-CLI_instance: CLI
-
-	ENDS
-
 CLI_parametersEnvName:
 	db "PARAMETERS",0
 

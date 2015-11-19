@@ -156,10 +156,3 @@ SkipLDIR2:
 	add hl,de
 	ret
 	ENDP
-
-;
-	SECTION RAM
-
-MappedBufferLoader_instance: MappedBufferLoader
-
-	ENDS

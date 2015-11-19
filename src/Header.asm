@@ -683,12 +683,6 @@ Header_CheckGZIP:
 	ret
 
 ;
-	SECTION RAM
-
-Header_instance: Header
-
-	ENDS
-
 Header_versionLabel:
 	db "VGM version: ",0
 
