@@ -7,7 +7,7 @@ MappedBuffer: MACRO
 	lastSegment:
 		db 0
 	segments:
-		ds 256 * 2
+		ds 255 * 2
 	_size:
 	ENDM
 
