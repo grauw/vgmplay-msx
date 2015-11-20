@@ -2,34 +2,24 @@
 ; Buffers an entire file in memory.
 ;
 MappedReader_BASE_ADDRESS: equ 8000H
+MappedReader_SEGMENT_SIZE: equ 4000H
 
 MappedReader: MACRO
-	; iy = this
-	; a <- value
-	Read_IY:
-		ld a,(0)
-	position: equ $ - 2
-		inc (iy + MappedReader.position)
-		ret nz
-		jp MappedReader_Read_IY.Continue
-
+	super: Reader
 	buffer:
 		dw MappedBuffer_instance
 	positionSegmentIndex:
-		db 0
+		db -1
 	size:
 	ENDM
 
 ; ix = this
 ; ix <- this
 MappedReader_Construct:
-	ld de,0
-	ld hl,0
-	push ix
-	ex (sp),iy
-	call MappedReader_SetPosition_IY
-	ex (sp),iy
-	pop ix
+	ld hl,MappedReader_BASE_ADDRESS
+	ld bc,MappedReader_SEGMENT_SIZE
+	ld de,MappedReader_Filler_IY
+	call Reader_Construct
 	ret
 
 ; iy = this
@@ -54,8 +44,9 @@ MappedReader_SetPosition_IY:
 	ld a,h
 	and 3FH
 	or 80H
-	ld (iy + MappedReader.position),l
-	ld (iy + MappedReader.position + 1),a
+	ld (iy + MappedReader.super.bufferPosition),l
+	ld (iy + MappedReader.super.bufferPosition + 1),a
+	ld (iy + MappedReader.super.fillPending),0
 	ld a,h
 	rla
 	rl e
@@ -70,10 +61,12 @@ MappedReader_SetPosition_IY:
 
 ; iy = this
 ; dehl <- address
-MappedReader_GetPosition_IY:
-	ld l,(iy + MappedReader.position)
-	ld h,(iy + MappedReader.position + 1)
+MappedReader_GetPosition_IY: PROC
+	ld l,(iy + MappedReader.super.bufferPosition)
+	ld h,(iy + MappedReader.super.bufferPosition + 1)
 	ld a,(iy + MappedReader.positionSegmentIndex)
+	bit 0,(iy + MappedReader.super.fillPending)
+	call nz,FillPending
 	rlc h
 	rlc h
 	rrca
@@ -84,6 +77,11 @@ MappedReader_GetPosition_IY:
 	ld e,a
 	ld d,0
 	ret
+FillPending:
+	ld hl,MappedReader_BASE_ADDRESS
+	inc a
+	ret
+	ENDP
 
 ; ehl = nr of bytes to skip
 ; iy = this
@@ -121,23 +119,7 @@ MappedReader_SkipBC_IY:
 ; iy = this
 ; a <- value
 ; Modifies: f
-MappedReader_Read_IY: PROC
-	jp iy
-Continue:
-	push af
-	ld a,(iy + MappedReader.position + 1)
-	inc a
-	ld (iy + MappedReader.position + 1),a
-	cp (MappedReader_BASE_ADDRESS + 4000H) >> 8
-	jr z,FinishBlock
-	pop af
-	ret
-FinishBlock:
-	ld (iy + MappedReader.position + 1),MappedReader_BASE_ADDRESS >> 8
-	call MappedReader_SelectNextSegment_IY
-	pop af
-	ret
-	ENDP
+MappedReader_Read_IY: equ Reader_Read_IY
 
 ; iy = this
 ; de <- value
@@ -184,11 +166,12 @@ Loop:
 ; ix = processing callback (hl = source, bc = bytes)
 ; iy = this
 MappedReader_ReadAndProcessBlock_IY: PROC
+	call MappedReader_FillIfNeeded
 Loop:
 	push hl
-	ld hl,MappedReader_BASE_ADDRESS + 4000H
-	ld c,(iy + MappedReader.position)
-	ld b,(iy + MappedReader.position + 1)
+	ld hl,MappedReader_BASE_ADDRESS + MappedReader_SEGMENT_SIZE
+	ld c,(iy + MappedReader.super.bufferPosition)
+	ld b,(iy + MappedReader.super.bufferPosition + 1)
 	and a
 	sbc hl,bc
 	ex (sp),hl
@@ -213,8 +196,8 @@ FinalLap:
 	jp Process
 ; bc = bytes, ix = processing callback, iy = this
 Process:
-	ld l,(iy + MappedReader.position)
-	ld h,(iy + MappedReader.position + 1)
+	ld l,(iy + MappedReader.super.bufferPosition)
+	ld h,(iy + MappedReader.super.bufferPosition + 1)
 	push bc
 	call CallIX
 	pop bc
@@ -223,6 +206,27 @@ Process:
 CallIX:
 	jp ix
 	ENDP
+
+; iy = this
+MappedReader_FillIfNeeded:
+	bit 0,(iy + MappedReader.super.fillPending)
+	ret z
+	inc (iy + MappedReader.super.bufferPosition)
+	inc (iy + MappedReader.super.bufferPosition + 1)
+	call Reader_FinishBlock_IY
+	ret
+
+; bc = byte count
+; de = buffer start
+; iy = this
+; Modifies: af, hl
+MappedReader_Filler_IY:
+	push bc
+	push de
+	call MappedReader_SelectNextSegment_IY
+	pop de
+	pop bc
+	ret
 
 ; iy = this
 MappedReader_SelectNextSegment_IY:
