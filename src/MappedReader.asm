@@ -54,7 +54,7 @@ MappedReader_SetPosition_IY:
 	rl e
 	ld (iy + MappedReader.positionSegmentIndex),e
 	ld a,e
-	ld h,MappedReader_BASE_ADDRESS >> 8
+	ld h,(iy + MappedReader.super.bufferStart + 1)
 	call MappedBuffer_SelectSegment
 	pop ix
 	ret
@@ -78,7 +78,8 @@ MappedReader_GetPosition_IY: PROC
 	ld d,0
 	ret
 FillPending:
-	ld hl,MappedReader_BASE_ADDRESS
+	ld l,(iy + MappedReader.super.bufferStart)
+	ld h,(iy + MappedReader.super.bufferStart + 1)
 	inc a
 	ret
 	ENDP
@@ -169,7 +170,8 @@ MappedReader_ReadAndProcessBlock_IY: PROC
 	call MappedReader_FillIfNeeded
 Loop:
 	push hl
-	ld hl,MappedReader_BASE_ADDRESS + MappedReader_SEGMENT_SIZE
+	ld l,(iy + MappedReader.super.bufferEnd)
+	ld h,(iy + MappedReader.super.bufferEnd + 1)
 	ld c,(iy + MappedReader.super.bufferPosition)
 	ld b,(iy + MappedReader.super.bufferPosition + 1)
 	and a
@@ -236,7 +238,7 @@ MappedReader_SelectNextSegment_IY:
 	push ix
 	push de
 	call MappedReader_GetBuffer_IY
-	ld h,MappedReader_BASE_ADDRESS >> 8
+	ld h,(iy + MappedReader.super.bufferStart + 1)
 	call MappedBuffer_SelectSegment
 	pop de
 	pop ix
