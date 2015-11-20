@@ -64,20 +64,18 @@ MappedBuffer_AllocateSegment:
 ; Modifies: de, hl
 MappedBuffer_AddSegment:
 	ld e,(ix + MappedBuffer.lastSegment)
+	inc e
+	ld hl,MappedBuffer_outOfMemoryError
+	jp z,Application_TerminateWithError
+	ld (ix + MappedBuffer.lastSegment),e
+	dec e
 	ld d,0
-	push de
 	push ix
 	add ix,de
 	add ix,de
 	ld (ix + MappedBuffer.segments),a
 	ld (ix + MappedBuffer.segments + 1),b
 	pop ix
-	inc de
-	ld (ix + MappedBuffer.lastSegment),e
-	bit 0,d
-	ld hl,MappedBuffer_outOfMemoryError
-	jp nz,Application_TerminateWithError
-	pop de
 	ld a,e
 	ret
 
