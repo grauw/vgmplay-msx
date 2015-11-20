@@ -25,6 +25,8 @@ MappedBuffer_Destruct:
 ; a <- segment
 ; Modifies: af
 MappedBuffer_SelectSegment:
+	cp (ix + MappedBuffer.lastSegment)
+	call nc,System_ThrowException
 	push bc
 	push de
 	push hl
