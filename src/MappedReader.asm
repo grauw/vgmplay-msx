@@ -130,14 +130,21 @@ MappedReader_ReadDoubleWord_IY:
 ; iy = this
 MappedReader_ReadBlock_IY: PROC
 Loop:
-	call Reader_Read_IY
-	ld (de),a
-	inc de
-	dec bc
-	ld a,b
-	or c
-	jp nz,Loop
-	ret
+	ld a,c
+	or b
+	ret z
+	push bc
+	call Reader_ReadBlockFromBuffer_IY
+	push bc
+	call System_FastLDIR
+	pop bc
+	pop hl
+	and a
+	sbc hl,bc
+	call c,System_ThrowException
+	ld c,l
+	ld b,h
+	jp Loop
 	ENDP
 
 ; bc = byte count
