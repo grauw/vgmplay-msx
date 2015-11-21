@@ -104,29 +104,24 @@ MappedReader_Skip_IY:
 	ret
 
 ; iy = this
-; a <- value
-; Modifies: f
-MappedReader_Read_IY: equ Reader_Read_IY
-
-; iy = this
 ; de <- value
 MappedReader_ReadWord_IY:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld e,a
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld d,a
 	ret
 
 ; iy = this
 ; dehl <- value
 MappedReader_ReadDoubleWord_IY:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld l,a
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld h,a
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld e,a
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld d,a
 	ret
 
@@ -135,7 +130,7 @@ MappedReader_ReadDoubleWord_IY:
 ; iy = this
 MappedReader_ReadBlock_IY: PROC
 Loop:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld (de),a
 	inc de
 	dec bc

@@ -221,7 +221,7 @@ Player_Wait_JP_INLINE: MACRO
 ; ix = this
 ; iy = reader
 Player_ProcessNext:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld l,a
 	ld h,Player_commandsJumpTable >> 8
 	ld e,(hl)
@@ -260,10 +260,10 @@ Player_CheckExitCondition:
 ; ix = this
 ; iy = reader
 Player_DataBlock:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	cp 66H
 	jp nz,Player_UnsupportedCommand
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	ld l,a
 	ld h,Player_dataBlockJumpTable >> 8
 	ld e,(hl)
@@ -302,7 +302,7 @@ NoLoop:
 ; ix = this
 ; iy = reader
 Player_SetWait: PROC
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 	cp 62H
 	jp z,Set60th
 	cp 63H
@@ -387,21 +387,21 @@ Player_WaitNSamples:
 ; ix = this
 ; iy = reader
 Player_Skip11:
-	call MappedReader_Read_IY
-	call MappedReader_Read_IY
-	call MappedReader_Read_IY
-	call MappedReader_Read_IY
-	call MappedReader_Read_IY
+	call Reader_Read_IY
+	call Reader_Read_IY
+	call Reader_Read_IY
+	call Reader_Read_IY
+	call Reader_Read_IY
 Player_Skip6:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 Player_Skip5:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 Player_Skip4:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 Player_Skip3:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 Player_Skip2:
-	call MappedReader_Read_IY
+	call Reader_Read_IY
 Player_Skip1:
 	jp Player_ProcessNext
 

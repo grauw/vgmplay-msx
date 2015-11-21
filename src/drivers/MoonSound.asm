@@ -60,7 +60,7 @@ MoonSound: MACRO
 	; ix = player
 	; iy = reader
 	ProcessYMF278BCommand: PROC
-		call MappedReader_Read_IY
+		call Reader_Read_IY
 		cp 1
 		jr c,FM1
 		jp z,FM2

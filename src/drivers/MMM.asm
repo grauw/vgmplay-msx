@@ -23,7 +23,7 @@ MMM: MACRO
 	; ix = player
 	; iy = reader
 	ProcessSN76489Command:
-		call MappedReader_Read_IY
+		call Reader_Read_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 	ENDM

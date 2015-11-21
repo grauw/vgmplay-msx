@@ -44,7 +44,7 @@ SCC: MACRO
 	; ix = player
 	; iy = reader
 	ProcessK051649Command: PROC
-		call MappedReader_Read_IY
+		call Reader_Read_IY
 		cp 1
 		jr c,Waveform
 		jr z,Frequency
