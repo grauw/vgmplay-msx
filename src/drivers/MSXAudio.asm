@@ -289,7 +289,7 @@ MSXAudio_ProcessY8950DataBlock:
 	ld ix,MSXAudio_instance.WriteADPCMData
 	call MappedReader_ReadAndProcessBlock_IY
 	pop ix
-	ld a,01H
+	ld d,01H
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_instance.WriteRegister
 	push ix
