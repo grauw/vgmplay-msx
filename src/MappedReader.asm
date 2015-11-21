@@ -149,11 +149,7 @@ MappedReader_ReadDoubleWord_IY:
 ; iy = this
 MappedReader_ReadBlock_IY: PROC
 Loop:
-	push bc
-	push de
 	call MappedReader_Read_IY
-	pop de
-	pop bc
 	ld (de),a
 	inc de
 	dec bc
