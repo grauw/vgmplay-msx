@@ -180,6 +180,18 @@ Player_InstallDataBlockHandler_IY:
 	ld (hl),d
 	ret
 
+; a = command number
+; ix = handler object
+; hl = handler offset
+; iy = this
+Player_InstallDataBlockHandler_IY_IXOffset:
+	ld e,ixl
+	ld d,ixh
+	add hl,de
+	ex de,hl
+	call Player_InstallDataBlockHandler_IY
+	ret
+
 ; ix = this
 Player_Play: PROC
 	call Player_GetReaderIY

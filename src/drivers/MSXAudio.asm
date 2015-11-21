@@ -35,6 +35,7 @@ MSXAudio_PCM_DATA: equ 1AH
 MSXAudio_FM_BASE: equ 20H
 
 MSXAudio: MACRO
+	this:
 	safeControlMirror:
 		ds MSXAudio_FM_BASE
 
@@ -165,6 +166,19 @@ MSXAudio: MACRO
 		call MappedReader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
+
+	; ix = player
+	; iy = reader
+	ProcessY8950DataBlock:
+		push ix
+		ld ix,this
+		call MSXAudio_ProcessY8950DataBlock
+		pop ix
+		push ix
+		call Player_GetTimer
+		call Timer_Reset
+		pop ix
+		jp Player_ProcessNext
 	ENDM
 
 ; ix <- instance or null
@@ -197,9 +211,9 @@ MSXAudio_Install:
 	ld hl,MSXAudio.ProcessY8950Command
 	ld a,5CH
 	call Player_InstallCommandHandler_IY_IXOffset
-	ld de,MSXAudio_ProcessY8950DataBlock
+	ld hl,MSXAudio.ProcessY8950DataBlock
 	ld a,88H
-	call Player_InstallDataBlockHandler_IY
+	call Player_InstallDataBlockHandler_IY_IXOffset
 	ld hl,MSXAudio.ProcessYM3526Command
 	ld a,5BH
 	call Player_InstallCommandHandler_IY_IXOffset
@@ -259,17 +273,15 @@ MSXAudio_Reset:
 	call MSXAudio_FillRegisters
 	ret
 
-; ix = player
+; ix = this
+; iy = reader
 MSXAudio_ProcessY8950DataBlock:
 	call MappedReader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
 	call MappedReader_ReadDoubleWord_IY  ; total rom size
 	call MappedReader_ReadDoubleWord_IY  ; start address
-	push ix
-	ld ix,MSXAudio_instance
 	call MSXAudio_SetADPCMWriteAddress
-	pop ix
 	pop hl
 	pop de
 	ld bc,8  ; subtract header from block size
@@ -286,17 +298,14 @@ MSXAudio_ProcessY8950DataBlock:
 	or d
 	ret z
 	push ix
-	ld ix,MSXAudio_instance.WriteADPCMData
+	ld bc,MSXAudio.WriteADPCMData
+	add ix,bc
 	call MappedReader_ReadAndProcessBlock_IY
 	pop ix
 	ld d,01H
 	ld a,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_instance.WriteRegister
-	push ix
-	call Player_GetTimer
-	call Timer_Reset
-	pop ix
-	jp Player_ProcessNext
+	call MSXAudio_WriteRegister
+	ret
 
 ; ehl = write address
 ; ix = this
