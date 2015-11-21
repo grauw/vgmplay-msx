@@ -18,7 +18,7 @@ MappedReader: MACRO
 MappedReader_Construct:
 	ld hl,MappedReader_BASE_ADDRESS
 	ld bc,MappedReader_SEGMENT_SIZE
-	ld de,MappedReader_Filler_IY
+	ld de,MappedReader_Fill_IY
 	call Reader_Construct
 	ret
 
@@ -144,7 +144,7 @@ Loop:
 ; de = buffer start
 ; iy = this
 ; Modifies: af, hl
-MappedReader_Filler_IY:
+MappedReader_Fill_IY:
 	push bc
 	push de
 	call MappedReader_SelectNextSegment_IY
