@@ -159,61 +159,6 @@ Loop:
 	ret
 	ENDP
 
-; ehl = bytes count
-; ix = processing callback (hl = source, bc = bytes)
-; iy = this
-MappedReader_ReadAndProcessBlock_IY: PROC
-	call MappedReader_FillIfNeeded
-Loop:
-	push hl
-	ld l,(iy + MappedReader.super.bufferEnd)
-	ld h,(iy + MappedReader.super.bufferEnd + 1)
-	ld c,(iy + MappedReader.super.bufferPosition)
-	ld b,(iy + MappedReader.super.bufferPosition + 1)
-	and a
-	sbc hl,bc
-	ex (sp),hl
-	pop bc
-	sbc hl,bc
-	jr z,Process
-	jp nc,Continue
-	dec e
-	jp m,FinalLap
-Continue:
-	push de
-	push hl
-	call Process
-	pop hl
-	pop de
-	jp Loop
-FinalLap:
-	add hl,bc
-	ret z
-	ld c,l
-	ld b,h
-	jp Process
-; bc = bytes, ix = processing callback, iy = this
-Process:
-	ld l,(iy + MappedReader.super.bufferPosition)
-	ld h,(iy + MappedReader.super.bufferPosition + 1)
-	push bc
-	call CallIX
-	pop bc
-	call MappedReader_SkipBC_IY
-	ret
-CallIX:
-	jp ix
-	ENDP
-
-; iy = this
-MappedReader_FillIfNeeded:
-	bit 0,(iy + MappedReader.super.fillPending)
-	ret z
-	inc (iy + MappedReader.super.bufferPosition)
-	inc (iy + MappedReader.super.bufferPosition + 1)
-	call Reader_FinishBlock_IY
-	ret
-
 ; bc = byte count
 ; de = buffer start
 ; iy = this

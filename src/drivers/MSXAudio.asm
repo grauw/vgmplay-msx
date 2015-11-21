@@ -285,6 +285,7 @@ MSXAudio_ProcessY8950DataBlock:
 	pop hl
 	pop de
 	ld bc,8  ; subtract header from block size
+Loop:
 	and a
 	sbc hl,bc
 	ld bc,0
@@ -296,12 +297,24 @@ MSXAudio_ProcessY8950DataBlock:
 	or l
 	or e
 	or d
-	ret z
-	push ix
-	ld bc,MSXAudio.WriteADPCMData
-	add ix,bc
-	call MappedReader_ReadAndProcessBlock_IY
-	pop ix
+	jr z,Finish
+	push de
+	push hl
+	ld a,d
+	or e
+	jr z,LessThan64K
+	ld hl,0FFFFH
+LessThan64K:
+	ld c,l
+	ld b,h
+	call Reader_ReadBlockFromBuffer_IY
+	push bc
+	call MSXAudio_WriteADPCMData
+	pop bc
+	pop hl
+	pop de
+	jp Loop
+Finish:
 	ld d,01H
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_WriteRegister
@@ -342,6 +355,20 @@ MSXAudio_SetADPCMWriteAddress:
 	ld e,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_WriteRegister
 	ret
+
+; bc = count
+; hl = source
+; ix = this
+MSXAudio_WriteADPCMData: PROC
+	push ix
+	ld de,MSXAudio.WriteADPCMData
+	add ix,de
+	call JumpIX
+	pop ix
+	ret
+JumpIX:
+	jp ix
+	ENDP
 
 ; f <- c: Found
 MSXAudio_Detect:
