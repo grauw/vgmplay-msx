@@ -59,7 +59,7 @@ SFG: MACRO
 	; ix = player
 	; iy = reader
 	ProcessYM2151Command:
-		call MappedReader_ReadWord_IY
+		call Reader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 	ENDM

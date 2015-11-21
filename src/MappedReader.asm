@@ -103,28 +103,6 @@ MappedReader_Skip_IY:
 	call MappedReader_SetPosition_IY
 	ret
 
-; iy = this
-; de <- value
-MappedReader_ReadWord_IY:
-	call Reader_Read_IY
-	ld e,a
-	call Reader_Read_IY
-	ld d,a
-	ret
-
-; iy = this
-; dehl <- value
-MappedReader_ReadDoubleWord_IY:
-	call Reader_Read_IY
-	ld l,a
-	call Reader_Read_IY
-	ld h,a
-	call Reader_Read_IY
-	ld e,a
-	call Reader_Read_IY
-	ld d,a
-	ret
-
 ; de = destination address
 ; bc = bytes count
 ; iy = this

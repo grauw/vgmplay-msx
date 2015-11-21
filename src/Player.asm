@@ -275,7 +275,7 @@ Player_DataBlock:
 ; ix = this
 ; iy = reader
 Player_SkipDataBlock:
-	call MappedReader_ReadDoubleWord_IY
+	call Reader_ReadDoubleWord_IY
 	call MappedReader_Skip_IY
 	jp Player_ProcessNext
 
@@ -309,12 +309,12 @@ Player_SetWait: PROC
 	jp z,Set50th
 	call System_ThrowException
 Set60th:
-	call MappedReader_ReadWord_IY
+	call Reader_ReadWord_IY
 	ld (ix + Player.wait60th),e
 	ld (ix + Player.wait60th + 1),d
 	jp Player_ProcessNext
 Set50th:
-	call MappedReader_ReadWord_IY
+	call Reader_ReadWord_IY
 	ld (ix + Player.wait50th),e
 	ld (ix + Player.wait50th + 1),d
 	jp Player_ProcessNext
@@ -381,7 +381,7 @@ Player_Wait882Samples:
 	ld d,(ix + Player.wait50th + 1)
 	Player_Wait_JP_INLINE
 Player_WaitNSamples:
-	call MappedReader_ReadWord_IY
+	call Reader_ReadWord_IY
 	Player_Wait_JP_INLINE
 
 ; ix = this

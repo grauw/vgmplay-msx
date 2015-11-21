@@ -156,14 +156,14 @@ MSXAudio: MACRO
 	; ix = player
 	; iy = reader
 	ProcessY8950Command:
-		call MappedReader_ReadWord_IY
+		call Reader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
 	; ix = player
 	; iy = reader
 	ProcessYM3526Command:
-		call MappedReader_ReadWord_IY
+		call Reader_ReadWord_IY
 		call SafeWriteRegister
 		jp Player_ProcessNext
 
@@ -276,11 +276,11 @@ MSXAudio_Reset:
 ; ix = this
 ; iy = reader
 MSXAudio_ProcessY8950DataBlock:
-	call MappedReader_ReadDoubleWord_IY  ; block size
+	call Reader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
-	call MappedReader_ReadDoubleWord_IY  ; total rom size
-	call MappedReader_ReadDoubleWord_IY  ; start address
+	call Reader_ReadDoubleWord_IY  ; total rom size
+	call Reader_ReadDoubleWord_IY  ; start address
 	call MSXAudio_SetADPCMWriteAddress
 	pop hl
 	pop de
