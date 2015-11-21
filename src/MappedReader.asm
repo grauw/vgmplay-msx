@@ -103,20 +103,6 @@ MappedReader_Skip_IY:
 	call MappedReader_SetPosition_IY
 	ret
 
-; bc = nr of bytes to skip
-; iy = this
-; Modifies: af, bc, de, hl
-MappedReader_SkipBC_IY:
-	call MappedReader_GetPosition_IY
-	add hl,bc
-	ex de,hl
-	ld bc,0
-	adc hl,bc
-	ex de,hl
-	jp c,MappedReader_ThrowAddressOutOfBounds
-	call MappedReader_SetPosition_IY
-	ret
-
 ; iy = this
 ; a <- value
 ; Modifies: f
