@@ -291,7 +291,7 @@ MSXAudio_ProcessY8950DataBlock:
 	ex de,hl
 	sbc hl,bc
 	ex de,hl
-	jp c,System_ThrowException
+	call c,System_ThrowException
 	ld a,h
 	or l
 	or e
