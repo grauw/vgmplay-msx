@@ -1,5 +1,5 @@
 ;
-; Buffers an entire file in memory.
+; Reader backed by a mapped buffer
 ;
 MappedReader_BASE_ADDRESS: equ 8000H
 MappedReader_SEGMENT_SIZE: equ 4000H
