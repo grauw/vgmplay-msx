@@ -63,6 +63,8 @@ MMM_Install:
 	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
+	SECTION TPA_PAGE0
+
 ; ix = this
 MMM_Enable:
 	ld a,080H
@@ -86,6 +88,8 @@ MMM_Disable:
 	ld a,0
 	out (MMM_CONTROL),a
 	ret
+
+	ENDS
 
 ; ix = this
 ; a = slot
@@ -130,6 +134,8 @@ MMM_Detect:
 	call Memory_SearchSlots
 	ret
 
+	SECTION TPA_PAGE0
+
 ; a = slot id
 ; f <- c: found
 MMM_MatchSlot: PROC
@@ -173,8 +179,14 @@ TestValue:
 	ret
 	ENDP
 
+	IF $ > 4000H
+		ERROR "Must not be in pages 1-2."
+	ENDIF
+
+	ENDS
+
 ;
-	SECTION RAM
+	SECTION RAM_PAGE0
 
 MMM_instance: MMM
 
@@ -186,7 +198,3 @@ MMM_detectValues:
 	ENDIF
 
 	ENDS
-
-	IF $ > 4000H
-		ERROR "Must not be in pages 1-2."
-	ENDIF
