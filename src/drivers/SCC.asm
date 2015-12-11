@@ -245,7 +245,7 @@ Found:
 	ENDP
 
 ;
-	SECTION RAM_PAGE1
+	SECTION RAM
 
 SCC_instance: SCC
 
