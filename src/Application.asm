@@ -23,6 +23,8 @@ Application_Main:
 	ld hl,Application_dos2RequiredError
 	jp c,Application_TerminateWithError
 
+	call Application_CheckStack
+
 	call VDP_InitMirrorsOnVDPUpgrades
 
 	ld hl,Application_welcome
@@ -294,6 +296,14 @@ Application_ExitBlackout:
 	call VDP_DisableBlank
 	ret
 
+; Check if the stack is well above the heap
+Application_CheckStack:
+	ld hl,-(HEAP + HEAP_SIZE + STACK_SIZE)
+	add hl,sp
+	ld hl,Application_insufficientTPAError
+	jp nc,Application_TerminateWithError
+	ret
+
 ; a <- DOS error code
 Application_CheckDOSError:
 	and a
@@ -341,6 +351,9 @@ Application_playing:
 
 Application_dos2RequiredError:
 	db "MSX-DOS 2 is required.",13,10,0
+
+Application_insufficientTPAError:
+	db "Insufficient TPA space.",13,10,0
 
 Application_usageInstructions:
 	db "Usage: vgmplay [options] <file.vgm>",13,10

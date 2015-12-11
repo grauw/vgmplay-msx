@@ -10,6 +10,7 @@ DEBUG: equ 1
 
 HEAP: equ 0C000H
 HEAP_SIZE: equ 1000H
+STACK_SIZE: equ 100H
 
 	org 100H
 
