@@ -183,7 +183,7 @@ SFG_id:
 	db "MCHFM0"
 
 ;
-	SECTION PAGE1
+	SECTION RAM_PAGE1
 
 SFG_instance: SFG
 
