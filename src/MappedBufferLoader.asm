@@ -1,5 +1,5 @@
 ;
-; Buffers an entire file in memory.
+; Buffers an entire file in memory
 ;
 MappedBufferLoader_BASE_ADDRESS: equ 8000H
 
