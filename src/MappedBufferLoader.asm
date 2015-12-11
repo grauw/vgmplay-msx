@@ -115,7 +115,7 @@ MappedBufferLoader_LoadSegment: PROC
 NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	push bc
 	ld de,READBUFFER
-	ld hl,2000H
+	ld hl,READBUFFER_SIZE
 	ld c,_READ
 	call BDOS
 	cp .EOF
@@ -136,7 +136,7 @@ SkipLDIR1:
 	cp 20H
 	ret nz
 	ld de,READBUFFER
-	ld hl,2000H
+	ld hl,READBUFFER_SIZE
 	ld c,_READ
 	call BDOS
 	cp .EOF
@@ -148,11 +148,15 @@ SkipLDIR1:
 	ld c,l
 	ld b,h
 	ld hl,READBUFFER
-	ld de,MappedBufferLoader_BASE_ADDRESS + 2000H
+	ld de,MappedBufferLoader_BASE_ADDRESS + READBUFFER_SIZE
 	call System_FastLDIR
 	pop hl
 SkipLDIR2:
-	ld de,2000H
+	ld de,READBUFFER_SIZE
 	add hl,de
 	ret
 	ENDP
+
+	IF READBUFFER_SIZE != 2000H
+		ERROR "Read buffer size must be 2000H."
+	ENDIF
