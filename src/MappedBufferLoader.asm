@@ -114,7 +114,7 @@ MappedBufferLoader_LoadSegment: PROC
 	ret
 NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	push bc
-	ld de,SCRATCH
+	ld de,READBUFFER
 	ld hl,2000H
 	ld c,_READ
 	call BDOS
@@ -126,7 +126,7 @@ NonPrimary:  ; Can not load directly into nonprimary mapper slots
 	push hl
 	ld c,l
 	ld b,h
-	ld hl,SCRATCH
+	ld hl,READBUFFER
 	ld de,MappedBufferLoader_BASE_ADDRESS
 	call System_FastLDIR
 	pop hl
@@ -135,7 +135,7 @@ SkipLDIR1:
 	ld a,h
 	cp 20H
 	ret nz
-	ld de,SCRATCH
+	ld de,READBUFFER
 	ld hl,2000H
 	ld c,_READ
 	call BDOS
@@ -147,7 +147,7 @@ SkipLDIR1:
 	push hl
 	ld c,l
 	ld b,h
-	ld hl,SCRATCH
+	ld hl,READBUFFER
 	ld de,MappedBufferLoader_BASE_ADDRESS + 2000H
 	call System_FastLDIR
 	pop hl
