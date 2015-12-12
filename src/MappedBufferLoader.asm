@@ -2,6 +2,7 @@
 ; Buffers an entire file in memory
 ;
 MappedBufferLoader_BASE_ADDRESS: equ 8000H
+MappedBufferLoader_PAGE_SIZE: equ 4000H
 
 MappedBufferLoader: MACRO
 	buffer:
@@ -91,7 +92,7 @@ Done:
 ; a = segment index
 ; b = file handle
 ; hl <- bytes loaded
-MappedBufferLoader_LoadSegment: PROC
+MappedBufferLoader_LoadSegment:
 	push bc
 	push ix
 	call MappedBufferLoader_GetBuffer
@@ -104,7 +105,7 @@ MappedBufferLoader_LoadSegment: PROC
 	ld a,(Mapper_instance.primaryMapperSlot)
 	cp b
 	pop bc
-	jr nz,NonPrimary
+	jr nz,MappedBufferLoader_LoadViaBuffer
 	ld de,MappedBufferLoader_BASE_ADDRESS
 	ld hl,4000H
 	ld c,_READ
@@ -112,51 +113,55 @@ MappedBufferLoader_LoadSegment: PROC
 	cp .EOF
 	call nz,Application_CheckDOSError
 	ret
-NonPrimary:  ; Can not load directly into nonprimary mapper slots
-	push bc
-	ld de,READBUFFER
-	ld hl,READBUFFER_SIZE
-	ld c,_READ
-	call BDOS
-	cp .EOF
-	call nz,Application_CheckDOSError
-	ld a,l
-	or h
-	jr z,SkipLDIR1
-	push hl
-	ld c,l
-	ld b,h
-	ld hl,READBUFFER
-	ld de,MappedBufferLoader_BASE_ADDRESS
-	call System_FastLDIR
-	pop hl
-SkipLDIR1:
-	pop bc
-	ld a,h
-	cp 20H
-	ret nz
-	ld de,READBUFFER
-	ld hl,READBUFFER_SIZE
-	ld c,_READ
-	call BDOS
-	cp .EOF
-	call nz,Application_CheckDOSError
-	ld a,l
-	or h
-	jr z,SkipLDIR2
-	push hl
-	ld c,l
-	ld b,h
-	ld hl,READBUFFER
-	ld de,MappedBufferLoader_BASE_ADDRESS + READBUFFER_SIZE
-	call System_FastLDIR
-	pop hl
-SkipLDIR2:
-	ld de,READBUFFER_SIZE
-	add hl,de
-	ret
-	ENDP
 
-	IF READBUFFER_SIZE != 2000H
-		ERROR "Read buffer size must be 2000H."
-	ENDIF
+; Load data to BASE_ADDRESS via a buffer in the primary mapper.
+; Because DOS2 can not load directly into nonprimary mapper slots.
+; b = file handle
+; hl <- bytes loaded
+MappedBufferLoader_LoadViaBuffer: PROC
+	ld hl,MappedBufferLoader_PAGE_SIZE
+	ld de,MappedBufferLoader_BASE_ADDRESS
+Loop:
+	push bc
+	push hl
+	push de
+	ld de,READBUFFER_SIZE
+	and a
+	sbc hl,de
+	jr c,LessThanBufferSize
+	ex de,hl
+	jp Continue
+LessThanBufferSize:
+	add hl,de
+Continue:
+	ld de,READBUFFER
+	ld c,_READ
+	call BDOS
+	ld c,l
+	ld b,h
+	pop de
+	pop hl
+	cp .EOF
+	jr z,EndOfFile
+	call nz,Application_CheckDOSError
+	push bc
+	push hl
+	ld hl,READBUFFER
+	call System_FastLDIR
+	pop hl
+	pop bc
+	and a
+	sbc hl,bc
+	call c,System_ThrowException
+	pop bc
+	jp nz,Loop
+Done:
+	ex de,hl
+	ld de,MappedBufferLoader_BASE_ADDRESS
+	and a
+	sbc hl,de
+	ret
+EndOfFile:
+	pop bc
+	jp Done
+	ENDP
