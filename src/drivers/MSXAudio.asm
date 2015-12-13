@@ -316,7 +316,7 @@ LessThan64K:
 	jp Loop
 Finish:
 	ld d,01H
-	ld a,MSXAudio_ADPCM_CONTROL
+	ld e,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_WriteRegister
 	ret
 	ENDP
