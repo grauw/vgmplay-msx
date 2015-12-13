@@ -275,7 +275,7 @@ MSXAudio_Reset:
 
 ; ix = this
 ; iy = reader
-MSXAudio_ProcessY8950DataBlock:
+MSXAudio_ProcessY8950DataBlock: PROC
 	call Reader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
@@ -319,6 +319,7 @@ Finish:
 	ld a,MSXAudio_ADPCM_CONTROL
 	call MSXAudio_WriteRegister
 	ret
+	ENDP
 
 ; ehl = write address
 ; ix = this
