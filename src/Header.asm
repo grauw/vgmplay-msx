@@ -631,6 +631,8 @@ Header_PrintQSoundInfo:
 	ld bc,Header_qSoundName
 	jp Header_PrintClock
 
+; bc = name
+; dehl = clock
 Header_PrintClock: PROC
 	ld a,d
 	or e
