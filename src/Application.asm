@@ -227,6 +227,9 @@ Application_ReadHeader:
 	push ix
 	call Application_GetHeader
 	call Header_Construct
+	push ix
+	pop iy
+	call Chips_Construct
 	pop ix
 	ret
 
@@ -245,6 +248,7 @@ Application_ShowInfo:
 	call Application_GetHeader
 	call System_PrintCrLf
 	call Header_ShowInfo
+	call Chips_PrintInfo
 	pop ix
 	ret
 

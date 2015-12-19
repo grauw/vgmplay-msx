@@ -50,6 +50,7 @@ COM_Main:
 	INCLUDE "Player.asm"
 	INCLUDE "timers/Timer.asm"
 	INCLUDE "drivers/Drivers.asm"
+	INCLUDE "chips/Chips.asm"
 
 	ENDS
 
