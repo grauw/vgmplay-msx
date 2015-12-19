@@ -41,6 +41,7 @@ COM_Main:
 	INCLUDE "HeapTest.asm"
 	INCLUDE "Application.asm"
 	INCLUDE "CLI.asm"
+	INCLUDE "VGM.asm"
 	INCLUDE "Header.asm"
 	INCLUDE "GD3.asm"
 	INCLUDE "MappedBuffer.asm"

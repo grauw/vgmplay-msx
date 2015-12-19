@@ -4,16 +4,14 @@
 Application: MACRO
 	cli:
 		CLI
-	header:
-		Header
 	loader:
 		MappedBufferLoader
 	reader:
 		MappedReader
-	player:
-		Player
 	drivers:
 		Drivers
+	vgm:
+		VGM
 	size:
 	ENDM
 
@@ -105,22 +103,6 @@ Application_GetCLI:
 	ret
 
 ; ix = this
-; ix <- header
-Application_GetHeader:
-	ld de,Application.header
-	add ix,de
-	ret
-
-; ix = this
-; hl <- header
-Application_GetHeaderHL:
-	ld e,ixl
-	ld d,ixh
-	ld hl,Application.header
-	add hl,de
-	ret
-
-; ix = this
 ; ix <- loader
 Application_GetLoader:
 	ld de,Application.loader
@@ -135,22 +117,6 @@ Application_GetReader:
 	ret
 
 ; ix = this
-; iy <- reader
-Application_GetReaderIY:
-	push ix
-	pop iy
-	ld de,Application.reader
-	add iy,de
-	ret
-
-; ix = this
-; ix <- player
-Application_GetPlayer:
-	ld de,Application.player
-	add ix,de
-	ret
-
-; ix = this
 ; ix <- driver manager
 Application_GetDrivers:
 	ld de,Application.drivers
@@ -158,11 +124,17 @@ Application_GetDrivers:
 	ret
 
 ; ix = this
+; ix <- VGM
+Application_GetVGM:
+	ld de,Application.vgm
+	add ix,de
+	ret
+
+; ix = this
 Application_EnterMainLoop:
 	call Application_ParseCLI
 	call Application_LoadFile
-	call Application_ReadHeader
-	call Application_PrintInfo
+	call Application_ConstructVGM
 	call Application_EnterBlackout
 	call Application_Play
 	ret
@@ -218,37 +190,19 @@ Application_LoadFile: PROC
 	ENDP
 
 ; ix = this
-Application_ReadHeader:
-	ld bc,256
-	call Application_GetHeaderHL
-	call Application_GetReaderIY
-	ex de,hl
-	call MappedReader_ReadBlock_IY
+Application_ConstructVGM:
 	push ix
-	call Application_GetHeader
-	call Header_Construct
 	push ix
-	pop iy
-	call Chips_Construct
-	pop ix
-	ret
-
-; ix = this
-Application_PrintInfo:
 	push ix
-	call Application_GetHeader
-	call Header_GetGD3Offset
-	pop ix
-	push de
-	call Application_GetReaderIY
+	call Application_GetDrivers
+	ex (sp),ix
+	pop hl
+	call Application_GetReader
+	ex (sp),ix
+	call Application_GetVGM
 	pop de
-	call nz,System_PrintCrLf
-	call nz,GD3_PrintInfoEnglish
-	push ix
-	call Application_GetHeader
-	call System_PrintCrLf
-	call Header_PrintInfo
-	call Chips_PrintInfo
+	call VGM_Construct
+	call VGM_PrintInfo
 	pop ix
 	ret
 
@@ -256,26 +210,13 @@ Application_PrintInfo:
 Application_Play:
 	ld hl,Application_playing
 	call System_Print
-	call Application_GetHeaderHL
-	call Application_GetReaderIY
-	push ix
 	push ix
 	call Application_GetCLI
 	ld c,(ix + CLI.loops)
 	pop ix
-	call Application_GetPlayer
-	ld e,iyl
-	ld d,iyh
-	call Player_Construct
-	ex (sp),ix
-	pop iy
 	push ix
-	call Application_GetDrivers
-	call Drivers_Install
-	pop ix
-	push ix
-	call Application_GetPlayer
-	call Player_Play
+	call Application_GetVGM
+	call VGM_Play
 	pop ix
 	ret
 
