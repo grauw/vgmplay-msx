@@ -4,7 +4,7 @@
 
 ; dehl = GD3 offset
 ; iy = reader
-GD3_ShowTagInfoEnglish:
+GD3_PrintInfoEnglish:
 	call MappedReader_SetPosition_IY
 	call GD3_CheckVersion
 	ret nz

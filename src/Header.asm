@@ -224,11 +224,7 @@ Header_GetGD3Offset:
 	ret
 
 ; ix = this
-Header_ShowInfo:
-	call Header_PrintVersion
-	ret
-
-Header_PrintVersion:
+Header_PrintInfo:
 	ld hl,Header_versionLabel
 	call System_Print
 	ld a,(ix + Header.version + 1)

@@ -162,7 +162,7 @@ Application_EnterMainLoop:
 	call Application_ParseCLI
 	call Application_LoadFile
 	call Application_ReadHeader
-	call Application_ShowInfo
+	call Application_PrintInfo
 	call Application_EnterBlackout
 	call Application_Play
 	ret
@@ -234,7 +234,7 @@ Application_ReadHeader:
 	ret
 
 ; ix = this
-Application_ShowInfo:
+Application_PrintInfo:
 	push ix
 	call Application_GetHeader
 	call Header_GetGD3Offset
@@ -243,11 +243,11 @@ Application_ShowInfo:
 	call Application_GetReaderIY
 	pop de
 	call nz,System_PrintCrLf
-	call nz,GD3_ShowTagInfoEnglish
+	call nz,GD3_PrintInfoEnglish
 	push ix
 	call Application_GetHeader
 	call System_PrintCrLf
-	call Header_ShowInfo
+	call Header_PrintInfo
 	call Chips_PrintInfo
 	pop ix
 	ret
