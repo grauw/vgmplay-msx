@@ -95,7 +95,7 @@ VGM_PrintInfo:
 	pop ix
 	ret
 
-; c = nr of loops
+; a = nr of loops
 ; ix = this
 VGM_Play:
 	call VGM_GetHeaderHL

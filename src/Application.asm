@@ -212,7 +212,7 @@ Application_Play:
 	call System_Print
 	push ix
 	call Application_GetCLI
-	ld c,(ix + CLI.loops)
+	ld a,(ix + CLI.loops)
 	pop ix
 	push ix
 	call Application_GetVGM

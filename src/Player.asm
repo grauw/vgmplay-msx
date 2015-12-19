@@ -70,7 +70,7 @@ Player: MACRO
 	size:
 	ENDM
 
-; c = max loops
+; a = max loops
 ; de = reader
 ; hl = header
 ; ix = this
@@ -80,7 +80,7 @@ Player_Construct:
 	ld (ix + Player.reader + 1),d
 	ld (ix + Player.header),l
 	ld (ix + Player.header + 1),h
-	ld (ix + Player.maxLoops),c
+	ld (ix + Player.maxLoops),a
 	push ix
 	ld e,ixl
 	ld d,ixh
