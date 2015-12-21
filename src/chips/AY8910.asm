@@ -18,33 +18,26 @@ AY8910_Construct:
 	ld a,(iy + Header.ay8910ChipType)
 	ld (ix + AY8910.chipType),a
 	cp 10H
-	ld bc,AY8910_ym2149Name
-	jp z,AY8910_SetName
+	ld hl,AY8910_ym2149Name
+	jp z,Chip_SetName
 	cp 11H
-	ld bc,AY8910_ym3439Name
-	jp z,AY8910_SetName
+	ld hl,AY8910_ym3439Name
+	jp z,Chip_SetName
 	cp 12H
-	ld bc,AY8910_ymz284Name
-	jp z,AY8910_SetName
+	ld hl,AY8910_ymz284Name
+	jp z,Chip_SetName
 	cp 13H
-	ld bc,AY8910_ymz294Name
-	jp z,AY8910_SetName
+	ld hl,AY8910_ymz294Name
+	jp z,Chip_SetName
 	cp 1H
-	ld bc,AY8910_ay8912Name
-	jp z,AY8910_SetName
+	ld hl,AY8910_ay8912Name
+	jp z,Chip_SetName
 	cp 2H
-	ld bc,AY8910_ay8913Name
-	jp z,AY8910_SetName
+	ld hl,AY8910_ay8913Name
+	jp z,Chip_SetName
 	cp 3H
-	ld bc,AY8910_ay8930Name
-	jp z,AY8910_SetName
-	ret
-
-; bc = name
-; ix = this
-AY8910_SetName:
-	ld (ix + AY8910.super.name),c
-	ld (ix + AY8910.super.name + 1),b
+	ld hl,AY8910_ay8930Name
+	jp z,Chip_SetName
 	ret
 
 ;

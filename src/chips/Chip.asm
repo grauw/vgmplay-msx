@@ -51,6 +51,13 @@ Chip_GetName:
 	ld h,(ix + Chip.name + 1)
 	ret
 
+; hl = name
+; ix = this
+Chip_SetName:
+	ld (ix + Chip.name),l
+	ld (ix + Chip.name + 1),h
+	ret
+
 ; ix = this
 Chip_PrintInfo: PROC
 	call Chip_GetName

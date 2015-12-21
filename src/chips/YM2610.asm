@@ -15,8 +15,8 @@ YM2610_Construct:
 	call Chip_Construct
 	bit 7,(ix + YM2610.super.clock)
 	ret z
-	ld (ix + YM2610.super.name),YM2610_ym2610bName
-	ld (ix + YM2610.super.name + 1),YM2610_ym2610bName >> 8
+	ld hl,YM2610_ym2610bName
+	call Chip_SetName
 	ret
 
 ;
