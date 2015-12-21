@@ -116,82 +116,7 @@ MoonSound: MACRO
 		call WriteRegisterWave
 		ret
 		ENDP
-
-	; ix = player
-	; iy = reader
-	ProcessYMF278BCommand: PROC
-		call Reader_Read_IY
-		cp 1
-		jr c,FM1
-		jp z,FM2
-	Wave:
-		call Reader_ReadWord_IY
-		call SafeWriteRegisterWave
-		jp Player_ProcessNext
-	FM1:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
-	FM2:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister2
-		jp Player_ProcessNext
-		ENDP
-
-	; ix = player
-	; iy = reader
-	ProcessYMF278BROMDataBlock:
-		push ix
-		ld ix,this
-		call MoonSound_ProcessYMF278BROMDataBlock
-		pop ix
-		push ix
-		call Player_GetTimer
-		call Timer_Reset
-		pop ix
-		jp Player_ProcessNext
-
-	; ix = player
-	; iy = reader
-	ProcessYMF262Port0Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
-
-	; ix = player
-	; iy = reader
-	ProcessYMF262Port1Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister2
-		jp Player_ProcessNext
-
-	; ix = player
-	; iy = reader
-	ProcessYM3812Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
-
-	; ix = player
-	; iy = reader
-	ProcessYM3526Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-MoonSound_TryCreate:
-	call MoonSound_Detect
-	ld ix,0
-	ld de,0
-	ret nc
-	ld ix,MoonSound_instance
-	call MoonSound_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; ix = this
 MoonSound_Construct:
@@ -201,29 +126,6 @@ MoonSound_Construct:
 ; ix = this
 MoonSound_Destruct:
 	call MoonSound_Reset
-	ret
-
-; ix = this
-; iy = player
-MoonSound_Install:
-	ld hl,MoonSound.ProcessYMF278BCommand
-	ld a,0D0H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,MoonSound.ProcessYMF278BROMDataBlock
-	ld a,84H
-	call Player_InstallDataBlockHandler_IY_IXOffset
-	ld hl,MoonSound.ProcessYMF262Port0Command
-	ld a,5EH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,MoonSound.ProcessYMF262Port1Command
-	ld a,5FH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,MoonSound.ProcessYM3812Command
-	ld a,5AH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,MoonSound.ProcessYM3526Command
-	ld a,5BH
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this
@@ -464,74 +366,6 @@ MoonSound_Reset:
 	ld de,0000H
 	call MoonSound_FillRegisters2
 	ret
-
-; ix = this
-; iy = reader
-MoonSound_ProcessYMF278BROMDataBlock: PROC
-	ld (ix + MoonSound.WriteRegisterWave_Mask.useYRW801ROM),0
-	ld d,00000011B
-	ld e,MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
-	call Reader_ReadDoubleWord_IY  ; block size
-	push de
-	push hl
-	call Reader_ReadDoubleWord_IY  ; total rom size
-	call Reader_ReadDoubleWord_IY  ; start address
-	set 5,e
-	call MoonSound_SetMemoryAddress
-	pop hl
-	pop de
-	ld bc,8  ; subtract header from block size
-Loop:
-	and a
-	sbc hl,bc
-	ld bc,0
-	ex de,hl
-	sbc hl,bc
-	ex de,hl
-	call c,System_ThrowException
-	ld a,h
-	or l
-	or e
-	or d
-	jr z,Finish
-	push de
-	push hl
-	ld a,d
-	or e
-	jr z,LessThan64K
-	ld hl,0FFFFH
-LessThan64K:
-	ld c,l
-	ld b,h
-	call Reader_ReadBlockFromBuffer_IY
-	push bc
-	call MoonSound_WriteMemory
-	pop bc
-	pop hl
-	pop de
-	jp Loop
-Finish:
-	call MoonSound_FixUpWaveHeaders
-	ret
-	ENDP
-
-; ix = this
-MoonSound_FixUpWaveHeaders: PROC
-	ld b,128
-	ld de,0020H
-	ld hl,0000H
-Loop:
-	push bc
-	call MoonSound_ReadMemoryByte
-	or 20H
-	call MoonSound_WriteMemoryByte
-	ld bc,000CH
-	add hl,bc
-	pop bc
-	djnz Loop
-	ret
-	ENDP
 
 ; f <- c: Found
 MoonSound_Detect:

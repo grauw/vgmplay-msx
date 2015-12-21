@@ -2,7 +2,15 @@
 ; VGM YM3812 chip
 ;
 YM3812: MACRO
-	super: Chip YM3812_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip YM3812_name, YM3812_Connect, YM3812_Install
+
+	; ix = player
+	; iy = reader
+	ProcessCommand:
+		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -13,6 +21,28 @@ YM3812_Construct:
 	ld e,(iy + Header.ym3812Clock + 2)
 	ld d,(iy + Header.ym3812Clock + 3)
 	call Chip_Construct
+	ret
+
+; iy = drivers
+; ix = this
+YM3812_Connect:
+	call Drivers_TryCreateMoonSound_IY
+	ret nc
+	ld hl,MoonSound.SafeWriteRegister
+	add hl,de
+	ld (ix + YM3812.writeRegister),l
+	ld (ix + YM3812.writeRegister + 1),h
+	ret
+
+; iy = player
+; ix = this
+YM3812_Install:
+	ld a,(ix + YM3812.writeRegister)
+	or (ix + YM3812.writeRegister + 1)
+	ret z
+	ld hl,YM3812.ProcessCommand
+	ld a,5AH
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;

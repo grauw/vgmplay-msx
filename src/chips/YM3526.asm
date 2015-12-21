@@ -25,14 +25,23 @@ YM3526_Construct:
 
 ; iy = drivers
 ; ix = this
-YM3526_Connect:
+YM3526_Connect: PROC
 	call Drivers_TryCreateMSXAudio_IY
-	ret nc
+	jr nc,TryMoonSound
 	ld hl,MSXAudio.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3526.writeRegister),l
 	ld (ix + YM3526.writeRegister + 1),h
 	ret
+TryMoonSound:
+	call Drivers_TryCreateMoonSound_IY
+	ret nc
+	ld hl,MoonSound.SafeWriteRegister
+	add hl,de
+	ld (ix + YM3526.writeRegister),l
+	ld (ix + YM3526.writeRegister + 1),h
+	ret
+	ENDP
 
 ; iy = player
 ; ix = this

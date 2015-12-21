@@ -35,11 +35,6 @@ Drivers: MACRO
 ; ix <- this
 Drivers_Construct:
 	push ix
-	call MoonSound_TryCreate
-	pop ix
-	ld (ix + Drivers.moonSound),e
-	ld (ix + Drivers.moonSound + 1),d
-	push ix
 	call SCC_TryCreate
 	pop ix
 	ld (ix + Drivers.scc),e
@@ -97,10 +92,6 @@ Drivers_Destruct:
 ; iy = player
 ; ix <- this
 Drivers_Install:
-	push ix
-	call Drivers_GetMoonSound
-	call nz,MoonSound_Install
-	pop ix
 	push ix
 	call Drivers_GetSCC
 	call nz,SCC_Install
@@ -192,6 +183,26 @@ Drivers_TryCreateMSXAudio_IY:
 	pop ix
 	ld (iy + Drivers.msxAudio),e
 	ld (iy + Drivers.msxAudio + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- MoonSound driver
+; f <- c: succeeded
+Drivers_TryCreateMoonSound_IY:
+	ld a,(iy + Drivers.moonSound)
+	or (iy + Drivers.moonSound + 1)
+	ret nz
+	call MoonSound_Detect
+	ret nc
+	push ix
+	ld ix,MoonSound_instance
+	call MoonSound_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.moonSound),e
+	ld (iy + Drivers.moonSound + 1),d
 	scf
 	ret
 
