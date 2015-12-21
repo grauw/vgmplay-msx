@@ -35,11 +35,6 @@ Drivers: MACRO
 ; ix <- this
 Drivers_Construct:
 	push ix
-	call PSG_TryCreate
-	pop ix
-	ld (ix + Drivers.psg),e
-	ld (ix + Drivers.psg + 1),d
-	push ix
 	call MSXMusic_TryCreate
 	pop ix
 	ld (ix + Drivers.msxMusic),e
@@ -113,10 +108,6 @@ Drivers_Destruct:
 ; ix <- this
 Drivers_Install:
 	push ix
-	call Drivers_GetPSG
-	call nz,PSG_Install
-	pop ix
-	push ix
 	call Drivers_GetMSXMusic
 	call nz,MSXMusic_Install
 	pop ix
@@ -140,6 +131,26 @@ Drivers_Install:
 	call Drivers_GetMMM
 	call nz,MMM_Install
 	pop ix
+	ret
+
+; ix = this
+; de <- PSG driver
+; f <- c: succeeded
+Drivers_TryCreatePSG_IY:
+	ld a,(iy + Drivers.psg)
+	or (iy + Drivers.psg + 1)
+	ret nz
+	call PSG_Detect
+	ret nc
+	push ix
+	ld ix,PSG_instance
+	call PSG_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.psg),e
+	ld (iy + Drivers.psg + 1),d
+	scf
 	ret
 
 ; ix = this

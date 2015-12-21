@@ -29,23 +29,7 @@ PSG: MACRO
 		ld d,a
 		ld a,e
 		jr WriteRegister
-
-	; ix = player
-	; iy = reader
-	ProcessAY8910Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-PSG_TryCreate:
-	ld ix,PSG_instance
-	call PSG_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; ix = this
 PSG_Construct:
@@ -55,14 +39,6 @@ PSG_Construct:
 ; ix = this
 PSG_Destruct:
 	call PSG_Reset
-	ret
-
-; ix = this
-; iy = player
-PSG_Install:
-	ld hl,PSG.ProcessAY8910Command
-	ld a,0A0H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this
@@ -106,6 +82,11 @@ Loop:
 	djnz Loop
 	ret
 	ENDP
+
+; f <- c: found
+PSG_Detect:
+	scf
+	ret
 
 ;
 	SECTION RAM

@@ -2,9 +2,17 @@
 ; VGM AY8910 chip
 ;
 AY8910: MACRO
-	super: Chip AY8910_ay8910Name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip AY8910_ay8910Name, AY8910_Connect, AY8910_Install
 	chipType:
 		db 0
+
+	; ix = player
+	; iy = reader
+	ProcessCommand:
+		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -38,6 +46,28 @@ AY8910_Construct:
 	cp 3H
 	ld hl,AY8910_ay8930Name
 	jp z,Chip_SetName
+	ret
+
+; iy = drivers
+; ix = this
+AY8910_Connect:
+	call Drivers_TryCreatePSG_IY
+	ret nc
+	ld hl,PSG.SafeWriteRegister
+	add hl,de
+	ld (ix + AY8910.writeRegister),l
+	ld (ix + AY8910.writeRegister + 1),h
+	ret
+
+; iy = player
+; ix = this
+AY8910_Install:
+	ld a,(ix + AY8910.writeRegister)
+	or (ix + AY8910.writeRegister + 1)
+	ret z
+	ld hl,AY8910.ProcessCommand
+	ld a,0A0H
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;
