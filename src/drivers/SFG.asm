@@ -55,27 +55,7 @@ SFG: MACRO
 		ld d,a
 		ld a,e
 		jr WriteRegister
-
-	; ix = player
-	; iy = reader
-	ProcessYM2151Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-SFG_TryCreate:
-	call SFG_Detect
-	ld ix,0
-	ld de,0
-	ret nc
-	ld ix,SFG_instance
-	call SFG_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; a = slot
 ; ix = this
@@ -87,14 +67,6 @@ SFG_Construct:
 ; ix = this
 SFG_Destruct:
 	call SFG_Reset
-	ret
-
-; ix = this
-; iy = player
-SFG_Install:
-	ld hl,SFG.ProcessYM2151Command
-	ld a,54H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this

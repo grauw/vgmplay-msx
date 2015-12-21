@@ -2,7 +2,15 @@
 ; VGM YM2151 chip
 ;
 YM2151: MACRO
-	super: Chip YM2151_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip YM2151_name, YM2151_Connect, YM2151_Install
+
+	; ix = player
+	; iy = reader
+	ProcessCommand:
+		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -27,6 +35,28 @@ Continue:
 	call Chip_Construct
 	ret
 	ENDP
+
+; iy = drivers
+; ix = this
+YM2151_Connect:
+	call Drivers_TryCreateSFG_IY
+	ret nc
+	ld hl,SFG.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2151.writeRegister),l
+	ld (ix + YM2151.writeRegister + 1),h
+	ret
+
+; iy = player
+; ix = this
+YM2151_Install:
+	ld a,(ix + YM2151.writeRegister)
+	or (ix + YM2151.writeRegister + 1)
+	ret z
+	ld hl,YM2151.ProcessCommand
+	ld a,54H
+	call Player_InstallCommandHandler_IY_IXOffset
+	ret
 
 ;
 YM2151_instance: YM2151

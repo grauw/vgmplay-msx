@@ -40,11 +40,6 @@ Drivers_Construct:
 	ld (ix + Drivers.psg),e
 	ld (ix + Drivers.psg + 1),d
 	push ix
-	call SFG_TryCreate
-	pop ix
-	ld (ix + Drivers.sfg),e
-	ld (ix + Drivers.sfg + 1),d
-	push ix
 	call MSXMusic_TryCreate
 	pop ix
 	ld (ix + Drivers.msxMusic),e
@@ -122,10 +117,6 @@ Drivers_Install:
 	call nz,PSG_Install
 	pop ix
 	push ix
-	call Drivers_GetSFG
-	call nz,SFG_Install
-	pop ix
-	push ix
 	call Drivers_GetMSXMusic
 	call nz,MSXMusic_Install
 	pop ix
@@ -149,6 +140,26 @@ Drivers_Install:
 	call Drivers_GetMMM
 	call nz,MMM_Install
 	pop ix
+	ret
+
+; ix = this
+; de <- SFG driver
+; f <- c: succeeded
+Drivers_TryCreateSFG_IY:
+	ld a,(iy + Drivers.sfg)
+	or (iy + Drivers.sfg + 1)
+	ret nz
+	call SFG_Detect
+	ret nc
+	push ix
+	ld ix,SFG_instance
+	call SFG_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.sfg),e
+	ld (iy + Drivers.sfg + 1),d
+	scf
 	ret
 
 ; ix = this
