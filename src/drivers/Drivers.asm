@@ -35,11 +35,6 @@ Drivers: MACRO
 ; ix <- this
 Drivers_Construct:
 	push ix
-	call MSXAudio_TryCreate
-	pop ix
-	ld (ix + Drivers.msxAudio),e
-	ld (ix + Drivers.msxAudio + 1),d
-	push ix
 	call MoonSound_TryCreate
 	pop ix
 	ld (ix + Drivers.moonSound),e
@@ -105,10 +100,6 @@ Drivers_Install:
 	push ix
 	call Drivers_GetMoonSound
 	call nz,MoonSound_Install
-	pop ix
-	push ix
-	call Drivers_GetMSXAudio
-	call nz,MSXAudio_Install
 	pop ix
 	push ix
 	call Drivers_GetSCC
@@ -181,6 +172,26 @@ Drivers_TryCreateMSXMusic_IY:
 	pop ix
 	ld (iy + Drivers.msxMusic),e
 	ld (iy + Drivers.msxMusic + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- MSX-AUDIO driver
+; f <- c: succeeded
+Drivers_TryCreateMSXAudio_IY:
+	ld a,(iy + Drivers.msxAudio)
+	or (iy + Drivers.msxAudio + 1)
+	ret nz
+	call MSXAudio_Detect
+	ret nc
+	push ix
+	ld ix,MSXAudio_instance
+	call MSXAudio_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.msxAudio),e
+	ld (iy + Drivers.msxAudio + 1),d
 	scf
 	ret
 

@@ -152,47 +152,7 @@ MSXAudio: MACRO
 		ei
 		ret
 		ENDP
-
-	; ix = player
-	; iy = reader
-	ProcessY8950Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
-
-	; ix = player
-	; iy = reader
-	ProcessYM3526Command:
-		call Reader_ReadWord_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
-
-	; ix = player
-	; iy = reader
-	ProcessY8950DataBlock:
-		push ix
-		ld ix,this
-		call MSXAudio_ProcessY8950DataBlock
-		pop ix
-		push ix
-		call Player_GetTimer
-		call Timer_Reset
-		pop ix
-		jp Player_ProcessNext
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-MSXAudio_TryCreate:
-	call MSXAudio_Detect
-	ld ix,0
-	ld de,0
-	ret nc
-	ld ix,MSXAudio_instance
-	call MSXAudio_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; ix = this
 MSXAudio_Construct:
@@ -203,20 +163,6 @@ MSXAudio_Construct:
 MSXAudio_Destruct:
 	call MSXAudio_Mute
 	call MSXAudio_Reset
-	ret
-
-; ix = this
-; iy = player
-MSXAudio_Install:
-	ld hl,MSXAudio.ProcessY8950Command
-	ld a,5CH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,MSXAudio.ProcessY8950DataBlock
-	ld a,88H
-	call Player_InstallDataBlockHandler_IY_IXOffset
-	ld hl,MSXAudio.ProcessYM3526Command
-	ld a,5BH
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this
@@ -272,54 +218,6 @@ MSXAudio_Reset:
 	ld de,0060H
 	call MSXAudio_FillRegisters
 	ret
-
-; ix = this
-; iy = reader
-MSXAudio_ProcessY8950DataBlock: PROC
-	call Reader_ReadDoubleWord_IY  ; block size
-	push de
-	push hl
-	call Reader_ReadDoubleWord_IY  ; total rom size
-	call Reader_ReadDoubleWord_IY  ; start address
-	call MSXAudio_SetADPCMWriteAddress
-	pop hl
-	pop de
-	ld bc,8  ; subtract header from block size
-Loop:
-	and a
-	sbc hl,bc
-	ld bc,0
-	ex de,hl
-	sbc hl,bc
-	ex de,hl
-	call c,System_ThrowException
-	ld a,h
-	or l
-	or e
-	or d
-	jr z,Finish
-	push de
-	push hl
-	ld a,d
-	or e
-	jr z,LessThan64K
-	ld hl,0FFFFH
-LessThan64K:
-	ld c,l
-	ld b,h
-	call Reader_ReadBlockFromBuffer_IY
-	push bc
-	call MSXAudio_WriteADPCMData
-	pop bc
-	pop hl
-	pop de
-	jp Loop
-Finish:
-	ld d,01H
-	ld e,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_WriteRegister
-	ret
-	ENDP
 
 ; ehl = write address
 ; ix = this

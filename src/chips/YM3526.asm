@@ -2,7 +2,15 @@
 ; VGM YM3526 chip
 ;
 YM3526: MACRO
-	super: Chip YM3526_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip YM3526_name, YM3526_Connect, YM3526_Install
+
+	; ix = player
+	; iy = reader
+	ProcessCommand:
+		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
 	ENDM
 
 ; ix = this
@@ -13,6 +21,28 @@ YM3526_Construct:
 	ld e,(iy + Header.ym3526Clock + 2)
 	ld d,(iy + Header.ym3526Clock + 3)
 	call Chip_Construct
+	ret
+
+; iy = drivers
+; ix = this
+YM3526_Connect:
+	call Drivers_TryCreateMSXAudio_IY
+	ret nc
+	ld hl,MSXAudio.SafeWriteRegister
+	add hl,de
+	ld (ix + YM3526.writeRegister),l
+	ld (ix + YM3526.writeRegister + 1),h
+	ret
+
+; iy = player
+; ix = this
+YM3526_Install:
+	ld a,(ix + YM3526.writeRegister)
+	or (ix + YM3526.writeRegister + 1)
+	ret z
+	ld hl,YM3526.ProcessCommand
+	ld a,5BH
+	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;
