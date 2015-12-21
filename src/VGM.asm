@@ -45,7 +45,7 @@ VGM_GetReaderIY:
 	ret
 
 ; ix = this
-; iy <- reader
+; ix <- drivers
 VGM_GetDrivers:
 	ld e,(ix + VGM.drivers)
 	ld d,(ix + VGM.drivers + 1)
