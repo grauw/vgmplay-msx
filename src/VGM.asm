@@ -8,6 +8,8 @@ VGM: MACRO
 		dw 0
 	header:
 		Header
+	chips:
+		Chips
 	player:
 		Player
 	size:
@@ -29,8 +31,10 @@ VGM_Construct:
 	push ix
 	call VGM_GetHeader
 	call Header_Construct
-	push ix
+	ex (sp),ix
 	pop iy
+	push ix
+	call VGM_GetChips
 	call Chips_Construct
 	pop ix
 	ret
@@ -70,6 +74,13 @@ VGM_GetHeaderHL:
 	ret
 
 ; ix = this
+; ix <- chips
+VGM_GetChips:
+	ld de,VGM.chips
+	add ix,de
+	ret
+
+; ix = this
 ; ix <- player
 VGM_GetPlayer:
 	ld de,VGM.player
@@ -91,6 +102,9 @@ VGM_PrintInfo:
 	push ix
 	call VGM_GetHeader
 	call Header_PrintInfo
+	pop ix
+	push ix
+	call VGM_GetChips
 	call Chips_PrintInfo
 	pop ix
 	ret

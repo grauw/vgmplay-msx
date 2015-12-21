@@ -35,137 +35,97 @@
 	INCLUDE "Pokey.asm"
 	INCLUDE "QSound.asm"
 
-; iy = header
-Chips_Construct:
-	ld ix,SN76489_instance
-	call SN76489_Construct
-	ld ix,YM2413_instance
-	call YM2413_Construct
-	ld ix,YM2612_instance
-	call YM2612_Construct
-	ld ix,YM2151_instance
-	call YM2151_Construct
-	ld ix,SegaPCM_instance
-	call SegaPCM_Construct
-	ld ix,RF5C68_instance
-	call RF5C68_Construct
-	ld ix,YM2203_instance
-	call YM2203_Construct
-	ld ix,YM2608_instance
-	call YM2608_Construct
-	ld ix,YM2610_instance
-	call YM2610_Construct
-	ld ix,YM3812_instance
-	call YM3812_Construct
-	ld ix,YM3526_instance
-	call YM3526_Construct
-	ld ix,Y8950_instance
-	call Y8950_Construct
-	ld ix,YMF262_instance
-	call YMF262_Construct
-	ld ix,YMF278B_instance
-	call YMF278B_Construct
-	ld ix,YMF271_instance
-	call YMF271_Construct
-	ld ix,YMZ280B_instance
-	call YMZ280B_Construct
-	ld ix,RF5C164_instance
-	call RF5C164_Construct
-	ld ix,PWM_instance
-	call PWM_Construct
-	ld ix,AY8910_instance
-	call AY8910_Construct
-	ld ix,GameBoyDMG_instance
-	call GameBoyDMG_Construct
-	ld ix,NESAPU_instance
-	call NESAPU_Construct
-	ld ix,MultiPCM_instance
-	call MultiPCM_Construct
-	ld ix,UPD7759_instance
-	call UPD7759_Construct
-	ld ix,OKIM6258_instance
-	call OKIM6258_Construct
-	ld ix,OKIM6295_instance
-	call OKIM6295_Construct
-	ld ix,K051649_instance
-	call K051649_Construct
-	ld ix,K054539_instance
-	call K054539_Construct
-	ld ix,HuC6280_instance
-	call HuC6280_Construct
-	ld ix,C140_instance
-	call C140_Construct
-	ld ix,K053260_instance
-	call K053260_Construct
-	ld ix,Pokey_instance
-	call Pokey_Construct
-	ld ix,QSound_instance
-	call QSound_Construct
-	ret
+Chips: MACRO
+	COUNT: equ (chipsEnd - chips) / ChipInstance._size
+	chips:
+		ChipInstance SN76489_instance, SN76489_Construct
+		ChipInstance YM2413_instance, YM2413_Construct
+		ChipInstance YM2612_instance, YM2612_Construct
+		ChipInstance YM2151_instance, YM2151_Construct
+		ChipInstance SegaPCM_instance, SegaPCM_Construct
+		ChipInstance RF5C68_instance, RF5C68_Construct
+		ChipInstance YM2203_instance, YM2203_Construct
+		ChipInstance YM2608_instance, YM2608_Construct
+		ChipInstance YM2610_instance, YM2610_Construct
+		ChipInstance YM3812_instance, YM3812_Construct
+		ChipInstance YM3526_instance, YM3526_Construct
+		ChipInstance Y8950_instance, Y8950_Construct
+		ChipInstance YMF262_instance, YMF262_Construct
+		ChipInstance YMF278B_instance, YMF278B_Construct
+		ChipInstance YMF271_instance, YMF271_Construct
+		ChipInstance YMZ280B_instance, YMZ280B_Construct
+		ChipInstance RF5C164_instance, RF5C164_Construct
+		ChipInstance PWM_instance, PWM_Construct
+		ChipInstance AY8910_instance, AY8910_Construct
+		ChipInstance GameBoyDMG_instance, GameBoyDMG_Construct
+		ChipInstance NESAPU_instance, NESAPU_Construct
+		ChipInstance MultiPCM_instance, MultiPCM_Construct
+		ChipInstance UPD7759_instance, UPD7759_Construct
+		ChipInstance OKIM6258_instance, OKIM6258_Construct
+		ChipInstance OKIM6295_instance, OKIM6295_Construct
+		ChipInstance K051649_instance, K051649_Construct
+		ChipInstance K054539_instance, K054539_Construct
+		ChipInstance HuC6280_instance, HuC6280_Construct
+		ChipInstance C140_instance, C140_Construct
+		ChipInstance K053260_instance, K053260_Construct
+		ChipInstance Pokey_instance, Pokey_Construct
+		ChipInstance QSound_instance, QSound_Construct
+	chipsEnd:
+	ENDM
 
-Chips_PrintInfo:
-	ld ix,SN76489_instance
-	call Chip_PrintInfo
-	ld ix,YM2413_instance
-	call Chip_PrintInfo
-	ld ix,YM2612_instance
-	call Chip_PrintInfo
-	ld ix,YM2151_instance
-	call Chip_PrintInfo
-	ld ix,SegaPCM_instance
-	call Chip_PrintInfo
-	ld ix,RF5C68_instance
-	call Chip_PrintInfo
-	ld ix,YM2203_instance
-	call Chip_PrintInfo
-	ld ix,YM2608_instance
-	call Chip_PrintInfo
-	ld ix,YM2610_instance
-	call Chip_PrintInfo
-	ld ix,YM3812_instance
-	call Chip_PrintInfo
-	ld ix,YM3526_instance
-	call Chip_PrintInfo
-	ld ix,Y8950_instance
-	call Chip_PrintInfo
-	ld ix,YMF262_instance
-	call Chip_PrintInfo
-	ld ix,YMF278B_instance
-	call Chip_PrintInfo
-	ld ix,YMF271_instance
-	call Chip_PrintInfo
-	ld ix,YMZ280B_instance
-	call Chip_PrintInfo
-	ld ix,RF5C164_instance
-	call Chip_PrintInfo
-	ld ix,PWM_instance
-	call Chip_PrintInfo
-	ld ix,AY8910_instance
-	call Chip_PrintInfo
-	ld ix,GameBoyDMG_instance
-	call Chip_PrintInfo
-	ld ix,NESAPU_instance
-	call Chip_PrintInfo
-	ld ix,MultiPCM_instance
-	call Chip_PrintInfo
-	ld ix,UPD7759_instance
-	call Chip_PrintInfo
-	ld ix,OKIM6258_instance
-	call Chip_PrintInfo
-	ld ix,OKIM6295_instance
-	call Chip_PrintInfo
-	ld ix,K051649_instance
-	call Chip_PrintInfo
-	ld ix,K054539_instance
-	call Chip_PrintInfo
-	ld ix,HuC6280_instance
-	call Chip_PrintInfo
-	ld ix,C140_instance
-	call Chip_PrintInfo
-	ld ix,K053260_instance
-	call Chip_PrintInfo
-	ld ix,Pokey_instance
-	call Chip_PrintInfo
-	ld ix,QSound_instance
-	call Chip_PrintInfo
+ChipInstance: MACRO ?instance, ?constructor
+	instance:
+		dw ?instance
+	constructor:
+		dw ?constructor
+	_size:
+	ENDM
+
+; ix = this
+; iy = header
+Chips_Construct: PROC
+	ld b,Chips.COUNT
+	push ix
+Loop:
+	push bc
+	ld e,(ix + Chips.chips + ChipInstance.instance)
+	ld d,(ix + Chips.chips + ChipInstance.instance + 1)
+	ld l,(ix + Chips.chips + ChipInstance.constructor)
+	ld h,(ix + Chips.chips + ChipInstance.constructor + 1)
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call Construct
+	pop ix
+	pop bc
+	REPT 4  ; ChipInstance._size
+	inc ix
+	ENDM
+	djnz Loop
+	pop ix
 	ret
+Construct:
+	jp hl
+	ENDP
+
+; ix = this
+Chips_PrintInfo: PROC
+	ld b,Chips.COUNT
+	push ix
+Loop:
+	push bc
+	ld c,(ix + Chips.chips + ChipInstance.instance)
+	ld b,(ix + Chips.chips + ChipInstance.instance + 1)
+	push ix
+	ld ixl,c
+	ld ixh,b
+	call Chip_PrintInfo
+	pop ix
+	pop bc
+	REPT 4  ; ChipInstance._size
+	inc ix
+	ENDM
+	djnz Loop
+	pop ix
+	ret
+	ENDP
