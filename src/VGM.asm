@@ -130,10 +130,6 @@ VGM_Play:
 	ex (sp),ix
 	pop iy
 	push ix
-	call VGM_GetDrivers
-	call Drivers_Install
-	pop ix
-	push ix
 	call VGM_GetChips
 	call Chips_Install
 	pop ix

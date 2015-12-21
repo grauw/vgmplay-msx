@@ -74,12 +74,6 @@ Drivers_Destruct:
 	ret
 
 ; ix = this
-; iy = player
-; ix <- this
-Drivers_Install:
-	ret
-
-; ix = this
 ; de <- PSG driver
 ; f <- c: succeeded
 Drivers_TryCreatePSG_IY:
