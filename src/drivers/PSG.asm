@@ -4,7 +4,7 @@
 PSG_ADDRESS: equ 0A0H
 PSG_DATA: equ 0A1H
 
-PSG: MACRO
+PSG: MACRO ?address, ?data
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -17,10 +17,10 @@ PSG: MACRO
 	; d = value
 	WriteRegister:
 		di
-		out (PSG_ADDRESS),a
+		out (?address),a
 		ld a,d
 		ei
-		out (PSG_DATA),a
+		out (?data),a
 		ret
 	MaskMixer:
 		ld a,d
@@ -91,6 +91,6 @@ PSG_Detect:
 ;
 	SECTION RAM
 
-PSG_instance: PSG
+PSG_instance: PSG PSG_ADDRESS, PSG_DATA
 
 	ENDS

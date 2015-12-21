@@ -50,14 +50,23 @@ AY8910_Construct:
 
 ; iy = drivers
 ; ix = this
-AY8910_Connect:
+AY8910_Connect: PROC
 	call Drivers_TryCreatePSG_IY
-	ret nc
+	jp nc,TryMFRPSG
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
 	ld (ix + AY8910.writeRegister),l
 	ld (ix + AY8910.writeRegister + 1),h
 	ret
+TryMFRPSG:
+	call Drivers_TryCreateMFRPSG_IY
+	ret nc
+	ld hl,MFRPSG.SafeWriteRegister
+	add hl,de
+	ld (ix + AY8910.writeRegister),l
+	ld (ix + AY8910.writeRegister + 1),h
+	ret
+	ENDP
 
 ; iy = player
 ; ix = this

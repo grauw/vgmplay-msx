@@ -3,6 +3,7 @@
 ;
 
 	INCLUDE "PSG.asm"
+	INCLUDE "MFRPSG.asm"
 	INCLUDE "SFG.asm"
 	INCLUDE "MSXMusic.asm"
 	INCLUDE "MSXAudio.asm"
@@ -13,6 +14,8 @@
 
 Drivers: MACRO
 	psg:
+		dw 0
+	mfrPSG:
 		dw 0
 	sfg:
 		dw 0
@@ -42,6 +45,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetPSG
 	call nz,PSG_Destruct
+	pop ix
+	push ix
+	call Drivers_GetMFRPSG
+	call nz,MFRPSG_Destruct
 	pop ix
 	push ix
 	call Drivers_GetSFG
@@ -90,6 +97,26 @@ Drivers_TryCreatePSG_IY:
 	pop ix
 	ld (iy + Drivers.psg),e
 	ld (iy + Drivers.psg + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- MegaFlashROM SCC+ SD PSG driver
+; f <- c: succeeded
+Drivers_TryCreateMFRPSG_IY:
+	ld a,(iy + Drivers.mfrPSG)
+	or (iy + Drivers.mfrPSG + 1)
+	ret nz
+	call MFRPSG_Detect
+	ret nc
+	push ix
+	ld ix,MFRPSG_instance
+	call MFRPSG_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.mfrPSG),e
+	ld (iy + Drivers.mfrPSG + 1),d
 	scf
 	ret
 
@@ -240,6 +267,19 @@ Drivers_TryCreateMMM_IY:
 Drivers_GetPSG:
 	ld e,(ix + Drivers.psg)
 	ld d,(ix + Drivers.psg + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- MegaFlashROM SCC+ SD PSG driver
+; ix <- MegaFlashROM SCC+ SD PSG driver
+; f <- z: not set
+Drivers_GetMFRPSG:
+	ld e,(ix + Drivers.mfrPSG)
+	ld d,(ix + Drivers.mfrPSG + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
