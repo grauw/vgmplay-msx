@@ -1,11 +1,15 @@
 ;
 ; VGM chip
 ;
-Chip: MACRO ?name
+Chip: MACRO ?name, ?connecter, ?installer
 	clock:
 		dd 0
 	name:
 		dw ?name
+	connecter:
+		dw ?connecter
+	installer:
+		dw ?installer
 	ENDM
 
 ; dehl = clock
@@ -56,6 +60,30 @@ Chip_GetName:
 Chip_SetName:
 	ld (ix + Chip.name),l
 	ld (ix + Chip.name + 1),h
+	ret
+
+; iy = drivers
+; ix = this
+Chip_Connect:
+	ld l,(ix + Chip.connecter)
+	ld h,(ix + Chip.connecter + 1)
+	jp hl
+
+; iy = player
+; ix = this
+Chip_Install:
+	ld l,(ix + Chip.installer)
+	ld h,(ix + Chip.installer + 1)
+	jp hl
+
+; iy = drivers
+; ix = this
+Chip_ConnectDefault:
+	ret
+
+; iy = player
+; ix = this
+Chip_InstallDefault:
 	ret
 
 ; ix = this

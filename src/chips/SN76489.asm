@@ -2,7 +2,7 @@
 ; VGM SN76489 chip
 ;
 SN76489: MACRO
-	super: Chip SN76489_name
+	super: Chip SN76489_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

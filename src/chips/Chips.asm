@@ -141,3 +141,17 @@ Chips_PrintInfo:
 	ld hl,Chip_PrintInfo
 	call Chips_ForEachActiveChip
 	ret
+
+; iy = drivers
+; ix = this
+Chips_Connect:
+	ld hl,Chip_Connect
+	call Chips_ForEachActiveChip
+	ret
+
+; iy = player
+; ix = this
+Chips_Install:
+	ld hl,Chip_Install
+	call Chips_ForEachActiveChip
+	ret

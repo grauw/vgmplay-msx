@@ -2,7 +2,7 @@
 ; VGM AY8910 chip
 ;
 AY8910: MACRO
-	super: Chip AY8910_ay8910Name
+	super: Chip AY8910_ay8910Name, Chip_ConnectDefault, Chip_InstallDefault
 	chipType:
 		db 0
 	ENDM

@@ -2,7 +2,7 @@
 ; VGM YM2151 chip
 ;
 YM2151: MACRO
-	super: Chip YM2151_name
+	super: Chip YM2151_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

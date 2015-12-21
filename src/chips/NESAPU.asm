@@ -2,7 +2,7 @@
 ; VGM NESAPU chip
 ;
 NESAPU: MACRO
-	super: Chip NESAPU_name
+	super: Chip NESAPU_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

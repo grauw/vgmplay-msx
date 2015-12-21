@@ -2,7 +2,7 @@
 ; VGM UPD7759 chip
 ;
 UPD7759: MACRO
-	super: Chip UPD7759_name
+	super: Chip UPD7759_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

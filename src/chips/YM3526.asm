@@ -2,7 +2,7 @@
 ; VGM YM3526 chip
 ;
 YM3526: MACRO
-	super: Chip YM3526_name
+	super: Chip YM3526_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

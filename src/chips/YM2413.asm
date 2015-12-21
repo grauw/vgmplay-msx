@@ -2,7 +2,7 @@
 ; VGM YM2413 chip
 ;
 YM2413: MACRO
-	super: Chip YM2413_name
+	super: Chip YM2413_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

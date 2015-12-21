@@ -2,7 +2,7 @@
 ; VGM YM2608 chip
 ;
 YM2608: MACRO
-	super: Chip YM2608_name
+	super: Chip YM2608_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

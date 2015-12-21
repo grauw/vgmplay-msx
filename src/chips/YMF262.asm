@@ -2,7 +2,7 @@
 ; VGM YMF262 chip
 ;
 YMF262: MACRO
-	super: Chip YMF262_name
+	super: Chip YMF262_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

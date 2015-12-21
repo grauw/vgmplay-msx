@@ -2,7 +2,7 @@
 ; VGM MultiPCM chip
 ;
 MultiPCM: MACRO
-	super: Chip MultiPCM_name
+	super: Chip MultiPCM_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

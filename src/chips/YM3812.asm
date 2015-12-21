@@ -2,7 +2,7 @@
 ; VGM YM3812 chip
 ;
 YM3812: MACRO
-	super: Chip YM3812_name
+	super: Chip YM3812_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

@@ -2,7 +2,7 @@
 ; VGM Y8950 chip
 ;
 Y8950: MACRO
-	super: Chip Y8950_name
+	super: Chip Y8950_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

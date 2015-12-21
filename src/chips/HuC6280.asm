@@ -2,7 +2,7 @@
 ; VGM HuC6280 chip
 ;
 HuC6280: MACRO
-	super: Chip HuC6280_name
+	super: Chip HuC6280_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

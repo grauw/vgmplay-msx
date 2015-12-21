@@ -37,6 +37,14 @@ VGM_Construct:
 	call VGM_GetChips
 	call Chips_Construct
 	pop ix
+	push ix
+	push ix
+	call VGM_GetDrivers
+	ex (sp),ix
+	pop iy
+	call VGM_GetChips
+	call Chips_Connect
+	pop ix
 	ret
 
 ; ix = this
@@ -124,6 +132,10 @@ VGM_Play:
 	push ix
 	call VGM_GetDrivers
 	call Drivers_Install
+	pop ix
+	push ix
+	call VGM_GetChips
+	call Chips_Install
 	pop ix
 	push ix
 	call VGM_GetPlayer

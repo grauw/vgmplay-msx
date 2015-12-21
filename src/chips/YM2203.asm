@@ -2,7 +2,7 @@
 ; VGM YM2203 chip
 ;
 YM2203: MACRO
-	super: Chip YM2203_name
+	super: Chip YM2203_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this

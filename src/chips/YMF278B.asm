@@ -2,7 +2,7 @@
 ; VGM YMF278B chip
 ;
 YMF278B: MACRO
-	super: Chip YMF278B_name
+	super: Chip YMF278B_name, Chip_ConnectDefault, Chip_InstallDefault
 	ENDM
 
 ; ix = this
