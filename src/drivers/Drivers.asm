@@ -35,11 +35,6 @@ Drivers: MACRO
 ; ix <- this
 Drivers_Construct:
 	push ix
-	call SCC_TryCreate
-	pop ix
-	ld (ix + Drivers.scc),e
-	ld (ix + Drivers.scc + 1),d
-	push ix
 	call Franky_TryCreate
 	pop ix
 	ld (ix + Drivers.franky),e
@@ -92,10 +87,6 @@ Drivers_Destruct:
 ; iy = player
 ; ix <- this
 Drivers_Install:
-	push ix
-	call Drivers_GetSCC
-	call nz,SCC_Install
-	pop ix
 	push ix
 	call Drivers_GetFranky
 	call nz,Franky_Install
@@ -203,6 +194,26 @@ Drivers_TryCreateMoonSound_IY:
 	pop ix
 	ld (iy + Drivers.moonSound),e
 	ld (iy + Drivers.moonSound + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- SCC driver
+; f <- c: succeeded
+Drivers_TryCreateSCC_IY:
+	ld a,(iy + Drivers.scc)
+	or (iy + Drivers.scc + 1)
+	ret nz
+	call SCC_Detect
+	ret nc
+	push ix
+	ld ix,SCC_instance
+	call SCC_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.scc),e
+	ld (iy + Drivers.scc + 1),d
 	scf
 	ret
 

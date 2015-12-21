@@ -40,67 +40,7 @@ SCC: MACRO
 		ei
 		out (c),b
 		ret
-
-	; ix = player
-	; iy = reader
-	ProcessK051649Command: PROC
-		call Reader_Read_IY
-		cp 1
-		jr c,Waveform
-		jr z,Frequency
-		cp 3
-		jr c,Amplitude
-		jr z,Mixer
-		cp 5
-		jr c,WaveformSCCPlus
-		jr z,Deformation
-		call Reader_ReadWord_IY
-		jp Player_ProcessNext
-	Waveform:
-		call Reader_ReadWord_IY
-		ld a,e
-		call WriteRegister
-		jp Player_ProcessNext
-	Frequency:
-		call Reader_ReadWord_IY
-		ld a,SCC_FREQUENCY
-		add a,e
-		call WriteRegister
-		jp Player_ProcessNext
-	Amplitude:
-		call Reader_ReadWord_IY
-		ld a,SCC_AMPLITUDE
-		add a,e
-		call WriteRegister
-		jp Player_ProcessNext
-	Mixer:
-		call Reader_ReadWord_IY
-		ld a,SCC_MIXER
-		call WriteRegister
-		jp Player_ProcessNext
-	WaveformSCCPlus:
-		call Reader_ReadWord_IY
-		jp Player_ProcessNext
-	Deformation:
-		call Reader_ReadWord_IY
-		ld a,SCC_DEFORMATION
-		call WriteRegister
-		jp Player_ProcessNext
-		ENDP
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-SCC_TryCreate:
-	call SCC_Detect
-	ld ix,0
-	ld de,0
-	ret nc
-	ld ix,SCC_instance
-	call SCC_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; a = slot
 ; ix = this
@@ -113,14 +53,6 @@ SCC_Construct:
 ; ix = this
 SCC_Destruct:
 	call SCC_Reset
-	ret
-
-; ix = this
-; iy = player
-SCC_Install:
-	ld hl,SCC.ProcessK051649Command
-	ld a,0D2H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; ix = this
