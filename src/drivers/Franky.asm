@@ -12,23 +12,7 @@ Franky: MACRO
 	WriteRegister:
 		out (Franky_DATA),a
 		ret
-
-	; ix = player
-	; iy = reader
-	ProcessSN76489Command:
-		call Reader_Read_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-Franky_TryCreate:
-	ld ix,Franky_instance
-	call Franky_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; ix = this
 Franky_Construct:
@@ -40,14 +24,6 @@ Franky_Construct:
 ; ix = this
 Franky_Destruct:
 	call Franky_Reset
-	ret
-
-; ix = this
-; iy = player
-Franky_Install:
-	ld hl,Franky.ProcessSN76489Command
-	ld a,50H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ; a = value
@@ -78,6 +54,11 @@ Franky_Reset:
 	call Franky_WriteRegister
 	ld a,0FFH
 	call Franky_WriteRegister
+	ret
+
+; f <- c: found
+Franky_Detect:
+	scf
 	ret
 
 ;

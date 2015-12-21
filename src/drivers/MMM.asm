@@ -19,27 +19,7 @@ MMM: MACRO
 	WriteRegister:
 		out (MMM_SN76489),a
 		ret
-
-	; ix = player
-	; iy = reader
-	ProcessSN76489Command:
-		call Reader_Read_IY
-		call SafeWriteRegister
-		jp Player_ProcessNext
 	ENDM
-
-; ix <- instance or null
-; de <- instance or null
-MMM_TryCreate:
-	call MMM_Detect
-	ld ix,0
-	ld de,0
-	ret nc
-	ld ix,MMM_instance
-	call MMM_Construct
-	ld e,ixl
-	ld d,ixh
-	ret
 
 ; a = slot
 ; ix = this
@@ -53,14 +33,6 @@ MMM_Construct:
 MMM_Destruct:
 	call MMM_Reset
 	call MMM_Disable
-	ret
-
-; ix = this
-; iy = player
-MMM_Install:
-	ld hl,MMM.ProcessSN76489Command
-	ld a,50H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 	SECTION TPA_PAGE0

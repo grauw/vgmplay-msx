@@ -34,16 +34,6 @@ Drivers: MACRO
 ; ix = this
 ; ix <- this
 Drivers_Construct:
-	push ix
-	call Franky_TryCreate
-	pop ix
-	ld (ix + Drivers.franky),e
-	ld (ix + Drivers.franky + 1),d
-	push ix
-	call MMM_TryCreate
-	pop ix
-	ld (ix + Drivers.mmm),e
-	ld (ix + Drivers.mmm + 1),d
 	ret
 
 ; ix = this
@@ -87,14 +77,6 @@ Drivers_Destruct:
 ; iy = player
 ; ix <- this
 Drivers_Install:
-	push ix
-	call Drivers_GetFranky
-	call nz,Franky_Install
-	pop ix
-	push ix
-	call Drivers_GetMMM
-	call nz,MMM_Install
-	pop ix
 	ret
 
 ; ix = this
@@ -214,6 +196,46 @@ Drivers_TryCreateSCC_IY:
 	pop ix
 	ld (iy + Drivers.scc),e
 	ld (iy + Drivers.scc + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- Franky driver
+; f <- c: succeeded
+Drivers_TryCreateFranky_IY:
+	ld a,(iy + Drivers.franky)
+	or (iy + Drivers.franky + 1)
+	ret nz
+	call Franky_Detect
+	ret nc
+	push ix
+	ld ix,Franky_instance
+	call Franky_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.franky),e
+	ld (iy + Drivers.franky + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- Musical Memory Mapper driver
+; f <- c: succeeded
+Drivers_TryCreateMMM_IY:
+	ld a,(iy + Drivers.mmm)
+	or (iy + Drivers.mmm + 1)
+	ret nz
+	call MMM_Detect
+	ret nc
+	push ix
+	ld ix,MMM_instance
+	call MMM_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.mmm),e
+	ld (iy + Drivers.mmm + 1),d
 	scf
 	ret
 
