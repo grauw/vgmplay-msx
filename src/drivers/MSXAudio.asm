@@ -371,7 +371,7 @@ JumpIX:
 	jp ix
 	ENDP
 
-; f <- c: Found
+; f <- c: found
 MSXAudio_Detect:
 	in a,(MSXAudio_STATUS_PORT)
 	sub 06H

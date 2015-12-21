@@ -40,6 +40,8 @@ AY8910_Construct:
 	jp z,AY8910_SetName
 	ret
 
+; bc = name
+; ix = this
 AY8910_SetName:
 	ld (ix + AY8910.super.name),c
 	ld (ix + AY8910.super.name + 1),b
