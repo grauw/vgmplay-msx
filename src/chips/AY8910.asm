@@ -8,11 +8,25 @@ AY8910: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessCommand:
+	ProcessCommand: PROC
 		call Reader_ReadWord_IY
+	Continue:
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
+		call Reader_ReadWord_IY
+		bit 7,e
+		jr z,ProcessCommand.Continue
+		res 7,e
+		call AY8910_Ret
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -55,28 +69,49 @@ AY8910_Connect: PROC
 	jp nc,TryMFRPSG
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
-	ld (ix + AY8910.writeRegister),l
-	ld (ix + AY8910.writeRegister + 1),h
-	ret
+	ld (ix + AY8910.ProcessCommand.writeRegister),l
+	ld (ix + AY8910.ProcessCommand.writeRegister + 1),h
+	jr DualChip
 TryMFRPSG:
 	call Drivers_TryCreateMFRPSG_IY
 	ret nc
 	ld hl,MFRPSG.SafeWriteRegister
 	add hl,de
-	ld (ix + AY8910.writeRegister),l
-	ld (ix + AY8910.writeRegister + 1),h
+	ld (ix + AY8910.ProcessCommand.writeRegister),l
+	ld (ix + AY8910.ProcessCommand.writeRegister + 1),h
+	jr DualChip
+DualChip:
+	call Chip_IsDualChip
+	ret z
+	call Drivers_TryCreateMFRPSG_IY
+	ret nc
+	ld hl,MFRPSG.SafeWriteRegister
+	add hl,de
+	ld (ix + AY8910.ProcessCommandDual.writeRegister),l
+	ld (ix + AY8910.ProcessCommandDual.writeRegister + 1),h
 	ret
 	ENDP
 
 ; iy = player
 ; ix = this
-AY8910_Install:
-	ld a,(ix + AY8910.writeRegister)
-	or (ix + AY8910.writeRegister + 1)
+AY8910_Install: PROC
+	ld a,(ix + AY8910.ProcessCommand.writeRegister)
+	or (ix + AY8910.ProcessCommand.writeRegister + 1)
 	ret z
+	call Chip_IsDualChip
+	jr nz,DualChip
 	ld hl,AY8910.ProcessCommand
 	ld a,0A0H
 	call Player_InstallCommandHandler_IY_IXOffset
+	ret
+DualChip:
+	ld hl,AY8910.ProcessCommandDual
+	ld a,0A0H
+	call Player_InstallCommandHandler_IY_IXOffset
+	ret
+	ENDP
+
+AY8910_Ret:
 	ret
 
 ;
