@@ -108,8 +108,9 @@ Construct:
 	jp hl
 	ENDP
 
+; hl = callback (ix = chip)
 ; ix = this
-Chips_PrintInfo: PROC
+Chips_ForEachActiveChip: PROC
 	ld b,Chips.COUNT
 	push ix
 Loop:
@@ -119,7 +120,10 @@ Loop:
 	push ix
 	ld ixl,c
 	ld ixh,b
-	call Chip_PrintInfo
+	call Chip_IsActive
+	push hl
+	call nz,JumpHL
+	pop hl
 	pop ix
 	pop bc
 	REPT 4  ; ChipInstance._size
@@ -128,4 +132,12 @@ Loop:
 	djnz Loop
 	pop ix
 	ret
+JumpHL:
+	jp hl
 	ENDP
+
+; ix = this
+Chips_PrintInfo:
+	ld hl,Chip_PrintInfo
+	call Chips_ForEachActiveChip
+	ret

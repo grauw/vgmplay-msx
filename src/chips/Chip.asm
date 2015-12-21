@@ -53,8 +53,6 @@ Chip_GetName:
 
 ; ix = this
 Chip_PrintInfo: PROC
-	call Chip_IsActive
-	ret z
 	call Chip_GetName
 	call System_Print
 	call Chip_IsDualChip
