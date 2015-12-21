@@ -196,9 +196,6 @@ MoonSound_TryCreate:
 ; ix = this
 MoonSound_Construct:
 	call MoonSound_Reset
-	ld d,00000011B
-	ld e,MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
 	ret
 
 ; ix = this
@@ -472,6 +469,9 @@ MoonSound_Reset:
 ; iy = reader
 MoonSound_ProcessYMF278BROMDataBlock: PROC
 	ld (ix + MoonSound.WriteRegisterWave_Mask.useYRW801ROM),0
+	ld d,00000011B
+	ld e,MoonSound_FM2_NEW
+	call MoonSound_WriteRegister2
 	call Reader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
