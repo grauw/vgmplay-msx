@@ -48,8 +48,8 @@ Chips: MACRO
 		ChipInstance YM2608_instance, YM2608_Construct
 		ChipInstance YM2610_instance, YM2610_Construct
 		ChipInstance YM3812_instance, YM3812_Construct
-		ChipInstance YM3526_instance, YM3526_Construct
 		ChipInstance Y8950_instance, Y8950_Construct
+		ChipInstance YM3526_instance, YM3526_Construct
 		ChipInstance YMF262_instance, YMF262_Construct
 		ChipInstance YMF278B_instance, YMF278B_Construct
 		ChipInstance YMF271_instance, YMF271_Construct
