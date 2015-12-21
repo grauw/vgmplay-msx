@@ -87,9 +87,9 @@ VGM_PrintInfo:
 	pop de
 	call nz,System_PrintCrLf
 	call nz,GD3_PrintInfoEnglish
+	call System_PrintCrLf
 	push ix
 	call VGM_GetHeader
-	call System_PrintCrLf
 	call Header_PrintInfo
 	call Chips_PrintInfo
 	pop ix
