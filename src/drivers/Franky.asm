@@ -4,8 +4,6 @@
 Franky_DATA: equ 049H
 
 Franky: MACRO
-	DATA: equ 049H
-
 	; a = value
 	SafeWriteRegister:
 	; a = value
