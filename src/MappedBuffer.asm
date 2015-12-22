@@ -4,7 +4,7 @@
 MappedBuffer: MACRO
 	size:
 		dd 0
-	lastSegment:
+	segmentCount:
 		db 0
 	segments:
 		ds 255 * 2
@@ -25,7 +25,7 @@ MappedBuffer_Destruct:
 ; a <- segment
 ; Modifies: af
 MappedBuffer_SelectSegment:
-	cp (ix + MappedBuffer.lastSegment)
+	cp (ix + MappedBuffer.segmentCount)
 	call nc,System_ThrowException
 	push bc
 	push de
@@ -64,11 +64,11 @@ MappedBuffer_AllocateSegment:
 ; a <- new segment index
 ; Modifies: de, hl
 MappedBuffer_AddSegment:
-	ld e,(ix + MappedBuffer.lastSegment)
+	ld e,(ix + MappedBuffer.segmentCount)
 	inc e
 	ld hl,MappedBuffer_outOfMemoryError
 	jp z,Application_TerminateWithError
-	ld (ix + MappedBuffer.lastSegment),e
+	ld (ix + MappedBuffer.segmentCount),e
 	dec e
 	ld d,0
 	push ix
