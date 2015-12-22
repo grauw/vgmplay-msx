@@ -12,14 +12,8 @@ YMF278B: MACRO
 	ProcessCommand: PROC
 		call Reader_Read_IY
 		cp 1
-		jr c,FM1
-		jp z,FM2
-	Wave: PROC
-		call Reader_ReadWord_IY
-		call 0
-	writeRegister: equ $ - 2
-		jp Player_ProcessNext
-		ENDP
+		jr z,FM2
+		jp nc,Wave
 	FM1: PROC
 		call Reader_ReadWord_IY
 		call 0
@@ -27,6 +21,12 @@ YMF278B: MACRO
 		jp Player_ProcessNext
 		ENDP
 	FM2: PROC
+		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
+		ENDP
+	Wave: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
