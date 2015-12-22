@@ -248,12 +248,10 @@ Player_CheckExitCondition:
 	cp (ix + Player.lastJiffy)
 	ret z
 	ld (ix + Player.lastJiffy),a
-	ld c,_CONST
-	call BDOS
+	call DOS_ConsoleStatus
 	and a
 	ret z
-	ld c,_INNOE
-	call BDOS
+	call DOS_ConsoleInputWithoutEcho
 	and a
 	ret
 
@@ -414,9 +412,7 @@ Player_UnsupportedCommand:
 	pop af
 	call System_PrintHexA
 	call System_PrintCrLf
-	ld b,1
-	ld c,_TERM
-	call BDOS
+	jp DOS_Terminate
 
 ;
 	SECTION RAM

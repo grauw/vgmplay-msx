@@ -33,14 +33,12 @@ MappedBufferLoader_GetBuffer:
 MappedBufferLoader_LoadFile:
 	ex de,hl
 	ld a,00000001B  ; read-only
-	ld c,_OPEN
-	call BDOS
+	call DOS_OpenFileHandle
 	call Application_CheckDOSError
 	push bc
 	call MappedBufferLoader_LoadAllData
 	pop bc
-	ld c,_CLOSE
-	call BDOS
+	call DOS_CloseFileHandle
 	call Application_CheckDOSError
 	ret
 
@@ -108,8 +106,7 @@ MappedBufferLoader_LoadSegment:
 	jr nz,MappedBufferLoader_LoadViaBuffer
 	ld de,MappedBufferLoader_BASE_ADDRESS
 	ld hl,4000H
-	ld c,_READ
-	call BDOS
+	call DOS_ReadFromFileHandle
 	cp .EOF
 	call nz,Application_CheckDOSError
 	ret
@@ -135,8 +132,7 @@ LessThanBufferSize:
 	add hl,de
 Continue:
 	ld de,READBUFFER
-	ld c,_READ
-	call BDOS
+	call DOS_ReadFromFileHandle
 	ld c,l
 	ld b,h
 	pop de

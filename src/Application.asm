@@ -44,7 +44,7 @@ Application_Main:
 	ld ix,Application_instance
 	call Application_Construct
 	ld de,Application_Abort
-	call Application_SetAbortHandler
+	call DOS_DefineAbortExitRoutine
 	call Application_EnterMainLoop
 	call Application_Abort
 	ret
@@ -60,13 +60,6 @@ Application_Abort:
 	call Application_ExitBlackout
 	pop bc
 	pop af
-	ret
-
-; de = abort handler
-; ix = this
-Application_SetAbortHandler:
-	ld c,_DEFAB
-	call BDOS
 	ret
 
 ; ix = this
@@ -255,22 +248,17 @@ Application_CheckDOSError:
 	ret z
 Application_TerminateWithDOSError:
 	ld b,a
-	ld c,_EXPLAIN
 	ld de,Application_explainBuffer
-	call BDOS
+	call DOS_ExplainErrorCode
 	ld hl,Application_explainBuffer
 	call System_Print
 	call System_PrintCrLf
-	ld b,1
-	ld c,_TERM
-	call BDOS
+	jp DOS_Terminate
 
 ; hl <- message
 Application_TerminateWithError:
 	call System_Print
-	ld b,1
-	ld c,_TERM
-	call BDOS
+	jp DOS_Terminate
 
 ;
 	SECTION RAM

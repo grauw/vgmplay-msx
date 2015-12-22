@@ -21,8 +21,7 @@ CLI_Construct:
 	call CLI_GetBuffer
 	ld hl,CLI_parametersEnvName
 	ld b,255
-	ld c,_GENV
-	call BDOS
+	call DOS_GetEnvironmentItem
 	ret
 
 ; ix = this
@@ -115,8 +114,7 @@ CLI_ParsePath:
 	jp nz,Application_TerminateWithError
 	ld (ix + CLI.path),e
 	ld (ix + CLI.path + 1),d
-	ld c,_PARSE
-	call BDOS
+	call DOS_ParsePathname
 	ld a,(de)
 	and a
 	ret z
