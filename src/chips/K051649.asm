@@ -19,41 +19,46 @@ K051649: MACRO
 		jr z,Deformation
 		call Reader_ReadWord_IY
 		jp Player_ProcessNext
-	Waveform:
+	Waveform: PROC
 		call Reader_ReadWord_IY
 		ld a,e
 		call 0
-	writeRegisterWaveform: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
-	Frequency:
+		ENDP
+	Frequency: PROC
 		call Reader_ReadWord_IY
 		ld a,SCC_FREQUENCY
 		add a,e
 		call 0
-	writeRegisterFrequency: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
-	Amplitude:
+		ENDP
+	Amplitude: PROC
 		call Reader_ReadWord_IY
 		ld a,SCC_AMPLITUDE
 		add a,e
 		call 0
-	writeRegisterAmplitude: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
-	Mixer:
+		ENDP
+	Mixer: PROC
 		call Reader_ReadWord_IY
 		ld a,SCC_MIXER
 		call 0
-	writeRegisterMixer: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	WaveformSCCPlus:
 		call Reader_ReadWord_IY
 		jp Player_ProcessNext
-	Deformation:
+	Deformation: PROC
 		call Reader_ReadWord_IY
 		ld a,SCC_DEFORMATION
 		call 0
-	writeRegisterDeformation: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 		ENDP
 	ENDM
 
@@ -78,23 +83,23 @@ K051649_Connect:
 	ret nc
 	ld hl,SCC.WriteRegister
 	add hl,de
-	ld (ix + K051649.ProcessCommand.writeRegisterWaveform),l
-	ld (ix + K051649.ProcessCommand.writeRegisterWaveform + 1),h
-	ld (ix + K051649.ProcessCommand.writeRegisterFrequency),l
-	ld (ix + K051649.ProcessCommand.writeRegisterFrequency + 1),h
-	ld (ix + K051649.ProcessCommand.writeRegisterAmplitude),l
-	ld (ix + K051649.ProcessCommand.writeRegisterAmplitude + 1),h
-	ld (ix + K051649.ProcessCommand.writeRegisterMixer),l
-	ld (ix + K051649.ProcessCommand.writeRegisterMixer + 1),h
-	ld (ix + K051649.ProcessCommand.writeRegisterDeformation),l
-	ld (ix + K051649.ProcessCommand.writeRegisterDeformation + 1),h
+	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Frequency.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Mixer.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Mixer.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret
 
 ; iy = player
 ; ix = this
 K051649_Install:
-	ld a,(ix + K051649.ProcessCommand.writeRegisterWaveform)
-	or (ix + K051649.ProcessCommand.writeRegisterWaveform + 1)
+	ld a,(ix + K051649.ProcessCommand.Waveform.writeRegister)
+	or (ix + K051649.ProcessCommand.Waveform.writeRegister + 1)
 	ret z
 	ld hl,K051649.ProcessCommand
 	ld a,0D2H

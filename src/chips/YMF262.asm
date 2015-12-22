@@ -6,19 +6,21 @@ YMF262: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessPort0Command:
+	ProcessPort0Command: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 
 	; ix = player
 	; iy = reader
-	ProcessPort1Command:
+	ProcessPort1Command: PROC
 		call Reader_ReadWord_IY
 		call 0
-	writeRegister2: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -38,19 +40,19 @@ YMF262_Connect:
 	ret nc
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
-	ld (ix + YMF262.writeRegister),l
-	ld (ix + YMF262.writeRegister + 1),h
+	ld (ix + YMF262.ProcessPort0Command.writeRegister),l
+	ld (ix + YMF262.ProcessPort0Command.writeRegister + 1),h
 	ld hl,MoonSound.SafeWriteRegister2
 	add hl,de
-	ld (ix + YMF262.writeRegister2),l
-	ld (ix + YMF262.writeRegister2 + 1),h
+	ld (ix + YMF262.ProcessPort1Command.writeRegister),l
+	ld (ix + YMF262.ProcessPort1Command.writeRegister + 1),h
 	ret
 
 ; iy = player
 ; ix = this
 YMF262_Install:
-	ld a,(ix + YMF262.writeRegister)
-	or (ix + YMF262.writeRegister + 1)
+	ld a,(ix + YMF262.ProcessPort0Command.writeRegister)
+	or (ix + YMF262.ProcessPort0Command.writeRegister + 1)
 	ret z
 	ld hl,YMF262.ProcessPort0Command
 	ld a,5EH

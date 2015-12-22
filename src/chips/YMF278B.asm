@@ -14,36 +14,40 @@ YMF278B: MACRO
 		cp 1
 		jr c,FM1
 		jp z,FM2
-	Wave:
-		call Reader_ReadWord_IY
-		call 0
-	writeRegisterWave: equ $ - 2
-		jp Player_ProcessNext
-	FM1:
+	Wave: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
-	FM2:
+		ENDP
+	FM1: PROC
 		call Reader_ReadWord_IY
 		call 0
-	writeRegister2: equ $ - 2
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
+	FM2: PROC
+		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
+		ENDP
 		ENDP
 
 	; ix = player
 	; iy = reader
-	ProcessROMDataBlock:
+	ProcessROMDataBlock: PROC
 		push ix
 		ld ix,this
 		call 0
-	processROMDataBlock: equ $ - 2
+	process: equ $ - 2
 		pop ix
 		push ix
 		call Player_GetTimer
 		call Timer_Reset
 		pop ix
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -65,25 +69,25 @@ YMF278B_Connect:
 	ld (ix + YMF278B.moonSound + 1),d
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
-	ld (ix + YMF278B.ProcessCommand.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.writeRegister + 1),h
+	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister),l
+	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister + 1),h
 	ld hl,MoonSound.SafeWriteRegister2
 	add hl,de
-	ld (ix + YMF278B.ProcessCommand.writeRegister2),l
-	ld (ix + YMF278B.ProcessCommand.writeRegister2 + 1),h
+	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister),l
+	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister + 1),h
 	ld hl,MoonSound.SafeWriteRegisterWave
 	add hl,de
-	ld (ix + YMF278B.ProcessCommand.writeRegisterWave),l
-	ld (ix + YMF278B.ProcessCommand.writeRegisterWave + 1),h
-	ld (ix + YMF278B.processROMDataBlock),YMF278B_ProcessROMDataBlockMoonSound
-	ld (ix + YMF278B.processROMDataBlock + 1),YMF278B_ProcessROMDataBlockMoonSound >> 8
+	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister),l
+	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister + 1),h
+	ld (ix + YMF278B.ProcessROMDataBlock.process),YMF278B_ProcessROMDataBlockMoonSound
+	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),YMF278B_ProcessROMDataBlockMoonSound >> 8
 	ret
 
 ; iy = player
 ; ix = this
 YMF278B_Install:
-	ld a,(ix + YMF278B.ProcessCommand.writeRegister)
-	or (ix + YMF278B.ProcessCommand.writeRegister + 1)
+	ld a,(ix + YMF278B.ProcessCommand.FM1.writeRegister)
+	or (ix + YMF278B.ProcessCommand.FM1.writeRegister + 1)
 	ret z
 	ld hl,YMF278B.ProcessCommand
 	ld a,0D0H

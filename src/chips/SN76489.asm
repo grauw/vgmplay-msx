@@ -6,11 +6,12 @@ SN76489: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessCommand:
+	ProcessCommand: PROC
 		call Reader_Read_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -30,24 +31,24 @@ SN76489_Connect: PROC
 	jr nc,TryFranky
 	ld hl,MMM.SafeWriteRegister
 	add hl,de
-	ld (ix + SN76489.writeRegister),l
-	ld (ix + SN76489.writeRegister + 1),h
+	ld (ix + SN76489.ProcessCommand.writeRegister),l
+	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
 	ret
 TryFranky:
 	call Drivers_TryCreateFranky_IY
 	ret nc
 	ld hl,Franky.SafeWriteRegister
 	add hl,de
-	ld (ix + SN76489.writeRegister),l
-	ld (ix + SN76489.writeRegister + 1),h
+	ld (ix + SN76489.ProcessCommand.writeRegister),l
+	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
 	ret
 	ENDP
 
 ; iy = player
 ; ix = this
 SN76489_Install:
-	ld a,(ix + SN76489.writeRegister)
-	or (ix + SN76489.writeRegister + 1)
+	ld a,(ix + SN76489.ProcessCommand.writeRegister)
+	or (ix + SN76489.ProcessCommand.writeRegister + 1)
 	ret z
 	ld hl,SN76489.ProcessCommand
 	ld a,50H

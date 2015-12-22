@@ -6,11 +6,12 @@ YM3812: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessCommand:
+	ProcessCommand: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -30,15 +31,15 @@ YM3812_Connect:
 	ret nc
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
-	ld (ix + YM3812.writeRegister),l
-	ld (ix + YM3812.writeRegister + 1),h
+	ld (ix + YM3812.ProcessCommand.writeRegister),l
+	ld (ix + YM3812.ProcessCommand.writeRegister + 1),h
 	ret
 
 ; iy = player
 ; ix = this
 YM3812_Install:
-	ld a,(ix + YM3812.writeRegister)
-	or (ix + YM3812.writeRegister + 1)
+	ld a,(ix + YM3812.ProcessCommand.writeRegister)
+	or (ix + YM3812.ProcessCommand.writeRegister + 1)
 	ret z
 	ld hl,YM3812.ProcessCommand
 	ld a,5AH

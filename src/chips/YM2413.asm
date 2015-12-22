@@ -6,11 +6,12 @@ YM2413: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessCommand:
+	ProcessCommand: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -30,15 +31,15 @@ YM2413_Connect:
 	ret nc
 	ld hl,MSXMusic.SafeWriteRegister
 	add hl,de
-	ld (ix + YM2413.writeRegister),l
-	ld (ix + YM2413.writeRegister + 1),h
+	ld (ix + YM2413.ProcessCommand.writeRegister),l
+	ld (ix + YM2413.ProcessCommand.writeRegister + 1),h
 	ret
 
 ; iy = player
 ; ix = this
 YM2413_Install:
-	ld a,(ix + YM2413.writeRegister)
-	or (ix + YM2413.writeRegister + 1)
+	ld a,(ix + YM2413.ProcessCommand.writeRegister)
+	or (ix + YM2413.ProcessCommand.writeRegister + 1)
 	ret z
 	ld hl,YM2413.ProcessCommand
 	ld a,51H

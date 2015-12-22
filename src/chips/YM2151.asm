@@ -6,11 +6,12 @@ YM2151: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessCommand:
+	ProcessCommand: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -43,15 +44,15 @@ YM2151_Connect:
 	ret nc
 	ld hl,SFG.SafeWriteRegister
 	add hl,de
-	ld (ix + YM2151.writeRegister),l
-	ld (ix + YM2151.writeRegister + 1),h
+	ld (ix + YM2151.ProcessCommand.writeRegister),l
+	ld (ix + YM2151.ProcessCommand.writeRegister + 1),h
 	ret
 
 ; iy = player
 ; ix = this
 YM2151_Install:
-	ld a,(ix + YM2151.writeRegister)
-	or (ix + YM2151.writeRegister + 1)
+	ld a,(ix + YM2151.ProcessCommand.writeRegister)
+	or (ix + YM2151.ProcessCommand.writeRegister + 1)
 	ret z
 	ld hl,YM2151.ProcessCommand
 	ld a,54H

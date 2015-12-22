@@ -9,25 +9,27 @@ Y8950: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessCommand:
+	ProcessCommand: PROC
 		call Reader_ReadWord_IY
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 
 	; ix = player
 	; iy = reader
-	ProcessDataBlock:
+	ProcessDataBlock: PROC
 		push ix
 		ld ix,this
 		call 0
-	processDataBlock: equ $ - 2
+	process: equ $ - 2
 		pop ix
 		push ix
 		call Player_GetTimer
 		call Timer_Reset
 		pop ix
 		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -49,17 +51,17 @@ Y8950_Connect:
 	ld (ix + Y8950.msxAudio + 1),d
 	ld hl,MSXAudio.SafeWriteRegister
 	add hl,de
-	ld (ix + Y8950.writeRegister),l
-	ld (ix + Y8950.writeRegister + 1),h
-	ld (ix + Y8950.processDataBlock),Y8950_ProcessDataBlockMSXAudio
-	ld (ix + Y8950.processDataBlock + 1),Y8950_ProcessDataBlockMSXAudio >> 8
+	ld (ix + Y8950.ProcessCommand.writeRegister),l
+	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
+	ld (ix + Y8950.ProcessDataBlock.process),Y8950_ProcessDataBlockMSXAudio
+	ld (ix + Y8950.ProcessDataBlock.process + 1),Y8950_ProcessDataBlockMSXAudio >> 8
 	ret
 
 ; iy = player
 ; ix = this
 Y8950_Install:
-	ld a,(ix + Y8950.writeRegister)
-	or (ix + Y8950.writeRegister + 1)
+	ld a,(ix + Y8950.ProcessCommand.writeRegister)
+	or (ix + Y8950.ProcessCommand.writeRegister + 1)
 	ret z
 	ld hl,Y8950.ProcessCommand
 	ld a,5CH
