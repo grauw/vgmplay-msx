@@ -36,9 +36,11 @@ MappedBuffer_SelectSegment:
 	add ix,de
 	add ix,de
 	ld a,(ix + MappedBuffer.segments + 1)
+	push hl
 	call Memory_SetSlot
+	pop hl
 	ld a,(ix + MappedBuffer.segments)
-	call Mapper_instance.PutP2
+	call Mapper_instance.PutPH
 	pop ix
 	pop hl
 	pop de
