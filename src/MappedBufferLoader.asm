@@ -68,7 +68,9 @@ FirstSegment:
 	pop bc
 	push bc
 	call MappedBufferLoader_LoadSegment
-	ex de,hl
+	push hl
+	call DOS_ConsoleStatus  ; allow ctrl-c
+	pop de
 	pop bc
 	pop hl
 	add hl,de
