@@ -142,13 +142,13 @@ MappedReader_SelectNextSegment_IY:
 	ld a,(iy + MappedReader.positionSegmentIndex)
 	inc a
 	ld (iy + MappedReader.positionSegmentIndex),a
-	push ix
 	push de
+	push ix
 	call MappedReader_GetBuffer_IY
 	ld h,(iy + MappedReader.super.bufferStart + 1)
 	call MappedBuffer_SelectSegment
-	pop de
 	pop ix
+	pop de
 	ret
 
 MappedReader_ThrowAddressOutOfBounds:
