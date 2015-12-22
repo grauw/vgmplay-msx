@@ -319,6 +319,24 @@ Memory_SetSlot:
 	jp nz,Memory_SetPreparedSlotPage1
 	jp Memory_SetPreparedSlot
 
+; a = slot ID formatted FxxxSSPP
+; Modifies: af, bc, de, hl
+Memory_SetSlotPage0:
+	ld h,00H
+	jp Memory_SetSlot
+
+; a = slot ID formatted FxxxSSPP
+; Modifies: af, bc, de, hl
+Memory_SetSlotPage1:
+	ld h,40H
+	jp Memory_SetSlot
+
+; a = slot ID formatted FxxxSSPP
+; Modifies: af, bc, de, hl
+Memory_SetSlotPage2:
+	ld h,80H
+	jp Memory_SetSlot
+
 ;
 ; Sets a prepared slot selection.
 ; The current interrupt enabled state is preserved.

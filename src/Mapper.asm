@@ -82,14 +82,11 @@ Mapper_Construct:
 ; ix <- this
 Mapper_Destruct:
 	ld a,(ix + Mapper.primaryMapperSlot)
-	ld h,00H
-	call Memory_SetSlot
+	call Memory_SetSlotPage0
 	ld a,(ix + Mapper.primaryMapperSlot)
-	ld h,40H
-	call Memory_SetSlot
+	call Memory_SetSlotPage1
 	ld a,(ix + Mapper.primaryMapperSlot)
-	ld h,80H
-	call Memory_SetSlot
+	call Memory_SetSlotPage2
 	ld a,(ix + Mapper.initialPage0)
 	call Mapper_instance.PutP0
 	ld a,(ix + Mapper.initialPage1)

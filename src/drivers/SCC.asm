@@ -136,8 +136,7 @@ SCC_MatchSlot: PROC
 	call Memory_GetSlotPage2
 	push af
 	ex af,af'
-	ld h,80H
-	call Memory_SetSlot
+	call Memory_SetSlotPage2
 	ld a,(SCC_BANK_SELECT)
 	ld d,a
 	ld a,SCC_BANK
@@ -164,14 +163,12 @@ NoSCC:
 	ld a,d
 	ld (SCC_BANK_SELECT),a
 	pop af
-	ld h,80H
-	call Memory_SetSlot
+	call Memory_SetSlotPage2
 	and a
 	ret
 Found:
 	pop af
-	ld h,80H
-	call Memory_SetSlot
+	call Memory_SetSlotPage2
 	scf
 	ret
 	ENDP
