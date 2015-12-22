@@ -204,16 +204,13 @@ MoonSound_ReadRegisterWave:
 ; bc = count
 ; hl = source
 ; ix = this
-MoonSound_WriteMemory: PROC
+MoonSound_WriteMemory:
 	push ix
 	ld de,MoonSound.WriteMemory
 	add ix,de
-	call JumpIX
+	call System_JumpIX
 	pop ix
 	ret
-JumpIX:
-	jp ix
-	ENDP
 
 ; ehl = memory address
 ; ix = this

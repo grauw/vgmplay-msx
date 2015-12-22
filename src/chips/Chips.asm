@@ -95,7 +95,7 @@ Loop:
 	push ix
 	ld ixl,e
 	ld ixh,d
-	call Construct
+	call System_JumpHL
 	pop ix
 	pop bc
 	REPT 4  ; ChipInstance._size
@@ -104,8 +104,6 @@ Loop:
 	djnz Loop
 	pop ix
 	ret
-Construct:
-	jp hl
 	ENDP
 
 ; hl = callback (ix = chip)
@@ -122,7 +120,7 @@ Loop:
 	ld ixh,b
 	call Chip_IsActive
 	push hl
-	call nz,JumpHL
+	call nz,System_JumpHL
 	pop hl
 	pop ix
 	pop bc
@@ -132,8 +130,6 @@ Loop:
 	djnz Loop
 	pop ix
 	ret
-JumpHL:
-	jp hl
 	ENDP
 
 ; ix = this

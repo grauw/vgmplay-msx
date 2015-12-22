@@ -273,6 +273,21 @@ Loop:
 
 	ENDS
 
+System_Return:
+	ret
+
+; hl = jump address
+System_JumpHL:
+	jp hl
+
+; ix = jump address
+System_JumpIX:
+	jp ix
+
+; iy = jump address
+System_JumpIY:
+	jp iy
+
 System_EnableTurbo:
 	call System_IsTurboR
 	ret c

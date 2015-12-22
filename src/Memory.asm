@@ -561,7 +561,7 @@ Memory_CallSlot: PROC
 	push de
 	exx
 	ex af,af'
-	call CallIX
+	call JumpIX
 	ex af,af'
 	exx
 	pop de
@@ -577,7 +577,7 @@ Page1:
 	push de
 	exx
 	ex af,af'
-	call CallIX
+	call JumpIX
 	ex af,af'
 	exx
 	pop de
@@ -586,7 +586,7 @@ Page1:
 	exx
 	ex af,af'
 	ret
-CallIX:
+JumpIX:
 	jp ix
 	ENDP
 
@@ -616,7 +616,7 @@ PrimaryLoop:
 SecondaryLoop:
 	push af
 	push hl
-	call CallHL
+	call System_JumpHL
 	pop hl
 	jp c,Found
 	pop af
@@ -634,8 +634,6 @@ Found:
 	pop af
 	scf
 	ret
-CallHL:
-	jp hl
 	ENDP
 
 ;

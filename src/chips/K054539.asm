@@ -2,7 +2,7 @@
 ; VGM K054539 chip
 ;
 K054539: MACRO
-	super: Chip K054539_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip K054539_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

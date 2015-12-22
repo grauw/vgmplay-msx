@@ -2,7 +2,7 @@
 ; VGM OKIM6258 chip
 ;
 OKIM6258: MACRO
-	super: Chip OKIM6258_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip OKIM6258_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

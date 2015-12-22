@@ -258,16 +258,13 @@ MSXAudio_SetADPCMWriteAddress:
 ; bc = count
 ; hl = source
 ; ix = this
-MSXAudio_WriteADPCMData: PROC
+MSXAudio_WriteADPCMData:
 	push ix
 	ld de,MSXAudio.WriteADPCMData
 	add ix,de
-	call JumpIX
+	call System_JumpIX
 	pop ix
 	ret
-JumpIX:
-	jp ix
-	ENDP
 
 ; f <- c: found
 MSXAudio_Detect:

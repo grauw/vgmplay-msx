@@ -2,7 +2,7 @@
 ; VGM C140 chip
 ;
 C140: MACRO
-	super: Chip C140_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip C140_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

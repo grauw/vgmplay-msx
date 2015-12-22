@@ -2,7 +2,7 @@
 ; VGM Pokey chip
 ;
 Pokey: MACRO
-	super: Chip Pokey_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip Pokey_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

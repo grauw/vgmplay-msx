@@ -2,7 +2,7 @@
 ; VGM YMZ280B chip
 ;
 YMZ280B: MACRO
-	super: Chip YMZ280B_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip YMZ280B_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

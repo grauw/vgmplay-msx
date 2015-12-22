@@ -2,7 +2,7 @@
 ; VGM PWM chip
 ;
 PWM: MACRO
-	super: Chip PWM_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip PWM_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

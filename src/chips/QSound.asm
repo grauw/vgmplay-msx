@@ -2,7 +2,7 @@
 ; VGM QSound chip
 ;
 QSound: MACRO
-	super: Chip QSound_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip QSound_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

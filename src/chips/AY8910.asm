@@ -23,7 +23,7 @@ AY8910: MACRO
 		bit 7,e
 		jr z,ProcessCommand.Continue
 		res 7,e
-		call AY8910_Ret
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
@@ -110,9 +110,6 @@ DualChip:
 	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 	ENDP
-
-AY8910_Ret:
-	ret
 
 ;
 AY8910_instance: AY8910

@@ -2,7 +2,7 @@
 ; VGM RF5C164 chip
 ;
 RF5C164: MACRO
-	super: Chip RF5C164_name, Chip_ConnectDefault, Chip_InstallDefault
+	super: Chip RF5C164_name, System_Return, System_Return
 	ENDM
 
 ; ix = this

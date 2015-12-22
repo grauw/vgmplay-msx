@@ -76,16 +76,6 @@ Chip_Install:
 	ld h,(ix + Chip.installer + 1)
 	jp hl
 
-; iy = drivers
-; ix = this
-Chip_ConnectDefault:
-	ret
-
-; iy = player
-; ix = this
-Chip_InstallDefault:
-	ret
-
 ; ix = this
 Chip_PrintInfo: PROC
 	call Chip_GetName
