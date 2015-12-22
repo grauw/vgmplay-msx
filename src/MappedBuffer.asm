@@ -19,6 +19,12 @@ MappedBuffer_Construct:
 MappedBuffer_Destruct:
 	ret
 
+; ix = this
+; a <- nr of segments
+MappedBuffer_GetSegmentCount:
+	ld a,(ix + MappedBuffer.segmentCount)
+	ret
+
 ; h = address space page
 ; a = segment index
 ; ix = this
@@ -119,7 +125,7 @@ MappedBuffer_IsValidPosition:
 	ret
 
 ;
-	SECTION RAM
+	SECTION RAM_PAGE0
 
 MappedBuffer_instance: MappedBuffer
 

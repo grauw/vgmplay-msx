@@ -157,6 +157,8 @@ Frequency:
 ; ix = this
 Application_LoadFile:
 	call Application_PrintLoading
+	call Application_IsVGZ
+	jp z,Application_InflateFile
 	push ix
 	call Application_GetCLI
 	call CLI_GetPath
@@ -169,6 +171,60 @@ Application_LoadFile:
 	call MappedBufferLoader_Construct
 	call MappedBufferLoader_Load
 	call MappedBufferLoader_Destruct
+	pop ix
+	ret
+
+; ix = this
+; f <- z: is vgz
+Application_IsVGZ:
+	push ix
+	call Application_GetCLI
+	call CLI_GetPath
+	pop ix
+	ld a,0
+	ld bc,256
+	cpir
+	dec hl
+	dec hl
+	ld a,(hl)
+	and 11011111B  ; upper-case
+	cp "Z"
+	ret
+
+; de = file path
+; ix = this
+Application_InflateFile:
+	push ix
+	call Application_GetCLI
+	call CLI_GetPath
+	pop ix
+	ex de,hl
+	ld hl,READBUFFER
+	ld bc,READBUFFER_SIZE
+	push ix
+	call FileReader_class.New
+	call FileReader_Construct
+	push ix
+	ld a,0
+	call Archive_class.New
+	call Archive_Construct
+	push ix
+	call Mapped32KWriter_class.New
+	ld hl,MappedBuffer_instance
+	call Mapped32KWriter_Construct
+	ld e,ixl
+	ld d,ixh
+	ex (sp),ix
+	call Archive_Extract
+	ex (sp),ix
+	call Mapped32KWriter_Destruct
+	call Mapped32KWriter_class.Delete
+	pop ix
+	call Archive_Destruct
+	call Archive_class.Delete
+	pop ix
+	call FileReader_Destruct
+	call FileReader_class.Delete
 	pop ix
 	ret
 

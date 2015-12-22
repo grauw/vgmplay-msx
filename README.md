@@ -88,9 +88,11 @@ Options:
     lot of VDP interference on the audio output, this may reduce the amount of
     interference.
 
-To configure Multi Mente to play VGM files, add the following line to MMRET.DAT:
+To configure Multi Mente to play VGM files, add the following lines to
+MMRET.DAT:
 
     .VGM    VGMPLAY $T
+    .VGZ    VGMPLAY $T
 
 
 Development information

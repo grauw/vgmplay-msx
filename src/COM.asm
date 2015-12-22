@@ -9,19 +9,19 @@
 DEBUG: equ 0
 
 HEAP: equ 0C000H
-HEAP_SIZE: equ 1000H
+HEAP_SIZE: equ 1180H
 STACK_SIZE: equ 100H
-READBUFFER_SIZE: equ 2000H
+READBUFFER_SIZE: equ 0E00H
 
 	org 100H
 
-TPA: ds 2E00H
-RAM: ds 0F00H
+TPA: ds 2D00H
 TPA_PAGE0: ds 0100H
-RAM_PAGE0: ds 0100H
-TPA_PAGE1: ds 0300H
+RAM_PAGE0: ds 0300H
+READBUFFER: ds READBUFFER_SIZE
+TPA_PAGE1: ds 3000H
+RAM: ds 0F00H
 RAM_PAGE1: ds 0100H
-READBUFFER: ds VIRTUAL READBUFFER_SIZE
 
 	SECTION TPA
 
@@ -36,34 +36,49 @@ COM_Main:
 	INCLUDE "Class.asm"
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
-	INCLUDE "MemoryTest.asm"
 	INCLUDE "Mapper.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
-	INCLUDE "HeapTest.asm"
 	INCLUDE "Application.asm"
 	INCLUDE "CLI.asm"
-	INCLUDE "VGM.asm"
-	INCLUDE "Header.asm"
-	INCLUDE "GD3.asm"
 	INCLUDE "MappedBuffer.asm"
 	INCLUDE "MappedBufferLoader.asm"
-	INCLUDE "deflate/Reader.asm"
-	INCLUDE "deflate/Writer.asm"
 	INCLUDE "MappedReader.asm"
 	INCLUDE "MappedWriter.asm"
-	INCLUDE "Player.asm"
-	INCLUDE "timers/Timer.asm"
-	INCLUDE "drivers/Drivers.asm"
-	INCLUDE "chips/Chips.asm"
+	INCLUDE "Mapped32KWriter.asm"
+
+	; gunzip
+	INCLUDE "Archive.asm"
+	INCLUDE "deflate/Inflate.asm"
+	INCLUDE "deflate/Alphabet.asm"
+	INCLUDE "deflate/Branch.asm"
+	INCLUDE "deflate/FixedAlphabets.asm"
+	INCLUDE "deflate/DynamicAlphabets.asm"
+	INCLUDE "deflate/Reader.asm"
+	INCLUDE "deflate/Writer.asm"
+	INCLUDE "FileReader.asm"
+	INCLUDE "CRC32Checker.asm"
+
+CRC32Table:
+	; not present
 
 	ENDS
 
 	SECTION TPA_PAGE1
 
+	INCLUDE "VGM.asm"
+	INCLUDE "Header.asm"
+	INCLUDE "GD3.asm"
+	INCLUDE "Player.asm"
+	INCLUDE "timers/Timer.asm"
+	INCLUDE "drivers/Drivers.asm"
+	INCLUDE "chips/Chips.asm"
+	INCLUDE "MemoryTest.asm"
+	INCLUDE "HeapTest.asm"
+
 	ENDS
 
-	SECTION RAM
+	SECTION RAM_PAGE0
 
 Heap_main:
 	Heap HEAP, HEAP_SIZE

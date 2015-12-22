@@ -247,7 +247,7 @@ System_GetStringLength:
 	cpl
 	ret
 
-	SECTION RAM
+	SECTION RAM_PAGE0
 
 ; Up to 19% faster alternative for large LDIRs (break-even at 21 loops)
 ; hl = source
