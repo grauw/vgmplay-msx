@@ -10,7 +10,7 @@ MappedBufferLoader: MACRO
 	size:
 	ENDM
 
-; hl = filename
+; hl = file path
 ; ix = this
 ; ix <- this
 MappedBufferLoader_Construct:
@@ -27,7 +27,7 @@ MappedBufferLoader_GetBuffer:
 	ld ixh,d
 	ret
 
-; hl = filename
+; hl = file path
 ; ix = this
 ; ix <- this
 MappedBufferLoader_LoadFile:
