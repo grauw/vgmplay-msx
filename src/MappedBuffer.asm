@@ -50,7 +50,6 @@ MappedBuffer_SelectSegment:
 ; b <- slot id
 MappedBuffer_AllocateSegment:
 	ld a,(Mapper_instance.primaryMapperSlot)
-	and 10001111B
 	or 00100000B  ; allocate primary slot, or another
 	ld b,a
 	ld a,0
