@@ -35,6 +35,8 @@ COM_Main:
 	INCLUDE "BIOS.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "System.asm"
+	INCLUDE "Memory.asm"
+	INCLUDE "MemoryTest.asm"
 	INCLUDE "Mapper.asm"
 	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
@@ -56,9 +58,6 @@ COM_Main:
 	ENDS
 
 	SECTION TPA_PAGE1
-
-	INCLUDE "Memory.asm"
-	INCLUDE "MemoryTest.asm"
 
 	ENDS
 

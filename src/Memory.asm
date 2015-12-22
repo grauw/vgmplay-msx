@@ -315,9 +315,11 @@ Memory_SetSlot:
 	push hl
 	call Memory_PrepareSlot
 	pop hl
+	bit 7,h
+	jp nz,Memory_SetPreparedSlot
 	bit 6,h
-	jp nz,Memory_SetPreparedSlotPage1
-	jp Memory_SetPreparedSlot
+	jp nz,Memory_SetPreparedSlot
+	jp Memory_SetPreparedSlotPage0
 
 ; a = slot ID formatted FxxxSSPP
 ; Modifies: af, bc, de, hl
@@ -370,13 +372,13 @@ Memory_SetPreparedSlot:
 	ei
 	ret
 
-	SECTION TPA
+	SECTION TPA_PAGE1
 
 ;
-; Sets a prepared slot selection in page 1.
+; Sets a prepared slot selection in page 0.
 ; See SetPreparedSlot.
 ;
-Memory_SetPreparedSlotPage1:
+Memory_SetPreparedSlotPage0:
 	push bc
 	ld hl,0FFFFH
 	ld c,0A8H
@@ -412,9 +414,11 @@ Memory_ReadSlot:
 	push hl
 	call Memory_PrepareSlot
 	pop hl
+	bit 7,h
+	jp nz,Memory_ReadPreparedSlot
 	bit 6,h
-	jp nz,Memory_ReadPreparedSlotPage1
-	jp Memory_ReadPreparedSlot
+	jp nz,Memory_ReadPreparedSlot
+	jp Memory_ReadPreparedSlotPage0
 
 ;
 ; Reads a byte from a prepared slot.
@@ -446,13 +450,13 @@ Memory_ReadPreparedSlot:
 	ei
 	ret
 
-	SECTION TPA
+	SECTION TPA_PAGE1
 
 ;
-; Reads a byte from a prepared slot in page 1.
+; Reads a byte from a prepared slot in page 0.
 ; See ReadPreparedSlot.
 ;
-Memory_ReadPreparedSlotPage1:
+Memory_ReadPreparedSlotPage0:
 	ld c,0A8H
 	ld a,r
 	ex af,af'
@@ -490,9 +494,11 @@ Memory_WriteSlot:
 	call Memory_PrepareSlot
 	pop hl
 	pop bc
+	bit 7,h
+	jp nz,Memory_WritePreparedSlot
 	bit 6,h
-	jp nz,Memory_WritePreparedSlotPage1
-	jp Memory_WritePreparedSlot
+	jp nz,Memory_WritePreparedSlot
+	jp Memory_WritePreparedSlotPage0
 
 ;
 ; Writes a byte to a prepared slot.
@@ -525,13 +531,13 @@ Memory_WritePreparedSlot:
 	ei
 	ret
 
-	SECTION TPA
+	SECTION TPA_PAGE1
 
 ;
-; Writes a byte to a prepared slot in page 1.
+; Writes a byte to a prepared slot in page 0.
 ; See WritePreparedSlot.
 ;
-Memory_WritePreparedSlotPage1:
+Memory_WritePreparedSlotPage0:
 	ld a,r
 	ld a,c
 	ld c,0A8H
@@ -570,9 +576,9 @@ Memory_CallSlot: PROC
 	exx
 	ld a,ixh
 	ld h,a
+	and 11000000B
 	ld a,iyh
-	bit 6,h
-	jp nz,Page1
+	jp z,Page0
 	call Memory_PrepareSlot
 	call Memory_SetPreparedSlot
 	push bc
@@ -588,9 +594,11 @@ Memory_CallSlot: PROC
 	exx
 	ex af,af'
 	ret
-Page1:
+
+	SECTION TPA_PAGE1
+Page0:
 	call Memory_PrepareSlot
-	call Memory_SetPreparedSlotPage1
+	call Memory_SetPreparedSlotPage0
 	push bc
 	push de
 	exx
@@ -600,12 +608,13 @@ Page1:
 	exx
 	pop de
 	pop bc
-	call Memory_SetPreparedSlotPage1
+	call Memory_SetPreparedSlotPage0
 	exx
 	ex af,af'
 	ret
 JumpIX:
 	jp ix
+	ENDS
 	ENDP
 
 	ENDS
