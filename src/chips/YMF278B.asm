@@ -11,9 +11,9 @@ YMF278B: MACRO
 	; iy = reader
 	ProcessCommand: PROC
 		call Reader_Read_IY
-		cp 1
+		dec a
 		jr z,FM2
-		jp nc,Wave
+		jp p,Wave
 	FM1: PROC
 		call Reader_ReadWord_IY
 		call 0
