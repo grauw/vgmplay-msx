@@ -81,18 +81,23 @@ Mapper_Construct:
 ; ix = this
 ; ix <- this
 Mapper_Destruct:
-	ld a,(ix + Mapper.primaryMapperSlot)
-	call Memory_SetSlotPage0
-	ld a,(ix + Mapper.primaryMapperSlot)
-	call Memory_SetSlotPage1
+	call Mapper_RestoreInitialState
+	ret
+
+; ix = this
+Mapper_RestoreInitialState:
 	ld a,(ix + Mapper.primaryMapperSlot)
 	call Memory_SetSlotPage2
-	ld a,(ix + Mapper.initialPage0)
-	call Mapper_instance.PutP0
-	ld a,(ix + Mapper.initialPage1)
-	call Mapper_instance.PutP1
 	ld a,(ix + Mapper.initialPage2)
 	call Mapper_instance.PutP2
+	ld a,(ix + Mapper.primaryMapperSlot)
+	call Memory_SetSlotPage1
+	ld a,(ix + Mapper.initialPage1)
+	call Mapper_instance.PutP1
+	ld a,(ix + Mapper.primaryMapperSlot)
+	call Memory_SetSlotPage0
+	ld a,(ix + Mapper.initialPage0)
+	call Mapper_instance.PutP0
 	ret
 
 ; ix = this

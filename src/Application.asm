@@ -53,6 +53,8 @@ Application_Main:
 Application_Abort:
 	push af
 	push bc
+	ld ix,Mapper_instance
+	call Mapper_RestoreInitialState
 	ld ix,Application_instance
 	call Application_Destruct
 	ld ix,Mapper_instance
