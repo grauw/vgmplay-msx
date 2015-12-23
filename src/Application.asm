@@ -172,11 +172,13 @@ Application_LoadFile: PROC
 	ld hl,Application_dotDotDot
 	call System_Print
 	call Application_GetLoader
-	pop hl
+	pop de
+	ld hl,MappedBuffer_instance
 	call MappedBufferLoader_Construct
 	pop ix
 	push ix
 	call Application_GetReader
+	ld hl,MappedBuffer_instance
 	call MappedReader_Construct
 	pop ix
 	ret

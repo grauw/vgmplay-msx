@@ -7,15 +7,18 @@ MappedReader_SEGMENT_SIZE: equ 4000H
 MappedReader: MACRO
 	super: Reader
 	buffer:
-		dw MappedBuffer_instance
+		dw 0
 	positionSegmentIndex:
 		db -1
 	size:
 	ENDM
 
+; hl = mapped buffer
 ; ix = this
 ; ix <- this
 MappedReader_Construct:
+	ld (ix + MappedReader.buffer),l
+	ld (ix + MappedReader.buffer + 1),h
 	ld hl,MappedReader_BASE_ADDRESS
 	ld bc,MappedReader_SEGMENT_SIZE
 	ld de,MappedReader_Fill_IY

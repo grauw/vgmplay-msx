@@ -6,14 +6,17 @@ MappedBufferLoader_PAGE_SIZE: equ 4000H
 
 MappedBufferLoader: MACRO
 	buffer:
-		dw MappedBuffer_instance
+		dw 0
 	size:
 	ENDM
 
-; hl = file path
+; de = file path
+; hl = mapped buffer
 ; ix = this
 ; ix <- this
 MappedBufferLoader_Construct:
+	ld (ix + MappedBufferLoader.buffer),l
+	ld (ix + MappedBufferLoader.buffer + 1),h
 	call MappedBufferLoader_LoadFile
 	ret
 
@@ -27,11 +30,10 @@ MappedBufferLoader_GetBuffer:
 	ld ixh,d
 	ret
 
-; hl = file path
+; de = file path
 ; ix = this
 ; ix <- this
 MappedBufferLoader_LoadFile:
-	ex de,hl
 	ld a,00000001B  ; read-only
 	call DOS_OpenFileHandle
 	call Application_CheckDOSError
