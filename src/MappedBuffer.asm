@@ -54,6 +54,13 @@ MappedBuffer_SelectSegment:
 	ret
 
 ; ix = this
+; a <- new segment index
+MappedBuffer_AllocateAndAddSegment:
+	call MappedBuffer_AllocateSegment
+	call MappedBuffer_AddSegment
+	ret
+
+; ix = this
 ; a <- segment number
 ; b <- slot id
 MappedBuffer_AllocateSegment:

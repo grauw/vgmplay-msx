@@ -44,12 +44,10 @@ Mapped32KWriter_Construct:
 
 	push ix
 	call Mapped32KWriter_GetBuffer
-	call MappedBuffer_AllocateSegment
-	call MappedBuffer_AddSegment
+	call MappedBuffer_AllocateAndAddSegment
 	ld h,40H
 	call MappedBuffer_SelectSegment
-	call MappedBuffer_AllocateSegment
-	call MappedBuffer_AddSegment
+	call MappedBuffer_AllocateAndAddSegment
 	ld h,80H
 	call MappedBuffer_SelectSegment
 	pop ix
@@ -119,8 +117,7 @@ NoCap:
 	push bc
 	push ix
 	call Mapped32KWriter_GetBuffer
-	call MappedBuffer_AllocateSegment
-	call MappedBuffer_AddSegment
+	call MappedBuffer_AllocateAndAddSegment
 	ld h,80H
 	call MappedBuffer_SelectSegment
 	pop ix

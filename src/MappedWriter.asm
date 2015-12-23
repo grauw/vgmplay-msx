@@ -64,8 +64,7 @@ MappedWriter_Flush:
 MappedWriter_AllocateNextSegment:
 	push ix
 	call MappedWriter_GetBuffer
-	call MappedBuffer_AllocateSegment
-	call MappedBuffer_AddSegment
+	call MappedBuffer_AllocateAndAddSegment
 	ld h,MappedWriter_BASE_ADDRESS >> 8
 	call MappedBuffer_SelectSegment
 	pop ix
