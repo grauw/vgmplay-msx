@@ -42,6 +42,13 @@ CLI_GetBuffer:
 	ret
 
 ; ix = this
+; hl <- path
+CLI_GetPath:
+	ld l,(ix + CLI.path)
+	ld h,(ix + CLI.path + 1)
+	ret
+
+; ix = this
 CLI_Parse: PROC
 	call CLI_GetBuffer
 Loop:

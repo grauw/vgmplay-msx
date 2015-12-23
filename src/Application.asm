@@ -137,8 +137,7 @@ Application_ParseCLI: PROC
 	push ix
 	call Application_GetCLI
 	call CLI_Parse
-	ld l,(ix + CLI.path)
-	ld h,(ix + CLI.path + 1)
+	call CLI_GetPath
 	ld a,l
 	or h
 	ld hl,Application_usageInstructions
@@ -159,8 +158,7 @@ Frequency:
 Application_LoadFile: PROC
 	push ix
 	call Application_GetCLI
-	ld l,(ix + CLI.path)
-	ld h,(ix + CLI.path + 1)
+	call CLI_GetPath
 	pop ix
 	push ix
 	push hl
