@@ -90,6 +90,19 @@ MappedBuffer_SetSize:
 	ld (ix + MappedBuffer.size + 2),e
 	ret
 
+; bc = size to add
+; ix = this
+MappedBuffer_IncreaseSize:
+	ld l,(ix + MappedBuffer.size)
+	ld h,(ix + MappedBuffer.size + 1)
+	ld a,(ix + MappedBuffer.size + 2)
+	add hl,bc
+	adc a,0
+	ld (ix + MappedBuffer.size),l
+	ld (ix + MappedBuffer.size + 1),h
+	ld (ix + MappedBuffer.size + 2),a
+	ret
+
 ; ehl = position
 ; ix = this
 ; f <- nc: position points past the end

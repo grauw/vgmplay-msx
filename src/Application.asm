@@ -175,6 +175,8 @@ Application_LoadFile: PROC
 	pop de
 	ld hl,MappedBuffer_instance
 	call MappedBufferLoader_Construct
+	call MappedBufferLoader_Load
+	call MappedBufferLoader_Destruct
 	pop ix
 	push ix
 	call Application_GetReader
