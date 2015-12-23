@@ -73,9 +73,9 @@ MappedBuffer_AllocateSegment:
 	jp c,Application_TerminateWithError
 	ret
 
-; ix = this
 ; a = segment number
 ; b = slot id
+; ix = this
 ; a <- new segment index
 ; Modifies: de, hl
 MappedBuffer_AddSegment:
