@@ -156,19 +156,13 @@ Frequency:
 
 ; ix = this
 Application_LoadFile: PROC
+	call Application_PrintLoading
 	push ix
 	call Application_GetCLI
 	call CLI_GetPath
 	pop ix
 	push ix
 	push hl
-	ld hl,Application_loadingFile
-	call System_Print
-	pop hl
-	push hl
-	call System_Print
-	ld hl,Application_dotDotDot
-	call System_Print
 	call Application_GetLoader
 	pop de
 	ld hl,MappedBuffer_instance
@@ -178,6 +172,19 @@ Application_LoadFile: PROC
 	pop ix
 	ret
 	ENDP
+
+; ix = this
+Application_PrintLoading:
+	ld hl,Application_loadingFile
+	call System_Print
+	push ix
+	call Application_GetCLI
+	call CLI_GetPath
+	pop ix
+	call System_Print
+	ld hl,Application_dotDotDot
+	call System_Print
+	ret
 
 ; ix = this
 Application_ConstructVGM:
