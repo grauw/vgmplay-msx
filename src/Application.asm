@@ -159,6 +159,7 @@ Frequency:
 ; ix = this
 Application_LoadFile:
 	call Application_PrintLoading
+	call Application_ConstructMappedBuffer
 	call Application_IsVGZ
 	jp z,Application_InflateFile
 	push ix
@@ -173,6 +174,18 @@ Application_LoadFile:
 	call MappedBufferLoader_Construct
 	call MappedBufferLoader_Load
 	call MappedBufferLoader_Destruct
+	pop ix
+	ret
+
+; ix = this
+Application_ConstructMappedBuffer:
+	push ix
+	ld ix,MappedBuffer_instance
+	call MappedBuffer_Construct
+	ld a,(Mapper_instance.primaryMapperSlot)
+	ld b,a
+	ld a,(Mapper_instance.initialPage2)
+	call MappedBuffer_SetFreebie
 	pop ix
 	ret
 

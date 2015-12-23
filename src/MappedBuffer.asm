@@ -4,6 +4,8 @@
 MappedBuffer: MACRO
 	size:
 		dd 0
+	freebie:
+		dw 0
 	segmentCount:
 		db 0
 	segments:
@@ -17,6 +19,14 @@ MappedBuffer_Construct:
 
 ; ix = this
 MappedBuffer_Destruct:
+	ret
+
+; a = segment number
+; b = slot id
+; ix = this
+MappedBuffer_SetFreebie:
+	ld (ix + MappedBuffer.freebie),a
+	ld (ix + MappedBuffer.freebie + 1),b
 	ret
 
 ; ix = this
@@ -55,10 +65,22 @@ MappedBuffer_SelectSegment:
 
 ; ix = this
 ; a <- new segment index
-MappedBuffer_AllocateAndAddSegment:
+MappedBuffer_AllocateAndAddSegment: PROC
+	ld a,(ix + MappedBuffer.segmentCount)
+	and a
+	jr nz,Continue
+	or (ix + MappedBuffer.freebie + 1)
+	jr nz,Freebie
+Continue:
 	call MappedBuffer_AllocateSegment
 	call MappedBuffer_AddSegment
 	ret
+Freebie:
+	ld a,(ix + MappedBuffer.freebie)
+	ld b,(ix + MappedBuffer.freebie + 1)
+	call MappedBuffer_AddSegment
+	ret
+	ENDP
 
 ; ix = this
 ; a <- segment number
