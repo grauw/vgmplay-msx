@@ -109,7 +109,7 @@ Loop:
 LessThan64K:
 	ld c,l
 	ld b,h
-	call Reader_ReadBlockFromBuffer_IY
+	call Reader_ReadBlockDirect_IY
 	push bc
 	call MSXAudio_WriteADPCMData
 	pop bc

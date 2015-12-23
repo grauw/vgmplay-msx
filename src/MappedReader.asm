@@ -115,7 +115,7 @@ Loop:
 	or b
 	ret z
 	push bc
-	call Reader_ReadBlockFromBuffer_IY
+	call Reader_ReadBlockDirect_IY
 	push bc
 	call System_FastLDIR
 	pop bc
