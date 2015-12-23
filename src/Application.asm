@@ -155,7 +155,7 @@ Frequency:
 	ENDP
 
 ; ix = this
-Application_LoadFile: PROC
+Application_LoadFile:
 	call Application_PrintLoading
 	push ix
 	call Application_GetCLI
@@ -171,7 +171,6 @@ Application_LoadFile: PROC
 	call MappedBufferLoader_Destruct
 	pop ix
 	ret
-	ENDP
 
 ; ix = this
 Application_PrintLoading:
