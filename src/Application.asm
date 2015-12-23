@@ -176,11 +176,6 @@ Application_LoadFile: PROC
 	call MappedBufferLoader_Load
 	call MappedBufferLoader_Destruct
 	pop ix
-	push ix
-	call Application_GetReader
-	ld hl,MappedBuffer_instance
-	call MappedReader_Construct
-	pop ix
 	ret
 	ENDP
 
@@ -192,6 +187,8 @@ Application_ConstructVGM:
 	ex (sp),ix
 	push ix
 	call Application_GetReader
+	ld hl,MappedBuffer_instance
+	call MappedReader_Construct
 	ex (sp),ix
 	call Application_GetVGM
 	pop de
