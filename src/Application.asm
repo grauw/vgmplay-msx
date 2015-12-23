@@ -188,14 +188,14 @@ Application_LoadFile: PROC
 Application_ConstructVGM:
 	push ix
 	push ix
-	push ix
 	call Application_GetDrivers
 	ex (sp),ix
-	pop hl
+	push ix
 	call Application_GetReader
 	ex (sp),ix
 	call Application_GetVGM
 	pop de
+	pop hl
 	call VGM_Construct
 	call VGM_PrintInfo
 	pop ix
