@@ -11,7 +11,7 @@ VBlankTimer: MACRO
 	super: Timer VBlankTimer_Start, VBlankTimer_Stop, VBlankTimer_Reset, VBlankTimer_Update
 	time:
 		dw 0
-	lastTimer:
+	lastJiffy:
 		db 0
 	ENDM
 
@@ -33,7 +33,7 @@ VBlankTimer_Stop:
 ; ix = this
 VBlankTimer_Reset:
 	ld a,(JIFFY)
-	ld (ix + VBlankTimer.lastTimer),a
+	ld (ix + VBlankTimer.lastJiffy),a
 	ld (ix + VBlankTimer.time),0
 	ld (ix + VBlankTimer.time + 1),0
 	ret
@@ -52,12 +52,12 @@ VBlankTimer_Update:
 ; ix = this
 ; hl <- time passed
 VBlankTimer_UpdateTimePassed: PROC
-	ld b,(ix + VBlankTimer.lastTimer)
+	ld b,(ix + VBlankTimer.lastJiffy)
 Wait:
 	ld a,(JIFFY)
 	cp b
 	jp z,Wait
-	ld (ix + VBlankTimer.lastTimer),a
+	ld (ix + VBlankTimer.lastJiffy),a
 	sub b
 	ld b,a
 	ld l,(ix + VBlankTimer.time)
