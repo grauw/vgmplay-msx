@@ -93,6 +93,12 @@ Player_Construct:
 	ret
 
 ; ix = this
+Player_Destruct:
+	call Player_GetTimer
+	call Timer_Stop
+	ret
+
+; ix = this
 ; de <- reader
 ; iy <- reader
 Player_GetReaderIY:

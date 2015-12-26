@@ -12,6 +12,10 @@ TimerFactory_CreateTimer:
 	call TurboRTimer_Detect
 	pop hl
 	jp c,TimerFactory_CreateTurboRTimer
+	push hl
+	call LineTimer_Detect
+	pop hl
+	jp c,TimerFactory_CreateLineTimer
 	jp TimerFactory_CreateVBlankTimer
 
 ; hl = callback
@@ -23,6 +27,16 @@ TimerFactory_CreateVBlankTimer:
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException
 	call VBlankTimer_Construct
+	ld e,ixl
+	ld d,ixh
+	ret
+
+; hl = callback
+; de <- timer
+; ix <- timer
+TimerFactory_CreateLineTimer:
+	call LineTimer_class.New
+	call LineTimer_Construct
 	ld e,ixl
 	ld d,ixh
 	ret

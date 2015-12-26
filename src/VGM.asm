@@ -2,6 +2,8 @@
 ; A VGM track
 ;
 VGM: MACRO
+	playerReference:
+		dw 0
 	reader:
 		dw 0
 	drivers:
@@ -44,6 +46,16 @@ VGM_Construct:
 	pop iy
 	call VGM_GetChips
 	call Chips_Connect
+	pop ix
+	ret
+
+; ix = this
+VGM_Destruct:
+	push ix
+	call VGM_GetPlayerReference
+	ld a,e
+	or d
+	call nz,Player_Destruct
 	pop ix
 	ret
 
@@ -96,6 +108,15 @@ VGM_GetPlayer:
 	ret
 
 ; ix = this
+; ix <- player
+VGM_GetPlayerReference:
+	ld e,(ix + VGM.playerReference)
+	ld d,(ix + VGM.playerReference + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
 VGM_PrintInfo:
 	push ix
 	call VGM_GetHeader
@@ -127,7 +148,11 @@ VGM_Play:
 	ld e,iyl
 	ld d,iyh
 	call Player_Construct
+	ld e,ixl
+	ld d,ixh
 	ex (sp),ix
+	ld (ix + VGM.playerReference),e
+	ld (ix + VGM.playerReference + 1),d
 	pop iy
 	push ix
 	call VGM_GetChips

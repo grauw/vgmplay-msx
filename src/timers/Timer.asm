@@ -9,6 +9,7 @@
 ;
 	INCLUDE "TimerFactory.asm"
 	INCLUDE "VBlankTimer.asm"
+	INCLUDE "LineTimer.asm"
 	INCLUDE "TurboRTimer.asm"
 
 Timer: MACRO ?start, ?stop, ?reset, ?update

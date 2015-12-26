@@ -2,6 +2,8 @@
 ; Top-level application program class
 ;
 Application: MACRO
+	vgmReference:
+		dw 0
 	cli:
 		CLI
 	loader:
@@ -81,6 +83,12 @@ Application_Construct:
 ; ix <- this
 Application_Destruct:
 	push ix
+	call Application_GetVGMReference
+	ld a,e
+	or d
+	call nz,VGM_Destruct
+	pop ix
+	push ix
 	call Application_GetCLI
 	call CLI_Destruct
 	pop ix
@@ -123,6 +131,15 @@ Application_GetDrivers:
 Application_GetVGM:
 	ld de,Application.vgm
 	add ix,de
+	ret
+
+; ix = this
+; ix <- VGM
+Application_GetVGMReference:
+	ld e,(ix + Application.vgmReference)
+	ld d,(ix + Application.vgmReference + 1)
+	ld ixl,e
+	ld ixh,d
 	ret
 
 ; ix = this
@@ -272,7 +289,11 @@ Application_ConstructVGM:
 	pop hl
 	call VGM_Construct
 	call VGM_PrintInfo
+	ld e,ixl
+	ld d,ixh
 	pop ix
+	ld (ix + Application.vgmReference),e
+	ld (ix + Application.vgmReference + 1),d
 	ret
 
 ; ix = this
