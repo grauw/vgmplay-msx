@@ -152,7 +152,7 @@ Application_EnterMainLoop:
 	ret
 
 ; ix = this
-Application_ParseCLI: PROC
+Application_ParseCLI:
 	push ix
 	call Application_GetCLI
 	call CLI_Parse
@@ -161,17 +161,8 @@ Application_ParseCLI: PROC
 	or h
 	ld hl,Application_usageInstructions
 	jp z,Application_TerminateWithError
-	call Frequency
 	pop ix
 	ret
-Frequency:
-	call VDP_GetVersion
-	ret z
-	ld a,(ix + CLI.frequency)
-	cp 50
-	jp z,VDP_Enable50Hz
-	jp VDP_Enable60Hz
-	ENDP
 
 ; ix = this
 Application_LoadFile:
@@ -390,5 +381,4 @@ Application_usageInstructions:
 	db 13,10
 	db "Options:",13,10
 	db "  /l  Number of playback loops. Default: 2.",13,10
-	db "  /5  50 Hz screen frequency (V9938 and up only).",13,10
 	db "  /b  Enter blackout mode during playback.",13,10,0

@@ -73,15 +73,6 @@ Options:
     exiting. The amount is specified like `/L15`. Use `/L` or `/L0` to loop
     infinitely. This setting will have no effect for songs which don’t loop.
     
-  * `/5` 50 Hz screen frequency (V9938 and up only).
-    
-    The player’s internal timer currently runs in sync with the display
-    frequency. For the best playback, the timer should match the playback
-    frequency of the original source file. Because this is 60 Hz for most VGM
-    files, by default VGMPlay switches to 60 Hz automatically. Use this option
-    to override this behaviour in case the VGM file was recorded at 50 Hz or
-    your monitor does not support 60 Hz.
-    
   * `/b` Enter blackout mode during playback.
     
     This setting makes the screen go black during playback. For machines with a

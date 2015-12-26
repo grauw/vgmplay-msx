@@ -4,8 +4,6 @@
 CLI: MACRO
 	path:
 		dw 0
-	frequency:
-		db 0
 	loops:
 		db 2
 	blackout:
@@ -74,10 +72,6 @@ Path:
 CLI_ParseOption: PROC
 	inc de
 	ld a,(de)
-	cp "5"
-	jr z,Option50Hz
-	cp "6"
-	jr z,Option60Hz
 	and 11011111B  ; upper-case
 	cp "L"
 	jr z,OptionLoops
@@ -85,14 +79,6 @@ CLI_ParseOption: PROC
 	jr z,OptionBlackout
 	ld hl,CLI_unknownOptionError
 	jp Application_TerminateWithError
-Option50Hz:
-	ld (ix + CLI.frequency),50
-	inc de
-	jp Next
-Option60Hz:
-	ld (ix + CLI.frequency),60
-	inc de
-	jp Next
 OptionLoops:
 	inc de
 	call CLI_ParseNumber
