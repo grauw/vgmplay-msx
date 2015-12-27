@@ -81,9 +81,6 @@ LineTimer_Construct:
 
 ; ix = this
 LineTimer_Start: PROC
-	ld a,(VDP_MIRROR_0)
-	and LineTimer_IE1
-	call nz,System_ThrowException
 	call LineTimer_Reset
 	ld a,0
 	ld (ix + LineTimer.LineInterruptHandler.line),a
@@ -105,9 +102,6 @@ Is60Hz:
 
 ; ix = this
 LineTimer_Stop:
-	ld a,(VDP_MIRROR_0)
-	and LineTimer_IE1
-	ret z
 	ld a,(VDP_MIRROR_0)
 	and ~LineTimer_IE1
 	ld (VDP_MIRROR_0),a

@@ -95,7 +95,8 @@ Player_Construct:
 ; ix = this
 Player_Destruct:
 	call Player_GetTimer
-	call Timer_Stop
+	call Timer_IsActive
+	call nz,Timer_Stop
 	ret
 
 ; ix = this
