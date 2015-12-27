@@ -18,6 +18,18 @@ Issues: <https://bitbucket.org/grauw/vgmplay-msx/issues>
 Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>  
 License: Simplified BSD License
 
+VGMPlay can play back music for quite a number of sound chips using various
+common and less common sound expansions for MSX, such as the PSG, MoonSound and
+Yamaha SFG. A detailed list can be found below.
+
+Both the VGM and VGZ formats are supported. The compressed VGZ format takes
+longer to load but also consumes less disk space. If so desired, VGZ files can
+be manually decompressed to VGM with
+[gunzip for MSX](https://bitbucket.org/grauw/gunzip) or PC.
+
+The timing resolution is 50 or 60 Hz on MSX1 machines with a TMS9918 VDP, 300 Hz
+on machines with a V9938 or V9958 VDP, and 4000 Hz on MSX turboR.
+
 For more information on the VGM format see:  
 <http://www.smspower.org/Music/VGMFileFormat>
 
@@ -38,6 +50,8 @@ System Requirements
 
 Supported sound chips
 ---------------------
+
+The sound expansion required for playback is mentioned between parentheses.
 
   * AY-3-8910 PSG / YM2149 SSG x2 (built-in, MegaFlashROM SCC+ SD)
   * YM2151 OPM (SFG-01/05)
