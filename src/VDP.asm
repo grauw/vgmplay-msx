@@ -276,7 +276,7 @@ Wait:
 ; Modifies: af, c
 VDP_SetRegister:
 	ld c,a
-	ld a,r
+	call System_CheckEIState
 	ld a,c
 	di
 	out (VDP_PORT_1),a

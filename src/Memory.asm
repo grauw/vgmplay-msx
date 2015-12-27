@@ -355,7 +355,7 @@ Memory_SetPreparedSlot:
 	push bc
 	ld hl,0FFFFH
 	ld c,0A8H
-	ld a,r
+	call System_CheckEIState
 	di
 	in a,(0A8H)  ; be careful not to modify p/v flag
 	out (c),d
@@ -382,7 +382,7 @@ Memory_SetPreparedSlotPage0:
 	push bc
 	ld hl,0FFFFH
 	ld c,0A8H
-	ld a,r
+	call System_CheckEIState_Page1
 	di
 	in a,(0A8H)  ; be careful not to modify p/v flag
 	out (c),d
@@ -431,7 +431,7 @@ Memory_ReadSlot:
 ;
 Memory_ReadPreparedSlot:
 	ld c,0A8H
-	ld a,r
+	call System_CheckEIState
 	ex af,af'
 	di
 	in b,(c)
@@ -458,7 +458,7 @@ Memory_ReadPreparedSlot:
 ;
 Memory_ReadPreparedSlotPage0:
 	ld c,0A8H
-	ld a,r
+	call System_CheckEIState
 	ex af,af'
 	di
 	in b,(c)
@@ -510,7 +510,7 @@ Memory_WriteSlot:
 ; Modifies: af, af', bc, de, hl
 ;
 Memory_WritePreparedSlot:
-	ld a,r
+	call System_CheckEIState
 	ld a,c
 	ld c,0A8H
 	ex af,af'
@@ -538,7 +538,7 @@ Memory_WritePreparedSlot:
 ; See WritePreparedSlot.
 ;
 Memory_WritePreparedSlotPage0:
-	ld a,r
+	call System_CheckEIState
 	ld a,c
 	ld c,0A8H
 	ex af,af'
