@@ -120,7 +120,7 @@ MSXAudio: MACRO
 	; hl = source
 	WriteADPCMData: PROC
 		di
-		ld d,00H
+		ld d,70H
 		ld a,MSXAudio_FLAG_CONTROL
 		call WriteRegister
 		dec bc
