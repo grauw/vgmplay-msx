@@ -129,19 +129,19 @@ MSXAudio: MACRO
 		ld e,b
 		ld b,c
 		ld c,MSXAudio_DATA_PORT
+		ld a,MSXAudio_ADPCM_DATA
+		out (MSXAudio_ADDRESS_PORT),a  ; wait 12 cycles after
 		jr Wait
 	Next:
 		ld d,80H
 		ld a,MSXAudio_FLAG_CONTROL
 		call WriteRegister
+		ld a,MSXAudio_ADPCM_DATA
+		out (MSXAudio_ADDRESS_PORT),a  ; wait 12 cycles after
 	Wait:
 		in a,(MSXAudio_STATUS_PORT)
 		bit 3,a
 		jr z,Wait
-		ld a,MSXAudio_ADPCM_DATA
-		out (MSXAudio_ADDRESS_PORT),a
-		in a,(MSXAudio_STATUS_PORT)  ; wait 12 cycles
-		ld a,(hl)                    ;  "
 		outi
 		jr nz,Next
 		dec e
