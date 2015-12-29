@@ -20,8 +20,8 @@ MSXMusic: MACRO
 	; d = value
 	WriteRegister:
 		out (MSXMusic_ADDRESS),a
-		push ix  ; wait 12 cycles
-		pop ix
+		in a,(MSXMusic_ADDRESS)  ; wait 12 cycles
+		ld a,(hl)                ;  "
 		ld a,d
 		out (MSXMusic_DATA),a
 		in a,(09AH)  ; R800 wait: ~72 cycles
