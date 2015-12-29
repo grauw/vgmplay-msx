@@ -146,7 +146,7 @@ MSXAudio: MACRO
 		out (MSXAudio_ADDRESS_PORT),a  ; wait 12 cycles after
 	Wait:
 		in a,(MSXAudio_STATUS_PORT)
-		bit 3,a
+		and 00001000B
 		jr z,Wait
 		outi
 		jr nz,Next
