@@ -1,3 +1,5 @@
+source lib/gunzip/tools/profile.tcl
+
 ext debugdevice
 set debugoutput stdout
 debug set_watchpoint read_io 0x2E
