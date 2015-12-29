@@ -49,8 +49,8 @@ MSXAudio: MACRO
 	; d = value
 	WriteRegister:
 		out (MSXAudio_ADDRESS_PORT),a
-		push hl  ; wait 11 cycles (12 officially)
-		pop hl
+		in a,(MSXAudio_STATUS_PORT)  ; wait 12 cycles
+		ld a,(hl)                    ;  "
 		ld a,d
 		out (MSXAudio_DATA_PORT),a
 		in a,(09AH)  ; R800 wait: ~72 cycles
@@ -140,8 +140,8 @@ MSXAudio: MACRO
 		jr z,Wait
 		ld a,MSXAudio_ADPCM_DATA
 		out (MSXAudio_ADDRESS_PORT),a
-		push hl  ; wait 12 cycles
-		pop hl
+		in a,(MSXAudio_STATUS_PORT)  ; wait 12 cycles
+		ld a,(hl)                    ;  "
 		outi
 		jr nz,Next
 		dec e
