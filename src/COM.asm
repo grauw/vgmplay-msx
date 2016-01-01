@@ -66,6 +66,7 @@ CRC32Table:
 
 	SECTION TPA_PAGE1
 
+	INCLUDE "Interrupt.asm"
 	INCLUDE "VGM.asm"
 	INCLUDE "Header.asm"
 	INCLUDE "GD3.asm"

@@ -18,6 +18,7 @@ LineTimer: MACRO
 		db 0
 
 	InterruptHandler: PROC
+		push af
 		ld a,1
 		out (VDP_PORT_1),a
 		ld a,15 | VDP_REGISTER
@@ -29,8 +30,9 @@ LineTimer: MACRO
 		out (VDP_PORT_1),a
 		ld a,15 | VDP_REGISTER
 		out (VDP_PORT_1),a
+		pop af
 	oldHook:
-		ds 5,0C9H
+		ds Interrupt_HOOK_SIZE,0C9H
 		ENDP
 
 	LineInterruptHandler: PROC
@@ -55,6 +57,8 @@ LineTimer: MACRO
 		out (VDP_PORT_1),a
 		ld a,15 | VDP_REGISTER
 		out (VDP_PORT_1),a
+		pop af
+		ei
 		ret
 		ENDP
 	_size:
@@ -112,39 +116,29 @@ LineTimer_Stop:
 
 ; ix = this
 LineTimer_InstallInterruptHandler:
-	ld e,ixl
-	ld d,ixh
+	push ix
+	ld ix,Interrupt_instance
+	call Interrupt_Construct
+	pop ix
+	ld c,ixl
+	ld b,ixh
 	ld hl,LineTimer.InterruptHandler.oldHook
-	add hl,de
+	add hl,bc
 	ex de,hl
-	ld hl,H.KEYI
-	ld bc,5
-	ldir
-	ld e,ixl
-	ld d,ixh
 	ld hl,LineTimer.InterruptHandler
-	add hl,de
-	ld a,0C3H  ; jp
-	di
-	ld (H.KEYI),a
-	ld a,l
-	ld (H.KEYI + 1),a
-	ld a,h
-	ld (H.KEYI + 2),a
-	ei
+	add hl,bc
+	push ix
+	ld ix,Interrupt_instance
+	call Interrupt_Hook
+	pop ix
 	ret
 
 ; ix = this
 LineTimer_UninstallInterruptHandler:
-	ld e,ixl
-	ld d,ixh
-	ld hl,LineTimer.InterruptHandler.oldHook
-	add hl,de
-	ld de,H.KEYI
-	ld bc,5
-	di
-	ldir
-	ei
+	push ix
+	ld ix,Interrupt_instance
+	call Interrupt_Destruct
+	pop ix
 	ret
 
 ; ix = this
