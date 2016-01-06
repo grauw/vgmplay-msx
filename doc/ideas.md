@@ -45,7 +45,6 @@ Reduce TPA usage (to allow selecting more files in Multi Mente)
 
 Show which drivers are playing which sound chips
 
-  * Make distinction between SFG-01 and SFG-05
   * Franky detection
   * MegaFlashROM PSG detection
 

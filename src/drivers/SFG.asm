@@ -63,7 +63,7 @@ SFG: MACRO
 ; ix = this
 SFG_Construct:
 	call SFG_SetSlot
-	ld bc,SFG_name
+	call SFG_GetName
 	ld de,SFG_FREQUENCY >> 16
 	ld hl,SFG_FREQUENCY
 	call Driver_Construct
@@ -141,6 +141,24 @@ Loop:
 	ret
 	ENDP
 
+; ix = this
+; bc <- name
+SFG_GetName:
+	call SFG_IsSFG01
+	ld bc,SFG_sfg01Name
+	ret z
+	ld bc,SFG_sfg05Name
+	ret
+
+; ix = this
+; f <- z: yes
+SFG_IsSFG01:
+	ld a,(ix + SFG.slot)
+	ld hl,0088H
+	call Memory_ReadSlot
+	and 0F0H
+	ret
+
 ; f <- c: found
 ; a <- slot
 SFG_Detect:
@@ -161,8 +179,10 @@ SFG_id:
 	db "MCHFM0"
 
 ;
-SFG_name:
-	db "Yamaha SFG",0
+SFG_sfg01Name:
+	db "Yamaha SFG-01",0
+SFG_sfg05Name:
+	db "Yamaha SFG-05",0
 
 	SECTION RAM_PAGE1
 
