@@ -53,7 +53,7 @@ Supported sound chips
 
 The sound expansion required for playback is mentioned between parentheses.
 
-  * AY-3-8910 PSG / YM2149 SSG x2 (built-in, MegaFlashROM SCC+ SD)
+  * AY-3-8910 PSG / YM2149 SSG x2 (built-in, MegaFlashROM SCC+)
   * YM2151 OPM (SFG-01/05)
   * YM2413 OPLL (MSX-MUSIC, FM-PAC)
   * YM3526 OPL (MSX-AUDIO, Music Module, MoonSound)

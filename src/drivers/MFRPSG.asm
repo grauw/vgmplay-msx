@@ -1,5 +1,5 @@
 ;
-; MegaFlashROM SCC+ SD AY-3-8910 PSG driver
+; MegaFlashROM SCC+ AY-3-8910 PSG driver
 ;
 MFRPSG_ADDRESS: equ 010H
 MFRPSG_DATA: equ 011H
