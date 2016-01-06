@@ -2,6 +2,7 @@
 ; Driver manager
 ;
 
+	INCLUDE "Driver.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "MFRPSG.asm"
 	INCLUDE "SFG.asm"

@@ -9,8 +9,10 @@ SCC_MIXER: equ 8FH
 SCC_DEFORMATION: equ 0E0H
 SCC_BANK_SELECT: equ 9000H
 SCC_BANK: equ 3FH
+SCC_FREQUENCY_: equ 1789773
 
 SCC: MACRO
+	super: Driver
 	slot:
 		db 0
 
@@ -46,6 +48,10 @@ SCC: MACRO
 ; ix = this
 SCC_Construct:
 	call SCC_SetSlot
+	ld bc,SCC_name
+	ld de,SCC_FREQUENCY_ >> 16
+	ld hl,SCC_FREQUENCY_
+	call Driver_Construct
 	call SCC_SelectBank
 	call SCC_Reset
 	ret
@@ -174,6 +180,9 @@ Found:
 	ENDP
 
 ;
+SCC_name:
+	db "Konami SCC",0
+
 	SECTION RAM
 
 SCC_instance: SCC

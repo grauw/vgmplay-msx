@@ -29,6 +29,7 @@ SN76489_Construct:
 SN76489_Connect: PROC
 	call Drivers_TryCreateMMM_IY
 	jr nc,TryFranky
+	call Chip_SetDriver
 	ld hl,MMM.SafeWriteRegister
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l
@@ -37,6 +38,7 @@ SN76489_Connect: PROC
 TryFranky:
 	call Drivers_TryCreateFranky_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,Franky.SafeWriteRegister
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l

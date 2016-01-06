@@ -14,9 +14,12 @@ MoonSound_WAVE_MEMORY_ADDRESS_E: equ 03H
 MoonSound_WAVE_MEMORY_ADDRESS_H: equ 04H
 MoonSound_WAVE_MEMORY_ADDRESS_L: equ 05H
 MoonSound_WAVE_MEMORY_DATA: equ 06H
+MoonSound_FREQUENCY: equ 33868800
 
 MoonSound: MACRO
 	this:
+	super: Driver
+
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -120,6 +123,10 @@ MoonSound: MACRO
 
 ; ix = this
 MoonSound_Construct:
+	ld bc,MoonSound_name
+	ld de,MoonSound_FREQUENCY >> 16
+	ld hl,MoonSound_FREQUENCY
+	call Driver_Construct
 	call MoonSound_Reset
 	ret
 
@@ -375,6 +382,9 @@ MoonSound_Detect:
 	ret
 
 ;
+MoonSound_name:
+	db "MoonSound",0
+
 	SECTION RAM
 
 MoonSound_instance: MoonSound

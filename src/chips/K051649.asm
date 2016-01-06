@@ -81,6 +81,7 @@ K051649_Construct:
 K051649_Connect:
 	call Drivers_TryCreateSCC_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,SCC.WriteRegister
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l

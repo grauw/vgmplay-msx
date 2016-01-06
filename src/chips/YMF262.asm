@@ -38,6 +38,7 @@ YMF262_Construct:
 YMF262_Connect:
 	call Drivers_TryCreateMoonSound_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + YMF262.ProcessPort0Command.writeRegister),l

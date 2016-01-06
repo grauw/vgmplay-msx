@@ -3,8 +3,11 @@
 ;
 PSG_ADDRESS: equ 0A0H
 PSG_DATA: equ 0A1H
+PSG_FREQUENCY: equ 1789773
 
 PSG: MACRO ?address, ?data
+	super: Driver
+
 	; e = register
 	; d = value
 	SafeWriteRegister:
@@ -33,6 +36,10 @@ PSG: MACRO ?address, ?data
 
 ; ix = this
 PSG_Construct:
+	ld bc,PSG_name
+	ld de,PSG_FREQUENCY >> 16
+	ld hl,PSG_FREQUENCY
+	call Driver_Construct
 	call PSG_Reset
 	ret
 
@@ -89,6 +96,9 @@ PSG_Detect:
 	ret
 
 ;
+PSG_name:
+	db "Internal PSG",0
+
 	SECTION RAM
 
 PSG_instance: PSG PSG_ADDRESS, PSG_DATA

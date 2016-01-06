@@ -5,8 +5,10 @@ MSXMusic_ADDRESS: equ 7CH
 MSXMusic_DATA: equ 7DH
 MSXMusic_ID_ADDRESS: equ 4018H
 MSXMusic_ENABLE_ADDRESS: equ 7FF6H
+MSXMusic_FREQUENCY: equ 3579545
 
 MSXMusic: MACRO
+	super: Driver
 	slot:
 		db 0
 	internal:
@@ -35,6 +37,10 @@ MSXMusic: MACRO
 MSXMusic_Construct:
 	ld (ix + MSXMusic.slot),a
 	ld (ix + MSXMusic.internal),b
+	ld bc,MSXMusic_name
+	ld de,MSXMusic_FREQUENCY >> 16
+	ld hl,MSXMusic_FREQUENCY
+	call Driver_Construct
 	call MSXMusic_Enable
 	call MSXMusic_Reset
 	ret
@@ -173,6 +179,9 @@ MSXMusic_externalId:
 	db "OPLL"
 
 ;
+MSXMusic_name:
+	db "MSX-MUSIC",0
+
 	SECTION RAM
 
 MSXMusic_instance: MSXMusic

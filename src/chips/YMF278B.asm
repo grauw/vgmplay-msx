@@ -65,6 +65,7 @@ YMF278B_Construct:
 YMF278B_Connect:
 	call Drivers_TryCreateMoonSound_IY
 	ret nc
+	call Chip_SetDriver
 	ld (ix + YMF278B.moonSound),e
 	ld (ix + YMF278B.moonSound + 1),d
 	ld hl,MoonSound.SafeWriteRegister

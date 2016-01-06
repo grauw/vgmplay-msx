@@ -6,6 +6,10 @@ Chip: MACRO ?name, ?connecter, ?installer
 		dd 0
 	name:
 		dw ?name
+	driver:
+		dw 0
+	driver2:
+		dw 0
 	connecter:
 		dw ?connecter
 	installer:
@@ -62,6 +66,20 @@ Chip_SetName:
 	ld (ix + Chip.name + 1),h
 	ret
 
+; de = driver
+; ix = this
+Chip_SetDriver:
+	ld (ix + Chip.driver),e
+	ld (ix + Chip.driver + 1),d
+	ret
+
+; de = driver
+; ix = this
+Chip_SetDriver2:
+	ld (ix + Chip.driver2),e
+	ld (ix + Chip.driver2 + 1),d
+	ret
+
 ; iy = drivers
 ; ix = this
 Chip_Connect:
@@ -90,6 +108,26 @@ Single:
 	call System_PrintDecDEHL
 	ld hl,Chip_hz
 	call System_Print
+	ld e,(ix + Chip.driver)
+	ld d,(ix + Chip.driver + 1)
+	ld a,e
+	or d
+	ret z
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
+	ld e,(ix + Chip.driver2)
+	ld d,(ix + Chip.driver2 + 1)
+	ld a,e
+	or d
+	ret z
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
 	ret
 	ENDP
 

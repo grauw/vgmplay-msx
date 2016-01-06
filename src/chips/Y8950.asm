@@ -47,6 +47,7 @@ Y8950_Construct:
 Y8950_Connect:
 	call Drivers_TryCreateMSXAudio_IY
 	ret nc
+	call Chip_SetDriver
 	ld (ix + Y8950.msxAudio),e
 	ld (ix + Y8950.msxAudio + 1),d
 	ld hl,MSXAudio.SafeWriteRegister

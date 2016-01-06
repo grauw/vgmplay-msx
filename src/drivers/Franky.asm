@@ -2,8 +2,11 @@
 ; Franky / Playsoniq SN76489 DCSG driver
 ;
 Franky_DATA: equ 049H
+Franky_FREQUENCY: equ 3579545
 
 Franky: MACRO
+	super: Driver
+
 	; a = value
 	SafeWriteRegister:
 	; a = value
@@ -14,6 +17,10 @@ Franky: MACRO
 
 ; ix = this
 Franky_Construct:
+	ld bc,Franky_name
+	ld de,Franky_FREQUENCY >> 16
+	ld hl,Franky_FREQUENCY
+	call Driver_Construct
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset
@@ -60,6 +67,9 @@ Franky_Detect:
 	ret
 
 ;
+Franky_name:
+	db "Franky",0
+
 	SECTION RAM
 
 Franky_instance: Franky

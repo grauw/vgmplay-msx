@@ -42,6 +42,7 @@ Continue:
 YM2151_Connect:
 	call Drivers_TryCreateSFG_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,SFG.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2151.ProcessCommand.writeRegister),l

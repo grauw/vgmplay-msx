@@ -6,6 +6,7 @@
 MSXAudio_STATUS_PORT: equ 0C0H
 MSXAudio_ADDRESS_PORT: equ 0C0H
 MSXAudio_DATA_PORT: equ 0C1H
+MSXAudio_FREQUENCY: equ 3579545
 
 ; registers
 MSXAudio_TEST: equ 01H
@@ -36,6 +37,7 @@ MSXAudio_FM_BASE: equ 20H
 
 MSXAudio: MACRO
 	this:
+	super: Driver
 	safeControlMirror:
 		ds MSXAudio_FM_BASE
 
@@ -162,6 +164,10 @@ MSXAudio: MACRO
 
 ; ix = this
 MSXAudio_Construct:
+	ld bc,MSXAudio_name
+	ld de,MSXAudio_FREQUENCY >> 16
+	ld hl,MSXAudio_FREQUENCY
+	call Driver_Construct
 	call MSXAudio_Reset
 	ret
 
@@ -282,6 +288,9 @@ MSXAudio_Detect:
 	ret
 
 ;
+MSXAudio_name:
+	db "MSX-AUDIO",0
+
 	SECTION RAM
 
 MSXAudio_instance: MSXAudio

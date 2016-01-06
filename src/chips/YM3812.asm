@@ -29,6 +29,7 @@ YM3812_Construct:
 YM3812_Connect:
 	call Drivers_TryCreateMoonSound_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3812.ProcessCommand.writeRegister),l

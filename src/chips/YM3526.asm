@@ -29,6 +29,7 @@ YM3526_Construct:
 YM3526_Connect: PROC
 	call Drivers_TryCreateMSXAudio_IY
 	jr nc,TryMoonSound
+	call Chip_SetDriver
 	ld hl,MSXAudio.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3526.ProcessCommand.writeRegister),l
@@ -37,6 +38,7 @@ YM3526_Connect: PROC
 TryMoonSound:
 	call Drivers_TryCreateMoonSound_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3526.ProcessCommand.writeRegister),l

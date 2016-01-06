@@ -29,6 +29,7 @@ YM2413_Construct:
 YM2413_Connect:
 	call Drivers_TryCreateMSXMusic_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,MSXMusic.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2413.ProcessCommand.writeRegister),l

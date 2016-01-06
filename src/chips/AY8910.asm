@@ -67,6 +67,7 @@ AY8910_Construct:
 AY8910_Connect: PROC
 	call Drivers_TryCreatePSG_IY
 	jp nc,TryMFRPSG
+	call Chip_SetDriver
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
 	ld (ix + AY8910.ProcessCommand.writeRegister),l
@@ -75,6 +76,7 @@ AY8910_Connect: PROC
 TryMFRPSG:
 	call Drivers_TryCreateMFRPSG_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,MFRPSG.SafeWriteRegister
 	add hl,de
 	ld (ix + AY8910.ProcessCommand.writeRegister),l
@@ -85,6 +87,7 @@ DualChip:
 	ret z
 	call Drivers_TryCreateMFRPSG_IY
 	ret nc
+	call Chip_SetDriver2
 	ld hl,MFRPSG.SafeWriteRegister
 	add hl,de
 	ld (ix + AY8910.ProcessCommandDual.writeRegister),l

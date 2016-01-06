@@ -8,8 +8,10 @@ MMM_PAGE0: equ 0FCH
 MMM_PAGE1: equ 0FDH
 MMM_PAGE2: equ 0FEH
 MMM_PAGE3: equ 0FFH
+MMM_FREQUENCY: equ 3579545
 
 MMM: MACRO
+	super: Driver
 	slot:
 		db 0
 
@@ -24,6 +26,10 @@ MMM: MACRO
 ; a = slot
 ; ix = this
 MMM_Construct:
+	ld bc,MMM_name
+	ld de,MMM_FREQUENCY >> 16
+	ld hl,MMM_FREQUENCY
+	call Driver_Construct
 	call MMM_SetSlot
 	call MMM_Enable
 	call MMM_Reset
@@ -158,6 +164,9 @@ TestValue:
 	ENDS
 
 ;
+MMM_name:
+	db "Musical Memory Mapper",0
+
 	SECTION RAM_PAGE0
 
 MMM_instance: MMM
