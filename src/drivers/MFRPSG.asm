@@ -27,7 +27,7 @@ MFRPSG_Detect:
 
 ;
 MFRPSG_name:
-	db "MegaFlashROM SCC+ SD PSG",0
+	db "MegaFlashROM PSG",0
 
 	SECTION RAM
 
