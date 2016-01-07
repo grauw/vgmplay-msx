@@ -46,6 +46,11 @@ Reduce TPA usage (to allow selecting more files in Multi Mente)
 Show which drivers are playing which sound chips
 
   * Franky detection
+  * PlaySoniq detection
   * MegaFlashROM PSG detection
 
 Support SCC+ 5th channel
+
+Fix PlaySoniq SCC+ detection
+
+Fix Zemmix Neo 300 Hz playback
