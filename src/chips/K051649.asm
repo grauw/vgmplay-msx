@@ -78,7 +78,24 @@ K051649_Construct:
 
 ; iy = drivers
 ; ix = this
-K051649_Connect:
+K051649_Connect: PROC
+	call Drivers_TryCreateSCCPlus_IY
+	jr nc,SCC
+	call Chip_SetDriver
+	ld hl,SCCPlus.WriteRegister
+	add hl,de
+	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Frequency.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Mixer.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Mixer.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
+	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
+	ret
+SCC:
 	call Drivers_TryCreateSCC_IY
 	ret nc
 	call Chip_SetDriver
@@ -95,6 +112,7 @@ K051649_Connect:
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret
+	ENDP
 
 ; iy = player
 ; ix = this

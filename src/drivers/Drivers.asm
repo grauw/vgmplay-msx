@@ -10,6 +10,7 @@
 	INCLUDE "MSXAudio.asm"
 	INCLUDE "MoonSound.asm"
 	INCLUDE "SCC.asm"
+	INCLUDE "SCCPlus.asm"
 	INCLUDE "Franky.asm"
 	INCLUDE "MMM.asm"
 
@@ -27,6 +28,8 @@ Drivers: MACRO
 	moonSound:
 		dw 0
 	scc:
+		dw 0
+	sccPlus:
 		dw 0
 	franky:
 		dw 0
@@ -70,6 +73,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetSCC
 	call nz,SCC_Destruct
+	pop ix
+	push ix
+	call Drivers_GetSCCPlus
+	call nz,SCCPlus_Destruct
 	pop ix
 	push ix
 	call Drivers_GetFranky
@@ -222,6 +229,26 @@ Drivers_TryCreateSCC_IY:
 	ret
 
 ; ix = this
+; de <- SCC+ driver
+; f <- c: succeeded
+Drivers_TryCreateSCCPlus_IY:
+	ld a,(iy + Drivers.sccPlus)
+	or (iy + Drivers.sccPlus + 1)
+	ret nz
+	call SCCPlus_Detect
+	ret nc
+	push ix
+	ld ix,SCCPlus_instance
+	call SCCPlus_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.sccPlus),e
+	ld (iy + Drivers.sccPlus + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- Franky driver
 ; f <- c: succeeded
 Drivers_TryCreateFranky_IY:
@@ -346,6 +373,19 @@ Drivers_GetMoonSound:
 Drivers_GetSCC:
 	ld e,(ix + Drivers.scc)
 	ld d,(ix + Drivers.scc + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- SCC+ driver
+; ix <- SCC+ driver
+; f <- z: not set
+Drivers_GetSCCPlus:
+	ld e,(ix + Drivers.sccPlus)
+	ld d,(ix + Drivers.sccPlus + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
