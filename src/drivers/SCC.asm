@@ -161,9 +161,7 @@ SCC_MatchSlot: PROC
 	jr nz,NoSCC
 	ld a,(SCC_BANK_SELECT)
 	cp SCC_BANK
-	jr z,NoSCC
-	xor a
-	jr Found
+	jr nz,Found
 NoSCC:
 	ld (hl),e
 	ld a,d
