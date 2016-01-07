@@ -2,7 +2,7 @@
 ; VGM K051649 chip
 ;
 K051649: MACRO
-	super: Chip K051649_name, K051649_Connect, K051649_Install
+	super: Chip K051649_k051649Name, K051649_Connect, K051649_Install
 
 	; ix = player
 	; iy = reader
@@ -74,6 +74,16 @@ K051649_Construct:
 	ld d,(iy + Header.k051649Clock - 80H + 3)
 	pop iy
 	call Chip_Construct
+	call K051649_IsSCCPlus
+	ret z
+	ld hl,K051649_k052539Name
+	call Chip_SetName
+	ret
+
+; ix = this
+; f <- nz: SCC+
+K051649_IsSCCPlus:
+	bit 7,(ix + K051649.super.clock + 3)
 	ret
 
 ; iy = drivers
@@ -128,5 +138,8 @@ K051649_Install:
 ;
 K051649_instance: K051649
 
-K051649_name:
+K051649_k051649Name:
 	db "K051649 (SCC)",0
+
+K051649_k052539Name:
+	db "K052539 (SCC+)",0
