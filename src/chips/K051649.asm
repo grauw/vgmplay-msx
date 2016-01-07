@@ -106,6 +106,8 @@ K051649_Connect: PROC
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret
 SCC:
+	call K051649_IsSCCPlus
+	ret nz
 	call Drivers_TryCreateSCC_IY
 	ret nc
 	call Chip_SetDriver
