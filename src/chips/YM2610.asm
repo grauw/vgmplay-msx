@@ -13,10 +13,16 @@ YM2610_Construct:
 	ld e,(iy + Header.ym2610BClock + 2)
 	ld d,(iy + Header.ym2610BClock + 3)
 	call Chip_Construct
-	bit 7,(ix + YM2610.super.clock + 3)
+	call YM2610_IsYM2610B
 	ret z
 	ld hl,YM2610_ym2610bName
 	call Chip_SetName
+	ret
+
+; ix = this
+; f <- nz: YM2610B
+YM2610_IsYM2610B:
+	bit 7,(ix + YM2610.super.clock + 3)
 	ret
 
 ;
