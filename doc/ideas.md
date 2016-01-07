@@ -50,7 +50,3 @@ Show which drivers are playing which sound chips
   * MegaFlashROM PSG detection
 
 Support SCC+ 5th channel
-
-Fix PlaySoniq SCC+ detection
-
-Fix Zemmix Neo 300 Hz playback
