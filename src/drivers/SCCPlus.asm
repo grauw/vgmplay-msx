@@ -227,6 +227,8 @@ NoSCC:
 	and a
 	ret
 Found:
+	ld a,SCC_BANK_DEFAULT
+	ld (SCC_BANK_SELECT),a
 	pop af
 	call Memory_SetSlotPage2
 	scf
