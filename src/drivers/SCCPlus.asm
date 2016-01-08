@@ -9,6 +9,7 @@ SCCPlus_MIXER: equ 988FH
 SCCPlus_DEFORMATION: equ 98C0H
 SCCPlus_BANK_SELECT: equ 9000H
 SCCPlus_BANK: equ 3FH
+SCCPlus_BANK_DEFAULT: equ 02H
 SCCPlus_MODE: equ 0BFFFH
 SCCPlus_MODE_SCC: equ 00H
 SCCPlus_MODE_SCCPLUS: equ 20H
@@ -85,13 +86,14 @@ SCCPlus_Construct:
 	ld de,SCCPlus_FREQUENCY_ >> 16
 	ld hl,SCCPlus_FREQUENCY_
 	call Driver_Construct
-	call SCCPlus_SelectBank
+	call SCCPlus_Select
 	call SCCPlus_Reset
 	ret
 
 ; ix = this
 SCCPlus_Destruct:
 	call SCCPlus_Reset
+	call SCCPlus_Deselect
 	ret
 
 ; ix = this
@@ -104,9 +106,17 @@ SCCPlus_SetSlot:
 	ret
 
 ; ix = this
-SCCPlus_SelectBank:
+SCCPlus_Select:
 	ld hl,SCCPlus_BANK_SELECT
 	ld c,SCCPlus_BANK
+	ld a,(ix + SCCPlus.slot)
+	call Memory_WriteSlot
+	ret
+
+; ix = this
+SCCPlus_Deselect:
+	ld hl,SCCPlus_BANK_SELECT
+	ld c,SCCPlus_BANK_DEFAULT
 	ld a,(ix + SCCPlus.slot)
 	call Memory_WriteSlot
 	ret

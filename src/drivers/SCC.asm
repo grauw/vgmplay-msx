@@ -10,6 +10,7 @@ SCC_PLUS_WAVEFORM5: equ 98A0H
 SCC_DEFORMATION: equ 98E0H
 SCC_BANK_SELECT: equ 9000H
 SCC_BANK: equ 3FH
+SCC_BANK_DEFAULT: equ 02H
 SCC_FREQUENCY_: equ 1789773
 
 SCC: MACRO
@@ -83,13 +84,14 @@ SCC_Construct:
 	ld de,SCC_FREQUENCY_ >> 16
 	ld hl,SCC_FREQUENCY_
 	call Driver_Construct
-	call SCC_SelectBank
+	call SCC_Select
 	call SCC_Reset
 	ret
 
 ; ix = this
 SCC_Destruct:
 	call SCC_Reset
+	call SCC_Deselect
 	ret
 
 ; ix = this
@@ -102,9 +104,17 @@ SCC_SetSlot:
 	ret
 
 ; ix = this
-SCC_SelectBank:
+SCC_Select:
 	ld hl,SCC_BANK_SELECT
 	ld c,SCC_BANK
+	ld a,(ix + SCC.slot)
+	call Memory_WriteSlot
+	ret
+
+; ix = this
+SCC_Deselect:
+	ld hl,SCC_BANK_SELECT
+	ld c,SCC_BANK_DEFAULT
 	ld a,(ix + SCC.slot)
 	call Memory_WriteSlot
 	ret
