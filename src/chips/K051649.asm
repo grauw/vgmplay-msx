@@ -21,30 +21,24 @@ K051649: MACRO
 		jp Player_ProcessNext
 	Waveform: PROC
 		call Reader_ReadWord_IY
-		ld a,e
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Frequency: PROC
 		call Reader_ReadWord_IY
-		ld a,SCC_FREQUENCY
-		add a,e
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Amplitude: PROC
 		call Reader_ReadWord_IY
-		ld a,SCC_AMPLITUDE
-		add a,e
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Mixer: PROC
 		call Reader_ReadWord_IY
-		ld a,SCC_MIXER
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
@@ -54,7 +48,6 @@ K051649: MACRO
 		jp Player_ProcessNext
 	Deformation: PROC
 		call Reader_ReadWord_IY
-		ld a,SCC_DEFORMATION
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
@@ -92,16 +85,24 @@ K051649_Connect: PROC
 	call Drivers_TryCreateSCCPlus_IY
 	jr nc,SCC
 	call Chip_SetDriver
-	ld hl,SCCPlus.WriteRegister
+	ld hl,SCCPlus.WriteWaveform
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
+	ld hl,SCCPlus.WriteFrequency
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Frequency.writeRegister + 1),h
+	ld hl,SCCPlus.WriteAmplitude
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister + 1),h
+	ld hl,SCCPlus.WriteMixer
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Mixer.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Mixer.writeRegister + 1),h
+	ld hl,SCCPlus.WriteDeformation
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret
@@ -111,16 +112,24 @@ SCC:
 	call Drivers_TryCreateSCC_IY
 	ret nc
 	call Chip_SetDriver
-	ld hl,SCC.WriteRegister
+	ld hl,SCC.WriteWaveform
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
+	ld hl,SCC.WriteFrequency
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Frequency.writeRegister + 1),h
+	ld hl,SCC.WriteAmplitude
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister + 1),h
+	ld hl,SCC.WriteMixer
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Mixer.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Mixer.writeRegister + 1),h
+	ld hl,SCC.WriteDeformation
+	add hl,de
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret

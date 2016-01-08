@@ -43,6 +43,36 @@ SCC: MACRO
 		ei
 		out (c),b
 		ret
+
+	; e = channel * 20H + offset
+	; d = value
+	WriteWaveform:
+		ld a,e
+		jp WriteRegister
+
+	; e = channel * 2 + offset
+	; d = value
+	WriteFrequency:
+		ld a,SCC_FREQUENCY
+		add a,e
+		jp WriteRegister
+
+	; e = channel
+	; d = value
+	WriteAmplitude:
+		ld a,SCC_AMPLITUDE
+		add a,e
+		jp WriteRegister
+
+	; d = value
+	WriteMixer:
+		ld a,SCC_MIXER
+		jp WriteRegister
+
+	; d = value
+	WriteDeformation:
+		ld a,SCC_DEFORMATION
+		jp WriteRegister
 	ENDM
 
 ; a = slot
