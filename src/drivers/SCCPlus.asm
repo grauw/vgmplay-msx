@@ -7,7 +7,6 @@ SCCPlus_FREQUENCY: equ 9880H
 SCCPlus_AMPLITUDE: equ 988AH
 SCCPlus_MIXER: equ 988FH
 SCCPlus_DEFORMATION: equ 98C0H
-SCCPlus_WAVEFORM5_COMPATIBILITY: equ 98A0H
 SCCPlus_BANK_SELECT: equ 9000H
 SCCPlus_BANK: equ 3FH
 SCCPlus_MODE: equ 0BFFFH
@@ -147,11 +146,11 @@ SCCPlus_MatchSlot: PROC
 	push af
 	ex af,af'
 	call Memory_SetSlotPage2
-	ld a,(SCCPlus_BANK_SELECT)
+	ld a,(SCC_BANK_SELECT)
 	ld d,a
-	ld a,SCCPlus_BANK
-	ld (SCCPlus_BANK_SELECT),a
-	ld hl,SCCPlus_REGISTER_BASE
+	ld a,SCC_BANK
+	ld (SCC_BANK_SELECT),a
+	ld hl,SCC_REGISTER_BASE
 	ld e,(hl)
 	xor a
 	ld (hl),a
@@ -163,26 +162,26 @@ SCCPlus_MatchSlot: PROC
 	ld a,(hl)
 	inc a
 	jr nz,NoSCC
-	ld a,(SCCPlus_BANK_SELECT)
-	cp SCCPlus_BANK
+	ld a,(SCC_BANK_SELECT)
+	cp SCC_BANK
 	jr z,NoSCC
 CheckSCCPlus:
 	ld a,SCCPlus_MODE_SCC
 	ld (SCCPlus_MODE),a
 	ld a,47H
-	ld (SCCPlus_WAVEFORM + 3 * 20H),a
-	ld a,(SCCPlus_WAVEFORM5_COMPATIBILITY)
+	ld (SCC_WAVEFORM + 3 * 20H),a
+	ld a,(SCC_PLUS_WAVEFORM5)
 	cp 47H
 	jr nz,NoSCC
 	ld a,01H
-	ld (SCCPlus_WAVEFORM + 3 * 20H),a
-	ld a,(SCCPlus_WAVEFORM5_COMPATIBILITY)
+	ld (SCC_WAVEFORM + 3 * 20H),a
+	ld a,(SCC_PLUS_WAVEFORM5)
 	cp 01H
 	jr z,Found
 NoSCC:
 	ld (hl),e
 	ld a,d
-	ld (SCCPlus_BANK_SELECT),a
+	ld (SCC_BANK_SELECT),a
 	pop af
 	call Memory_SetSlotPage2
 	and a
