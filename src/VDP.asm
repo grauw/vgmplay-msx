@@ -287,6 +287,27 @@ VDP_SetRegister:
 	ei
 	ret
 
+; b = register
+; a <- value
+; Modifies: f, b
+VDP_GetStatusRegister:
+	call System_CheckEIState
+	di
+	ld a,b
+	out (VDP_PORT_1),a
+	ld a,15 | VDP_REGISTER
+	out (VDP_PORT_1),a
+	in a,(VDP_PORT_1)
+	ld b,a
+	ld a,(VDP_MIRROR_8 + 15)
+	out (VDP_PORT_1),a
+	ld a,15 | VDP_REGISTER
+	out (VDP_PORT_1),a
+	ld a,b
+	ret po
+	ei
+	ret
+
 ; Set the palette referenced by hl.
 ; Modifies: af, bc, hl
 VDP_SetPalette:
