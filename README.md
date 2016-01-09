@@ -63,7 +63,7 @@ The sound expansion required for playback is mentioned between parentheses.
   * Y8950 MSX-AUDIO (Music Module, 256K sample RAM recommended)
   * K051649 Konami SCC
   * K052539 Konami SCC+
-  * SN76489 DCSG (Franky, Playsoniq, Musical Memory Mapper)
+  * SN76489 DCSG x2 (Franky, Playsoniq, Musical Memory Mapper)
 
 
 Usage instructions

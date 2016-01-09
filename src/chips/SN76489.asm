@@ -12,6 +12,15 @@ SN76489: MACRO
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
+		call Reader_Read_IY
+		call System_Return
+	writeRegister: equ $ - 2
+		jp Player_ProcessNext
+		ENDP
 	ENDM
 
 ; ix = this
@@ -34,7 +43,7 @@ SN76489_Connect: PROC
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l
 	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
-	ret
+	jr DualChip
 TryFranky:
 	call Drivers_TryCreateFranky_IY
 	ret nc
@@ -43,6 +52,17 @@ TryFranky:
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l
 	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
+	jr DualChip
+DualChip:
+	call Chip_IsDualChip
+	ret z
+	call Drivers_TryCreateFranky_IY
+	ret nc
+	call Chip_SetDriver2
+	ld hl,Franky.SafeWriteRegister
+	add hl,de
+	ld (ix + SN76489.ProcessCommandDual.writeRegister),l
+	ld (ix + SN76489.ProcessCommandDual.writeRegister + 1),h
 	ret
 	ENDP
 
@@ -54,6 +74,11 @@ SN76489_Install:
 	ret z
 	ld hl,SN76489.ProcessCommand
 	ld a,50H
+	call Player_InstallCommandHandler_IY_IXOffset
+	call Chip_IsDualChip
+	ret z
+	ld hl,SN76489.ProcessCommandDual
+	ld a,30H
 	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
