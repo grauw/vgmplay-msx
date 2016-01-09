@@ -227,8 +227,6 @@ SCCPlus_MatchSlot: PROC
 	cp SCC_BANK
 	jr z,NoSCC
 CheckSCCPlus:
-	ld a,SCCPlus_MODE_SCC
-	ld (SCCPlus_MODE),a
 	ld a,47H
 	ld (SCC_WAVEFORM + 3 * 20H),a
 	ld a,(SCC_PLUS_WAVEFORM5)
