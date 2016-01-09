@@ -43,9 +43,12 @@ K051649: MACRO
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
-	WaveformSCCPlus:
+	WaveformSCCPlus: PROC
 		call Reader_ReadWord_IY
+		call 0
+	writeRegister: equ $ - 2
 		jp Player_ProcessNext
+		ENDP
 	Deformation: PROC
 		call Reader_ReadWord_IY
 		call 0
@@ -85,10 +88,14 @@ K051649_Connect: PROC
 	call Drivers_TryCreateSCCPlus_IY
 	jr nc,SCC
 	call Chip_SetDriver
-	ld hl,SCCPlus.WriteWaveform
+	ld hl,SCCPlus.WriteWaveformSCCCompatible
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
+	ld hl,SCCPlus.WriteWaveform
+	add hl,de
+	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister),l
+	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister + 1),h
 	ld hl,SCCPlus.WriteFrequency
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
@@ -116,6 +123,8 @@ SCC:
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
+	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister),System_ThrowException
+	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister + 1),System_ThrowException >> 8
 	ld hl,SCC.WriteFrequency
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l

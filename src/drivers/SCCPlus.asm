@@ -1,15 +1,15 @@
 ;
 ; K052539 Konami SCC+
 ;
-SCCPlus_REGISTER_BASE: equ 9800H
-SCCPlus_WAVEFORM: equ 9800H
-SCCPlus_FREQUENCY: equ 9880H
-SCCPlus_AMPLITUDE: equ 988AH
-SCCPlus_MIXER: equ 988FH
-SCCPlus_DEFORMATION: equ 98C0H
-SCCPlus_BANK_SELECT: equ 9000H
-SCCPlus_BANK: equ 3FH
-SCCPlus_BANK_DEFAULT: equ 02H
+SCCPlus_REGISTER_BASE: equ 0B800H
+SCCPlus_WAVEFORM: equ 0B800H
+SCCPlus_FREQUENCY: equ 0B8A0H
+SCCPlus_AMPLITUDE: equ 0B8AAH
+SCCPlus_MIXER: equ 0B8AFH
+SCCPlus_DEFORMATION: equ 0B8C0H
+SCCPlus_BANK_SELECT: equ 0B000H
+SCCPlus_BANK: equ 80H
+SCCPlus_BANK_DEFAULT: equ 03H
 SCCPlus_MODE: equ 0BFFFH
 SCCPlus_MODE_SCC: equ 00H
 SCCPlus_MODE_SCCPLUS: equ 20H
@@ -51,6 +51,19 @@ SCCPlus: MACRO
 	; d = value
 	WriteWaveform:
 		ld a,e
+		jp WriteRegister
+
+	; e = channel * 20H + offset
+	; d = value
+	WriteWaveformSCCCompatible:
+		ld a,e
+		cp 60H
+		jp c,WriteRegister
+		push de
+		call WriteRegister
+		pop de
+		ld a,e
+		add a,20H
 		jp WriteRegister
 
 	; e = channel * 2 + offset
@@ -107,6 +120,10 @@ SCCPlus_SetSlot:
 
 ; ix = this
 SCCPlus_Select:
+	ld hl,SCCPlus_MODE
+	ld c,SCCPlus_MODE_SCCPLUS
+	ld a,(ix + SCCPlus.slot)
+	call Memory_WriteSlot
 	ld hl,SCCPlus_BANK_SELECT
 	ld c,SCCPlus_BANK
 	ld a,(ix + SCCPlus.slot)
@@ -117,6 +134,10 @@ SCCPlus_Select:
 SCCPlus_Deselect:
 	ld hl,SCCPlus_BANK_SELECT
 	ld c,SCCPlus_BANK_DEFAULT
+	ld a,(ix + SCCPlus.slot)
+	call Memory_WriteSlot
+	ld hl,SCCPlus_MODE
+	ld c,SCCPlus_MODE_SCC
 	ld a,(ix + SCCPlus.slot)
 	call Memory_WriteSlot
 	ret
