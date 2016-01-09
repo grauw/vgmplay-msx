@@ -37,9 +37,18 @@ SN76489_Construct:
 ; ix = this
 SN76489_Connect: PROC
 	call Drivers_TryCreateMMM_IY
-	jr nc,TryFranky
+	jr nc,TryPlaySoniq
 	call Chip_SetDriver
 	ld hl,MMM.SafeWriteRegister
+	add hl,de
+	ld (ix + SN76489.ProcessCommand.writeRegister),l
+	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
+	jr DualChip
+TryPlaySoniq:
+	call Drivers_TryCreatePlaySoniq_IY
+	jr nc,TryFranky
+	call Chip_SetDriver
+	ld hl,PlaySoniq.SafeWriteRegister
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l
 	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
@@ -56,6 +65,15 @@ TryFranky:
 DualChip:
 	call Chip_IsDualChip
 	ret z
+	call Drivers_TryCreatePlaySoniq_IY
+	jr nc,DualChipTryFranky
+	call Chip_SetDriver2
+	ld hl,PlaySoniq.SafeWriteRegister
+	add hl,de
+	ld (ix + SN76489.ProcessCommandDual.writeRegister),l
+	ld (ix + SN76489.ProcessCommandDual.writeRegister + 1),h
+	ret
+DualChipTryFranky:
 	call Drivers_TryCreateFranky_IY
 	ret nc
 	call Chip_SetDriver2

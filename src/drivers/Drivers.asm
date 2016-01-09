@@ -12,6 +12,7 @@
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCPlus.asm"
 	INCLUDE "Franky.asm"
+	INCLUDE "PlaySoniq.asm"
 	INCLUDE "MMM.asm"
 
 Drivers: MACRO
@@ -32,6 +33,8 @@ Drivers: MACRO
 	sccPlus:
 		dw 0
 	franky:
+		dw 0
+	playSoniq:
 		dw 0
 	mmm:
 		dw 0
@@ -81,6 +84,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetFranky
 	call nz,Franky_Destruct
+	pop ix
+	push ix
+	call Drivers_GetPlaySoniq
+	call nz,PlaySoniq_Destruct
 	pop ix
 	push ix
 	call Drivers_GetMMM
@@ -269,6 +276,26 @@ Drivers_TryCreateFranky_IY:
 	ret
 
 ; ix = this
+; de <- PlaySoniq driver
+; f <- c: succeeded
+Drivers_TryCreatePlaySoniq_IY:
+	ld a,(iy + Drivers.playSoniq)
+	or (iy + Drivers.playSoniq + 1)
+	ret nz
+	call PlaySoniq_Detect
+	ret nc
+	push ix
+	ld ix,PlaySoniq_instance
+	call PlaySoniq_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.playSoniq),e
+	ld (iy + Drivers.playSoniq + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- Musical Memory Mapper driver
 ; f <- c: succeeded
 Drivers_TryCreateMMM_IY:
@@ -399,6 +426,19 @@ Drivers_GetSCCPlus:
 Drivers_GetFranky:
 	ld e,(ix + Drivers.franky)
 	ld d,(ix + Drivers.franky + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- PlaySoniq driver
+; ix <- PlaySoniq driver
+; f <- z: not set
+Drivers_GetPlaySoniq:
+	ld e,(ix + Drivers.playSoniq)
+	ld d,(ix + Drivers.playSoniq + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e

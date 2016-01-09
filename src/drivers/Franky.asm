@@ -1,5 +1,5 @@
 ;
-; Franky / Playsoniq SN76489 DCSG driver
+; Franky SN76489 DCSG driver
 ;
 Franky_DATA: equ 049H
 Franky_FREQUENCY: equ 3579545

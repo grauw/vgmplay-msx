@@ -4,7 +4,6 @@ Ideas
 Multi-chip support:
 
   * 2x MSX-AUDIO / OPL on 0C0H and 0C2H, or MSX-AUDIO + OPL4
-  * Support Franky + Playsoniq SN76489 combination
 
 Fast forward key
 
