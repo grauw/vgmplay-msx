@@ -208,11 +208,6 @@ CheckSCCPlus:
 	ld (SCC_WAVEFORM + 3 * 20H),a
 	ld a,(SCC_PLUS_WAVEFORM5)
 	cp 47H
-	jr z,NoSCC
-	ld a,01H
-	ld (SCC_WAVEFORM + 3 * 20H),a
-	ld a,(SCC_PLUS_WAVEFORM5)
-	cp 01H
 	jr nz,Found
 NoSCC:
 	ld (hl),e
