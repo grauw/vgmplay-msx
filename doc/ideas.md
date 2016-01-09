@@ -48,5 +48,3 @@ Show which drivers are playing which sound chips
   * Franky detection
   * PlaySoniq detection
   * MegaFlashROM PSG detection
-
-Support SCC+ 5th channel
