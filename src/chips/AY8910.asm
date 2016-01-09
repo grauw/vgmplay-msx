@@ -81,7 +81,7 @@ TryMFRPSG:
 	add hl,de
 	ld (ix + AY8910.ProcessCommand.writeRegister),l
 	ld (ix + AY8910.ProcessCommand.writeRegister + 1),h
-	jr DualChip
+	ret
 DualChip:
 	call Chip_IsDualChip
 	ret z
@@ -140,4 +140,3 @@ AY8910_ymz284Name:
 
 AY8910_ymz294Name:
 	db "YMZ294 (SSG)",0
-

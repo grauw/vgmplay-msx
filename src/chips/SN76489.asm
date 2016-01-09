@@ -52,7 +52,7 @@ TryFranky:
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l
 	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
-	jr DualChip
+	ret
 DualChip:
 	call Chip_IsDualChip
 	ret z
