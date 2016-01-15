@@ -8,6 +8,8 @@ CLI: MACRO
 		db 2
 	blackout:
 		db 0
+	ocmWorkaround:
+		db 0
 	buffer:
 		ds 255
 	size:
@@ -77,6 +79,8 @@ CLI_ParseOption: PROC
 	jr z,OptionLoops
 	cp "B"
 	jr z,OptionBlackout
+	cp "O"
+	jr z,OptionOCMWorkaround
 	ld hl,CLI_unknownOptionError
 	jp Application_TerminateWithError
 OptionLoops:
@@ -86,6 +90,10 @@ OptionLoops:
 	jp Next
 OptionBlackout:
 	ld (ix + CLI.blackout),-1
+	inc de
+	jp Next
+OptionOCMWorkaround:
+	ld (ix + CLI.ocmWorkaround),-1
 	inc de
 	jp Next
 Next:

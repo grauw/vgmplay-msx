@@ -145,6 +145,7 @@ Application_GetVGMReference:
 ; ix = this
 Application_EnterMainLoop:
 	call Application_ParseCLI
+	call Application_CheckOCM
 	call Application_LoadFile
 	call Application_ConstructVGM
 	call Application_EnterBlackout
@@ -322,6 +323,38 @@ Application_ExitBlackout:
 	call VDP_DisableBlank
 	ret
 
+; ix = this
+Application_CheckOCM: PROC
+	push ix
+	call Application_GetCLI
+	ld a,(ix + CLI.ocmWorkaround)
+	pop ix
+	and a
+	jr nz,ActivateWorkaround
+	in a,(40H)
+	push af
+	ld a,0D4H
+	out (40H),a
+	in a,(40H)
+	cp ~0D4H
+	jr nz,Return
+	ld hl,Application_ocmWarning
+	call System_Print
+Return:
+	pop af
+	cpl
+	out (40H),a
+	ret
+ActivateWorkaround:
+	ld a,(VDP_MIRROR_8 + 9)
+	and 11111101B
+	or 10000000B
+	ld (VDP_MIRROR_8 + 9),a
+	ld b,9
+	call VDP_SetRegister
+	ret
+	ENDP
+
 ; Check if the stack is well above the heap
 Application_CheckStack:
 	ld hl,-(HEAP + HEAP_SIZE + STACK_SIZE)
@@ -376,9 +409,15 @@ Application_dos2RequiredError:
 Application_insufficientTPAError:
 	db "Insufficient TPA space.",13,10,0
 
+Application_ocmWarning:
+	db "Note: due to a 1chipMSX bug, the timing is incorrect. If music plays "
+	db "too slowly, use the /o command line option to activate the "
+	db "workaround.",13,10,10,0
+
 Application_usageInstructions:
 	db "Usage: vgmplay [options] <file.vgm>",13,10
 	db 13,10
 	db "Options:",13,10
 	db "  /l  Number of playback loops. Default: 2.",13,10
-	db "  /b  Enter blackout mode during playback.",13,10,0
+	db "  /b  Enter blackout mode during playback.",13,10
+	db "  /o  Activate 1chipMSX timing workaround.",13,10,0
