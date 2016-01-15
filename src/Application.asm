@@ -346,12 +346,52 @@ Return:
 	out (40H),a
 	ret
 ActivateWorkaround:
+	call ClearBottomLines
 	ld a,(VDP_MIRROR_8 + 9)
 	and 11111101B
 	or 10000000B
 	ld (VDP_MIRROR_8 + 9),a
 	ld b,9
 	call VDP_SetRegister
+	ret
+ClearBottomLines:
+	call VDP_GetModeFlags
+	cp VDP_MODE_GRAPHIC1
+	jr z,Graphic1
+	cp VDP_MODE_TEXT1
+	jr z,Text1
+	cp VDP_MODE_TEXT2
+	jr z,Text2
+	ret
+Graphic1:
+	ld a,0
+	ld hl,(T32NAM)
+	ld de,24 * 32
+	add hl,de
+	call VDP_SetWriteAddress
+	ld a,0
+	ld bc,3 * 32
+	call VDP_Fill
+	ret
+Text1:
+	ld a,0
+	ld hl,(TXTNAM)
+	ld de,24 * 40
+	add hl,de
+	call VDP_SetWriteAddress
+	ld a,0
+	ld bc,1024 - (24 * 40)  ; table address wraps at offset 1024
+	call VDP_Fill
+	ret
+Text2:
+	ld a,0
+	ld hl,(TXTNAM)
+	ld de,24 * 80
+	add hl,de
+	call VDP_SetWriteAddress
+	ld a,0
+	ld bc,3 * 80
+	call VDP_Fill
 	ret
 	ENDP
 

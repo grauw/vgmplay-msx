@@ -11,6 +11,10 @@ VDP_MIRROR_0: equ 0F3DFH
 VDP_MIRROR_8: equ 0FFE7H - 8
 VDP_MIRROR_25: equ 0FFFAH - 25
 
+VDP_MODE_GRAPHIC1: equ 00000B
+VDP_MODE_TEXT1: equ 00001B
+VDP_MODE_TEXT2: equ 01001B
+
 ;
 VDP_InitMirrorsOnVDPUpgrades: PROC
 	ld a,(EXPTBL)
@@ -270,6 +274,23 @@ Wait:
 	and 01000000B        ; check if bit 6 was 0 (s#0 5S) or 1 (s#2 VR)
 	ret
 	ENDP
+
+; a <- M1 .. M5 flags in bits 0-4
+VDP_GetModeFlags:
+	ld a,(VDP_MIRROR_0 + 0)
+	rrca
+	and 00000111B
+	ld b,a
+	ld a,(VDP_MIRROR_0 + 1)
+	rrca
+	rrca
+	rrca
+	rrca
+	rl b
+	rrca
+	rl b
+	ld a,b
+	ret
 
 ; a = value
 ; b = register
