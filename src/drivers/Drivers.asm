@@ -14,6 +14,8 @@
 	INCLUDE "Franky.asm"
 	INCLUDE "PlaySoniq.asm"
 	INCLUDE "MMM.asm"
+	INCLUDE "OPN.asm"
+
 
 Drivers: MACRO
 	psg:
@@ -37,6 +39,8 @@ Drivers: MACRO
 	playSoniq:
 		dw 0
 	mmm:
+		dw 0
+	opn:
 		dw 0
 	size:
 	ENDM
@@ -92,6 +96,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetMMM
 	call nz,MMM_Destruct
+	pop ix
+	push ix
+	call Drivers_GetOPN
+	call nz,OPN_Destruct
 	pop ix
 	ret
 
@@ -316,6 +324,26 @@ Drivers_TryCreateMMM_IY:
 	ret
 
 ; ix = this
+; de <- OPN driver
+; f <- c: succeeded
+Drivers_TryCreateOPN_IY:
+	ld a,(iy + Drivers.opn)
+	or (iy + Drivers.opn + 1)
+	ret nz
+	call OPN_Detect
+	ret nc
+	push ix
+	ld ix,OPN_instance
+	call OPN_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.opn),e
+	ld (iy + Drivers.opn + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- PSG driver
 ; ix <- PSG driver
 ; f <- z: not set
@@ -452,6 +480,19 @@ Drivers_GetPlaySoniq:
 Drivers_GetMMM:
 	ld e,(ix + Drivers.mmm)
 	ld d,(ix + Drivers.mmm + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- OPN driver
+; ix <- OPN driver
+; f <- z: not set
+Drivers_GetOPN:
+	ld e,(ix + Drivers.opn)
+	ld d,(ix + Drivers.opn + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
