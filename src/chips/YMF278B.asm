@@ -118,17 +118,8 @@ YMF278B_ProcessROMDataBlockMoonSound: PROC
 	exx
 	ld bc,8  ; subtract header from block size
 Loop:
-	and a
-	sbc hl,bc
-	ld bc,0
-	ex de,hl
-	sbc hl,bc
-	ex de,hl
+	call YMF278B_SubDEHL_BC
 	call c,System_ThrowException
-	ld a,h
-	or l
-	or e
-	or d
 	jr z,Finish
 	push de
 	push hl
@@ -148,6 +139,28 @@ LessThan64K:
 	jp Loop
 Finish:
 	call YMF278B_FixUpWaveHeaders
+	ret
+	ENDP
+
+; dehl = minuend
+; bc = subtrahend
+; f <- c: carry (negative result), z: zero
+YMF278B_SubDEHL_BC: PROC
+	and a
+	sbc hl,bc
+	jr c,Carry
+	ret nz
+	ld a,e
+	or d
+	ret
+Carry:
+	ld bc,0
+	ex de,hl
+	sbc hl,bc
+	ex de,hl
+	ret nz
+	ld a,l
+	or h
 	ret
 	ENDP
 
