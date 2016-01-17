@@ -231,10 +231,10 @@ Player_ProcessNext:
 	call Reader_Read_IY
 	ld l,a
 	ld h,Player_commandsJumpTable >> 8
-	ld e,(hl)
+	ld a,(hl)
 	inc h
-	ld d,(hl)
-	ex de,hl
+	ld h,(hl)
+	ld l,a
 	jp hl
 
 ; ix = this
