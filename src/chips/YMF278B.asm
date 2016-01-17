@@ -113,14 +113,16 @@ YMF278B_ProcessROMDataBlockMoonSound: PROC
 	exx
 	call Reader_ReadDoubleWord_IY  ; total rom size
 	call Reader_ReadDoubleWord_IY  ; start address
+	exx
+	ld bc,8  ; subtract header from block size
+	call YMF278B_SubDEHL_BC
+	call c,System_ThrowException
+	ret z
+	exx
 	set 5,e
 	call MoonSound_SetMemoryAddress
 	exx
-	ld bc,8  ; subtract header from block size
 Loop:
-	call YMF278B_SubDEHL_BC
-	call c,System_ThrowException
-	jr z,Finish
 	push de
 	push hl
 	ld a,d
@@ -136,8 +138,9 @@ LessThan64K:
 	pop bc
 	pop hl
 	pop de
-	jp Loop
-Finish:
+	call YMF278B_SubDEHL_BC
+	call c,System_ThrowException
+	jr nz,Loop
 	call YMF278B_FixUpWaveHeaders
 	ret
 	ENDP
