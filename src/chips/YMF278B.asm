@@ -110,14 +110,12 @@ YMF278B_ProcessROMDataBlockMoonSound: PROC
 	ld e,MoonSound_FM2_NEW
 	call MoonSound_WriteRegister2
 	call Reader_ReadDoubleWord_IY  ; block size
-	push de
-	push hl
+	exx
 	call Reader_ReadDoubleWord_IY  ; total rom size
 	call Reader_ReadDoubleWord_IY  ; start address
 	set 5,e
 	call MoonSound_SetMemoryAddress
-	pop hl
-	pop de
+	exx
 	ld bc,8  ; subtract header from block size
 Loop:
 	and a
