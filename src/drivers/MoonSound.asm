@@ -78,7 +78,6 @@ MoonSound: MACRO
 		cp (ix)  ; wait 88 cycles (18.6 R800 cycles, but 18 works)
 		nop
 		in a,(MoonSound_WAVE_DATA)
-		cp (ix)  ; wait 88 cycles (18.6 R800 cycles)
 		or 1
 		out (MoonSound_WAVE_DATA),a
 		set 7,d
