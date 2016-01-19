@@ -100,6 +100,7 @@ MoonSound: MACRO
 		ld d,00010001B
 		ld a,MoonSound_WAVE_MEMORY_CONTROL
 		call WriteRegisterWave
+		or 0  ; wait 88 cycles (18.6 R800 cycles)
 		ld a,MoonSound_WAVE_MEMORY_DATA
 		out (MoonSound_WAVE_ADDRESS),a
 		nop  ; wait 88 cycles (18.6 R800 cycles)
