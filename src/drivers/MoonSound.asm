@@ -30,7 +30,7 @@ MoonSound: MACRO
 	; d = value
 	WriteRegister:
 		out (MoonSound_FM_ADDRESS),a
-		nop     ; wait 56 cycles (11.8 R800 cycles)
+		nop     ; wait 56 cycles (5.9 bus cycles)
 		ld a,d
 		out (MoonSound_FM_DATA),a
 		ret
@@ -47,7 +47,7 @@ MoonSound: MACRO
 	; d = value
 	WriteRegister2:
 		out (MoonSound_FM2_ADDRESS),a
-		nop     ; wait 56 cycles (11.8 R800 cycles)
+		nop     ; wait 56 cycles (5.9 bus cycles)
 		ld a,d
 		out (MoonSound_FM2_DATA),a
 		ret
@@ -62,7 +62,7 @@ MoonSound: MACRO
 	; d = value
 	WriteRegisterWave:
 		out (MoonSound_WAVE_ADDRESS),a
-		cp (ix)  ; wait 88 cycles (18.6 R800 cycles, but 18 works)
+		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
 		ld a,d
 		out (MoonSound_WAVE_DATA),a
 		ret
@@ -75,7 +75,7 @@ MoonSound: MACRO
 		jp c,WriteRegisterWave
 		add a,18H
 		out (MoonSound_WAVE_ADDRESS),a
-		cp (ix)  ; wait 88 cycles (18.6 R800 cycles, but 18 works)
+		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
 		nop
 		in a,(MoonSound_WAVE_DATA)
 		or 1
@@ -89,7 +89,7 @@ MoonSound: MACRO
 	; a <- value
 	ReadRegisterWave:
 		out (MoonSound_WAVE_ADDRESS),a
-		cp (ix)  ; wait 88 cycles (18.6 R800 cycles, but 18 works)
+		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
 		nop
 		in a,(MoonSound_WAVE_DATA)
 		ret
@@ -100,10 +100,10 @@ MoonSound: MACRO
 		ld d,00010001B
 		ld a,MoonSound_WAVE_MEMORY_CONTROL
 		call WriteRegisterWave
-		or 0  ; wait 88 cycles (18.6 R800 cycles)
+		or 0  ; wait 88 cycles (9.3 bus cycles)
 		ld a,MoonSound_WAVE_MEMORY_DATA
 		out (MoonSound_WAVE_ADDRESS),a
-		nop  ; wait 88 cycles (18.6 R800 cycles)
+		nop  ; wait 88 cycles (9.3 bus cycles)
 		dec bc
 		inc b
 		inc c
