@@ -431,7 +431,7 @@ Application_explainBuffer:
 	ENDS
 
 Application_welcome:
-	db "VGMPlay 1.1 by Grauw",13,10,10,0
+	db "VGMPlay 1.2 by Grauw",13,10,10,0
 
 Application_loadingFile:
 	db "Loading ",0
