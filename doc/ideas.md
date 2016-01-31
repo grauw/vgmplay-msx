@@ -11,6 +11,8 @@ Print notice about OPM when VGM format version is 1.01.
 
   * Better: pick OPLL or OPM by scanning first 1K of song data for OPM commands
 
+Detect VGZ by file signature in stead of extension
+
 VGZ background decompression
 
 Show song length
@@ -47,3 +49,11 @@ Show which drivers are playing which sound chips
   * Franky detection
   * PlaySoniq detection
   * MegaFlashROM PSG detection
+
+Suspend VDP interrupts during vgz loading to improve performance
+
+Do not load files which don’t fit into memory
+
+Do not load files which can’t be played back on current sound chips
+
+Add sound device priority and skip options
