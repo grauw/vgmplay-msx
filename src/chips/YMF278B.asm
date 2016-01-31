@@ -100,7 +100,28 @@ YMF278B_Install:
 
 ; ix = this
 ; iy = reader
-YMF278B_ProcessROMDataBlock: PROC
+YMF278B_ProcessROMDataBlock:
+	call Reader_ReadDoubleWord_IY  ; block size
+	exx
+	call Reader_ReadDoubleWord_IY  ; total rom size
+	call Reader_ReadDoubleWord_IY  ; start address
+	set 5,e
+	exx
+	ld bc,8  ; subtract header from block size
+	call YMF278B_SubDEHL_BC
+	call c,System_ThrowException
+	ret z
+	call YMF278B_LoadSampleFromReader
+	ret
+
+; ehl = sample size
+; ehl' = sample start address
+; ix = this
+; iy = reader
+YMF278B_LoadSampleFromReader: PROC
+	push ix
+	push de
+	push hl
 	ld e,(ix + YMF278B.moonSound)
 	ld d,(ix + YMF278B.moonSound + 1)
 	ld ixl,e
@@ -109,17 +130,9 @@ YMF278B_ProcessROMDataBlock: PROC
 	ld d,00000011B
 	ld e,MoonSound_FM2_NEW
 	call MoonSound_WriteRegister2
-	call Reader_ReadDoubleWord_IY  ; block size
+	pop hl
+	pop de
 	exx
-	call Reader_ReadDoubleWord_IY  ; total rom size
-	call Reader_ReadDoubleWord_IY  ; start address
-	exx
-	ld bc,8  ; subtract header from block size
-	call YMF278B_SubDEHL_BC
-	call c,System_ThrowException
-	ret z
-	exx
-	set 5,e
 	call MoonSound_SetMemoryAddress
 	exx
 Loop:
@@ -142,6 +155,7 @@ LessThan64K:
 	call c,System_ThrowException
 	jr nz,Loop
 	call YMF278B_FixUpWaveHeaders
+	pop ix
 	ret
 	ENDP
 
