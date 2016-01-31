@@ -58,14 +58,14 @@ YMF278B: MACRO
 		cp 38H
 		ret nc
 		cp 20H
-		jr nc,MSB
-		cp 8H
-		ret c
-	LSB:
-		set 7,d
-		ret
+		jr c,LSB
 	MSB:
 		set 0,d
+		ret
+	LSB:
+		cp 8H
+		ret c
+		set 7,d
 		ret
 		ENDP
 	ENDM
