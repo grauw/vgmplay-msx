@@ -80,8 +80,8 @@ YMF278B_Connect:
 	add hl,de
 	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister),l
 	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister + 1),h
-	ld (ix + YMF278B.ProcessROMDataBlock.process),YMF278B_ProcessROMDataBlockMoonSound
-	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),YMF278B_ProcessROMDataBlockMoonSound >> 8
+	ld (ix + YMF278B.ProcessROMDataBlock.process),YMF278B_ProcessROMDataBlock
+	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),YMF278B_ProcessROMDataBlock >> 8
 	ret
 
 ; iy = player
@@ -100,7 +100,7 @@ YMF278B_Install:
 
 ; ix = this
 ; iy = reader
-YMF278B_ProcessROMDataBlockMoonSound: PROC
+YMF278B_ProcessROMDataBlock: PROC
 	ld e,(ix + YMF278B.moonSound)
 	ld d,(ix + YMF278B.moonSound + 1)
 	ld ixl,e
