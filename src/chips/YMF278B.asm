@@ -6,6 +6,10 @@ YMF278B: MACRO
 	super: Chip YMF278B_name, YMF278B_Connect, YMF278B_Install
 	moonSound:
 		dw 0
+	waveNumberMap:
+		dw 0
+	waveNumberMSB:
+		ds 24
 
 	; ix = player
 	; iy = reader
@@ -60,12 +64,27 @@ YMF278B: MACRO
 		cp 20H
 		jr c,LSB
 	MSB:
+		ld c,a
+		ld b,0
+		ld hl,waveNumberMSB - 20H
+		add hl,bc
+		ld (hl),d
 		set 0,d
 		ret
 	LSB:
 		cp 8H
 		ret c
-		set 7,d
+		ld c,a
+		ld b,0
+		ld hl,waveNumberMSB - 8H
+		add hl,bc
+		ld a,(hl)
+		and 1
+		ld c,d
+		ld b,a
+		ld hl,(waveNumberMap)
+		add hl,bc
+		ld d,(hl)
 		ret
 		ENDP
 	ENDM
@@ -229,6 +248,7 @@ Loop:
 
 ; ix = this
 YMF278B_EnableWaveNumberMapping:
+	call YMF278B_InitialiseWaveNumberMap
 	ld e,ixl
 	ld d,ixh
 	ld hl,YMF278B.MapWaveNumber
@@ -236,6 +256,35 @@ YMF278B_EnableWaveNumberMapping:
 	ld (ix + YMF278B.ProcessCommand.Wave.mapWaveNumber),l
 	ld (ix + YMF278B.ProcessCommand.Wave.mapWaveNumber + 1),h
 	ret
+
+; ix = this
+YMF278B_InitialiseWaveNumberMap: PROC
+	ld e,(ix + YMF278B.waveNumberMap)
+	ld d,(ix + YMF278B.waveNumberMap + 1)
+	ld a,e
+	or d
+	call z,Allocate
+	ld bc,2 | 00 << 8  ; 512
+	ld a,0
+Loop:
+	or 80H
+	ld (de),a
+	inc a
+	inc de
+	djnz Loop
+	dec c
+	jr nz,Loop
+	ret
+Allocate:
+	push ix
+	ld bc,512
+	ld ix,Heap_main
+	call Heap_Allocate
+	pop ix
+	ld (ix + YMF278B.waveNumberMap),e
+	ld (ix + YMF278B.waveNumberMap + 1),d
+	ret
+	ENDP
 
 ;
 YMF278B_instance: YMF278B
