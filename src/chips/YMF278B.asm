@@ -104,6 +104,15 @@ YMF278B_Connect:
 	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),YMF278B_ProcessROMDataBlock >> 8
 	ret
 
+; ix = this
+; ix <- moonsound
+YMF278B_GetMoonSound:
+	ld e,(ix + YMF278B.moonSound)
+	ld d,(ix + YMF278B.moonSound + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
 ; iy = player
 ; ix = this
 YMF278B_Install:
@@ -142,10 +151,7 @@ YMF278B_LoadSampleFromReader: PROC
 	push ix
 	push de
 	push hl
-	ld e,(ix + YMF278B.moonSound)
-	ld d,(ix + YMF278B.moonSound + 1)
-	ld ixl,e
-	ld ixh,d
+	call YMF278B_GetMoonSound
 	ld d,00000011B
 	ld e,MoonSound_FM2_NEW
 	call MoonSound_WriteRegister2
@@ -173,9 +179,8 @@ LessThan64K:
 	call YMF278B_SubDEHL_BC
 	call c,System_ThrowException
 	jr nz,Loop
-	call YMF278B_FixUpWaveHeaders
 	pop ix
-	call YMF278B_EnableWaveNumberMapping
+	call YMF278B_FixUpWaveHeaders
 	ret
 	ENDP
 
@@ -201,8 +206,10 @@ Carry:
 	ret
 	ENDP
 
-; ix = moonsound
+; ix = this
 YMF278B_FixUpWaveHeaders: PROC
+	push ix
+	call YMF278B_GetMoonSound
 	ld b,128
 	ld de,0020H
 	ld hl,0000H
@@ -215,6 +222,8 @@ Loop:
 	add hl,bc
 	pop bc
 	djnz Loop
+	pop ix
+	call YMF278B_EnableWaveNumberMapping
 	ret
 	ENDP
 
