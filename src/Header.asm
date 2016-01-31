@@ -270,4 +270,4 @@ Header_noVGMFileError:
 	db "Not a VGM file.",13,10,0
 
 Header_gzippedFileError:
-	db "File is gzipped, please extract before playback.",13,10,0
+	db "File is gzipped, please change the file extension to vgz.",13,10,0
