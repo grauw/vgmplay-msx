@@ -56,8 +56,8 @@ MoonSound: MACRO
 	; d = value
 	SafeWriteRegisterWave:
 		ld a,e
-		cp 20H
-		jr c,WriteRegisterWave_Mask
+		cp 8H
+		ret c
 	; a = register
 	; d = value
 	WriteRegisterWave:
@@ -66,24 +66,6 @@ MoonSound: MACRO
 		ld a,d
 		out (MoonSound_WAVE_DATA),a
 		ret
-	WriteRegisterWave_Mask: PROC
-		cp 8H
-		ret c
-	WaveTableNumberMSB:
-	useYRW801ROM:
-		scf
-		jp c,WriteRegisterWave
-		add a,18H
-		out (MoonSound_WAVE_ADDRESS),a
-		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
-		nop
-		in a,(MoonSound_WAVE_DATA)
-		or 1
-		out (MoonSound_WAVE_DATA),a
-		set 7,d
-		ld a,e
-		jp WriteRegisterWave
-		ENDP
 
 	; a = register
 	; a <- value

@@ -28,6 +28,8 @@ YMF278B: MACRO
 		ENDP
 	Wave: PROC
 		call Reader_ReadWord_IY
+		call System_Return
+	mapWaveNumber: equ $ - 2
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
@@ -47,6 +49,24 @@ YMF278B: MACRO
 		call Timer_Reset
 		pop ix
 		jp Player_ProcessNext
+		ENDP
+
+	; e = register
+	; d = value
+	MapWaveNumber: PROC
+		ld a,e
+		cp 38H
+		ret nc
+		cp 20H
+		jr nc,MSB
+		cp 8H
+		ret c
+	LSB:
+		set 7,d
+		ret
+	MSB:
+		set 0,d
+		ret
 		ENDP
 	ENDM
 
@@ -126,7 +146,6 @@ YMF278B_LoadSampleFromReader: PROC
 	ld d,(ix + YMF278B.moonSound + 1)
 	ld ixl,e
 	ld ixh,d
-	ld (ix + MoonSound.WriteRegisterWave_Mask.useYRW801ROM),0
 	ld d,00000011B
 	ld e,MoonSound_FM2_NEW
 	call MoonSound_WriteRegister2
@@ -156,6 +175,7 @@ LessThan64K:
 	jr nz,Loop
 	call YMF278B_FixUpWaveHeaders
 	pop ix
+	call YMF278B_EnableWaveNumberMapping
 	ret
 	ENDP
 
@@ -197,6 +217,16 @@ Loop:
 	djnz Loop
 	ret
 	ENDP
+
+; ix = this
+YMF278B_EnableWaveNumberMapping:
+	ld e,ixl
+	ld d,ixh
+	ld hl,YMF278B.MapWaveNumber
+	add hl,de
+	ld (ix + YMF278B.ProcessCommand.Wave.mapWaveNumber),l
+	ld (ix + YMF278B.ProcessCommand.Wave.mapWaveNumber + 1),h
+	ret
 
 ;
 YMF278B_instance: YMF278B
