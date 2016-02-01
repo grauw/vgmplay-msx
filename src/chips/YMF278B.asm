@@ -159,11 +159,12 @@ YMF278B_ProcessROMDataBlock:
 	call YMF278B_SubDEHL_BC
 	call c,System_ThrowException
 	ret z
+	exx
 	call YMF278B_LoadSampleFromReader
 	ret
 
-; ehl = sample size
-; ehl' = sample start address
+; ehl = sample start address
+; ehl' = sample size
 ; ix = this
 ; iy = reader
 YMF278B_LoadSampleFromReader: PROC
@@ -176,7 +177,6 @@ YMF278B_LoadSampleFromReader: PROC
 	call MoonSound_WriteRegister2
 	pop hl
 	pop de
-	exx
 	call MoonSound_SetMemoryAddress
 	exx
 Loop:
