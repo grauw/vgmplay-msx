@@ -162,7 +162,7 @@ YMF278B_ProcessROMDataBlock:
 	set 5,e
 	exx
 	ld bc,8  ; subtract header from block size
-	call YMF278B_SubDEHL_BC
+	call YMF278B_SubEHL_BC
 	call c,System_ThrowException
 	ret z
 	exx
@@ -201,7 +201,7 @@ LessThan64K:
 	pop bc
 	pop hl
 	pop de
-	call YMF278B_SubDEHL_BC
+	call YMF278B_SubEHL_BC
 	call c,System_ThrowException
 	jr nz,Loop
 	pop ix
@@ -209,22 +209,21 @@ LessThan64K:
 	ret
 	ENDP
 
-; dehl = minuend
+; ehl = minuend
 ; bc = subtrahend
 ; f <- c: carry (negative result), z: zero
-YMF278B_SubDEHL_BC: PROC
+YMF278B_SubEHL_BC: PROC
 	and a
 	sbc hl,bc
 	jr c,Carry
 	ret nz
 	ld a,e
-	or d
+	and a
 	ret
 Carry:
-	ld bc,0
-	ex de,hl
-	sbc hl,bc
-	ex de,hl
+	ld a,e
+	sbc a,0
+	ld e,a
 	ret nz
 	ld a,l
 	or h
