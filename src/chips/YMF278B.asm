@@ -150,9 +150,15 @@ YMF278B_Install:
 ; iy = reader
 YMF278B_ProcessROMDataBlock:
 	call Reader_ReadDoubleWord_IY  ; block size
+	ld a,d
+	and a
+	call nz,System_ThrowException
 	exx
 	call Reader_ReadDoubleWord_IY  ; total rom size
 	call Reader_ReadDoubleWord_IY  ; start address
+	ld a,d
+	and a
+	call nz,System_ThrowException
 	set 5,e
 	exx
 	ld bc,8  ; subtract header from block size
