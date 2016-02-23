@@ -132,3 +132,10 @@ invoke the `make run` command.
 Note that the [glass](https://bitbucket.org/grauw/glass) assembler which is
 embedded in the project requires [Java 7](http://java.com/getjava). To check
 your Java version, invoke the `java -version` command.
+
+
+Disclaimer
+----------
+
+THIS SOFTWARE DOES NOT FOLLOW THE STANDARDS IN EVERY REGARD.
+CONTINUED USE OF THIS SOFTWARE MIGHT RESULT IN SEVERE USER FRUSTATION.
