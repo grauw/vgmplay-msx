@@ -161,7 +161,7 @@ namespace eval vgm {
 		append header [zeros 136]
 
 		set file_handle [open $file_name "w"]
-		fconfigure $file_handle -encoding binary
+		fconfigure $file_handle -encoding binary -translation binary
 		puts -nonewline $file_handle $header
 		puts -nonewline $file_handle $music_data
 		close $file_handle
