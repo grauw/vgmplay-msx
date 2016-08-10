@@ -261,7 +261,7 @@ Player_CheckExitCondition:
 	ret z
 	and 00000001B  ; space bar
 	call z,DOS_ConsoleInputWithoutEcho
-	and a
+	or -1
 	ret
 
 ; ix = this
