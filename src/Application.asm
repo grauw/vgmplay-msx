@@ -212,6 +212,20 @@ Application_IsVGZ:
 	ld a,(hl)
 	and 11011111B  ; upper-case
 	cp "Z"
+	ret nz
+	dec hl
+	ld a,(hl)
+	and 11011111B  ; upper-case
+	cp "G"
+	ret nz
+	dec hl
+	ld a,(hl)
+	and 11011111B  ; upper-case
+	cp "V"
+	ret nz
+	dec hl
+	ld a,(hl)
+	cp "."
 	ret
 
 ; de = file path
