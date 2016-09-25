@@ -255,6 +255,7 @@ Player_CheckExitCondition:
 	cp (ix + Player.lastJiffy)
 	ret z
 	ld (ix + Player.lastJiffy),a
+	call DOS_ConsoleStatus  ; ctrl-c
 	ld a,(TRGFLG)
 	and 11110001B  ; space bar or joystick button
 	cp 11110001B
