@@ -1,6 +1,8 @@
 ;
 ; Top-level application program class
 ;
+Application_VGMREADER_BASE_ADDRESS: equ 8000H
+
 Application: MACRO
 	vgmReference:
 		dw 0
@@ -285,6 +287,7 @@ Application_ConstructVGM:
 	push ix
 	call Application_GetReader
 	ld de,MappedBuffer_instance
+	ld hl,Application_VGMREADER_BASE_ADDRESS
 	call MappedReader_Construct
 	ex (sp),ix
 	call Application_GetVGM

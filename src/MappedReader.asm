@@ -1,7 +1,6 @@
 ;
 ; Reader backed by a mapped buffer
 ;
-MappedReader_BASE_ADDRESS: equ 8000H
 MappedReader_SEGMENT_SIZE: equ 4000H
 
 MappedReader: MACRO
@@ -14,12 +13,18 @@ MappedReader: MACRO
 	ENDM
 
 ; de = mapped buffer
+; hl = base address
 ; ix = this
 ; ix <- this
 MappedReader_Construct:
+	ld a,l
+	and a
+	call nz,System_ThrowException
+	ld a,h
+	and 3FH
+	call nz,System_ThrowException
 	ld (ix + MappedReader.buffer),e
 	ld (ix + MappedReader.buffer + 1),d
-	ld hl,MappedReader_BASE_ADDRESS
 	ld bc,MappedReader_SEGMENT_SIZE
 	ld de,MappedReader_Fill_IY
 	call Reader_Construct

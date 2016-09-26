@@ -1,7 +1,6 @@
 ;
 ; Writer backed by a mapped buffer
 ;
-MappedWriter_BASE_ADDRESS: equ 8000H
 MappedWriter_SEGMENT_SIZE: equ 4000H
 
 MappedWriter: MACRO
@@ -12,11 +11,17 @@ MappedWriter: MACRO
 	ENDM
 
 ; de = mapped buffer
+; hl = base address
 ; ix = this
 MappedWriter_Construct:
+	ld a,l
+	and a
+	call nz,System_ThrowException
+	ld a,h
+	and 3FH
+	call nz,System_ThrowException
 	ld (ix + MappedWriter.buffer),e
 	ld (ix + MappedWriter.buffer + 1),d
-	ld hl,MappedWriter_BASE_ADDRESS
 	ld bc,MappedWriter_SEGMENT_SIZE
 	ld de,MappedWriter_Flush
 	call Writer_Construct
@@ -50,7 +55,8 @@ MappedWriter_Flush:
 	pop ix
 	pop de
 	pop bc
-	ld hl,MappedWriter_BASE_ADDRESS + MappedWriter_SEGMENT_SIZE
+	ld l,(ix + MappedWriter.super.bufferEnd)
+	ld h,(ix + MappedWriter.super.bufferEnd + 1)
 	and a
 	sbc hl,de
 	call c,System_ThrowException
@@ -62,10 +68,12 @@ MappedWriter_Flush:
 
 ; ix = this
 MappedWriter_AllocateNextSegment:
+	ld h,(ix + MappedWriter.super.bufferStart + 1)
 	push ix
+	push hl
 	call MappedWriter_GetBuffer
 	call MappedBuffer_AllocateAndAddSegment
-	ld h,MappedWriter_BASE_ADDRESS >> 8
+	pop hl
 	call MappedBuffer_SelectSegment
 	pop ix
 	ret

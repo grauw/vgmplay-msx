@@ -21,6 +21,7 @@ MappedBufferLoader_Construct:
 	push de
 	call MappedBufferLoader_GetWriter
 	pop de
+	ld hl,MappedBufferLoader_BASE_ADDRESS
 	call MappedWriter_Construct
 	pop ix
 	pop de
