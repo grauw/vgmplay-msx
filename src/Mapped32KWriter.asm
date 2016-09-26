@@ -22,12 +22,12 @@ Mapped32KWriter: MACRO
 Mapped32KWriter_class: Class Mapped32KWriter, Mapped32KWriter_template, Heap_main
 Mapped32KWriter_template: Mapped32KWriter
 
-; hl = mapped buffer
+; de = mapped buffer
 ; ix = this
 ; ix <- this
 Mapped32KWriter_Construct:
-	ld (ix + Mapped32KWriter.buffer),l
-	ld (ix + Mapped32KWriter.buffer + 1),h
+	ld (ix + Mapped32KWriter.buffer),e
+	ld (ix + Mapped32KWriter.buffer + 1),d
 	ld hl,Mapped32KWriter_BASE_ADDRESS
 	ld bc,Mapped32KWriter_BUFFER_SIZE
 	ld de,Mapped32KWriter_Flush

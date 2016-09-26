@@ -175,10 +175,8 @@ Application_LoadFile:
 	call CLI_GetPath
 	pop ix
 	push ix
-	push hl
 	call Application_GetLoader
-	pop de
-	ld hl,MappedBuffer_instance
+	ld de,MappedBuffer_instance
 	call MappedBufferLoader_Construct
 	call MappedBufferLoader_Load
 	call MappedBufferLoader_Destruct
@@ -247,7 +245,7 @@ Application_InflateFile:
 	call Archive_Construct
 	push ix
 	call Mapped32KWriter_class.New
-	ld hl,MappedBuffer_instance
+	ld de,MappedBuffer_instance
 	call Mapped32KWriter_Construct
 	ld e,ixl
 	ld d,ixh
@@ -286,7 +284,7 @@ Application_ConstructVGM:
 	ex (sp),ix
 	push ix
 	call Application_GetReader
-	ld hl,MappedBuffer_instance
+	ld de,MappedBuffer_instance
 	call MappedReader_Construct
 	ex (sp),ix
 	call Application_GetVGM

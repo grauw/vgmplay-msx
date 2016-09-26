@@ -12,13 +12,15 @@ MappedBufferLoader: MACRO
 	size:
 	ENDM
 
-; de = file path
-; hl = mapped buffer
+; hl = file path
+; de = mapped buffer
 ; ix = this
 MappedBufferLoader_Construct:
-	push de
+	push hl
 	push ix
+	push de
 	call MappedBufferLoader_GetWriter
+	pop de
 	call MappedWriter_Construct
 	pop ix
 	pop de

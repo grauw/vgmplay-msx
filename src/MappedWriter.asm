@@ -11,11 +11,11 @@ MappedWriter: MACRO
 	size:
 	ENDM
 
-; hl = buffer
+; de = mapped buffer
 ; ix = this
 MappedWriter_Construct:
-	ld (ix + MappedWriter.buffer),l
-	ld (ix + MappedWriter.buffer + 1),h
+	ld (ix + MappedWriter.buffer),e
+	ld (ix + MappedWriter.buffer + 1),d
 	ld hl,MappedWriter_BASE_ADDRESS
 	ld bc,MappedWriter_SEGMENT_SIZE
 	ld de,MappedWriter_Flush

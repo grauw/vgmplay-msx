@@ -13,12 +13,12 @@ MappedReader: MACRO
 	size:
 	ENDM
 
-; hl = mapped buffer
+; de = mapped buffer
 ; ix = this
 ; ix <- this
 MappedReader_Construct:
-	ld (ix + MappedReader.buffer),l
-	ld (ix + MappedReader.buffer + 1),h
+	ld (ix + MappedReader.buffer),e
+	ld (ix + MappedReader.buffer + 1),d
 	ld hl,MappedReader_BASE_ADDRESS
 	ld bc,MappedReader_SEGMENT_SIZE
 	ld de,MappedReader_Fill_IY
