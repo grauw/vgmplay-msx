@@ -53,7 +53,7 @@ MSX2:
 	ret
 	ENDP
 
-;
+; Modifies: af, bc, de, hl, ix, iy
 VDP_InitScreen0: PROC
 	xor a
 	ld hl,0
