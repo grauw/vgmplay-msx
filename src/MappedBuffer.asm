@@ -117,14 +117,6 @@ MappedBuffer_AddSegment:
 	ld a,e
 	ret
 
-; ehl = size
-; ix = this
-MappedBuffer_SetSize:
-	ld (ix + MappedBuffer.size),l
-	ld (ix + MappedBuffer.size + 1),h
-	ld (ix + MappedBuffer.size + 2),e
-	ret
-
 ; bc = size to add
 ; ix = this
 MappedBuffer_IncreaseSize:
