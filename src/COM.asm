@@ -37,10 +37,8 @@ COM_Main:
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
 	INCLUDE "Mapper.asm"
-	INCLUDE "VDP.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Application.asm"
-	INCLUDE "CLI.asm"
 	INCLUDE "MappedBuffer.asm"
 	INCLUDE "MappedBufferLoader.asm"
 	INCLUDE "MappedReader.asm"
@@ -66,6 +64,8 @@ CRC32Table:
 
 	SECTION TPA_PAGE1
 
+	INCLUDE "VDP.asm"
+	INCLUDE "CLI.asm"
 	INCLUDE "Interrupt.asm"
 	INCLUDE "VGM.asm"
 	INCLUDE "Header.asm"
