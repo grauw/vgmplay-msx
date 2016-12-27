@@ -190,9 +190,9 @@ Application_ConstructMappedBuffer:
 	push ix
 	ld ix,MappedBuffer_instance
 	call MappedBuffer_Construct
-	ld a,(Mapper_instance.primaryMapperSlot)
+	call Memory_GetSlotPage2
 	ld b,a
-	ld a,(Mapper_instance.initialPage2)
+	call Mapper_instance.GetP2
 	call MappedBuffer_SetFreebie
 	pop ix
 	ret
