@@ -75,9 +75,7 @@ Usage:
 
     vgmplay [options] <file.vgm>
 
-Note that the compressed VGZ format is not supported, rename the file to .vgm.gz
-and extract it using gzip or your favourite decompression software to retrieve
-the uncompressed VGM file.
+The compressed VGZ format is also supported.
 
 Options:
 
