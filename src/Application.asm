@@ -228,7 +228,6 @@ Application_IsVGZ:
 	cp "."
 	ret
 
-; de = file path
 ; ix = this
 Application_InflateFile:
 	push ix
