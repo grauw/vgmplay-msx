@@ -82,7 +82,7 @@ CLI_ParseOption: PROC
 	cp "O"
 	jr z,OptionOCMWorkaround
 	ld hl,CLI_unknownOptionError
-	jp Application_TerminateWithError
+	jp System_TerminateWithError
 OptionLoops:
 	inc de
 	call CLI_ParseNumber
@@ -103,7 +103,7 @@ Next:
 	cp " "
 	ret z
 	ld hl,CLI_unknownOptionError
-	jp Application_TerminateWithError
+	jp System_TerminateWithError
 	ENDP
 
 ; de = buffer position
@@ -112,7 +112,7 @@ CLI_ParsePath:
 	ld a,(ix + CLI.path)
 	or (ix + CLI.path + 1)
 	ld hl,CLI_multiplePathsError
-	jp nz,Application_TerminateWithError
+	jp nz,System_TerminateWithError
 	ld (ix + CLI.path),e
 	ld (ix + CLI.path + 1),d
 	call DOS_ParsePathname
@@ -137,9 +137,9 @@ Loop:
 	cp " "
 	ret z
 	sub "0"
-	jp c,Application_TerminateWithError
+	jp c,System_TerminateWithError
 	cp 10
-	jp nc,Application_TerminateWithError
+	jp nc,System_TerminateWithError
 	call Multiply10AndAdd
 	inc de
 	jp Loop
@@ -148,16 +148,16 @@ Multiply10AndAdd:
 	ld a,c
 	ld c,b
 	add a,a
-	jp c,Application_TerminateWithError
+	jp c,System_TerminateWithError
 	ld b,a
 	add a,a
-	jp c,Application_TerminateWithError
+	jp c,System_TerminateWithError
 	add a,a
-	jp c,Application_TerminateWithError
+	jp c,System_TerminateWithError
 	add a,b
-	jp c,Application_TerminateWithError
+	jp c,System_TerminateWithError
 	add a,c
-	jp c,Application_TerminateWithError
+	jp c,System_TerminateWithError
 	ld c,a
 	ret
 	ENDP

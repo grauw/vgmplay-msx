@@ -130,10 +130,10 @@ Header: MACRO
 Header_Construct:
 	call Header_CheckGZIP
 	ld hl,Header_gzippedFileError
-	jp z,Application_TerminateWithError
+	jp z,System_TerminateWithError
 	call Header_CheckID
 	ld hl,Header_noVGMFileError
-	jp nz,Application_TerminateWithError
+	jp nz,System_TerminateWithError
 	call Header_ClearPastDataOffset
 	ret
 
