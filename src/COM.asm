@@ -47,7 +47,7 @@ COM_Main:
 	INCLUDE "Mapped32KWriter.asm"
 
 	; gunzip
-	INCLUDE "Archive.asm"
+	INCLUDE "GzipArchive.asm"
 	INCLUDE "deflate/Inflate.asm"
 	INCLUDE "deflate/Alphabet.asm"
 	INCLUDE "deflate/Branch.asm"

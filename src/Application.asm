@@ -243,8 +243,8 @@ Application_InflateFile:
 	call FileReader_Construct
 	push ix
 	ld a,0
-	call Archive_class.New
-	call Archive_Construct
+	call GzipArchive_class.New
+	call GzipArchive_Construct
 	push ix
 	call Mapped32KWriter_class.New
 	ld de,MappedBuffer_instance
@@ -252,13 +252,13 @@ Application_InflateFile:
 	ld e,ixl
 	ld d,ixh
 	ex (sp),ix
-	call Archive_Extract
+	call GzipArchive_Extract
 	ex (sp),ix
 	call Mapped32KWriter_Destruct
 	call Mapped32KWriter_class.Delete
 	pop ix
-	call Archive_Destruct
-	call Archive_class.Delete
+	call GzipArchive_Destruct
+	call GzipArchive_class.Delete
 	pop ix
 	call FileReader_Destruct
 	call FileReader_class.Delete
