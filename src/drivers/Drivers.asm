@@ -15,6 +15,7 @@
 	INCLUDE "PlaySoniq.asm"
 	INCLUDE "MMM.asm"
 	INCLUDE "OPN.asm"
+	INCLUDE "OPNA.asm"
 
 
 Drivers: MACRO
@@ -41,6 +42,8 @@ Drivers: MACRO
 	mmm:
 		dw 0
 	opn:
+		dw 0
+	opna:
 		dw 0
 	size:
 	ENDM
@@ -100,6 +103,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetOPN
 	call nz,OPN_Destruct
+	pop ix
+	push ix
+	call Drivers_GetOPNA
+	call nz,OPNA_Destruct
 	pop ix
 	ret
 
@@ -344,6 +351,26 @@ Drivers_TryCreateOPN_IY:
 	ret
 
 ; ix = this
+; de <- OPNA driver
+; f <- c: succeeded
+Drivers_TryCreateOPNA_IY:
+	ld a,(iy + Drivers.opna)
+	or (iy + Drivers.opna + 1)
+	ret nz
+	call OPNA_Detect
+	ret nc
+	push ix
+	ld ix,OPNA_instance
+	call OPNA_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.opna),e
+	ld (iy + Drivers.opna + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- PSG driver
 ; ix <- PSG driver
 ; f <- z: not set
@@ -493,6 +520,19 @@ Drivers_GetMMM:
 Drivers_GetOPN:
 	ld e,(ix + Drivers.opn)
 	ld d,(ix + Drivers.opn + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- OPNA driver
+; ix <- OPNA driver
+; f <- z: not set
+Drivers_GetOPNA:
+	ld e,(ix + Drivers.opna)
+	ld d,(ix + Drivers.opna + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
