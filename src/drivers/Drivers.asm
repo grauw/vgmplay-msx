@@ -17,6 +17,7 @@
 	INCLUDE "TurboRPCM.asm"
 	INCLUDE "OPN.asm"
 	INCLUDE "OPNA.asm"
+	INCLUDE "emulations/OPN2TurboRPCM.asm"
 
 
 Drivers: MACRO
@@ -47,6 +48,8 @@ Drivers: MACRO
 	opn:
 		dw 0
 	opna:
+		dw 0
+	opn2TurboRPCM:
 		dw 0
 	size:
 	ENDM
@@ -114,6 +117,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetOPNA
 	call nz,OPNA_Destruct
+	pop ix
+	push ix
+	call Drivers_GetOPN2TurboRPCM
+	call nz,OPN2TurboRPCM_Destruct
 	pop ix
 	ret
 
@@ -398,6 +405,26 @@ Drivers_TryCreateOPNA_IY:
 	ret
 
 ; ix = this
+; de <- OPN2 turboR PCM driver
+; f <- c: succeeded
+Drivers_TryCreateOPN2TurboRPCM_IY:
+	ld a,(iy + Drivers.opn2TurboRPCM)
+	or (iy + Drivers.opn2TurboRPCM + 1)
+	ret nz
+	call Drivers_TryCreateTurboRPCM_IY
+	ret nc
+	push ix
+	ld ix,OPN2TurboRPCM_instance
+	call OPN2TurboRPCM_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.opn2TurboRPCM),e
+	ld (iy + Drivers.opn2TurboRPCM + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- PSG driver
 ; ix <- PSG driver
 ; f <- z: not set
@@ -573,6 +600,19 @@ Drivers_GetOPN:
 Drivers_GetOPNA:
 	ld e,(ix + Drivers.opna)
 	ld d,(ix + Drivers.opna + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- OPN2 turboR PCM driver
+; ix <- OPN2 turboR PCM driver
+; f <- z: not set
+Drivers_GetOPN2TurboRPCM:
+	ld e,(ix + Drivers.opn2TurboRPCM)
+	ld d,(ix + Drivers.opn2TurboRPCM + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
