@@ -14,6 +14,7 @@
 	INCLUDE "Franky.asm"
 	INCLUDE "PlaySoniq.asm"
 	INCLUDE "MMM.asm"
+	INCLUDE "TurboRPCM.asm"
 	INCLUDE "OPN.asm"
 	INCLUDE "OPNA.asm"
 
@@ -40,6 +41,8 @@ Drivers: MACRO
 	playSoniq:
 		dw 0
 	mmm:
+		dw 0
+	turboRPCM:
 		dw 0
 	opn:
 		dw 0
@@ -99,6 +102,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetMMM
 	call nz,MMM_Destruct
+	pop ix
+	push ix
+	call Drivers_GetTurboRPCM
+	call nz,TurboRPCM_Destruct
 	pop ix
 	push ix
 	call Drivers_GetOPN
@@ -331,6 +338,26 @@ Drivers_TryCreateMMM_IY:
 	ret
 
 ; ix = this
+; de <- turboR PCM driver
+; f <- c: succeeded
+Drivers_TryCreateTurboRPCM_IY:
+	ld a,(iy + Drivers.turboRPCM)
+	or (iy + Drivers.turboRPCM + 1)
+	ret nz
+	call TurboRPCM_Detect
+	ret nc
+	push ix
+	ld ix,TurboRPCM_instance
+	call TurboRPCM_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.turboRPCM),e
+	ld (iy + Drivers.turboRPCM + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- OPN driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN_IY:
@@ -507,6 +534,19 @@ Drivers_GetPlaySoniq:
 Drivers_GetMMM:
 	ld e,(ix + Drivers.mmm)
 	ld d,(ix + Drivers.mmm + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- turboR PCM driver
+; ix <- turboR PCM driver
+; f <- z: not set
+Drivers_GetTurboRPCM:
+	ld e,(ix + Drivers.turboRPCM)
+	ld d,(ix + Drivers.turboRPCM + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
