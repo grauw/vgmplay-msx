@@ -31,24 +31,23 @@ YM2612: MACRO
 	; ix = player
 	; iy = reader
 	ProcessPCMWrite: PROC
-		call MappedReader_GetPosition_IY
-		push de
-		push hl
-		ld hl,(pcmDataPosition)
-		ld de,(pcmDataPosition + 2)
-		call MappedReader_SetPosition_IY
-		call Reader_Read_IY
+		ld a,(YM2612_pcmBuffer)
+	position: equ $ - 2
 		ld d,a
 		ld e,YM2612_PCM_REGISTER
 		call 0
 	writeRegister: equ $ - 2
-		call MappedReader_GetPosition_IY
-		ld (pcmDataPosition),hl
+		ld hl,position
+		inc (hl)
+		ret nz
+		ld a,(pcmDataPosition + 1)
+		inc a
+		ld (pcmDataPosition + 1),a
+		jr nz,BufferPCMData
+		ld de,(pcmDataPosition + 2)
+		inc de
 		ld (pcmDataPosition + 2),de
-		pop hl
-		pop de
-		call MappedReader_SetPosition_IY
-		ret
+		jr BufferPCMData
 		ENDP
 
 	; ix = player
@@ -57,7 +56,10 @@ YM2612: MACRO
 		call MappedReader_GetPosition_IY
 		ld (pcmDataStart),hl
 		ld (pcmDataStart + 2),de
-		ld (pcmDataPosition),hl
+		ld a,l
+		ld (ProcessPCMWrite.position),a
+		ld a,h
+		ld (pcmDataPosition + 1),a
 		ld (pcmDataPosition + 2),de
 		jp Player_SkipDataBlock
 
@@ -67,12 +69,34 @@ YM2612: MACRO
 		call Reader_ReadDoubleWord_IY
 		ld bc,(pcmDataStart)
 		add hl,bc
-		ld (pcmDataPosition),hl
+		ld a,l
+		ld (ProcessPCMWrite.position),a
+		ld a,h
+		ld (pcmDataPosition + 1),a
 		ex de,hl
 		ld bc,(pcmDataStart + 2)
 		add hl,bc
 		ld (pcmDataPosition + 2),hl
+		call BufferPCMData
 		jp Player_ProcessNext
+
+	; ix = player
+	; iy = reader
+	BufferPCMData:
+		call MappedReader_GetPosition_IY
+		push de
+		push hl
+		ld hl,(pcmDataPosition)
+		ld de,(pcmDataPosition + 2)
+		ld l,0
+		call MappedReader_SetPosition_IY
+		ld de,YM2612_pcmBuffer
+		ld bc,100H
+		call MappedReader_ReadBlock_IY
+		pop hl
+		pop de
+		call MappedReader_SetPosition_IY
+		ret
 
 	; ix = player
 	; iy = reader
@@ -254,6 +278,9 @@ YM2612_Install:
 	SECTION RAM
 
 YM2612_instance: YM2612
+
+	ALIGN 100H
+YM2612_pcmBuffer: ds 100H
 
 	ENDS
 
