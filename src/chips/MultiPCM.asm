@@ -20,7 +20,11 @@ MultiPCM_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 MultiPCM_instance: MultiPCM
+
+	ENDS
 
 MultiPCM_name:
 	db "MultiPCM",0

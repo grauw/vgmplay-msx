@@ -61,7 +61,11 @@ YM2151_Install:
 	ret
 
 ;
+	SECTION RAM
+
 YM2151_instance: YM2151
+
+	ENDS
 
 YM2151_name:
 	db "YM2151 (OPM)",0

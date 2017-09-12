@@ -115,7 +115,11 @@ DualChip:
 	ENDP
 
 ;
+	SECTION RAM
+
 AY8910_instance: AY8910
+
+	ENDS
 
 AY8910_ay8910Name:
 	db "AY-3-8910 (PSG)",0

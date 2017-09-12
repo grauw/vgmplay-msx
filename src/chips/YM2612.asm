@@ -29,7 +29,11 @@ Continue:
 	ENDP
 
 ;
+	SECTION RAM
+
 YM2612_instance: YM2612
+
+	ENDS
 
 YM2612_name:
 	db "YM2612 (OPN2)",0

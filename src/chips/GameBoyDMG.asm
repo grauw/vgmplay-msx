@@ -20,7 +20,11 @@ GameBoyDMG_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 GameBoyDMG_instance: GameBoyDMG
+
+	ENDS
 
 GameBoyDMG_name:
 	db "Game Boy DMG",0

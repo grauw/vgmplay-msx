@@ -20,7 +20,11 @@ QSound_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 QSound_instance: QSound
+
+	ENDS
 
 QSound_name:
 	db "QSound",0

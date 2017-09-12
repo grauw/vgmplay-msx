@@ -156,7 +156,11 @@ K051649_Install:
 	ret
 
 ;
+	SECTION RAM
+
 K051649_instance: K051649
+
+	ENDS
 
 K051649_k051649Name:
 	db "K051649 (SCC)",0

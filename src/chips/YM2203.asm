@@ -48,7 +48,11 @@ YM2203_Install:
 	ret
 
 ;
+	SECTION RAM
+
 YM2203_instance: YM2203
+
+	ENDS
 
 YM2203_name:
 	db "YM2203 (OPN)",0

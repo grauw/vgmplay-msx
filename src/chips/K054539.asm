@@ -20,7 +20,11 @@ K054539_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 K054539_instance: K054539
+
+	ENDS
 
 K054539_name:
 	db "K054539",0

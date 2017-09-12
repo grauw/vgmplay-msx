@@ -20,7 +20,11 @@ OKIM6295_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 OKIM6295_instance: OKIM6295
+
+	ENDS
 
 OKIM6295_name:
 	db "OKI M6295",0

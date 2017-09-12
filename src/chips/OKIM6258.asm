@@ -20,7 +20,11 @@ OKIM6258_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 OKIM6258_instance: OKIM6258
+
+	ENDS
 
 OKIM6258_name:
 	db "OKI M6258",0

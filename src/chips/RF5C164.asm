@@ -16,7 +16,11 @@ RF5C164_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 RF5C164_instance: RF5C164
+
+	ENDS
 
 RF5C164_name:
 	db "RF5C164",0

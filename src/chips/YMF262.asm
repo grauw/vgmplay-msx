@@ -64,7 +64,11 @@ YMF262_Install:
 	ret
 
 ;
+	SECTION RAM
+
 YMF262_instance: YMF262
+
+	ENDS
 
 YMF262_name:
 	db "YMF262 (OPL3)",0

@@ -26,7 +26,11 @@ YM2610_IsYM2610B:
 	ret
 
 ;
+	SECTION RAM
+
 YM2610_instance: YM2610
+
+	ENDS
 
 YM2610_ym2610Name:
 	db "YM2610 (OPNB)",0

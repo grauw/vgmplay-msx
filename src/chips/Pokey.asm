@@ -20,7 +20,11 @@ Pokey_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 Pokey_instance: Pokey
+
+	ENDS
 
 Pokey_name:
 	db "POKEY",0

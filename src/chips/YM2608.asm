@@ -141,7 +141,11 @@ Finish:
 	ENDP
 
 ;
+	SECTION RAM
+
 YM2608_instance: YM2608
+
+	ENDS
 
 YM2608_name:
 	db "YM2608 (OPNA)",0

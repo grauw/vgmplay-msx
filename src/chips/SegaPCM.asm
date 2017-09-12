@@ -16,7 +16,11 @@ SegaPCM_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 SegaPCM_instance: SegaPCM
+
+	ENDS
 
 SegaPCM_name:
 	db "Sega PCM",0

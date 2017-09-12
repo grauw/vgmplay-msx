@@ -20,7 +20,11 @@ HuC6280_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 HuC6280_instance: HuC6280
+
+	ENDS
 
 HuC6280_name:
 	db "HuC6280",0

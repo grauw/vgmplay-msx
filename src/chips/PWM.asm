@@ -16,7 +16,11 @@ PWM_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 PWM_instance: PWM
+
+	ENDS
 
 PWM_name:
 	db "PWM",0

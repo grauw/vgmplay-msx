@@ -101,7 +101,11 @@ SN76489_Install:
 	ret
 
 ;
+	SECTION RAM
+
 SN76489_instance: SN76489
+
+	ENDS
 
 SN76489_name:
 	db "SN76489 (DCSG)",0

@@ -292,7 +292,11 @@ Allocate:
 	ENDP
 
 ;
+	SECTION RAM
+
 YMF278B_instance: YMF278B
+
+	ENDS
 
 YMF278B_name:
 	db "YMF278B (OPL4)",0

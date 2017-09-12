@@ -58,7 +58,11 @@ YM3526_Install:
 	ret
 
 ;
+	SECTION RAM
+
 YM3526_instance: YM3526
+
+	ENDS
 
 YM3526_name:
 	db "YM3526 (OPL)",0

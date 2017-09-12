@@ -20,7 +20,11 @@ NESAPU_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 NESAPU_instance: NESAPU
+
+	ENDS
 
 NESAPU_name:
 	db "2A03 (NES APU)",0

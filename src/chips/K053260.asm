@@ -20,7 +20,11 @@ K053260_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 K053260_instance: K053260
+
+	ENDS
 
 K053260_name:
 	db "K053260",0

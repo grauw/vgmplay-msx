@@ -48,7 +48,11 @@ YM2413_Install:
 	ret
 
 ;
+	SECTION RAM
+
 YM2413_instance: YM2413
+
+	ENDS
 
 YM2413_name:
 	db "YM2413 (OPLL)",0

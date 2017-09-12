@@ -20,7 +20,11 @@ C140_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 C140_instance: C140
+
+	ENDS
 
 C140_name:
 	db "C140",0

@@ -16,7 +16,11 @@ YMZ280B_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 YMZ280B_instance: YMZ280B
+
+	ENDS
 
 YMZ280B_name:
 	db "YMZ280B (PCMD8)",0

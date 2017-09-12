@@ -125,7 +125,11 @@ Finish:
 	ENDP
 
 ;
+	SECTION RAM
+
 Y8950_instance: Y8950
+
+	ENDS
 
 Y8950_name:
 	db "Y8950 (MSX-AUDIO)",0

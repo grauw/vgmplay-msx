@@ -48,7 +48,11 @@ YM3812_Install:
 	ret
 
 ;
+	SECTION RAM
+
 YM3812_instance: YM3812
+
+	ENDS
 
 YM3812_name:
 	db "YM3812 (OPL2)",0

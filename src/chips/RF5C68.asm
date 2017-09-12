@@ -16,7 +16,11 @@ RF5C68_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 RF5C68_instance: RF5C68
+
+	ENDS
 
 RF5C68_name:
 	db "RF5C68",0

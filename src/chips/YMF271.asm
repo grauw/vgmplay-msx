@@ -16,7 +16,11 @@ YMF271_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 YMF271_instance: YMF271
+
+	ENDS
 
 YMF271_name:
 	db "YMF271 (OPX)",0

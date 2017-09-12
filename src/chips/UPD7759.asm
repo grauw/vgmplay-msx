@@ -20,7 +20,11 @@ UPD7759_Construct:
 	ret
 
 ;
+	SECTION RAM
+
 UPD7759_instance: UPD7759
+
+	ENDS
 
 UPD7759_name:
 	db "uPD7759",0
