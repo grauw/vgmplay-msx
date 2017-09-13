@@ -8,7 +8,6 @@ YM2203: MACRO
 	; iy = reader
 	ProcessCommand: PROC
 		call Reader_ReadWord_IY
-	Continue:
 		call 0
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
