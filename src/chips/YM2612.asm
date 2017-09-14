@@ -53,6 +53,9 @@ YM2612: MACRO
 	; ix = player
 	; iy = reader
 	ProcessPCMDataBlock:
+		call Reader_ReadDoubleWord_IY
+		push de
+		push hl
 		call MappedReader_GetPosition_IY
 		ld (pcmDataStart),hl
 		ld (pcmDataStart + 2),de
@@ -61,7 +64,10 @@ YM2612: MACRO
 		ld a,h
 		ld (pcmDataPosition + 1),a
 		ld (pcmDataPosition + 2),de
-		jp Player_SkipDataBlock
+		pop hl
+		pop de
+		call MappedReader_Skip_IY
+		jp Player_ProcessNext
 
 	; ix = player
 	; iy = reader
