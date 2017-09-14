@@ -67,6 +67,7 @@ YM2612: MACRO
 		pop hl
 		pop de
 		call MappedReader_Skip_IY
+		call BufferPCMData
 		jp Player_ProcessNext
 
 	; ix = player
