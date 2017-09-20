@@ -29,6 +29,7 @@ YM2203_Construct:
 YM2203_Connect:
 	call Drivers_TryCreateOPN_IY
 	ret nc
+	call Chip_SetDriver
 	ld hl,OPN.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2203.ProcessCommand.writeRegister),l
