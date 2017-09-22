@@ -26,15 +26,25 @@ YM2203_Construct:
 
 ; iy = drivers
 ; ix = this
-YM2203_Connect:
+YM2203_Connect: PROC
 	call Drivers_TryCreateOPN_IY
-	ret nc
+	jr nc,TryOPNOnSFGPSG
 	call Chip_SetDriver
 	ld hl,OPN.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2203.ProcessCommand.writeRegister),l
 	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
 	ret
+TryOPNOnSFGPSG:
+	call Drivers_TryCreateOPNOnSFGPSG_IY
+	ret nc
+	call Chip_SetDriver
+	ld hl,OPNOnSFGPSG.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2203.ProcessCommand.writeRegister),l
+	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
+	ret
+	ENDP
 
 ; iy = player
 ; ix = this
