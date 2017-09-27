@@ -74,22 +74,23 @@ OPNOnSFGPSG: MACRO
 		ld (hl),d
 		ret
 	WriteFrequencyLSB:
+		push af
 		add a,-0A0H + alignedFrequencies
 		ld l,a
 		ld h,alignedFrequencies >> 8
-		ld e,(hl)
+		ld h,(hl)
+		ld l,d
 		call OPNOnSFGPSG_FrequencyToKey
+		pop af
 		ld d,c
-		ld a,l
-		and 03H
 		ld c,a
 		push bc
-		or 30H
+		add a,-0A0H + 30H
 		call WriteSFGRegister
 		pop bc
 		ld d,b
 		ld a,c
-		or 28H
+		add a,-0A0H + 28H
 		jr WriteSFGRegister
 	WriteFBConnect:
 		add a,-0B0H + 20H
@@ -124,16 +125,87 @@ OPNOnSFGPSG_Construct:
 	ld (ix + OPNOnSFGPSG.SafeWriteRegister.writeSFGRegister + 1),h
 	ret
 
-; d = f-number LSB
-; e = block + f-number MSB
+; l = f-number LSB
+; h = block + f-number MSB
 ; b <- key code
 ; c <- key fraction
 OPNOnSFGPSG_FrequencyToKey:
-	ld c,d
-	ld b,e
-	rl c
-	sla b
+	call OPNOnSFGPSG_BlockFNumToFloat
+	call Math_Log2
+	call OPNOnSFGPSG_OffsetOPNToOPM
+	call OPNOnSFGPSG_ToKeyCodeFraction
 	ret
+
+; l = f-number LSB
+; h = block + f-number MSB
+; b <- exponent (octave)
+; hl <- significand (fnum * 32)
+OPNOnSFGPSG_BlockFNumToFloat:
+	xor a
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	rla
+	add hl,hl
+	rla
+	add hl,hl
+	rla
+	ld b,a
+	ret
+
+; b.hl = octave.fraction (OPN)
+; b.hl <- octave.fraction (OPM)
+OPNOnSFGPSG_OffsetOPNToOPM:
+	ld de,31898  ; 65536 * log2((7159090 / 2^11 / 144) / 27.5) + 8/12
+	add hl,de    ;               freq                    A0      A-C#
+	ret nc
+	inc b
+	ret
+
+; b.hl = octave.fraction
+; b <- key code
+; c <- key fraction
+OPNOnSFGPSG_ToKeyCodeFraction: PROC
+	ld a,b
+	cp 8
+	jr nc,OutOfRange
+	ld e,l
+	ld d,h
+	srl d
+	rr e
+	srl d
+	rr e
+	sbc hl,de  ; * 3/4
+	add hl,hl
+	rl b
+	add hl,hl
+	rl b
+	add hl,hl
+	rl b
+	add hl,hl
+	rl b
+	ld c,h
+	ld a,b  ; remap
+	and 0FH
+	cp 3
+	ret c
+	inc b
+	cp 6
+	ret c
+	inc b
+	cp 9
+	ret c
+	inc b
+	ret
+OutOfRange:
+	jp p,Overflow
+Underflow:
+	ld bc,0
+	ret
+Overflow:
+	ld bc,7EFCH
+	ret
+	ENDP
 
 ; ix = this
 OPNOnSFGPSG_Destruct:

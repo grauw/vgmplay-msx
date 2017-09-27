@@ -40,6 +40,7 @@ COM_Main:
 	INCLUDE "Mapper.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Application.asm"
+	INCLUDE "Math.asm"
 	INCLUDE "MappedBuffer.asm"
 	INCLUDE "MappedBufferLoader.asm"
 	INCLUDE "MappedReader.asm"
