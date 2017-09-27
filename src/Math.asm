@@ -3,16 +3,25 @@
 ; hl = antilogarithm significand (precision: 9 bits)
 ; b <- logarithm characteristic
 ; hl <- logarithm mantissa (precision: 8 bits)
-Math_Log2:
-	add hl,hl
+Math_Log2: PROC
+	and a
+	adc hl,hl
+	jr c,Lookup
+	jr z,NegativeInfinity
+LeadingZerosLoop:
 	dec b
-	jr nc,Math_Log2
-	inc b
+	add hl,hl
+	jr nc,LeadingZerosLoop
+Lookup:
 	ld l,h
 	ld h,Math_log2Table >> 8
 	ld h,(hl)
 	ld l,0
 	ret
+NegativeInfinity:
+	ld b,-16
+	ret
+	ENDP
 
 ; Log mantissa table in 256 steps
 ; JS: Array.from({length: 256}, (v, i) => Math.round(256 * Math.log((i / 256) + 1) / Math.log(2)))
