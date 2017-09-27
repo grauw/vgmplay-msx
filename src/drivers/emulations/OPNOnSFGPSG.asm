@@ -156,8 +156,8 @@ OPNOnSFGPSG_BlockFNumToFloat:
 ; b.hl = octave.fraction (OPN)
 ; b.hl <- octave.fraction (OPM)
 OPNOnSFGPSG_OffsetOPNToOPM:
-	ld de,31898  ; 65536 * log2((7159090 / 2^11 / 144) / 27.5) + 8/12
-	add hl,de    ;               freq                    A0      A-C#
+	ld de,31941  ; 65536 * (log2((7159090 / 2^11 / 144) / 27.5) + 8/12 + 0.5/12/64)
+	add hl,de    ;                frequency               A0      A-C#   rounding
 	ret nc
 	inc b
 	ret
