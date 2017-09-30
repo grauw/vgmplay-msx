@@ -445,7 +445,11 @@ Drivers_TryCreateOPN2TurboRPCM_IY:
 	ld a,(iy + Drivers.opn2TurboRPCM)
 	or (iy + Drivers.opn2TurboRPCM + 1)
 	ret nz
+	call Drivers_TryCreateOPNFMOnSFG_IY
+	ret nc
+	push de
 	call Drivers_TryCreateTurboRPCM_IY
+	pop bc
 	ret nc
 	push ix
 	ld ix,OPN2TurboRPCM_instance

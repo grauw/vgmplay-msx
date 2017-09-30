@@ -84,7 +84,7 @@ OPNFMOnSFG: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		call OPNFMOnSFG_FrequencyToKey
+		call FrequencyToKey
 		pop af
 		ld d,c
 		ld c,a
@@ -194,7 +194,7 @@ OPNFMOnSFG: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		call OPNFMOnSFG_FrequencyToKey
+		call FrequencyToKey
 		pop af
 		ld d,c
 		ld c,a
@@ -248,6 +248,20 @@ OPNFMOnSFG: MACRO
 		pop de
 		add a,-0B4H + 20H + 4
 		jp WriteSFGRegister
+		ENDP
+
+	; l = f-number LSB
+	; h = block + f-number MSB
+	; b <- key code
+	; c <- key fraction
+	FrequencyToKey: PROC
+		call OPNFMOnSFG_BlockFNumToFloat
+		call Math_Log2
+		ld de,31941
+	offset: equ $ - 2
+		call OPNFMOnSFG_OffsetOPNToOPM
+		call OPNFMOnSFG_ToKeyCodeFraction
+		ret
 		ENDP
 	ENDM
 
@@ -317,15 +331,16 @@ OPNFMOnSFG_WriteRegister2:
 	ld a,e
 	jp hl
 
-; l = f-number LSB
-; h = block + f-number MSB
-; b <- key code
-; c <- key fraction
-OPNFMOnSFG_FrequencyToKey:
-	call OPNFMOnSFG_BlockFNumToFloat
-	call Math_Log2
-	call OPNFMOnSFG_OffsetOPNToOPM
-	call OPNFMOnSFG_ToKeyCodeFraction
+; de = offset; 65536 * (log2((7159090 / 2^11 / 144) / 27.5) + 8/12 + 0.5/12/64)
+;                             frequency               A0      A-C#   rounding
+; ix = this
+OPNFMOnSFG_SetFrequencyOffset:
+	ld bc,OPNFMOnSFG.FrequencyToKey.offset
+	add ix,bc
+	ld (ix),e
+	ld (ix + 1),d
+	ld bc,-OPNFMOnSFG.FrequencyToKey.offset
+	add ix,bc
 	ret
 
 ; l = f-number LSB
@@ -345,11 +360,12 @@ OPNFMOnSFG_BlockFNumToFloat:
 	ld b,a
 	ret
 
+; de = offset; 65536 * (log2((7159090 / 2^11 / 144) / 27.5) + 8/12 + 0.5/12/64)
+;                             frequency               A0      A-C#   rounding
 ; b.hl = octave.fraction (OPN)
 ; b.hl <- octave.fraction (OPM)
 OPNFMOnSFG_OffsetOPNToOPM:
-	ld de,31941  ; 65536 * (log2((7159090 / 2^11 / 144) / 27.5) + 8/12 + 0.5/12/64)
-	add hl,de    ;                frequency               A0      A-C#   rounding
+	add hl,de
 	ret nc
 	inc b
 	ret
