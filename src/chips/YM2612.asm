@@ -198,16 +198,16 @@ Continue:
 ; iy = drivers
 ; ix = this
 YM2612_Connect:
-	call Drivers_TryCreateOPN2TurboRPCM_IY
+	call Drivers_TryCreateOPN2OnSFGTurboRPCM_IY
 	ret nc
 	call Chip_SetDriver
-	ld hl,OPN2TurboRPCM.SafeWriteRegister
+	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2612.ProcessPort0Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort0Command.writeRegister + 1),h
 	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
 	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
-	ld hl,OPN2TurboRPCM.SafeWriteRegister2
+	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister2
 	add hl,de
 	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
