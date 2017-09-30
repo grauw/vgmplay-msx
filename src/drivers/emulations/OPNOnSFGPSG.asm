@@ -125,6 +125,10 @@ OPNOnSFGPSG_Construct:
 	ld (ix + OPNOnSFGPSG.SafeWriteRegister.writeSFGRegister + 1),h
 	ret
 
+; ix = this
+OPNOnSFGPSG_Destruct:
+	ret
+
 ; l = f-number LSB
 ; h = block + f-number MSB
 ; b <- key code
@@ -206,10 +210,6 @@ Overflow:
 	ld bc,7EFCH
 	ret
 	ENDP
-
-; ix = this
-OPNOnSFGPSG_Destruct:
-	ret
 
 ;
 OPNOnSFGPSG_name:
