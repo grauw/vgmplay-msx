@@ -53,9 +53,9 @@ YM2608_Construct:
 
 ; iy = drivers
 ; ix = this
-YM2608_Connect:
+YM2608_Connect: PROC
 	call Drivers_TryCreateOPNA_IY
-	ret nc
+	jr nc,TryOPNOnSFGPSG
 	call Chip_SetDriver
 	ld (ix + YM2608.OPNA),e
 	ld (ix + YM2608.OPNA + 1),d
@@ -70,6 +70,22 @@ YM2608_Connect:
 	ld (ix + YM2608.ProcessDataBlock.process),YM2608_ProcessDataBlockOPNA
 	ld (ix + YM2608.ProcessDataBlock.process + 1),YM2608_ProcessDataBlockOPNA >> 8
 	ret
+TryOPNOnSFGPSG:
+	call Drivers_TryCreateOPNOnSFGPSG_IY
+	ret nc
+	call Chip_SetDriver
+	ld hl,OPNOnSFGPSG.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2608.ProcessPort0Command.writeRegister),l
+	ld (ix + YM2608.ProcessPort0Command.writeRegister + 1),h
+	ld hl,OPNOnSFGPSG.SafeWriteRegister2
+	add hl,de
+	ld (ix + YM2608.ProcessPort1Command.writeRegister),l
+	ld (ix + YM2608.ProcessPort1Command.writeRegister + 1),h
+	ld (ix + YM2608.ProcessDataBlock.process),YM2608_SkipDataBlock
+	ld (ix + YM2608.ProcessDataBlock.process + 1),YM2608_SkipDataBlock >> 8
+	ret
+	ENDP
 
 ; iy = player
 ; ix = this
@@ -139,6 +155,11 @@ Finish:
 	call OPNA_WriteRegister2
 	ret
 	ENDP
+
+YM2608_SkipDataBlock:
+	call Reader_ReadDoubleWord_IY
+	call MappedReader_Skip_IY
+	ret
 
 ;
 	SECTION RAM

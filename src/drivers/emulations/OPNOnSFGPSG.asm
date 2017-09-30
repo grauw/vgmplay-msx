@@ -23,6 +23,17 @@ OPNOnSFGPSG: MACRO
 		jp 0
 	writeFMRegister: equ $ - 2
 		ENDP
+
+	; e = register
+	; d = value
+	SafeWriteRegister2:
+		ld a,e
+	; a = register
+	; d = value
+	WriteRegister2: PROC
+		jp 0
+	writeFMRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; bc = OPN FM on SFG driver
@@ -45,6 +56,10 @@ OPNOnSFGPSG_Construct:
 	add hl,bc
 	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister),l
 	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister + 1),h
+	ld hl,OPNFMOnSFG.WriteRegister2
+	add hl,bc
+	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister),l
+	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister + 1),h
 	ret
 
 ; ix = this
