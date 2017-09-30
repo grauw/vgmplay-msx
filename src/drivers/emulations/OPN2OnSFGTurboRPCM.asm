@@ -1,7 +1,6 @@
 ;
 ; OPN2 PCM on SFG + turboR PCM driver
 ;
-OPN2OnSFGTurboRPCM_PCM_REGISTER: equ 2AH
 OPN2OnSFGTurboRPCM_FREQUENCY: equ 7670453
 
 OPN2OnSFGTurboRPCM: MACRO
@@ -11,7 +10,7 @@ OPN2OnSFGTurboRPCM: MACRO
 	; d = value
 	SafeWriteRegister: PROC
 		ld a,e
-		cp OPN2OnSFGTurboRPCM_PCM_REGISTER
+		cp 2AH
 		jp z,0
 	writePCMRegister: equ $ - 2
 		jp 0
