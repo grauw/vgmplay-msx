@@ -9,6 +9,8 @@ OPNFMOnSFG: MACRO
 	super: Driver
 	frequencyMSBs:
 		ds 4
+	rlFBConnects:
+		ds 4
 
 	; e = register
 	; d = value
@@ -28,9 +30,6 @@ OPNFMOnSFG: MACRO
 		cp 0A0H
 		jr nc,WriteChannels
 		ret
-	WriteSFGRegister:
-		jp 0
-	writeSFGRegister: equ $ - 2
 	WriteTest:
 		add a,-20H
 		jr WriteSFGRegister
@@ -45,6 +44,9 @@ OPNFMOnSFG: MACRO
 		ld d,a
 		ld a,8
 		jr WriteSFGRegister
+	WriteSFGRegister:
+		jp 0
+	writeSFGRegister: equ $ - 2
 	WriteSlots:
 		and 03H
 		ld b,a
@@ -95,13 +97,47 @@ OPNFMOnSFG: MACRO
 		add a,-0A0H + 28H
 		jr WriteSFGRegister
 	WriteFBConnect:
+		ld c,a
+		ld b,0
+		ld hl,-0B0H + rlFBConnects
+		add hl,bc
+		ld a,(hl)
+		and 11000000B
+		ld b,a
+		ld a,d
+		and 00111111B
+		or b
+		ld (hl),a
+		ld d,a
+		ld a,e
 		add a,-0B0H + 20H
-		set 6,d
-		set 7,d
 		jr WriteSFGRegister
 	WritePMSAMSLR:
+		ld c,a
+		ld b,0
+		ld hl,-0B4H + rlFBConnects
+		add hl,bc
+		ld a,(hl)
+		rla
+		rla
+		sla d  ; swap l & r
+		rra
+		sla d
+		rra
+		ld (hl),a
+		push af
+		rra
+		rl d
+		rra
+		rl d
+		ld a,e
+		push af
 		add a,-0B4H + 38H
-		jr WriteSFGRegister
+		call WriteSFGRegister
+		pop af
+		pop de
+		add a,-0B4H + 20H
+		jp WriteSFGRegister
 		ENDP
 	ENDM
 
@@ -118,11 +154,35 @@ OPNFMOnSFG_Construct:
 	add hl,de
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister),l
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister + 1),h
+	call OPNFMOnSFG_Initialize
 	ret
 
 ; ix = this
 OPNFMOnSFG_Destruct:
 	ret
+
+; ix = this
+; e = register
+; d = value
+OPNFMOnSFG_Initialize:
+	ld de,0C0B4H
+	call OPNFMOnSFG_WriteRegister
+	ld de,0C0B5H
+	call OPNFMOnSFG_WriteRegister
+	ld de,0C0B6H
+	call OPNFMOnSFG_WriteRegister
+	ret
+
+; ix = this
+; e = register
+; d = value
+OPNFMOnSFG_WriteRegister:
+	push ix
+	pop hl
+	ld bc,OPNFMOnSFG.WriteRegister
+	add hl,bc
+	ld a,e
+	jp hl
 
 ; l = f-number LSB
 ; h = block + f-number MSB
