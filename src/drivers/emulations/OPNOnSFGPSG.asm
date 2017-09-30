@@ -21,7 +21,7 @@ OPNOnSFGPSG: MACRO
 		jp c,0
 	writePSGRegister: equ $ - 2
 		jp 0
-	writeSFGRegister: equ $ - 2
+	writeFMRegister: equ $ - 2
 		ENDP
 	ENDM
 
@@ -43,8 +43,8 @@ OPNOnSFGPSG_Construct:
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister + 1),h
 	ld hl,OPNFMOnSFG.WriteRegister
 	add hl,bc
-	ld (ix + OPNOnSFGPSG.WriteRegister.writeSFGRegister),l
-	ld (ix + OPNOnSFGPSG.WriteRegister.writeSFGRegister + 1),h
+	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister),l
+	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister + 1),h
 	ret
 
 ; ix = this
