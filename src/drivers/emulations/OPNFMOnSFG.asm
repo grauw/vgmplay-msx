@@ -8,9 +8,9 @@ OPNFMOnSFG_FREQUENCY: equ 3579545
 OPNFMOnSFG: MACRO
 	super: Driver
 	frequencyMSBs:
-		ds 4
+		ds 8
 	rlFBConnects:
-		ds 4
+		ds 8
 
 	; e = register
 	; d = value
@@ -139,6 +139,116 @@ OPNFMOnSFG: MACRO
 		add a,-0B4H + 20H
 		jp WriteSFGRegister
 		ENDP
+
+	; e = register
+	; d = value
+	SafeWriteRegister2:
+		ld a,e
+	; a = register
+	; d = value
+	WriteRegister2: PROC
+		cp 30H
+		ret c
+		cp 090H
+		jr c,WriteSlots
+		cp 0A0H
+		jr nc,WriteChannels
+		ret
+	WriteSFGRegister:
+		jp 0
+	writeSFGRegister: equ $ - 2
+	WriteSlots:
+		and 03H
+		ld b,a
+		ld a,e
+		add a,-30H
+		and 0FCH
+		add a,a
+		or b
+		add a,40H + 4
+		jr WriteSFGRegister
+	WriteChannels:
+		cp 0A4H
+		jr c,WriteFrequencyLSB
+		cp 0A8H
+		jr c,WriteFrequencyMSB
+		cp 0B0H
+		ret c
+		cp 0B4H
+		jr c,WriteFBConnect
+		cp 0B8H
+		jr c,WritePMSAMSLR
+		ret
+	WriteFrequencyMSB:
+		ld c,a
+		ld b,0
+		ld hl,-0A4H + frequencyMSBs + 4
+		add hl,bc
+		ld (hl),d
+		ret
+	WriteFrequencyLSB:
+		push af
+		ld c,a
+		ld b,0
+		ld hl,-0A0H + frequencyMSBs + 4
+		add hl,bc
+		ld h,(hl)
+		ld l,d
+		call OPNFMOnSFG_FrequencyToKey
+		pop af
+		ld d,c
+		ld c,a
+		push bc
+		add a,-0A0H + 30H + 4
+		call WriteSFGRegister
+		pop bc
+		ld d,b
+		ld a,c
+		add a,-0A0H + 28H + 4
+		jr WriteSFGRegister
+	WriteFBConnect:
+		ld c,a
+		ld b,0
+		ld hl,-0B0H + rlFBConnects + 4
+		add hl,bc
+		ld a,(hl)
+		and 11000000B
+		ld b,a
+		ld a,d
+		and 00111111B
+		or b
+		ld (hl),a
+		ld d,a
+		ld a,e
+		add a,-0B0H + 20H + 4
+		jr WriteSFGRegister
+	WritePMSAMSLR:
+		ld c,a
+		ld b,0
+		ld hl,-0B4H + rlFBConnects + 4
+		add hl,bc
+		ld a,(hl)
+		rla
+		rla
+		sla d  ; swap l & r
+		rra
+		sla d
+		rra
+		ld (hl),a
+		push af
+		rra
+		rl d
+		rra
+		rl d
+		ld a,e
+		push af
+		add a,-0B4H + 38H + 4
+		call WriteSFGRegister
+		pop af
+		pop de
+		add a,-0B4H + 20H + 4
+		jp WriteSFGRegister
+		ENDP
 	ENDM
 
 ; de = SFG driver
@@ -154,6 +264,12 @@ OPNFMOnSFG_Construct:
 	add hl,de
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister),l
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister + 1),h
+	ld bc,OPNFMOnSFG.WriteRegister2.writeSFGRegister
+	add ix,bc
+	ld (ix),l
+	ld (ix + 1),h
+	ld bc,-OPNFMOnSFG.WriteRegister2.writeSFGRegister
+	add ix,bc
 	call OPNFMOnSFG_Initialize
 	ret
 
@@ -171,6 +287,12 @@ OPNFMOnSFG_Initialize:
 	call OPNFMOnSFG_WriteRegister
 	ld de,0C0B6H
 	call OPNFMOnSFG_WriteRegister
+	ld de,0C0B4H
+	call OPNFMOnSFG_WriteRegister2
+	ld de,0C0B5H
+	call OPNFMOnSFG_WriteRegister2
+	ld de,0C0B6H
+	call OPNFMOnSFG_WriteRegister2
 	ret
 
 ; ix = this
@@ -180,6 +302,17 @@ OPNFMOnSFG_WriteRegister:
 	push ix
 	pop hl
 	ld bc,OPNFMOnSFG.WriteRegister
+	add hl,bc
+	ld a,e
+	jp hl
+
+; ix = this
+; e = register
+; d = value
+OPNFMOnSFG_WriteRegister2:
+	push ix
+	pop hl
+	ld bc,OPNFMOnSFG.WriteRegister2
 	add hl,bc
 	ld a,e
 	jp hl
