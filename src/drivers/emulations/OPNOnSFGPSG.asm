@@ -12,8 +12,11 @@ OPNOnSFGPSG: MACRO
 
 	; e = register
 	; d = value
-	SafeWriteRegister: PROC
+	SafeWriteRegister:
 		ld a,e
+	; a = register
+	; d = value
+	WriteRegister: PROC
 		cp 20H
 		jp c,0
 	writePSGRegister: equ $ - 2
@@ -117,12 +120,12 @@ OPNOnSFGPSG_Construct:
 	pop bc
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
-	ld (ix + OPNOnSFGPSG.SafeWriteRegister.writePSGRegister),l
-	ld (ix + OPNOnSFGPSG.SafeWriteRegister.writePSGRegister + 1),h
+	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister),l
+	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister + 1),h
 	ld hl,SFG.WriteRegister
 	add hl,bc
-	ld (ix + OPNOnSFGPSG.SafeWriteRegister.writeSFGRegister),l
-	ld (ix + OPNOnSFGPSG.SafeWriteRegister.writeSFGRegister + 1),h
+	ld (ix + OPNOnSFGPSG.WriteRegister.writeSFGRegister),l
+	ld (ix + OPNOnSFGPSG.WriteRegister.writeSFGRegister + 1),h
 	ret
 
 ; ix = this
