@@ -7,9 +7,8 @@ OPNFMOnSFG_FREQUENCY: equ 3579545
 
 OPNFMOnSFG: MACRO
 	super: Driver
-	frequencies:
-		ds 7
-	alignedFrequencies: equ (frequencies + 3) & 0FFFCH
+	frequencyMSBs:
+		ds 4
 
 	; e = register
 	; d = value
@@ -69,16 +68,18 @@ OPNFMOnSFG: MACRO
 		jr c,WritePMSAMSLR
 		ret
 	WriteFrequencyMSB:
-		add a,-0A4H + alignedFrequencies
-		ld l,a
-		ld h,alignedFrequencies >> 8
+		ld c,a
+		ld b,0
+		ld hl,-0A4H + frequencyMSBs
+		add hl,bc
 		ld (hl),d
 		ret
 	WriteFrequencyLSB:
 		push af
-		add a,-0A0H + alignedFrequencies
-		ld l,a
-		ld h,alignedFrequencies >> 8
+		ld c,a
+		ld b,0
+		ld hl,-0A0H + frequencyMSBs
+		add hl,bc
 		ld h,(hl)
 		ld l,d
 		call OPNFMOnSFG_FrequencyToKey
