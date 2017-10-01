@@ -8,7 +8,7 @@ MappedReader: MACRO
 	buffer:
 		dw 0
 	positionSegmentIndex:
-		db -1
+		dw -1
 	size:
 	ENDM
 
@@ -40,13 +40,15 @@ MappedReader_GetBuffer_IY:
 	ld ixh,d
 	ret
 
-; ehl = address
+; dehl = address
 ; iy = this
 MappedReader_SetPosition_IY:
 	push ix
-	ld a,e
+	ld c,e
+	ld b,d
 	call MappedReader_GetBuffer_IY
-	ld e,a
+	ld e,c
+	ld d,b
 	call MappedBuffer_IsValidPosition
 	jp nc,MappedReader_ThrowAddressOutOfBounds
 	ld a,h
@@ -58,10 +60,14 @@ MappedReader_SetPosition_IY:
 	ld a,h
 	rla
 	rl e
+	rl d
+	jp c,MappedReader_ThrowAddressOutOfBounds
 	rla
 	rl e
+	rl d
+	jp c,MappedReader_ThrowAddressOutOfBounds
 	ld (iy + MappedReader.positionSegmentIndex),e
-	ld a,e
+	ld (iy + MappedReader.positionSegmentIndex + 1),d
 	ld h,(iy + MappedReader.super.bufferStart + 1)
 	call MappedBuffer_SelectSegment
 	pop ix
@@ -72,32 +78,29 @@ MappedReader_SetPosition_IY:
 MappedReader_GetPosition_IY: PROC
 	ld l,(iy + MappedReader.super.bufferPosition)
 	ld h,(iy + MappedReader.super.bufferPosition + 1)
-	ld a,(iy + MappedReader.positionSegmentIndex)
+	ld e,(iy + MappedReader.positionSegmentIndex)
+	ld d,(iy + MappedReader.positionSegmentIndex + 1)
 	bit 0,(iy + MappedReader.super.fillPending)
 	call nz,FillPending
 	rlc h
 	rlc h
-	rrca
+	srl d
+	rr e
 	rr h
-	rrca
+	srl d
+	rr e
 	rr h
-	and 3FH
-	ld e,a
-	ld d,0
 	ret
 FillPending:
 	ld l,(iy + MappedReader.super.bufferStart)
 	ld h,(iy + MappedReader.super.bufferStart + 1)
-	inc a
+	inc de
 	ret
 	ENDP
 
-; ehl = nr of bytes to skip
+; dehl = nr of bytes to skip
 ; iy = this
 MappedReader_Skip_IY:
-	ld a,d
-	and a
-	jp nz,MappedReader_ThrowAddressOutOfBounds
 	push de
 	push hl
 	call MappedReader_GetPosition_IY
@@ -147,16 +150,20 @@ MappedReader_Fill_IY:
 
 ; iy = this
 MappedReader_SelectNextSegment_IY:
-	ld a,(iy + MappedReader.positionSegmentIndex)
-	inc a
-	ld (iy + MappedReader.positionSegmentIndex),a
-	push de
+	ld e,(iy + MappedReader.positionSegmentIndex)
+	ld d,(iy + MappedReader.positionSegmentIndex + 1)
+	inc de
+	ld (iy + MappedReader.positionSegmentIndex),e
+	ld (iy + MappedReader.positionSegmentIndex + 1),d
 	push ix
+	ld c,e
+	ld b,d
 	call MappedReader_GetBuffer_IY
 	ld h,(iy + MappedReader.super.bufferStart + 1)
+	ld e,c
+	ld d,b
 	call MappedBuffer_SelectSegment
 	pop ix
-	pop de
 	ret
 
 MappedReader_ThrowAddressOutOfBounds:

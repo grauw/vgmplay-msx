@@ -129,7 +129,8 @@ NoCap:
 	push ix
 	call Mapped32KWriter_GetBuffer
 	call MappedBuffer_GetSegmentCount
-	sub 2
+	dec de
+	dec de
 	ld h,40H
 	call MappedBuffer_SelectSegment
 	pop ix

@@ -1,15 +1,17 @@
 ;
 ; Memory-mapped buffer
 ;
+MappedBuffer_MAX_SEGMENTS: equ 256
+
 MappedBuffer: MACRO
 	size:
 		dd 0
 	freebie:
 		dw 0
 	segmentCount:
-		db 0
+		dw 0
 	segments:
-		ds 255 * 2
+		ds MappedBuffer_MAX_SEGMENTS * 2
 	_size:
 	ENDM
 
@@ -30,25 +32,29 @@ MappedBuffer_SetFreebie:
 	ret
 
 ; ix = this
-; a <- nr of segments
+; de <- nr of segments
 MappedBuffer_GetSegmentCount:
-	ld a,(ix + MappedBuffer.segmentCount)
+	ld e,(ix + MappedBuffer.segmentCount)
+	ld d,(ix + MappedBuffer.segmentCount + 1)
 	ret
 
 ; h = address space page
-; a = segment index
+; de = segment index
 ; ix = this
-; a <- segment
 ; Modifies: af
-MappedBuffer_SelectSegment:
+MappedBuffer_SelectSegment: PROC
+	ld a,d
+	cp (ix + MappedBuffer.segmentCount + 1)
+	jr c,Ok
+	call nz,System_ThrowException
+	ld a,e
 	cp (ix + MappedBuffer.segmentCount)
 	call nc,System_ThrowException
+Ok:
 	push bc
 	push de
 	push hl
 	push ix
-	ld e,a
-	ld d,0
 	add ix,de
 	add ix,de
 	ld a,(ix + MappedBuffer.segments + 1)
@@ -62,12 +68,13 @@ MappedBuffer_SelectSegment:
 	pop de
 	pop bc
 	ret
+	ENDP
 
 ; ix = this
-; a <- new segment index
+; de <- new segment index
 MappedBuffer_AllocateAndAddSegment: PROC
 	ld a,(ix + MappedBuffer.segmentCount)
-	and a
+	or (ix + MappedBuffer.segmentCount + 1)
 	jr nz,Continue
 	or (ix + MappedBuffer.freebie + 1)
 	jr nz,Freebie
@@ -98,23 +105,25 @@ MappedBuffer_AllocateSegment:
 ; a = segment number
 ; b = slot id
 ; ix = this
-; a <- new segment index
-; Modifies: de, hl
+; de <- new segment index
+; Modifies: hl
 MappedBuffer_AddSegment:
 	ld e,(ix + MappedBuffer.segmentCount)
-	inc e
+	ld d,(ix + MappedBuffer.segmentCount + 1)
+	ld hl,-MappedBuffer_MAX_SEGMENTS
+	add hl,de
 	ld hl,MappedBuffer_outOfMemoryError
-	jp z,System_TerminateWithError
+	jp c,System_TerminateWithError
+	inc de
 	ld (ix + MappedBuffer.segmentCount),e
-	dec e
-	ld d,0
+	ld (ix + MappedBuffer.segmentCount + 1),d
+	dec de
 	push ix
 	add ix,de
 	add ix,de
 	ld (ix + MappedBuffer.segments),a
 	ld (ix + MappedBuffer.segments + 1),b
 	pop ix
-	ld a,e
 	ret
 
 ; bc = size to add
@@ -122,19 +131,25 @@ MappedBuffer_AddSegment:
 MappedBuffer_IncreaseSize:
 	ld l,(ix + MappedBuffer.size)
 	ld h,(ix + MappedBuffer.size + 1)
-	ld a,(ix + MappedBuffer.size + 2)
+	ld e,(ix + MappedBuffer.size + 2)
+	ld d,(ix + MappedBuffer.size + 3)
 	add hl,bc
-	adc a,0
 	ld (ix + MappedBuffer.size),l
 	ld (ix + MappedBuffer.size + 1),h
-	ld (ix + MappedBuffer.size + 2),a
+	ret nc
+	inc de
+	ld (ix + MappedBuffer.size + 2),e
+	ld (ix + MappedBuffer.size + 3),d
 	ret
 
-; ehl = position
+; dehl = position
 ; ix = this
 ; f <- nc: position points past the end
 ; Modifies: af
 MappedBuffer_IsValidPosition:
+	ld a,d
+	cp (ix + MappedBuffer.size + 3)
+	ret c
 	ld a,e
 	cp (ix + MappedBuffer.size + 2)
 	ret c
