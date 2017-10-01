@@ -17,7 +17,7 @@ OPNOnSFGPSG: MACRO
 	; a = register
 	; d = value
 	WriteRegister: PROC
-		cp 20H
+		cp 10H
 		jp c,0
 	writePSGRegister: equ $ - 2
 		jp 0
