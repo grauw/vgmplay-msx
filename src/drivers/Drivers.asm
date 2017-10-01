@@ -20,6 +20,7 @@
 	INCLUDE "emulations/OPNFMOnSFG.asm"
 	INCLUDE "emulations/OPNOnSFGPSG.asm"
 	INCLUDE "emulations/OPN2OnSFGTurboRPCM.asm"
+	INCLUDE "emulations/OPN2OnOPNATurboRPCM.asm"
 
 
 Drivers: MACRO
@@ -56,6 +57,8 @@ Drivers: MACRO
 	opnOnSFGPSG:
 		dw 0
 	opn2OnSFGTurboRPCM:
+		dw 0
+	opn2OnOPNATurboRPCM:
 		dw 0
 	size:
 	ENDM
@@ -135,6 +138,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetOPN2OnSFGTurboRPCM
 	call nz,OPN2OnSFGTurboRPCM_Destruct
+	pop ix
+	push ix
+	call Drivers_GetOPN2OnOPNATurboRPCM
+	call nz,OPN2OnOPNATurboRPCM_Destruct
 	pop ix
 	ret
 
@@ -487,6 +494,30 @@ Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
 	ret
 
 ; ix = this
+; de <- OPN2 on OPNA + turboR PCM driver
+; f <- c: succeeded
+Drivers_TryCreateOPN2OnOPNATurboRPCM_IY:
+	ld a,(iy + Drivers.opn2OnOPNATurboRPCM)
+	or (iy + Drivers.opn2OnOPNATurboRPCM + 1)
+	ret nz
+	call Drivers_TryCreateOPNA_IY
+	ret nc
+	push de
+	call Drivers_TryCreateTurboRPCM_IY
+	pop bc
+	ret nc
+	push ix
+	ld ix,OPN2OnOPNATurboRPCM_instance
+	call OPN2OnOPNATurboRPCM_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.opn2OnOPNATurboRPCM),e
+	ld (iy + Drivers.opn2OnOPNATurboRPCM + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- PSG driver
 ; ix <- PSG driver
 ; f <- z: not set
@@ -701,6 +732,19 @@ Drivers_GetOPNOnSFGPSG:
 Drivers_GetOPN2OnSFGTurboRPCM:
 	ld e,(ix + Drivers.opn2OnSFGTurboRPCM)
 	ld d,(ix + Drivers.opn2OnSFGTurboRPCM + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- OPN2 on OPNA + turboR PCM driver
+; ix <- OPN2 on OPNA + turboR PCM driver
+; f <- z: not set
+Drivers_GetOPN2OnOPNATurboRPCM:
+	ld e,(ix + Drivers.opn2OnOPNATurboRPCM)
+	ld d,(ix + Drivers.opn2OnOPNATurboRPCM + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e

@@ -197,7 +197,22 @@ Continue:
 
 ; iy = drivers
 ; ix = this
-YM2612_Connect:
+YM2612_Connect: PROC
+	call Drivers_TryCreateOPN2OnOPNATurboRPCM_IY
+	jr nc,TryOPN2OnSFGTurboRPCM
+	call Chip_SetDriver
+	ld hl,OPN2OnOPNATurboRPCM.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2612.ProcessPort0Command.writeRegister),l
+	ld (ix + YM2612.ProcessPort0Command.writeRegister + 1),h
+	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
+	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
+	ld hl,OPN2OnOPNATurboRPCM.SafeWriteRegister2
+	add hl,de
+	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
+	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
+	ret
+TryOPN2OnSFGTurboRPCM:
 	call Drivers_TryCreateOPN2OnSFGTurboRPCM_IY
 	ret nc
 	call Chip_SetDriver
@@ -212,6 +227,7 @@ YM2612_Connect:
 	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
 	ret
+	ENDP
 
 ; iy = player
 ; ix = this
