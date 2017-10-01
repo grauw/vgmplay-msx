@@ -60,7 +60,7 @@ TurboRPCM_Enable:
 
 ; ix = this
 TurboRPCM_Disable:
-	ld a,00000000B
+	ld a,00000010B
 	out (TurboRPCM_CONTROL),a
 	ld a,80H
 	out (TurboRPCM_DATA),a
