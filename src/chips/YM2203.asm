@@ -28,9 +28,18 @@ YM2203_Construct:
 ; ix = this
 YM2203_Connect: PROC
 	call Drivers_TryCreateOPN_IY
-	jr nc,TryOPNOnSFGPSG
+	jr nc,TryOPNA
 	call Chip_SetDriver
 	ld hl,OPN.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2203.ProcessCommand.writeRegister),l
+	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
+	ret
+TryOPNA:
+	call Drivers_TryCreateOPNA_IY
+	jr nc,TryOPNOnSFGPSG
+	call Chip_SetDriver
+	ld hl,OPNA.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2203.ProcessCommand.writeRegister),l
 	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
