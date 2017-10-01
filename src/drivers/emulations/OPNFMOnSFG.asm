@@ -19,8 +19,8 @@ OPNFMOnSFG: MACRO
 	; a = register
 	; d = value
 	WriteRegister: PROC
-		cp 21H
-		jr z,WriteTest
+		cp 22H
+		jr z,WriteLFO
 		cp 28H
 		jr z,WriteKeyOnOff
 		cp 30H
@@ -30,9 +30,14 @@ OPNFMOnSFG: MACRO
 		cp 0A0H
 		jr nc,WriteChannels
 		ret
-	WriteTest:
-		add a,-20H
-		jr WriteSFGRegister
+	WriteLFO:
+		ld c,d
+		ld b,0
+		ld hl,OPNFMOnSFG_lfoLUT
+		add hl,bc
+		ld d,(hl)
+		ld a,18H
+		call WriteSFGRegister
 	WriteKeyOnOff:
 		ld a,d
 		and 07H
@@ -126,10 +131,8 @@ OPNFMOnSFG: MACRO
 		rra
 		ld (hl),a
 		push af
-		rra
-		rl d
-		rra
-		rl d
+		rlc d
+		rlc d
 		ld a,e
 		push af
 		add a,-0B4H + 38H
@@ -236,10 +239,8 @@ OPNFMOnSFG: MACRO
 		rra
 		ld (hl),a
 		push af
-		rra
-		rl d
-		rra
-		rl d
+		rlc d
+		rlc d
 		ld a,e
 		push af
 		add a,-0B4H + 38H + 4
@@ -307,6 +308,12 @@ OPNFMOnSFG_Initialize:
 	call OPNFMOnSFG_WriteRegister2
 	ld de,0C0B6H
 	call OPNFMOnSFG_WriteRegister2
+	ld de,1019H   ; AMD, rescales AMS
+	call OPNFMOnSFG_WriteSFGRegister
+	ld de,0A819H  ; PMD, rescales PMS, get level 5 somewhat right
+	call OPNFMOnSFG_WriteSFGRegister
+	ld de,021BH   ; W, triangle LFO waveform
+	call OPNFMOnSFG_WriteSFGRegister
 	ret
 
 ; ix = this
@@ -327,6 +334,17 @@ OPNFMOnSFG_WriteRegister2:
 	push ix
 	pop hl
 	ld bc,OPNFMOnSFG.WriteRegister2
+	add hl,bc
+	ld a,e
+	jp hl
+
+; ix = this
+; e = register
+; d = value
+OPNFMOnSFG_WriteSFGRegister:
+	push ix
+	pop hl
+	ld bc,OPNFMOnSFG.WriteRegister.WriteSFGRegister
 	add hl,bc
 	ld a,e
 	jp hl
@@ -418,6 +436,9 @@ Overflow:
 ;
 OPNFMOnSFG_name:
 	db "SFG (emu)",0
+
+OPNFMOnSFG_lfoLUT:
+	db 0, 0, 0, 0, 0, 0, 0, 0, 0C1H, 0C7H, 0C9H, 0CBH, 0CDH, 0D4H, 0F9H, 0FFH
 
 	SECTION RAM
 
