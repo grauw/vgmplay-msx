@@ -53,6 +53,28 @@ NegativeInfinity:
 	ret
 	ENDP
 
+; hl = multiplicand
+; bc = multiplier
+; dehl <- product
+; Modifies: af
+Math_Multiply16x16: PROC
+	ex de,hl
+	ld hl,0
+	ld a,16
+Loop:
+	add hl,hl
+	rl e
+	rl d
+	jr nc,NoAdd
+	add hl,bc
+	jp nc,NoAdd
+	inc de
+NoAdd:
+	dec a
+	jr nz,Loop
+	ret
+	ENDP
+
 ; Log mantissa table in 128 steps
 ; JS: Array.from({length: 129}, (v, i) => Math.round(65536 * Math.log((i / 128) + 1) / Math.log(2)))
 	ALIGN 256

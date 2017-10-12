@@ -2,9 +2,12 @@
 ; OPN2 PCM on OPNA + turboR PCM driver
 ;
 OPN2OnOPNATurboRPCM_FREQUENCY: equ 7670453
+OPN2OnOPNATurboRPCM_FREQUENCY_RATIO: equ (OPN2OnOPNATurboRPCM_FREQUENCY << 8) / (OPNA_FREQUENCY >> 7)
 
 OPN2OnOPNATurboRPCM: MACRO
 	super: Driver
+	frequencyMSBs:
+		ds 8
 
 	; e = register
 	; d = value
@@ -13,16 +16,84 @@ OPN2OnOPNATurboRPCM: MACRO
 		cp 2AH
 		jp z,0
 	writePCMRegister: equ $ - 2
+		cp 0A0H
+		jr c,WriteFMRegister
+		cp 0A4H
+		jr c,WriteFrequencyLSB
+		cp 0A8H
+		jr c,WriteFrequencyMSB
+	WriteFMRegister:
 		jp 0
 	writeFMRegister: equ $ - 2
+	WriteFrequencyMSB:
+		ld c,a
+		ld b,0
+		ld hl,-0A4H + frequencyMSBs
+		add hl,bc
+		ld (hl),d
+		ret
+	WriteFrequencyLSB:
+		push af
+		ld c,a
+		ld b,0
+		ld hl,-0A0H + frequencyMSBs
+		add hl,bc
+		ld h,(hl)
+		ld l,d
+		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
+		call OPN2OnOPNATurboRPCM_AdjustFrequency
+		pop af
+		ld l,e
+		ld h,a
+		push hl
+		add a,-0A0H + 0A4H
+		call WriteFMRegister
+		pop hl
+		ld d,l
+		ld a,h
+		jr WriteFMRegister
 		ENDP
 
 	; e = register
 	; d = value
 	SafeWriteRegister2: PROC
 		ld a,e
+		cp 0A0H
+		jr c,WriteFMRegister
+		cp 0A4H
+		jr c,WriteFrequencyLSB
+		cp 0A8H
+		jr c,WriteFrequencyMSB
+	WriteFMRegister:
 		jp 0
 	writeFMRegister: equ $ - 2
+	WriteFrequencyMSB:
+		ld c,a
+		ld b,0
+		ld hl,-0A4H + frequencyMSBs + 4
+		add hl,bc
+		ld (hl),d
+		ret
+	WriteFrequencyLSB:
+		push af
+		ld c,a
+		ld b,0
+		ld hl,-0A0H + frequencyMSBs + 4
+		add hl,bc
+		ld h,(hl)
+		ld l,d
+		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
+		call OPN2OnOPNATurboRPCM_AdjustFrequency
+		pop af
+		ld l,e
+		ld h,a
+		push hl
+		add a,-0A0H + 0A4H
+		call WriteFMRegister
+		pop hl
+		ld d,l
+		ld a,h
+		jr WriteFMRegister
 		ENDP
 	ENDM
 
@@ -55,6 +126,36 @@ OPN2OnOPNATurboRPCM_Construct:
 ; ix = this
 OPN2OnOPNATurboRPCM_Destruct:
 	ret
+
+; bc = multiplier
+; hl = old block + fnum
+; de = new block + fnum
+OPN2OnOPNATurboRPCM_AdjustFrequency: PROC
+	ld a,h
+	and 00111000B
+	push af
+	ld a,h
+	and 00000111B
+	ld h,a
+	call Math_Multiply16x16
+	pop af
+	bit 2,d
+	jr z,NoOverflow
+	add a,8
+	or d
+	ld d,a
+	bit 6,a
+	ret z
+	ld de,3FFFH
+	ret
+NoOverflow:
+	rl h
+	rl e
+	rl d
+	or d
+	ld d,a
+	ret
+	ENDP
 
 ;
 OPN2OnOPNATurboRPCM_name:
