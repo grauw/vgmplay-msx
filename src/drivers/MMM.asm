@@ -78,20 +78,14 @@ MMM_SetSlot:
 ; a = value
 ; ix = this
 MMM_WriteRegister:
-	push ix
-	pop hl
 	ld bc,MMM.WriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; a = value
 ; ix = this
 MMM_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,MMM.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 MMM_Reset:

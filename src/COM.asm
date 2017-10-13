@@ -39,6 +39,7 @@ COM_Main:
 	INCLUDE "Memory.asm"
 	INCLUDE "Mapper.asm"
 	INCLUDE "Heap.asm"
+	INCLUDE "Utils.asm"
 	INCLUDE "Application.asm"
 	INCLUDE "Math.asm"
 	INCLUDE "MappedBuffer.asm"

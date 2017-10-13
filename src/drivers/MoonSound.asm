@@ -121,85 +121,60 @@ MoonSound_Destruct:
 ; d = value
 ; ix = this
 MoonSound_WriteRegister:
-	push ix
-	pop hl
-	ld bc,MoonSound.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,MoonSound.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MoonSound_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,MoonSound.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MoonSound_WriteRegister2:
-	push ix
-	pop hl
-	ld bc,MoonSound.WriteRegister2
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,MoonSound.WriteRegister2
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MoonSound_SafeWriteRegister2:
-	push ix
-	pop hl
 	ld bc,MoonSound.SafeWriteRegister2
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MoonSound_WriteRegisterWave:
-	push ix
-	pop hl
-	ld bc,MoonSound.WriteRegisterWave
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,MoonSound.WriteRegisterWave
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MoonSound_SafeWriteRegisterWave:
-	push ix
-	pop hl
 	ld bc,MoonSound.SafeWriteRegisterWave
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; a = register
 ; ix = this
 ; a <- value
 MoonSound_ReadRegisterWave:
-	push ix
-	pop hl
 	ld bc,MoonSound.ReadRegisterWave
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; bc = count
 ; hl = source
 ; ix = this
 MoonSound_WriteMemory:
-	push ix
 	ld de,MoonSound.WriteMemory
-	add ix,de
-	call System_JumpIX
-	pop ix
-	ret
+	jp Utils_JumpIXOffsetDE
 
 ; ehl = memory address
 ; ix = this

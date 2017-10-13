@@ -236,43 +236,31 @@ OPNA_Destruct:
 ; d = value
 ; ix = this
 OPNA_WriteRegister:
-	push ix
-	pop hl
-	ld bc,OPNA.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,OPNA.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 OPNA_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,OPNA.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 OPNA_WriteRegister2:
-	push ix
-	pop hl
-	ld bc,OPNA.WriteRegister2
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,OPNA.WriteRegister2
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 OPNA_SafeWriteRegister2:
-	push ix
-	pop hl
 	ld bc,OPNA.SafeWriteRegister2
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; b = count
 ; e = register base
@@ -437,12 +425,8 @@ OPNA_SetADPCMWriteAddress:
 ; hl = source
 ; ix = this
 OPNA_WriteADPCMData:
-	push ix
 	ld de,OPNA.WriteADPCMData
-	add ix,de
-	call System_JumpIX
-	pop ix
-	ret
+	jp Utils_JumpIXOffsetDE
 
 ; f <- c: Found
 OPNA_Detect:

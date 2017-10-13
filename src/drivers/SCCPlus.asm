@@ -146,22 +146,16 @@ SCCPlus_Deselect:
 ; d = value
 ; ix = this
 SCCPlus_WriteRegister:
-	push ix
-	pop hl
-	ld bc,SCCPlus.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,SCCPlus.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 SCCPlus_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,SCCPlus.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; b = count
 ; e = register base

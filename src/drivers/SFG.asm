@@ -88,22 +88,16 @@ SFG_SetSlot:
 ; d = value
 ; ix = this
 SFG_WriteRegister:
-	push ix
-	pop hl
-	ld bc,SFG.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,SFG.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 SFG_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,SFG.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 SFG_Reset:

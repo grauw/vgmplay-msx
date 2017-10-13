@@ -34,20 +34,14 @@ Franky_Destruct:
 ; a = value
 ; ix = this
 Franky_WriteRegister:
-	push ix
-	pop hl
 	ld bc,Franky.WriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; a = value
 ; ix = this
 Franky_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,Franky.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 Franky_Reset:

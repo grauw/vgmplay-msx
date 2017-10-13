@@ -181,22 +181,16 @@ MSXAudio_Destruct:
 ; d = value
 ; ix = this
 MSXAudio_WriteRegister:
-	push ix
-	pop hl
-	ld bc,MSXAudio.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,MSXAudio.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MSXAudio_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,MSXAudio.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; b = count
 ; e = register base
@@ -271,12 +265,8 @@ MSXAudio_SetADPCMWriteAddress:
 ; hl = source
 ; ix = this
 MSXAudio_WriteADPCMData:
-	push ix
 	ld de,MSXAudio.WriteADPCMData
-	add ix,de
-	call System_JumpIX
-	pop ix
-	ret
+	jp Utils_JumpIXOffsetDE
 
 ; f <- c: found
 MSXAudio_Detect:

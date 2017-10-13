@@ -34,21 +34,15 @@ TurboRPCM_Destruct:
 ; d = value
 ; ix = this
 TurboRPCM_WriteRegister:
-	push ix
-	pop hl
-	ld bc,TurboRPCM.WriteRegister
-	add hl,bc
 	ld a,d
-	jp hl
+	ld bc,TurboRPCM.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; d = value
 ; ix = this
 TurboRPCM_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,TurboRPCM.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 TurboRPCM_Enable:

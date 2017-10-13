@@ -55,22 +55,16 @@ MSXMusic_Destruct:
 ; d = value
 ; ix = this
 MSXMusic_WriteRegister:
-	push ix
-	pop hl
-	ld bc,MSXMusic.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,MSXMusic.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 MSXMusic_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,MSXMusic.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 MSXMusic_Enable:

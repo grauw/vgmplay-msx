@@ -52,22 +52,16 @@ PSG_Destruct:
 ; d = value
 ; ix = this
 PSG_WriteRegister:
-	push ix
-	pop hl
-	ld bc,PSG.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,PSG.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 PSG_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,PSG.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 PSG_Reset: PROC

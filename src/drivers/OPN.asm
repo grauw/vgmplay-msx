@@ -55,22 +55,16 @@ OPN_Destruct:
 ; d = value
 ; ix = this
 OPN_WriteRegister:
-	push ix
-	pop hl
-	ld bc,OPN.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,OPN.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 OPN_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,OPN.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; b = count
 ; e = register base

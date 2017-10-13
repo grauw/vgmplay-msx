@@ -59,20 +59,14 @@ PlaySoniq_Deselect:
 ; a = value
 ; ix = this
 PlaySoniq_WriteRegister:
-	push ix
-	pop hl
 	ld bc,PlaySoniq.WriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; a = value
 ; ix = this
 PlaySoniq_SafeWriteRegister:
-	push ix
-	pop hl
 	ld bc,PlaySoniq.SafeWriteRegister
-	add hl,bc
-	jp hl
+	jp Utils_JumpIXOffsetBC
 
 ; ix = this
 PlaySoniq_Reset:

@@ -320,34 +320,25 @@ OPNFMOnSFG_Initialize:
 ; d = value
 ; ix = this
 OPNFMOnSFG_WriteRegister:
-	push ix
-	pop hl
-	ld bc,OPNFMOnSFG.WriteRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,OPNFMOnSFG.WriteRegister
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 OPNFMOnSFG_WriteRegister2:
-	push ix
-	pop hl
-	ld bc,OPNFMOnSFG.WriteRegister2
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,OPNFMOnSFG.WriteRegister2
+	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
 OPNFMOnSFG_WriteSFGRegister:
-	push ix
-	pop hl
-	ld bc,OPNFMOnSFG.WriteRegister.WriteSFGRegister
-	add hl,bc
 	ld a,e
-	jp hl
+	ld bc,OPNFMOnSFG.WriteRegister.WriteSFGRegister
+	jp Utils_JumpIXOffsetBC
 
 ; de = offset; 65536 * (log2((7159090 / 2^11 / 144) / 27.5) + 8/12 + 0.5/12/64)
 ;                             frequency               A0      A-C#   rounding
