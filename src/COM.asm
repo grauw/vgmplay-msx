@@ -67,6 +67,9 @@ CRC32Table:
 
 	SECTION RAM_PAGE0
 
+Heap_main:
+	Heap HEAP, HEAP_SIZE
+
 	ALIGN 100H
 READBUFFER: ds READBUFFER_SIZE
 
@@ -86,12 +89,5 @@ READBUFFER: ds READBUFFER_SIZE
 	INCLUDE "chips/Chips.asm"
 	INCLUDE "MemoryTest.asm"
 	INCLUDE "HeapTest.asm"
-
-	ENDS
-
-	SECTION RAM_PAGE0
-
-Heap_main:
-	Heap HEAP, HEAP_SIZE
 
 	ENDS
