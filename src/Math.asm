@@ -77,7 +77,7 @@ NoAdd:
 
 ; Log mantissa table in 128 steps
 ; JS: Array.from({length: 129}, (v, i) => Math.round(65536 * Math.log((i / 128) + 1) / Math.log(2)))
-	ALIGN 256
+	ALIGN 100H
 Math_log2Table:
 	dw     0,   736,  1466,  2190,  2909,  3623,  4331,  5034
 	dw  5732,  6425,  7112,  7795,  8473,  9146,  9814, 10477

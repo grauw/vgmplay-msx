@@ -423,7 +423,7 @@ Player_UnsupportedCommand:
 ;
 	SECTION RAM
 
-	ALIGN 256
+	ALIGN 100H
 Player_commandsJumpTable:
 	dw Player_Skip1               ; 00H
 	dw Player_Skip1               ; 01H
@@ -682,7 +682,7 @@ Player_commandsJumpTable:
 	dw Player_Skip5               ; FEH
 	dw Player_Skip5               ; FFH
 
-	ALIGN 256
+	ALIGN 100H
 Player_dataBlockJumpTable:
 	REPT 256
 	db Player_SkipDataBlock & 0FFH
