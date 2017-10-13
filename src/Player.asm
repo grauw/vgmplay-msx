@@ -415,13 +415,9 @@ Player_Skip1:
 
 ; ix = this
 Player_UnsupportedCommand:
-	push af
 	in a,(2EH)
 	ld hl,Player_unsupportedCommandError
 	call System_Print
-	pop af
-	call System_PrintHexA
-	call System_PrintCrLf
 	jp DOS_Terminate
 
 ;
@@ -701,4 +697,4 @@ Player_scratch:
 	ENDS
 
 Player_unsupportedCommandError:
-	db "Unsupported command: ",0
+	db "Unsupported command.",13,10,0
