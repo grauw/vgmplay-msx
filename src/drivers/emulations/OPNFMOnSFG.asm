@@ -297,17 +297,17 @@ OPNFMOnSFG_Destruct:
 ; ix = this
 OPNFMOnSFG_Initialize:
 	ld de,0C0B4H
-	call OPNFMOnSFG_WriteRegister
+	call OPNFMOnSFG_SafeWriteRegister
 	ld de,0C0B5H
-	call OPNFMOnSFG_WriteRegister
+	call OPNFMOnSFG_SafeWriteRegister
 	ld de,0C0B6H
-	call OPNFMOnSFG_WriteRegister
+	call OPNFMOnSFG_SafeWriteRegister
 	ld de,0C0B4H
-	call OPNFMOnSFG_WriteRegister2
+	call OPNFMOnSFG_SafeWriteRegister2
 	ld de,0C0B5H
-	call OPNFMOnSFG_WriteRegister2
+	call OPNFMOnSFG_SafeWriteRegister2
 	ld de,0C0B6H
-	call OPNFMOnSFG_WriteRegister2
+	call OPNFMOnSFG_SafeWriteRegister2
 	ld de,1019H   ; AMD, rescales AMS
 	call OPNFMOnSFG_WriteSFGRegister
 	ld de,0A819H  ; PMD, rescales PMS, get level 5 somewhat right
@@ -319,17 +319,15 @@ OPNFMOnSFG_Initialize:
 ; e = register
 ; d = value
 ; ix = this
-OPNFMOnSFG_WriteRegister:
-	ld a,e
-	ld bc,OPNFMOnSFG.WriteRegister
+OPNFMOnSFG_SafeWriteRegister:
+	ld bc,OPNFMOnSFG.SafeWriteRegister
 	jp Utils_JumpIXOffsetBC
 
 ; e = register
 ; d = value
 ; ix = this
-OPNFMOnSFG_WriteRegister2:
-	ld a,e
-	ld bc,OPNFMOnSFG.WriteRegister2
+OPNFMOnSFG_SafeWriteRegister2:
+	ld bc,OPNFMOnSFG.SafeWriteRegister2
 	jp Utils_JumpIXOffsetBC
 
 ; e = register
