@@ -253,7 +253,6 @@ OPNA_SafeWriteRegister:
 	add hl,bc
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
 ; ix = this
