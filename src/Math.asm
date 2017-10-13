@@ -75,6 +75,8 @@ NoAdd:
 	ret
 	ENDP
 
+	SECTION RAM_PAGE0_ALIGNED
+
 ; Log mantissa table in 128 steps
 ; JS: Array.from({length: 129}, (v, i) => Math.round(65536 * Math.log((i / 128) + 1) / Math.log(2)))
 	ALIGN 100H
@@ -95,3 +97,5 @@ Math_log2Table:
 	dw 56229, 56635, 57040, 57443, 57845, 58245, 58643, 59039
 	dw 59434, 59827, 60219, 60609, 60997, 61384, 61769, 62152
 	dw 62534, 62915, 63294, 63671, 64047, 64421, 64794, 65166
+
+	ENDS

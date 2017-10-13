@@ -423,7 +423,7 @@ Player_UnsupportedCommand:
 	jp DOS_Terminate
 
 ;
-	SECTION RAM
+	SECTION RAM_PAGE1_ALIGNED
 
 	ALIGN 100H
 Player_commandsJumpTable:
