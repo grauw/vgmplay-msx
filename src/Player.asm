@@ -134,7 +134,7 @@ Player_GetTimer:
 Player_InitCommandsJumpTable: PROC
 	ld bc,256
 	ld hl,Player_commandsJumpTable + 1
-	ld de,Player_scratch
+	ld de,READBUFFER  ; scratch
 MSBExtractionLoop:
 	ldi
 	inc hl
@@ -147,7 +147,7 @@ LSBExtractionLoop:
 	inc hl
 	jp pe,LSBExtractionLoop
 	ld bc,256
-	ld hl,Player_scratch
+	ld hl,READBUFFER  ; scratch
 	ld de,Player_commandsJumpTable + 256
 	call System_FastLDIR
 	ret
@@ -692,9 +692,6 @@ Player_dataBlockJumpTable:
 	REPT 256
 	db Player_SkipDataBlock >> 8
 	ENDM
-
-Player_scratch:
-	ds 256
 
 	ENDS
 
