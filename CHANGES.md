@@ -1,5 +1,5 @@
-VGMPlay for MSX change log
-==========================
+VGMPlay MSX change log
+======================
 
 For the complete list of changes please refer to the
 [revision history](https://bitbucket.org/grauw/vgmplay-msx/commits/all).

@@ -1,5 +1,5 @@
-VGMPlay for MSX
-===============
+VGMPlay MSX
+===========
 
 Copyright 2015 Laurens Holst
 
