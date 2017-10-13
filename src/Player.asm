@@ -394,6 +394,8 @@ Player_WaitNSamples:
 
 ; ix = this
 ; iy = reader
+Player_Skip12:
+	call Reader_Read_IY
 Player_Skip11:
 	call Reader_Read_IY
 	call Reader_Read_IY
@@ -529,7 +531,7 @@ Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 65H
 	dw Player_EndOfSoundData      ; 66H
 	dw Player_DataBlock           ; 67H
-	dw Player_UnsupportedCommand  ; 68H
+	dw Player_Skip12              ; 68H
 	dw Player_UnsupportedCommand  ; 69H
 	dw Player_UnsupportedCommand  ; 6AH
 	dw Player_UnsupportedCommand  ; 6BH
