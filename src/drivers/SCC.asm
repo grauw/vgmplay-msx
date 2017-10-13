@@ -94,8 +94,8 @@ SCC_Destruct:
 	call SCC_Deselect
 	ret
 
-; ix = this
 ; a = slot
+; ix = this
 SCC_SetSlot:
 	ld (ix + SCC.slot),a
 	call Memory_PrepareSlotPage2
@@ -119,9 +119,9 @@ SCC_Deselect:
 	call Memory_WriteSlot
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 SCC_WriteRegister:
 	push ix
 	pop hl

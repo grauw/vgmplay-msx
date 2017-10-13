@@ -31,8 +31,8 @@ TurboRPCM_Destruct:
 	call TurboRPCM_Disable
 	ret
 
-; ix = this
 ; d = value
+; ix = this
 TurboRPCM_WriteRegister:
 	push ix
 	pop hl
@@ -41,8 +41,8 @@ TurboRPCM_WriteRegister:
 	ld a,d
 	jp hl
 
-; ix = this
 ; d = value
+; ix = this
 TurboRPCM_SafeWriteRegister:
 	push ix
 	pop hl

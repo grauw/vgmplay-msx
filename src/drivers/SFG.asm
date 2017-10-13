@@ -75,8 +75,8 @@ SFG_Destruct:
 	call SFG_Reset
 	ret
 
-; ix = this
 ; a = slot
+; ix = this
 SFG_SetSlot:
 	ld (ix + SFG.slot),a
 	call Memory_PrepareSlotPage0
@@ -84,9 +84,9 @@ SFG_SetSlot:
 	ld (ix + SFG.preparedSubslot),e
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 SFG_WriteRegister:
 	push ix
 	pop hl
@@ -95,9 +95,9 @@ SFG_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 SFG_SafeWriteRegister:
 	push ix
 	pop hl

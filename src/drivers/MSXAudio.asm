@@ -177,9 +177,9 @@ MSXAudio_Destruct:
 	call MSXAudio_Reset
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MSXAudio_WriteRegister:
 	push ix
 	pop hl
@@ -188,9 +188,9 @@ MSXAudio_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MSXAudio_SafeWriteRegister:
 	push ix
 	pop hl

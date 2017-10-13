@@ -51,9 +51,9 @@ MSXMusic_Destruct:
 	call MSXMusic_Disable
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MSXMusic_WriteRegister:
 	push ix
 	pop hl
@@ -62,9 +62,9 @@ MSXMusic_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MSXMusic_SafeWriteRegister:
 	push ix
 	pop hl

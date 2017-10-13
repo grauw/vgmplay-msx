@@ -117,9 +117,9 @@ MoonSound_Destruct:
 	call MoonSound_Reset
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MoonSound_WriteRegister:
 	push ix
 	pop hl
@@ -128,9 +128,9 @@ MoonSound_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MoonSound_SafeWriteRegister:
 	push ix
 	pop hl
@@ -138,9 +138,9 @@ MoonSound_SafeWriteRegister:
 	add hl,bc
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MoonSound_WriteRegister2:
 	push ix
 	pop hl
@@ -149,9 +149,9 @@ MoonSound_WriteRegister2:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MoonSound_SafeWriteRegister2:
 	push ix
 	pop hl
@@ -159,9 +159,9 @@ MoonSound_SafeWriteRegister2:
 	add hl,bc
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MoonSound_WriteRegisterWave:
 	push ix
 	pop hl
@@ -170,9 +170,9 @@ MoonSound_WriteRegisterWave:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 MoonSound_SafeWriteRegisterWave:
 	push ix
 	pop hl
@@ -180,8 +180,8 @@ MoonSound_SafeWriteRegisterWave:
 	add hl,bc
 	jp hl
 
-; ix = this
 ; a = register
+; ix = this
 ; a <- value
 MoonSound_ReadRegisterWave:
 	push ix

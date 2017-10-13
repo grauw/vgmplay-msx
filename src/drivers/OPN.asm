@@ -51,9 +51,9 @@ OPN_Destruct:
 	call OPN_Mute
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPN_WriteRegister:
 	push ix
 	pop hl
@@ -62,9 +62,9 @@ OPN_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPN_SafeWriteRegister:
 	push ix
 	pop hl

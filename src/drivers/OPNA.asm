@@ -232,9 +232,9 @@ OPNA_Destruct:
 	call OPNA_Mute
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNA_WriteRegister:
 	push ix
 	pop hl
@@ -243,9 +243,9 @@ OPNA_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNA_SafeWriteRegister:
 	push ix
 	pop hl
@@ -264,9 +264,9 @@ OPNA_WriteRegister2:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNA_SafeWriteRegister2:
 	push ix
 	pop hl

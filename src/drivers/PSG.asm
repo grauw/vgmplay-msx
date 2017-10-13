@@ -48,9 +48,9 @@ PSG_Destruct:
 	call PSG_Reset
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 PSG_WriteRegister:
 	push ix
 	pop hl
@@ -59,9 +59,9 @@ PSG_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 PSG_SafeWriteRegister:
 	push ix
 	pop hl

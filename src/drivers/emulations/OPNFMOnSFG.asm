@@ -292,9 +292,9 @@ OPNFMOnSFG_Construct:
 OPNFMOnSFG_Destruct:
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNFMOnSFG_Initialize:
 	ld de,0C0B4H
 	call OPNFMOnSFG_WriteRegister
@@ -316,9 +316,9 @@ OPNFMOnSFG_Initialize:
 	call OPNFMOnSFG_WriteSFGRegister
 	ret
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNFMOnSFG_WriteRegister:
 	push ix
 	pop hl
@@ -327,9 +327,9 @@ OPNFMOnSFG_WriteRegister:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNFMOnSFG_WriteRegister2:
 	push ix
 	pop hl
@@ -338,9 +338,9 @@ OPNFMOnSFG_WriteRegister2:
 	ld a,e
 	jp hl
 
-; ix = this
 ; e = register
 ; d = value
+; ix = this
 OPNFMOnSFG_WriteSFGRegister:
 	push ix
 	pop hl

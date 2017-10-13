@@ -69,8 +69,8 @@ MMM_Disable:
 
 	ENDS
 
-; ix = this
 ; a = slot
+; ix = this
 MMM_SetSlot:
 	ld (ix + MMM.slot),a
 	ret
