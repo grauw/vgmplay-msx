@@ -24,7 +24,6 @@ Show song length
 Chip emulations
 
   * Play OPLL on OPL4 (with current best known instrument settings)
-  * Play OPN family on OPM + PSG (though OPM misses the OPN’s SSG EG)
   * Play PCM chips on OPL4 (C140, OKIM, and SegaPCM which is similar to OPL4)
 
 Sparse MSX-AUDIO and OPL4 (AD)PCM loading
@@ -42,8 +41,6 @@ Reset SFG-01/05 before playback
 Mute FM chips by setting ADSR to 0FH.
 
 Reduce TPA usage (to allow selecting more files in Multi Mente)
-
-Show which drivers are playing which sound chips
 
   * Franky detection
   * PlaySoniq detection
