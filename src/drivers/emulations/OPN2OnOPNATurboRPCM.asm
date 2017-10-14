@@ -145,7 +145,7 @@ OPN2OnOPNATurboRPCM_Destruct:
 
 ; bc = multiplier
 ; hl = old block + fnum
-; de = new block + fnum
+; de <- new block + fnum
 OPN2OnOPNATurboRPCM_AdjustFrequency: PROC
 	ld a,h
 	and 00111000B
