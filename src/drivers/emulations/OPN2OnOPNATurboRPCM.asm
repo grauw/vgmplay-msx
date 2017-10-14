@@ -17,14 +17,14 @@ OPN2OnOPNATurboRPCM: MACRO
 		jp z,0
 	writePCMRegister: equ $ - 2
 		cp 0A0H
-		jr c,WriteFMRegister
+		jr c,SafeWriteFMRegister
 		cp 0A4H
 		jr c,WriteFrequencyLSB
 		cp 0A8H
 		jr c,WriteFrequencyMSB
-	WriteFMRegister:
+	SafeWriteFMRegister:
 		jp 0
-	writeFMRegister: equ $ - 2
+	safeWriteFMRegister: equ $ - 2
 	WriteFrequencyMSB:
 		ld c,a
 		ld b,0
@@ -51,7 +51,9 @@ OPN2OnOPNATurboRPCM: MACRO
 		pop hl
 		ld d,l
 		ld a,h
-		jr WriteFMRegister
+	WriteFMRegister:
+		jp 0
+	writeFMRegister: equ $ - 2
 		ENDP
 
 	; e = register
@@ -59,14 +61,14 @@ OPN2OnOPNATurboRPCM: MACRO
 	SafeWriteRegister2: PROC
 		ld a,e
 		cp 0A0H
-		jr c,WriteFMRegister
+		jr c,SafeWriteFMRegister
 		cp 0A4H
 		jr c,WriteFrequencyLSB
 		cp 0A8H
 		jr c,WriteFrequencyMSB
-	WriteFMRegister:
+	SafeWriteFMRegister:
 		jp 0
-	writeFMRegister: equ $ - 2
+	safeWriteFMRegister: equ $ - 2
 	WriteFrequencyMSB:
 		ld c,a
 		ld b,0
@@ -93,7 +95,9 @@ OPN2OnOPNATurboRPCM: MACRO
 		pop hl
 		ld d,l
 		ld a,h
-		jr WriteFMRegister
+	WriteFMRegister:
+		jp 0
+	writeFMRegister: equ $ - 2
 		ENDP
 	ENDM
 
@@ -113,14 +117,26 @@ OPN2OnOPNATurboRPCM_Construct:
 	add hl,de
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
+	ld hl,OPNA.SafeWriteRegister
+	add hl,bc
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister + 1),h
 	ld hl,OPNA.WriteRegister
 	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
+	ld hl,OPNA.SafeWriteRegister2
+	add hl,bc
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister + 1),h
 	ld hl,OPNA.WriteRegister2
 	add hl,bc
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister + 1),h
+	ld bc,128
+	add ix,bc
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
+	ld bc,-128
+	add ix,bc
 	ret
 
 ; ix = this
