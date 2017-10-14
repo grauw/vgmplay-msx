@@ -43,14 +43,13 @@ OPN2OnOPNATurboRPCM: MACRO
 		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
-		ld l,e
-		ld h,a
+		ld h,e
+		ld l,a
 		push hl
 		add a,-0A0H + 0A4H
 		call WriteFMRegister
-		pop hl
-		ld d,l
-		ld a,h
+		pop de
+		ld a,e
 	WriteFMRegister:
 		jp 0
 	writeFMRegister: equ $ - 2
@@ -87,14 +86,13 @@ OPN2OnOPNATurboRPCM: MACRO
 		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
-		ld l,e
-		ld h,a
+		ld h,e
+		ld l,a
 		push hl
 		add a,-0A0H + 0A4H
 		call WriteFMRegister
-		pop hl
-		ld d,l
-		ld a,h
+		pop de
+		ld a,e
 	WriteFMRegister:
 		jp 0
 	writeFMRegister: equ $ - 2
