@@ -65,7 +65,7 @@ MSXAudio: MACRO
 		add hl,bc
 		ld (hl),d
 		cp MSXAudio_FLAG_CONTROL
-		jr z,MaskFlagControl
+		ret z
 		cp MSXAudio_MISC_CONTROL
 		jr z,MaskMiscControl
 		jr c,WriteRegister
@@ -73,13 +73,6 @@ MSXAudio: MACRO
 		jr c,WriteStartAddress
 		cp MSXAudio_STOP_ADDRESS_H + 1
 		jr c,WriteStopAddress
-		jr WriteRegister
-	MaskFlagControl:
-		ld a,d
-		and 00000111B
-		or 01111000B
-		ld d,a
-		ld a,e
 		jr WriteRegister
 	MaskMiscControl:
 		ld a,d
