@@ -28,16 +28,9 @@ YM2608: MACRO
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC
-		push ix
 		ld ix,this
-		call System_ThrowException
+		jp Player_SkipDataBlock
 	process: equ $ - 2
-		pop ix
-		push ix
-		call Player_GetTimer
-		call Timer_Reset
-		pop ix
-		jp Player_ProcessNext
 		ENDP
 	ENDM
 
@@ -79,8 +72,6 @@ TryOPNOnSFGPSG:
 	add hl,de
 	ld (ix + YM2608.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2608.ProcessPort1Command.writeRegister + 1),h
-	ld (ix + YM2608.ProcessDataBlock.process),YM2608_SkipDataBlock
-	ld (ix + YM2608.ProcessDataBlock.process + 1),YM2608_SkipDataBlock >> 8
 	ret
 	ENDP
 
@@ -149,11 +140,6 @@ Finish:
 	call OPNA_WriteRegister2
 	ret
 	ENDP
-
-YM2608_SkipDataBlock:
-	call Reader_ReadDoubleWord_IY
-	call MappedReader_Skip_IY
-	ret
 
 ;
 	SECTION RAM

@@ -278,14 +278,21 @@ Player_DataBlock:
 	inc h
 	ld d,(hl)
 	ex de,hl
-	jp hl
+	push ix
+	call System_JumpHL
+	pop ix
+	push ix
+	call Player_GetTimer
+	call Timer_Reset
+	pop ix
+	jp Player_ProcessNext
 
 ; ix = this
 ; iy = reader
 Player_SkipDataBlock:
 	call Reader_ReadDoubleWord_IY
 	call MappedReader_Skip_IY
-	jp Player_ProcessNext
+	ret
 
 ; ix = this
 ; iy = reader

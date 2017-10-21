@@ -19,16 +19,9 @@ Y8950: MACRO
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC
-		push ix
 		ld ix,this
-		call System_ThrowException
+		jp Player_SkipDataBlock
 	process: equ $ - 2
-		pop ix
-		push ix
-		call Player_GetTimer
-		call Timer_Reset
-		pop ix
-		jp Player_ProcessNext
 		ENDP
 	ENDM
 
