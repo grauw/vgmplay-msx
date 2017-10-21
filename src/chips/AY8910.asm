@@ -10,21 +10,15 @@ AY8910: MACRO
 	; iy = reader
 	ProcessCommand: PROC
 		call Reader_ReadWord_IY
-	Continue:
+		bit 7,e
+		jr nz,DualChip
 		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
-		ENDP
-
-	; ix = player
-	; iy = reader
-	ProcessCommandDual: PROC
-		call Reader_ReadWord_IY
-		bit 7,e
-		jr z,ProcessCommand.Continue
+	DualChip:
 		res 7,e
 		call System_Return
-	writeRegister: equ $ - 2
+	writeRegisterDual: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	ENDM
@@ -87,26 +81,18 @@ DualChip:
 	call Chip_SetDriver2
 	ld hl,MFRPSG.SafeWriteRegister
 	add hl,de
-	ld (ix + AY8910.ProcessCommandDual.writeRegister),l
-	ld (ix + AY8910.ProcessCommandDual.writeRegister + 1),h
+	ld (ix + AY8910.ProcessCommand.writeRegisterDual),l
+	ld (ix + AY8910.ProcessCommand.writeRegisterDual + 1),h
 	ret
 	ENDP
 
 ; iy = player
 ; ix = this
-AY8910_Install: PROC
-	call Chip_IsDualChip
-	jr nz,DualChip
+AY8910_Install:
 	ld hl,AY8910.ProcessCommand
 	ld a,0A0H
 	call Player_InstallCommandHandler_IY_IXOffset
 	ret
-DualChip:
-	ld hl,AY8910.ProcessCommandDual
-	ld a,0A0H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
-	ENDP
 
 ;
 	SECTION RAM
