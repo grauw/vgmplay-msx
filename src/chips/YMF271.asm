@@ -8,10 +8,7 @@ YMF271: MACRO
 ; ix = this
 ; iy = header
 YMF271_Construct:
-	ld l,(iy + Header.ymf271Clock)
-	ld h,(iy + Header.ymf271Clock + 1)
-	ld e,(iy + Header.ymf271Clock + 2)
-	ld d,(iy + Header.ymf271Clock + 3)
+	ld de,Header.ymf271Clock
 	call Chip_Construct
 	ret
 

@@ -180,16 +180,10 @@ YM2612_Construct: PROC
 	ld bc,-102H
 	add hl,bc
 	jr nc,Pre1_02
-	ld l,(iy + Header.ym2612Clock)
-	ld h,(iy + Header.ym2612Clock + 1)
-	ld e,(iy + Header.ym2612Clock + 2)
-	ld d,(iy + Header.ym2612Clock + 3)
+	ld de,Header.ym2612Clock
 	jp Continue
 Pre1_02:
-	ld l,(iy + Header.ym2413Clock)
-	ld h,(iy + Header.ym2413Clock + 1)
-	ld e,(iy + Header.ym2413Clock + 2)
-	ld d,(iy + Header.ym2413Clock + 3)
+	ld de,Header.ym2413Clock
 Continue:
 	call Chip_Construct
 	call YM2612_IsYM3438

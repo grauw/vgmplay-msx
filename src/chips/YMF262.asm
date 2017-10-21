@@ -26,10 +26,7 @@ YMF262: MACRO
 ; ix = this
 ; iy = header
 YMF262_Construct:
-	ld l,(iy + Header.ymf262Clock)
-	ld h,(iy + Header.ymf262Clock + 1)
-	ld e,(iy + Header.ymf262Clock + 2)
-	ld d,(iy + Header.ymf262Clock + 3)
+	ld de,Header.ymf262Clock
 	call Chip_Construct
 	ret
 

@@ -17,10 +17,7 @@ YM3526: MACRO
 ; ix = this
 ; iy = header
 YM3526_Construct:
-	ld l,(iy + Header.ym3526Clock)
-	ld h,(iy + Header.ym3526Clock + 1)
-	ld e,(iy + Header.ym3526Clock + 2)
-	ld d,(iy + Header.ym3526Clock + 3)
+	ld de,Header.ym3526Clock
 	call Chip_Construct
 	ret
 

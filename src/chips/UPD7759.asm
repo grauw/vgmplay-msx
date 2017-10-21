@@ -8,14 +8,7 @@ UPD7759: MACRO
 ; ix = this
 ; iy = header
 UPD7759_Construct:
-	push iy
-	ld de,80H
-	add iy,de
-	ld l,(iy + Header.uPD7759Clock - 80H)
-	ld h,(iy + Header.uPD7759Clock - 80H + 1)
-	ld e,(iy + Header.uPD7759Clock - 80H + 2)
-	ld d,(iy + Header.uPD7759Clock - 80H + 3)
-	pop iy
+	ld de,Header.uPD7759Clock
 	call Chip_Construct
 	ret
 

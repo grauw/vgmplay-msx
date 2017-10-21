@@ -8,10 +8,7 @@ YMZ280B: MACRO
 ; ix = this
 ; iy = header
 YMZ280B_Construct:
-	ld l,(iy + Header.ymz280bClock)
-	ld h,(iy + Header.ymz280bClock + 1)
-	ld e,(iy + Header.ymz280bClock + 2)
-	ld d,(iy + Header.ymz280bClock + 3)
+	ld de,Header.ymz280bClock
 	call Chip_Construct
 	ret
 

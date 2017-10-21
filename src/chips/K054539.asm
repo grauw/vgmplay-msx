@@ -8,14 +8,7 @@ K054539: MACRO
 ; ix = this
 ; iy = header
 K054539_Construct:
-	push iy
-	ld de,80H
-	add iy,de
-	ld l,(iy + Header.k054539Clock - 80H)
-	ld h,(iy + Header.k054539Clock - 80H + 1)
-	ld e,(iy + Header.k054539Clock - 80H + 2)
-	ld d,(iy + Header.k054539Clock - 80H + 3)
-	pop iy
+	ld de,Header.k054539Clock
 	call Chip_Construct
 	ret
 

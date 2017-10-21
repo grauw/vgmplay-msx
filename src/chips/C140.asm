@@ -8,14 +8,7 @@ C140: MACRO
 ; ix = this
 ; iy = header
 C140_Construct:
-	push iy
-	ld de,80H
-	add iy,de
-	ld l,(iy + Header.c140Clock - 80H)
-	ld h,(iy + Header.c140Clock - 80H + 1)
-	ld e,(iy + Header.c140Clock - 80H + 2)
-	ld d,(iy + Header.c140Clock - 80H + 3)
-	pop iy
+	ld de,Header.c140Clock
 	call Chip_Construct
 	ret
 

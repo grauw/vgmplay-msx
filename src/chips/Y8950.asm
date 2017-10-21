@@ -35,10 +35,7 @@ Y8950: MACRO
 ; ix = this
 ; iy = header
 Y8950_Construct:
-	ld l,(iy + Header.y8950Clock)
-	ld h,(iy + Header.y8950Clock + 1)
-	ld e,(iy + Header.y8950Clock + 2)
-	ld d,(iy + Header.y8950Clock + 3)
+	ld de,Header.y8950Clock
 	call Chip_Construct
 	ret
 

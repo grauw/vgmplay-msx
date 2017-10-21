@@ -44,10 +44,7 @@ YM2608: MACRO
 ; ix = this
 ; iy = header
 YM2608_Construct:
-	ld l,(iy + Header.ym2608Clock)
-	ld h,(iy + Header.ym2608Clock + 1)
-	ld e,(iy + Header.ym2608Clock + 2)
-	ld d,(iy + Header.ym2608Clock + 3)
+	ld de,Header.ym2608Clock
 	call Chip_Construct
 	ret
 

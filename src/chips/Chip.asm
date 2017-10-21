@@ -16,9 +16,17 @@ Chip: MACRO ?name, ?connecter, ?installer
 		dw ?installer
 	ENDM
 
-; dehl = clock
+; de = header clock offset
 ; ix = this
+; iy = header
 Chip_Construct:
+	push iy
+	add iy,de
+	ld l,(iy)
+	ld h,(iy + 1)
+	ld e,(iy + 2)
+	ld d,(iy + 3)
+	pop iy
 	ld (ix + Chip.clock),l
 	ld (ix + Chip.clock + 1),h
 	ld (ix + Chip.clock + 2),e

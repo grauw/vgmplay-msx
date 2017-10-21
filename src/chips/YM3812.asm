@@ -17,10 +17,7 @@ YM3812: MACRO
 ; ix = this
 ; iy = header
 YM3812_Construct:
-	ld l,(iy + Header.ym3812Clock)
-	ld h,(iy + Header.ym3812Clock + 1)
-	ld e,(iy + Header.ym3812Clock + 2)
-	ld d,(iy + Header.ym3812Clock + 3)
+	ld de,Header.ym3812Clock
 	call Chip_Construct
 	ret
 

@@ -8,10 +8,7 @@ PWM: MACRO
 ; ix = this
 ; iy = header
 PWM_Construct:
-	ld l,(iy + Header.pwmClock)
-	ld h,(iy + Header.pwmClock + 1)
-	ld e,(iy + Header.pwmClock + 2)
-	ld d,(iy + Header.pwmClock + 3)
+	ld de,Header.pwmClock
 	call Chip_Construct
 	ret
 

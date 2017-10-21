@@ -26,10 +26,7 @@ YM2610: MACRO
 ; ix = this
 ; iy = header
 YM2610_Construct:
-	ld l,(iy + Header.ym2610BClock)
-	ld h,(iy + Header.ym2610BClock + 1)
-	ld e,(iy + Header.ym2610BClock + 2)
-	ld d,(iy + Header.ym2610BClock + 3)
+	ld de,Header.ym2610BClock
 	call Chip_Construct
 	call YM2610_IsYM2610B
 	ret z

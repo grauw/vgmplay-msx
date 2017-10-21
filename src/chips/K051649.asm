@@ -61,14 +61,7 @@ K051649: MACRO
 ; ix = this
 ; iy = header
 K051649_Construct:
-	push iy
-	ld de,80H
-	add iy,de
-	ld l,(iy + Header.k051649Clock - 80H)
-	ld h,(iy + Header.k051649Clock - 80H + 1)
-	ld e,(iy + Header.k051649Clock - 80H + 2)
-	ld d,(iy + Header.k051649Clock - 80H + 3)
-	pop iy
+	ld de,Header.k051649Clock
 	call Chip_Construct
 	call K051649_IsSCCPlus
 	ret z

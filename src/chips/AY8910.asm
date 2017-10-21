@@ -32,10 +32,7 @@ AY8910: MACRO
 ; ix = this
 ; iy = header
 AY8910_Construct:
-	ld l,(iy + Header.ay8910Clock)
-	ld h,(iy + Header.ay8910Clock + 1)
-	ld e,(iy + Header.ay8910Clock + 2)
-	ld d,(iy + Header.ay8910Clock + 3)
+	ld de,Header.ay8910Clock
 	call Chip_Construct
 	ld a,(iy + Header.ay8910ChipType)
 	ld (ix + AY8910.chipType),a

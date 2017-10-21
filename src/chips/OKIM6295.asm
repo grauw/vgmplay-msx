@@ -8,14 +8,7 @@ OKIM6295: MACRO
 ; ix = this
 ; iy = header
 OKIM6295_Construct:
-	push iy
-	ld de,80H
-	add iy,de
-	ld l,(iy + Header.okiM6295Clock - 80H)
-	ld h,(iy + Header.okiM6295Clock - 80H + 1)
-	ld e,(iy + Header.okiM6295Clock - 80H + 2)
-	ld d,(iy + Header.okiM6295Clock - 80H + 3)
-	pop iy
+	ld de,Header.okiM6295Clock
 	call Chip_Construct
 	ret
 

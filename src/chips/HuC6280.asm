@@ -8,14 +8,7 @@ HuC6280: MACRO
 ; ix = this
 ; iy = header
 HuC6280_Construct:
-	push iy
-	ld de,80H
-	add iy,de
-	ld l,(iy + Header.huC6280Clock - 80H)
-	ld h,(iy + Header.huC6280Clock - 80H + 1)
-	ld e,(iy + Header.huC6280Clock - 80H + 2)
-	ld d,(iy + Header.huC6280Clock - 80H + 3)
-	pop iy
+	ld de,Header.huC6280Clock
 	call Chip_Construct
 	ret
 

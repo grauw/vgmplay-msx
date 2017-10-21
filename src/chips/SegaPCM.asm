@@ -8,10 +8,7 @@ SegaPCM: MACRO
 ; ix = this
 ; iy = header
 SegaPCM_Construct:
-	ld l,(iy + Header.segaPCMClock)
-	ld h,(iy + Header.segaPCMClock + 1)
-	ld e,(iy + Header.segaPCMClock + 2)
-	ld d,(iy + Header.segaPCMClock + 3)
+	ld de,Header.segaPCMClock
 	call Chip_Construct
 	ret
 

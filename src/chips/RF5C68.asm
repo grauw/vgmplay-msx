@@ -8,10 +8,7 @@ RF5C68: MACRO
 ; ix = this
 ; iy = header
 RF5C68_Construct:
-	ld l,(iy + Header.rf5c68Clock)
-	ld h,(iy + Header.rf5c68Clock + 1)
-	ld e,(iy + Header.rf5c68Clock + 2)
-	ld d,(iy + Header.rf5c68Clock + 3)
+	ld de,Header.rf5c68Clock
 	call Chip_Construct
 	ret
 

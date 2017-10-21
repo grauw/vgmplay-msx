@@ -92,10 +92,7 @@ YMF278B: MACRO
 ; ix = this
 ; iy = header
 YMF278B_Construct:
-	ld l,(iy + Header.ymf278bClock)
-	ld h,(iy + Header.ymf278bClock + 1)
-	ld e,(iy + Header.ymf278bClock + 2)
-	ld d,(iy + Header.ymf278bClock + 3)
+	ld de,Header.ymf278bClock
 	call Chip_Construct
 	ret
 

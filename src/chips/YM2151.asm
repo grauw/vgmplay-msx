@@ -22,16 +22,10 @@ YM2151_Construct: PROC
 	ld bc,-102H
 	add hl,bc
 	jr nc,Pre1_02
-	ld l,(iy + Header.ym2151Clock)
-	ld h,(iy + Header.ym2151Clock + 1)
-	ld e,(iy + Header.ym2151Clock + 2)
-	ld d,(iy + Header.ym2151Clock + 3)
+	ld de,Header.ym2151Clock
 	jp Continue
 Pre1_02:
-	ld l,(iy + Header.ym2413Clock)
-	ld h,(iy + Header.ym2413Clock + 1)
-	ld e,(iy + Header.ym2413Clock + 2)
-	ld d,(iy + Header.ym2413Clock + 3)
+	ld de,Header.ym2413Clock
 Continue:
 	call Chip_Construct
 	ret
