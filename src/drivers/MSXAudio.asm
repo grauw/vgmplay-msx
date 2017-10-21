@@ -153,6 +153,10 @@ MSXAudio: MACRO
 		ei
 		ret
 		ENDP
+
+	ProcessDataBlock:
+		ld ix,this
+		jp MSXAudio_ProcessDataBlock
 	ENDM
 
 ; ix = this
@@ -217,6 +221,54 @@ MSXAudio_Reset:
 	ld de,0060H
 	call MSXAudio_FillRegisters
 	ret
+
+; ix = this
+; iy = reader
+MSXAudio_ProcessDataBlock: PROC
+	call Reader_ReadDoubleWord_IY  ; block size
+	push de
+	push hl
+	call Reader_ReadDoubleWord_IY  ; total rom size
+	call Reader_ReadDoubleWord_IY  ; start address
+	call MSXAudio_SetADPCMWriteAddress
+	pop hl
+	pop de
+	ld bc,8  ; subtract header from block size
+Loop:
+	and a
+	sbc hl,bc
+	ld bc,0
+	ex de,hl
+	sbc hl,bc
+	ex de,hl
+	call c,System_ThrowException
+	ld a,h
+	or l
+	or e
+	or d
+	jr z,Finish
+	push de
+	push hl
+	ld a,d
+	or e
+	jr z,LessThan64K
+	ld hl,0FFFFH
+LessThan64K:
+	ld c,l
+	ld b,h
+	call Reader_ReadBlockDirect_IY
+	push bc
+	call MSXAudio_WriteADPCMData
+	pop bc
+	pop hl
+	pop de
+	jp Loop
+Finish:
+	ld d,01H
+	ld e,MSXAudio_ADPCM_CONTROL
+	call MSXAudio_WriteRegister
+	ret
+	ENDP
 
 ; ehl = write address
 ; ix = this

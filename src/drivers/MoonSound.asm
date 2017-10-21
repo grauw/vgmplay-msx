@@ -19,6 +19,10 @@ MoonSound_FREQUENCY: equ 33868800
 MoonSound: MACRO
 	this:
 	super: Driver
+	waveNumberMap:
+		dw 0
+	waveNumberMSB:
+		ds 24
 
 	; e = register
 	; d = value
@@ -55,6 +59,8 @@ MoonSound: MACRO
 	; e = register
 	; d = value
 	SafeWriteRegisterWave:
+		call System_Return
+	mapWaveNumber: equ $ - 2
 		ld a,e
 		cp 8H
 		ret c
@@ -99,6 +105,43 @@ MoonSound: MACRO
 		ld d,00010000B
 		ld a,MoonSound_WAVE_MEMORY_CONTROL
 		call WriteRegisterWave
+		ret
+		ENDP
+
+	ProcessROMDataBlock:
+		ld ix,this
+		jp MoonSound_ProcessROMDataBlock
+
+	; e = register
+	; d = value
+	MapWaveNumber: PROC
+		ld a,e
+		cp 38H
+		ret nc
+		cp 20H
+		jr c,LSB
+	MSB:
+		ld c,a
+		ld b,0
+		ld hl,waveNumberMSB - 20H
+		add hl,bc
+		ld (hl),d
+		set 0,d
+		ret
+	LSB:
+		cp 8H
+		ret c
+		ld c,a
+		ld b,0
+		ld hl,waveNumberMSB - 8H
+		add hl,bc
+		ld a,(hl)
+		and 1
+		ld c,d
+		ld b,a
+		ld hl,(waveNumberMap)
+		add hl,bc
+		ld d,(hl)
 		ret
 		ENDP
 	ENDM
@@ -168,6 +211,145 @@ MoonSound_SafeWriteRegisterWave:
 MoonSound_ReadRegisterWave:
 	ld bc,MoonSound.ReadRegisterWave
 	jp Utils_JumpIXOffsetBC
+
+; ix = this
+; iy = reader
+MoonSound_ProcessROMDataBlock:
+	call Reader_ReadDoubleWord_IY  ; block size
+	ld a,d
+	and a
+	call nz,System_ThrowException
+	exx
+	call Reader_ReadDoubleWord_IY  ; total rom size
+	call Reader_ReadDoubleWord_IY  ; start address
+	ld a,d
+	and a
+	call nz,System_ThrowException
+	set 5,e
+	exx
+	ld bc,8  ; subtract header from block size
+	call MoonSound_SubEHL_BC
+	call c,System_ThrowException
+	ret z
+	exx
+	call MoonSound_LoadSampleFromReader
+	ret
+
+; ehl = sample start address
+; ehl' = sample size
+; ix = this
+; iy = reader
+MoonSound_LoadSampleFromReader: PROC
+	push de
+	push hl
+	ld d,00000011B
+	ld e,MoonSound_FM2_NEW
+	call MoonSound_WriteRegister2
+	pop hl
+	pop de
+	call MoonSound_SetMemoryAddress
+	exx
+Loop:
+	push de
+	push hl
+	ld a,d
+	or e
+	jr z,LessThan64K
+	ld hl,0FFFFH
+LessThan64K:
+	ld c,l
+	ld b,h
+	call Reader_ReadBlockDirect_IY
+	push bc
+	call MoonSound_WriteMemory
+	pop bc
+	pop hl
+	pop de
+	call MoonSound_SubEHL_BC
+	call c,System_ThrowException
+	jr nz,Loop
+	call MoonSound_FixUpWaveHeaders
+	ret
+	ENDP
+
+; ehl = minuend
+; bc = subtrahend
+; f <- c: carry (negative result), z: zero
+MoonSound_SubEHL_BC: PROC
+	and a
+	sbc hl,bc
+	jr c,Carry
+	ret nz
+	ld a,e
+	and a
+	ret
+Carry:
+	ld a,e
+	sbc a,0
+	ld e,a
+	ret nz
+	ld a,l
+	or h
+	ret
+	ENDP
+
+; ix = this
+MoonSound_FixUpWaveHeaders: PROC
+	ld b,128
+	ld de,0020H
+	ld hl,0000H
+Loop:
+	push bc
+	call MoonSound_ReadMemoryByte
+	or 20H
+	call MoonSound_WriteMemoryByte
+	ld bc,000CH
+	add hl,bc
+	pop bc
+	djnz Loop
+	call MoonSound_EnableWaveNumberMapping
+	ret
+	ENDP
+
+; ix = this
+MoonSound_EnableWaveNumberMapping:
+	call MoonSound_InitialiseWaveNumberMap
+	ld e,ixl
+	ld d,ixh
+	ld hl,MoonSound.MapWaveNumber
+	add hl,de
+	ld (ix + MoonSound.mapWaveNumber),l
+	ld (ix + MoonSound.mapWaveNumber + 1),h
+	ret
+
+; ix = this
+MoonSound_InitialiseWaveNumberMap: PROC
+	ld e,(ix + MoonSound.waveNumberMap)
+	ld d,(ix + MoonSound.waveNumberMap + 1)
+	ld a,e
+	or d
+	call z,Allocate
+	ld bc,2 | 00 << 8  ; 512
+	ld a,0
+Loop:
+	or 80H
+	ld (de),a
+	inc a
+	inc de
+	djnz Loop
+	dec c
+	jr nz,Loop
+	ret
+Allocate:
+	push ix
+	ld bc,512
+	ld ix,Heap_main
+	call Heap_Allocate
+	pop ix
+	ld (ix + MoonSound.waveNumberMap),e
+	ld (ix + MoonSound.waveNumberMap + 1),d
+	ret
+	ENDP
 
 ; bc = count
 ; hl = source
