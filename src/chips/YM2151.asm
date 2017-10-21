@@ -16,20 +16,10 @@ YM2151: MACRO
 
 ; ix = this
 ; iy = header
-YM2151_Construct: PROC
-	ld l,(iy + Header.version)
-	ld h,(iy + Header.version + 1)
-	ld bc,-102H
-	add hl,bc
-	jr nc,Pre1_02
+YM2151_Construct:
 	ld de,Header.ym2151Clock
-	jp Continue
-Pre1_02:
-	ld de,Header.ym2413Clock
-Continue:
 	call Chip_Construct
 	ret
-	ENDP
 
 ; iy = drivers
 ; ix = this

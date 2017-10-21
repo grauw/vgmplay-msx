@@ -135,6 +135,7 @@ Header_Construct:
 	ld hl,Header_noVGMFileError
 	jp nz,System_TerminateWithError
 	call Header_ClearPastDataOffset
+	call Header_FixPre102Clocks
 	ret
 
 ; ix = this
@@ -158,6 +159,27 @@ Header_ClearPastDataOffset:
 	ld d,h
 	inc de
 	ldir
+	ret
+
+; ix = this
+Header_FixPre102Clocks:
+	ld l,(ix + Header.version)
+	ld h,(ix + Header.version + 1)
+	ld bc,-102H
+	add hl,bc
+	ret c
+	ld l,(ix + Header.ym2413Clock)
+	ld h,(ix + Header.ym2413Clock + 1)
+	ld e,(ix + Header.ym2413Clock + 2)
+	ld d,(ix + Header.ym2413Clock + 3)
+	ld (ix + Header.ym2151Clock),l
+	ld (ix + Header.ym2151Clock + 1),h
+	ld (ix + Header.ym2151Clock + 2),e
+	ld (ix + Header.ym2151Clock + 3),d
+	ld (ix + Header.ym2612Clock),l
+	ld (ix + Header.ym2612Clock + 1),h
+	ld (ix + Header.ym2612Clock + 2),e
+	ld (ix + Header.ym2612Clock + 3),d
 	ret
 
 ; ix = this

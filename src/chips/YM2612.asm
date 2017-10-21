@@ -174,24 +174,14 @@ YM2612: MACRO
 
 ; ix = this
 ; iy = header
-YM2612_Construct: PROC
-	ld l,(iy + Header.version)
-	ld h,(iy + Header.version + 1)
-	ld bc,-102H
-	add hl,bc
-	jr nc,Pre1_02
+YM2612_Construct:
 	ld de,Header.ym2612Clock
-	jp Continue
-Pre1_02:
-	ld de,Header.ym2413Clock
-Continue:
 	call Chip_Construct
 	call YM2612_IsYM3438
 	ret z
 	ld hl,YM2612_ym3438Name
 	call Chip_SetName
 	ret
-	ENDP
 
 ; ix = this
 ; f <- nz: YM3438
