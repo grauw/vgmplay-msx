@@ -84,9 +84,6 @@ DualChipTryFranky:
 ; iy = player
 ; ix = this
 SN76489_Install:
-	ld a,(ix + SN76489.ProcessCommand.writeRegister)
-	or (ix + SN76489.ProcessCommand.writeRegister + 1)
-	ret z
 	ld hl,SN76489.ProcessCommand
 	ld a,50H
 	call Player_InstallCommandHandler_IY_IXOffset

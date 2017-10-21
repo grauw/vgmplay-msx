@@ -132,9 +132,6 @@ YMF278B_GetMoonSound:
 ; iy = player
 ; ix = this
 YMF278B_Install:
-	ld a,(ix + YMF278B.ProcessCommand.FM1.writeRegister)
-	or (ix + YMF278B.ProcessCommand.FM1.writeRegister + 1)
-	ret z
 	ld hl,YMF278B.ProcessCommand
 	ld a,0D0H
 	call Player_InstallCommandHandler_IY_IXOffset

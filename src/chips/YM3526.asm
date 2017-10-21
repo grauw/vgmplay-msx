@@ -46,9 +46,6 @@ TryMoonSound:
 ; iy = player
 ; ix = this
 YM3526_Install:
-	ld a,(ix + YM3526.ProcessCommand.writeRegister)
-	or (ix + YM3526.ProcessCommand.writeRegister + 1)
-	ret z
 	ld hl,YM3526.ProcessCommand
 	ld a,5BH
 	call Player_InstallCommandHandler_IY_IXOffset

@@ -226,9 +226,6 @@ TryOPN2OnSFGTurboRPCM:
 ; iy = player
 ; ix = this
 YM2612_Install:
-	ld a,(ix + YM2612.ProcessPort0Command.writeRegister)
-	or (ix + YM2612.ProcessPort0Command.writeRegister + 1)
-	ret z
 	ld hl,YM2612.ProcessPort0Command
 	ld a,52H
 	call Player_InstallCommandHandler_IY_IXOffset

@@ -87,9 +87,6 @@ TryOPNOnSFGPSG:
 ; iy = player
 ; ix = this
 YM2608_Install:
-	ld a,(ix + YM2608.ProcessPort0Command.writeRegister)
-	or (ix + YM2608.ProcessPort0Command.writeRegister + 1)
-	ret z
 	ld hl,YM2608.ProcessPort0Command
 	ld a,56H
 	call Player_InstallCommandHandler_IY_IXOffset

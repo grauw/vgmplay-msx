@@ -98,6 +98,9 @@ Chip_Connect:
 ; iy = player
 ; ix = this
 Chip_Install:
+	ld a,(ix + Chip.driver)
+	or (ix + Chip.driver + 1)
+	ret z
 	ld l,(ix + Chip.installer)
 	ld h,(ix + Chip.installer + 1)
 	jp hl

@@ -58,9 +58,6 @@ Y8950_Connect:
 ; iy = player
 ; ix = this
 Y8950_Install:
-	ld a,(ix + Y8950.ProcessCommand.writeRegister)
-	or (ix + Y8950.ProcessCommand.writeRegister + 1)
-	ret z
 	ld hl,Y8950.ProcessCommand
 	ld a,5CH
 	call Player_InstallCommandHandler_IY_IXOffset

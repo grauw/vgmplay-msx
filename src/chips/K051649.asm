@@ -140,9 +140,6 @@ SCC:
 ; iy = player
 ; ix = this
 K051649_Install:
-	ld a,(ix + K051649.ProcessCommand.Waveform.writeRegister)
-	or (ix + K051649.ProcessCommand.Waveform.writeRegister + 1)
-	ret z
 	ld hl,K051649.ProcessCommand
 	ld a,0D2H
 	call Player_InstallCommandHandler_IY_IXOffset

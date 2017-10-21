@@ -95,9 +95,6 @@ DualChip:
 ; iy = player
 ; ix = this
 AY8910_Install: PROC
-	ld a,(ix + AY8910.ProcessCommand.writeRegister)
-	or (ix + AY8910.ProcessCommand.writeRegister + 1)
-	ret z
 	call Chip_IsDualChip
 	jr nz,DualChip
 	ld hl,AY8910.ProcessCommand

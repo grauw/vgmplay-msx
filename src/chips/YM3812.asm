@@ -36,9 +36,6 @@ YM3812_Connect:
 ; iy = player
 ; ix = this
 YM3812_Install:
-	ld a,(ix + YM3812.ProcessCommand.writeRegister)
-	or (ix + YM3812.ProcessCommand.writeRegister + 1)
-	ret z
 	ld hl,YM3812.ProcessCommand
 	ld a,5AH
 	call Player_InstallCommandHandler_IY_IXOffset

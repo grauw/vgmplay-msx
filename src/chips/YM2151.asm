@@ -36,9 +36,6 @@ YM2151_Connect:
 ; iy = player
 ; ix = this
 YM2151_Install:
-	ld a,(ix + YM2151.ProcessCommand.writeRegister)
-	or (ix + YM2151.ProcessCommand.writeRegister + 1)
-	ret z
 	ld hl,YM2151.ProcessCommand
 	ld a,54H
 	call Player_InstallCommandHandler_IY_IXOffset

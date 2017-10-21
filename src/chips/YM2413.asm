@@ -36,9 +36,6 @@ YM2413_Connect:
 ; iy = player
 ; ix = this
 YM2413_Install:
-	ld a,(ix + YM2413.ProcessCommand.writeRegister)
-	or (ix + YM2413.ProcessCommand.writeRegister + 1)
-	ret z
 	ld hl,YM2413.ProcessCommand
 	ld a,51H
 	call Player_InstallCommandHandler_IY_IXOffset

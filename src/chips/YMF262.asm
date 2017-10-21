@@ -49,9 +49,6 @@ YMF262_Connect:
 ; iy = player
 ; ix = this
 YMF262_Install:
-	ld a,(ix + YMF262.ProcessPort0Command.writeRegister)
-	or (ix + YMF262.ProcessPort0Command.writeRegister + 1)
-	ret z
 	ld hl,YMF262.ProcessPort0Command
 	ld a,5EH
 	call Player_InstallCommandHandler_IY_IXOffset
