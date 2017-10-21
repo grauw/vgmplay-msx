@@ -21,37 +21,37 @@ K051649: MACRO
 		jp Player_ProcessNext
 	Waveform: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Frequency: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Amplitude: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Mixer: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	WaveformSCCPlus: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	Deformation: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP

@@ -8,7 +8,7 @@ YMF262: MACRO
 	; iy = reader
 	ProcessPort0Command: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
@@ -17,7 +17,7 @@ YMF262: MACRO
 	; iy = reader
 	ProcessPort1Command: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP

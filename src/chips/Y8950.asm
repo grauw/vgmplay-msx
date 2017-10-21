@@ -11,7 +11,7 @@ Y8950: MACRO
 	; iy = reader
 	ProcessCommand: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
@@ -21,7 +21,7 @@ Y8950: MACRO
 	ProcessDataBlock: PROC
 		push ix
 		ld ix,this
-		call 0
+		call System_ThrowException
 	process: equ $ - 2
 		pop ix
 		push ix

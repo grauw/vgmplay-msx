@@ -20,13 +20,13 @@ YMF278B: MACRO
 		jp p,Wave
 	FM1: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
 	FM2: PROC
 		call Reader_ReadWord_IY
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
@@ -34,7 +34,7 @@ YMF278B: MACRO
 		call Reader_ReadWord_IY
 		call System_Return
 	mapWaveNumber: equ $ - 2
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
@@ -45,7 +45,7 @@ YMF278B: MACRO
 	ProcessROMDataBlock: PROC
 		push ix
 		ld ix,this
-		call 0
+		call System_ThrowException
 	process: equ $ - 2
 		pop ix
 		push ix

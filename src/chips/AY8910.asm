@@ -11,7 +11,7 @@ AY8910: MACRO
 	ProcessCommand: PROC
 		call Reader_ReadWord_IY
 	Continue:
-		call 0
+		call System_Return
 	writeRegister: equ $ - 2
 		jp Player_ProcessNext
 		ENDP
