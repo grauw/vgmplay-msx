@@ -4,7 +4,7 @@
 YM2612_PCM_REGISTER: equ 2AH
 
 YM2612: MACRO
-	super: Chip YM2612_name, YM2612_Connect, YM2612_Install
+	super: Chip YM2612_ym2612Name, YM2612_Connect, YM2612_Install
 	pcmDataStart:
 		dd 0
 	pcmDataPosition:
@@ -192,8 +192,18 @@ Pre1_02:
 	ld d,(iy + Header.ym2413Clock + 3)
 Continue:
 	call Chip_Construct
+	call YM2612_IsYM3438
+	ret z
+	ld hl,YM2612_ym3438Name
+	call Chip_SetName
 	ret
 	ENDP
+
+; ix = this
+; f <- nz: YM3438
+YM2612_IsYM3438:
+	bit 7,(ix + YM2612.super.clock + 3)
+	ret
 
 ; iy = drivers
 ; ix = this
@@ -311,5 +321,8 @@ YM2612_pcmBuffer: ds 100H
 
 	ENDS
 
-YM2612_name:
+YM2612_ym2612Name:
 	db "YM2612 (OPN2)",0
+
+YM2612_ym3438Name:
+	db "YM3438 (OPN2C)",0
