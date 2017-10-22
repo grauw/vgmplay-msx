@@ -10,7 +10,7 @@ PlaySoniq_SN76489_DATA_DEFAULT: equ 49H
 PlaySoniq_FREQUENCY: equ 3579545
 
 PlaySoniq: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	originalSN76489Port:
 		db 0
 

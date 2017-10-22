@@ -8,7 +8,7 @@ MSXMusic_ENABLE_ADDRESS: equ 7FF6H
 MSXMusic_FREQUENCY: equ 3579545
 
 MSXMusic: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	slot:
 		db 0
 	internal:

@@ -4,7 +4,11 @@
 OPN2OnSFGTurboRPCM_FREQUENCY: equ 7670453
 
 OPN2OnSFGTurboRPCM: MACRO
-	super: Driver
+	super: Driver OPN2OnSFGTurboRPCM_PrintInfoImpl
+	opnFMOnSFGDriver:
+		dw 0
+	turboRPCMDriver:
+		dw 0
 
 	; e = register
 	; d = value
@@ -38,6 +42,10 @@ OPN2OnSFGTurboRPCM_Construct:
 	call Driver_Construct
 	pop de
 	pop bc
+	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),c
+	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),b
+	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e
+	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister),l
@@ -60,6 +68,24 @@ OPN2OnSFGTurboRPCM_Construct:
 
 ; ix = this
 OPN2OnSFGTurboRPCM_Destruct:
+	ret
+
+; ix = this
+OPN2OnSFGTurboRPCM_PrintInfoImpl:
+	push ix
+	ld e,(ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver)
+	ld d,(ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1)
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
+	push ix
+	ld e,(ix + OPN2OnSFGTurboRPCM.turboRPCMDriver)
+	ld d,(ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1)
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
 	ret
 
 ;

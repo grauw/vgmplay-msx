@@ -5,7 +5,7 @@ Franky_DATA: equ 049H
 Franky_FREQUENCY: equ 3579545
 
 Franky: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 
 	; a = value
 	SafeWriteRegister:

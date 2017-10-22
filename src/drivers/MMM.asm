@@ -11,7 +11,7 @@ MMM_PAGE3: equ 0FFH
 MMM_FREQUENCY: equ 3579545
 
 MMM: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	slot:
 		db 0
 

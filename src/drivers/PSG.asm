@@ -6,7 +6,7 @@ PSG_DATA: equ 0A1H
 PSG_FREQUENCY: equ 1789773
 
 PSG: MACRO ?address, ?data
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 
 	; e = register
 	; d = value

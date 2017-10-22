@@ -5,7 +5,11 @@ OPNOnSFGPSG_PCM_REGISTER: equ 2AH
 OPNOnSFGPSG_FREQUENCY: equ 3579545
 
 OPNOnSFGPSG: MACRO
-	super: Driver
+	super: Driver OPNOnSFGPSG_PrintInfoImpl
+	opnFMOnSFGDriver:
+		dw 0
+	psgDriver:
+		dw 0
 	frequencies:
 		ds 7
 	alignedFrequencies: equ (frequencies + 3) & 0FFFCH
@@ -48,6 +52,10 @@ OPNOnSFGPSG_Construct:
 	call Driver_Construct
 	pop de
 	pop bc
+	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),c
+	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),b
+	ld (ix + OPNOnSFGPSG.psgDriver),e
+	ld (ix + OPNOnSFGPSG.psgDriver + 1),d
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister),l
@@ -64,6 +72,24 @@ OPNOnSFGPSG_Construct:
 
 ; ix = this
 OPNOnSFGPSG_Destruct:
+	ret
+
+; ix = this
+OPNOnSFGPSG_PrintInfoImpl:
+	push ix
+	ld e,(ix + OPNOnSFGPSG.opnFMOnSFGDriver)
+	ld d,(ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1)
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
+	push ix
+	ld e,(ix + OPNOnSFGPSG.psgDriver)
+	ld d,(ix + OPNOnSFGPSG.psgDriver + 1)
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
 	ret
 
 ;

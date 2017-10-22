@@ -10,7 +10,7 @@ SFG_ID_ADDRESS: equ 80H
 SFG_FREQUENCY: equ 3579545
 
 SFG: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	slot:
 		db 0
 

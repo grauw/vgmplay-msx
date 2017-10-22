@@ -14,7 +14,7 @@ SCC_BANK_DEFAULT: equ 02H
 SCC_FREQUENCY_: equ 1789773
 
 SCC: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	slot:
 		db 0
 

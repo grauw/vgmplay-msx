@@ -32,7 +32,7 @@ OPNA_ADPCM_END: equ 11H
 
 OPNA: MACRO
 	this:
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	safeControlMirror:
 		ds OPNA_ADPCM_END
 

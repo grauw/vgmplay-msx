@@ -16,7 +16,7 @@ SCCPlus_MODE_SCCPLUS: equ 20H
 SCCPlus_FREQUENCY_: equ 1789773
 
 SCCPlus: MACRO
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	slot:
 		db 0
 

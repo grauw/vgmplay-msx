@@ -6,7 +6,9 @@
 OPNFMOnSFG_FREQUENCY: equ 3579545
 
 OPNFMOnSFG: MACRO
-	super: Driver
+	super: Driver OPNFMOnSFG_PrintInfoImpl
+	sfgDriver:
+		dw 0
 	frequencyMSBs:
 		ds 8
 	rlFBConnects:
@@ -275,6 +277,8 @@ OPNFMOnSFG_Construct:
 	ld hl,OPNFMOnSFG_FREQUENCY
 	call Driver_Construct
 	pop de
+	ld (ix + OPNFMOnSFG.sfgDriver),e
+	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
 	ld hl,SFG.WriteRegister
 	add hl,de
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister),l
@@ -421,6 +425,17 @@ Overflow:
 	ld bc,7EFCH
 	ret
 	ENDP
+
+; ix = this
+OPNFMOnSFG_PrintInfoImpl:
+	push ix
+	ld e,(ix + OPNFMOnSFG.sfgDriver)
+	ld d,(ix + OPNFMOnSFG.sfgDriver + 1)
+	ld ixl,e
+	ld ixh,d
+	call Driver_PrintInfo
+	pop ix
+	ret
 
 ;
 OPNFMOnSFG_name:

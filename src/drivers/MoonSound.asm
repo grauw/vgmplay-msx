@@ -18,7 +18,7 @@ MoonSound_FREQUENCY: equ 33868800
 
 MoonSound: MACRO
 	this:
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	waveNumberMap:
 		dw 0
 	waveNumberMSB:

@@ -37,7 +37,7 @@ MSXAudio_FM_BASE: equ 20H
 
 MSXAudio: MACRO
 	this:
-	super: Driver
+	super: Driver Driver_PrintInfoImpl
 	safeControlMirror:
 		ds MSXAudio_FM_BASE
 
