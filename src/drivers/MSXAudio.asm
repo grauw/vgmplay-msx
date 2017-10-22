@@ -316,7 +316,28 @@ MSXAudio_WriteADPCMData:
 ; f <- c: found
 MSXAudio_Detect:
 	in a,(MSXAudio_STATUS_PORT)
-	sub 06H
+	and 11111001B
+	ret nz
+	push ix
+	ld ix,MSXAudio_instance
+	di
+	ld de,10000000B << 8 | MSXAudio_FLAG_CONTROL
+	call MSXAudio_WriteRegister
+	ld de,0FFH << 8 | MSXAudio_TIMER_1
+	call MSXAudio_WriteRegister
+	ld de,00111001B << 8 | MSXAudio_FLAG_CONTROL
+	call MSXAudio_WriteRegister
+	ld b,0  ; wait >80 µs
+	djnz $
+	in a,(MSXAudio_STATUS_PORT)
+	and 11111001B
+	push af
+	ld de,01111000B << 8 | MSXAudio_FLAG_CONTROL
+	call MSXAudio_WriteRegister
+	ei
+	pop af
+	pop ix
+	sub 11000000B
 	and a
 	ret nz
 	scf
