@@ -217,6 +217,8 @@ OPNA: MACRO
 		ret
 		ENDP
 
+	; ix = player
+	; iy = reader
 	ProcessDataBlock:
 		ld ix,this
 		jp OPNA_ProcessDataBlock
