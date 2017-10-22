@@ -2,7 +2,7 @@
 ; VGM GameBoyDMG chip
 ;
 GameBoyDMG: MACRO
-	super: Chip GameBoyDMG_name, System_Return, System_Return
+	super: Chip GameBoyDMG_name, System_Return
 	ENDM
 
 ; ix = this

@@ -3,7 +3,7 @@
 ;
 Y8950: MACRO
 	this:
-	super: Chip Y8950_name, Y8950_Connect, Y8950_Install
+	super: Chip Y8950_name, Y8950_Connect
 
 	; ix = player
 	; iy = reader
@@ -43,17 +43,6 @@ Y8950_Connect:
 	add hl,de
 	ld (ix + Y8950.ProcessDataBlock.process),l
 	ld (ix + Y8950.ProcessDataBlock.process + 1),h
-	ret
-
-; iy = player
-; ix = this
-Y8950_Install:
-	ld hl,Y8950.ProcessCommand
-	ld a,5CH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,Y8950.ProcessDataBlock
-	ld a,88H
-	call Player_InstallDataBlockHandler_IY_IXOffset
 	ret
 
 ;

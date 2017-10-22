@@ -2,7 +2,7 @@
 ; VGM YM2151 chip
 ;
 YM2151: MACRO
-	super: Chip YM2151_name, YM2151_Connect, YM2151_Install
+	super: Chip YM2151_name, YM2151_Connect
 
 	; ix = player
 	; iy = reader
@@ -31,14 +31,6 @@ YM2151_Connect:
 	add hl,de
 	ld (ix + YM2151.ProcessCommand.writeRegister),l
 	ld (ix + YM2151.ProcessCommand.writeRegister + 1),h
-	ret
-
-; iy = player
-; ix = this
-YM2151_Install:
-	ld hl,YM2151.ProcessCommand
-	ld a,54H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;

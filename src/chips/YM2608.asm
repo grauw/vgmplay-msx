@@ -3,7 +3,7 @@
 ;
 YM2608: MACRO
 	this:
-	super: Chip YM2608_name, YM2608_Connect, YM2608_Install
+	super: Chip YM2608_name, YM2608_Connect
 
 	; ix = player
 	; iy = reader
@@ -71,20 +71,6 @@ TryOPNOnSFGPSG:
 	ld (ix + YM2608.ProcessPort1Command.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-YM2608_Install:
-	ld hl,YM2608.ProcessPort0Command
-	ld a,56H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2608.ProcessPort1Command
-	ld a,57H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2608.ProcessDataBlock
-	ld a,81H
-	call Player_InstallDataBlockHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

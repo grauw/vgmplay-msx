@@ -2,7 +2,7 @@
 ; VGM K053260 chip
 ;
 K053260: MACRO
-	super: Chip K053260_name, System_Return, System_Return
+	super: Chip K053260_name, System_Return
 	ENDM
 
 ; ix = this

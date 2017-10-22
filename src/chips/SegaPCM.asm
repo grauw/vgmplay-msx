@@ -2,7 +2,7 @@
 ; VGM SegaPCM chip
 ;
 SegaPCM: MACRO
-	super: Chip SegaPCM_name, System_Return, System_Return
+	super: Chip SegaPCM_name, System_Return
 	ENDM
 
 ; ix = this

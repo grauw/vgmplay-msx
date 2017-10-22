@@ -144,10 +144,3 @@ Chips_Connect:
 	ld hl,Chip_Connect
 	call Chips_ForEachActiveChip
 	ret
-
-; iy = player
-; ix = this
-Chips_Install:
-	ld hl,Chip_Install
-	call Chips_ForEachActiveChip
-	ret

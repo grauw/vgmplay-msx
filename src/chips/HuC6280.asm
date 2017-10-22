@@ -2,7 +2,7 @@
 ; VGM HuC6280 chip
 ;
 HuC6280: MACRO
-	super: Chip HuC6280_name, System_Return, System_Return
+	super: Chip HuC6280_name, System_Return
 	ENDM
 
 ; ix = this

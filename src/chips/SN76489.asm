@@ -2,7 +2,7 @@
 ; VGM SN76489 chip
 ;
 SN76489: MACRO
-	super: Chip SN76489_name, SN76489_Connect, SN76489_Install
+	super: Chip SN76489_name, SN76489_Connect
 
 	; ix = player
 	; iy = reader
@@ -80,19 +80,6 @@ DualChipTryFranky:
 	ld (ix + SN76489.ProcessCommandDual.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-SN76489_Install:
-	ld hl,SN76489.ProcessCommand
-	ld a,50H
-	call Player_InstallCommandHandler_IY_IXOffset
-	call Chip_IsDualChip
-	ret z
-	ld hl,SN76489.ProcessCommandDual
-	ld a,30H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

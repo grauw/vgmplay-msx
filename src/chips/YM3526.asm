@@ -2,7 +2,7 @@
 ; VGM YM3526 chip
 ;
 YM3526: MACRO
-	super: Chip YM3526_name, YM3526_Connect, YM3526_Install
+	super: Chip YM3526_name, YM3526_Connect
 
 	; ix = player
 	; iy = reader
@@ -42,14 +42,6 @@ TryMoonSound:
 	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-YM3526_Install:
-	ld hl,YM3526.ProcessCommand
-	ld a,5BH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

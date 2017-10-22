@@ -4,7 +4,7 @@
 YM2612_PCM_REGISTER: equ 2AH
 
 YM2612: MACRO
-	super: Chip YM2612_ym2612Name, YM2612_Connect, YM2612_Install
+	super: Chip YM2612_ym2612Name, YM2612_Connect
 	pcmDataStart:
 		dd 0
 	pcmDataPosition:
@@ -222,71 +222,6 @@ TryOPN2OnSFGTurboRPCM:
 	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-YM2612_Install:
-	ld hl,YM2612.ProcessPort0Command
-	ld a,52H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPort1Command
-	ld a,53H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait0
-	ld a,80H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait1
-	ld a,81H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait2
-	ld a,82H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait3
-	ld a,83H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait4
-	ld a,84H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait5
-	ld a,85H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait6
-	ld a,86H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait7
-	ld a,87H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait8
-	ld a,88H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait9
-	ld a,89H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait10
-	ld a,8AH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait11
-	ld a,8BH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait12
-	ld a,8CH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait13
-	ld a,8DH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait14
-	ld a,8EH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMWriteWait15
-	ld a,8FH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMDataSeek
-	ld a,0E0H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2612.ProcessPCMDataBlock
-	ld a,00H
-	call Player_InstallDataBlockHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

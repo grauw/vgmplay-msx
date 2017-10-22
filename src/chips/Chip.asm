@@ -1,7 +1,7 @@
 ;
 ; VGM chip
 ;
-Chip: MACRO ?name, ?connecter, ?installer
+Chip: MACRO ?name, ?connecter
 	clock:
 		dd 0
 	name:
@@ -12,8 +12,6 @@ Chip: MACRO ?name, ?connecter, ?installer
 		dw 0
 	connecter:
 		dw ?connecter
-	installer:
-		dw ?installer
 	ENDM
 
 ; de = header clock offset
@@ -93,16 +91,6 @@ Chip_SetDriver2:
 Chip_Connect:
 	ld l,(ix + Chip.connecter)
 	ld h,(ix + Chip.connecter + 1)
-	jp hl
-
-; iy = player
-; ix = this
-Chip_Install:
-	ld a,(ix + Chip.driver)
-	or (ix + Chip.driver + 1)
-	ret z
-	ld l,(ix + Chip.installer)
-	ld h,(ix + Chip.installer + 1)
 	jp hl
 
 ; ix = this

@@ -2,7 +2,7 @@
 ; VGM YM2203 chip
 ;
 YM2203: MACRO
-	super: Chip YM2203_name, YM2203_Connect, YM2203_Install
+	super: Chip YM2203_name, YM2203_Connect
 
 	; ix = player
 	; iy = reader
@@ -51,14 +51,6 @@ TryOPNOnSFGPSG:
 	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-YM2203_Install:
-	ld hl,YM2203.ProcessCommand
-	ld a,55H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

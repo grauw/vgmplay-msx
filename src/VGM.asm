@@ -155,10 +155,6 @@ VGM_Play:
 	ld (ix + VGM.playerReference + 1),d
 	pop iy
 	push ix
-	call VGM_GetChips
-	call Chips_Install
-	pop ix
-	push ix
 	call VGM_GetPlayer
 	call Player_Play
 	pop ix

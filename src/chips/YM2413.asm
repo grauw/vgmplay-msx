@@ -2,7 +2,7 @@
 ; VGM YM2413 chip
 ;
 YM2413: MACRO
-	super: Chip YM2413_name, YM2413_Connect, YM2413_Install
+	super: Chip YM2413_name, YM2413_Connect
 
 	; ix = player
 	; iy = reader
@@ -31,14 +31,6 @@ YM2413_Connect:
 	add hl,de
 	ld (ix + YM2413.ProcessCommand.writeRegister),l
 	ld (ix + YM2413.ProcessCommand.writeRegister + 1),h
-	ret
-
-; iy = player
-; ix = this
-YM2413_Install:
-	ld hl,YM2413.ProcessCommand
-	ld a,51H
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;

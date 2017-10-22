@@ -2,7 +2,7 @@
 ; VGM YM2610 chip
 ;
 YM2610: MACRO
-	super: Chip YM2610_ym2610Name, YM2610_Connect, YM2610_Install
+	super: Chip YM2610_ym2610Name, YM2610_Connect
 
 	; ix = player
 	; iy = reader
@@ -69,17 +69,6 @@ TryOPNOnSFGPSG:
 	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-YM2610_Install:
-	ld hl,YM2610.ProcessPort0Command
-	ld a,58H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YM2610.ProcessPort1Command
-	ld a,59H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

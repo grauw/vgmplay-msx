@@ -3,7 +3,7 @@
 ;
 YMF278B: MACRO
 	this:
-	super: Chip YMF278B_name, YMF278B_Connect, YMF278B_Install
+	super: Chip YMF278B_name, YMF278B_Connect
 
 	; ix = player
 	; iy = reader
@@ -70,17 +70,6 @@ YMF278B_Connect:
 	add hl,de
 	ld (ix + YMF278B.ProcessROMDataBlock.process),l
 	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),h
-	ret
-
-; iy = player
-; ix = this
-YMF278B_Install:
-	ld hl,YMF278B.ProcessCommand
-	ld a,0D0H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YMF278B.ProcessROMDataBlock
-	ld a,84H
-	call Player_InstallDataBlockHandler_IY_IXOffset
 	ret
 
 ;

@@ -2,7 +2,7 @@
 ; VGM YMF271 chip
 ;
 YMF271: MACRO
-	super: Chip YMF271_name, System_Return, System_Return
+	super: Chip YMF271_name, System_Return
 	ENDM
 
 ; ix = this

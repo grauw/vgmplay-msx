@@ -2,7 +2,7 @@
 ; VGM MultiPCM chip
 ;
 MultiPCM: MACRO
-	super: Chip MultiPCM_name, System_Return, System_Return
+	super: Chip MultiPCM_name, System_Return
 	ENDM
 
 ; ix = this

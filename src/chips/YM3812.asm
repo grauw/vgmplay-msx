@@ -2,7 +2,7 @@
 ; VGM YM3812 chip
 ;
 YM3812: MACRO
-	super: Chip YM3812_name, YM3812_Connect, YM3812_Install
+	super: Chip YM3812_name, YM3812_Connect
 
 	; ix = player
 	; iy = reader
@@ -31,14 +31,6 @@ YM3812_Connect:
 	add hl,de
 	ld (ix + YM3812.ProcessCommand.writeRegister),l
 	ld (ix + YM3812.ProcessCommand.writeRegister + 1),h
-	ret
-
-; iy = player
-; ix = this
-YM3812_Install:
-	ld hl,YM3812.ProcessCommand
-	ld a,5AH
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;

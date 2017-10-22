@@ -2,7 +2,7 @@
 ; VGM YMF262 chip
 ;
 YMF262: MACRO
-	super: Chip YMF262_name, YMF262_Connect, YMF262_Install
+	super: Chip YMF262_name, YMF262_Connect
 
 	; ix = player
 	; iy = reader
@@ -44,17 +44,6 @@ YMF262_Connect:
 	add hl,de
 	ld (ix + YMF262.ProcessPort1Command.writeRegister),l
 	ld (ix + YMF262.ProcessPort1Command.writeRegister + 1),h
-	ret
-
-; iy = player
-; ix = this
-YMF262_Install:
-	ld hl,YMF262.ProcessPort0Command
-	ld a,5EH
-	call Player_InstallCommandHandler_IY_IXOffset
-	ld hl,YMF262.ProcessPort1Command
-	ld a,5FH
-	call Player_InstallCommandHandler_IY_IXOffset
 	ret
 
 ;

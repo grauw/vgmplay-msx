@@ -2,7 +2,7 @@
 ; VGM K051649 chip
 ;
 K051649: MACRO
-	super: Chip K051649_k051649Name, K051649_Connect, K051649_Install
+	super: Chip K051649_k051649Name, K051649_Connect
 
 	; ix = player
 	; iy = reader
@@ -136,14 +136,6 @@ SCC:
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-K051649_Install:
-	ld hl,K051649.ProcessCommand
-	ld a,0D2H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

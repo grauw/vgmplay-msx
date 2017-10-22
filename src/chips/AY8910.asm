@@ -2,7 +2,7 @@
 ; VGM AY8910 chip
 ;
 AY8910: MACRO
-	super: Chip AY8910_ay8910Name, AY8910_Connect, AY8910_Install
+	super: Chip AY8910_ay8910Name, AY8910_Connect
 	chipType:
 		db 0
 
@@ -85,14 +85,6 @@ DualChip:
 	ld (ix + AY8910.ProcessCommand.writeRegisterDual + 1),h
 	ret
 	ENDP
-
-; iy = player
-; ix = this
-AY8910_Install:
-	ld hl,AY8910.ProcessCommand
-	ld a,0A0H
-	call Player_InstallCommandHandler_IY_IXOffset
-	ret
 
 ;
 	SECTION RAM

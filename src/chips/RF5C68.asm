@@ -2,7 +2,7 @@
 ; VGM RF5C68 chip
 ;
 RF5C68: MACRO
-	super: Chip RF5C68_name, System_Return, System_Return
+	super: Chip RF5C68_name, System_Return
 	ENDM
 
 ; ix = this

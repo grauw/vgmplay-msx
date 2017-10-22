@@ -153,52 +153,6 @@ LSBExtractionLoop:
 	ret
 	ENDP
 
-; a = command number
-; de = handler address
-; iy = this
-Player_InstallCommandHandler_IY:
-	ld l,a
-	ld h,Player_commandsJumpTable >> 8
-	ld (hl),e
-	inc h
-	ld (hl),d
-	ret
-
-; a = command number
-; ix = handler object
-; hl = handler offset
-; iy = this
-Player_InstallCommandHandler_IY_IXOffset:
-	ld e,ixl
-	ld d,ixh
-	add hl,de
-	ex de,hl
-	call Player_InstallCommandHandler_IY
-	ret
-
-; a = command number
-; de = handler address
-; iy = this
-Player_InstallDataBlockHandler_IY:
-	ld l,a
-	ld h,Player_dataBlockJumpTable >> 8
-	ld (hl),e
-	inc h
-	ld (hl),d
-	ret
-
-; a = command number
-; ix = handler object
-; hl = handler offset
-; iy = this
-Player_InstallDataBlockHandler_IY_IXOffset:
-	ld e,ixl
-	ld d,ixh
-	add hl,de
-	ex de,hl
-	call Player_InstallDataBlockHandler_IY
-	ret
-
 ; ix = this
 Player_Play: PROC
 	call Player_GetReaderIY
@@ -267,25 +221,33 @@ Player_CheckExitCondition:
 
 ; ix = this
 ; iy = reader
-Player_DataBlock:
+Player_ProcessDataBlock:
 	call Reader_Read_IY
 	cp 66H
 	jp nz,Player_UnsupportedCommand
 	call Reader_Read_IY
-	ld l,a
-	ld h,Player_dataBlockJumpTable >> 8
-	ld e,(hl)
-	inc h
-	ld d,(hl)
-	ex de,hl
 	push ix
-	call System_JumpHL
+	call Player_ProcessDataBlockByType
 	pop ix
 	push ix
 	call Player_GetTimer
 	call Timer_Reset
 	pop ix
 	jp Player_ProcessNext
+
+; a = data type
+; ix = this
+; iy = reader
+Player_ProcessDataBlockByType:
+	cp 00H
+	jp z,YM2612_instance.ProcessPCMDataBlock
+	cp 81H
+	jp z,YM2608_instance.ProcessDataBlock
+	cp 84H
+	jp z,YMF278B_instance.ProcessROMDataBlock
+	cp 88H
+	jp z,Y8950_instance.ProcessDataBlock
+	jp Player_SkipDataBlock
 
 ; ix = this
 ; iy = reader
@@ -482,7 +444,7 @@ Player_commandsJumpTable:
 	dw Player_Skip1               ; 2DH
 	dw Player_Skip1               ; 2EH
 	dw Player_Skip1               ; 2FH
-	dw Player_Skip2               ; 30H
+	dw SN76489_instance.ProcessCommandDual        ; 30H
 	dw Player_Skip2               ; 31H
 	dw Player_Skip2               ; 32H
 	dw Player_Skip2               ; 33H
@@ -514,22 +476,22 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; 4DH
 	dw Player_Skip3               ; 4EH
 	dw Player_Skip2               ; 4FH
-	dw Player_Skip2               ; 50H
-	dw Player_Skip3               ; 51H
-	dw Player_Skip3               ; 52H
-	dw Player_Skip3               ; 53H
-	dw Player_Skip3               ; 54H
-	dw Player_Skip3               ; 55H
-	dw Player_Skip3               ; 56H
-	dw Player_Skip3               ; 57H
-	dw Player_Skip3               ; 58H
-	dw Player_Skip3               ; 59H
-	dw Player_Skip3               ; 5AH
-	dw Player_Skip3               ; 5BH
-	dw Player_Skip3               ; 5CH
+	dw SN76489_instance.ProcessCommand            ; 50H
+	dw YM2413_instance.ProcessCommand             ; 51H
+	dw YM2612_instance.ProcessPort0Command        ; 52H
+	dw YM2612_instance.ProcessPort1Command        ; 53H
+	dw YM2151_instance.ProcessCommand             ; 54H
+	dw YM2203_instance.ProcessCommand             ; 55H
+	dw YM2608_instance.ProcessPort0Command        ; 56H
+	dw YM2608_instance.ProcessPort1Command        ; 57H
+	dw YM2610_instance.ProcessPort0Command        ; 58H
+	dw YM2610_instance.ProcessPort1Command        ; 59H
+	dw YM3812_instance.ProcessCommand             ; 5AH
+	dw YM3526_instance.ProcessCommand             ; 5BH
+	dw Y8950_instance.ProcessCommand              ; 5CH
 	dw Player_Skip3               ; 5DH
-	dw Player_Skip3               ; 5EH
-	dw Player_Skip3               ; 5FH
+	dw YMF262_instance.ProcessPort0Command        ; 5EH
+	dw YMF262_instance.ProcessPort1Command        ; 5FH
 	dw Player_UnsupportedCommand  ; 60H
 	dw Player_WaitNSamples        ; 61H
 	dw Player_Wait735Samples      ; 62H
@@ -537,7 +499,7 @@ Player_commandsJumpTable:
 	dw Player_SetWait             ; 64H
 	dw Player_UnsupportedCommand  ; 65H
 	dw Player_EndOfSoundData      ; 66H
-	dw Player_DataBlock           ; 67H
+	dw Player_ProcessDataBlock    ; 67H
 	dw Player_Skip12              ; 68H
 	dw Player_UnsupportedCommand  ; 69H
 	dw Player_UnsupportedCommand  ; 6AH
@@ -562,22 +524,22 @@ Player_commandsJumpTable:
 	dw Player_Wait14Samples       ; 7DH
 	dw Player_Wait15Samples       ; 7EH
 	dw Player_Wait16Samples       ; 7FH
-	dw Player_Wait0Samples        ; 80H
-	dw Player_Wait1Samples        ; 81H
-	dw Player_Wait2Samples        ; 82H
-	dw Player_Wait3Samples        ; 83H
-	dw Player_Wait4Samples        ; 84H
-	dw Player_Wait5Samples        ; 85H
-	dw Player_Wait6Samples        ; 86H
-	dw Player_Wait7Samples        ; 87H
-	dw Player_Wait8Samples        ; 88H
-	dw Player_Wait9Samples        ; 89H
-	dw Player_Wait10Samples       ; 8AH
-	dw Player_Wait11Samples       ; 8BH
-	dw Player_Wait12Samples       ; 8CH
-	dw Player_Wait13Samples       ; 8DH
-	dw Player_Wait14Samples       ; 8EH
-	dw Player_Wait15Samples       ; 8FH
+	dw YM2612_instance.ProcessPCMWriteWait0       ; 80H
+	dw YM2612_instance.ProcessPCMWriteWait1       ; 81H
+	dw YM2612_instance.ProcessPCMWriteWait2       ; 82H
+	dw YM2612_instance.ProcessPCMWriteWait3       ; 83H
+	dw YM2612_instance.ProcessPCMWriteWait4       ; 84H
+	dw YM2612_instance.ProcessPCMWriteWait5       ; 85H
+	dw YM2612_instance.ProcessPCMWriteWait6       ; 86H
+	dw YM2612_instance.ProcessPCMWriteWait7       ; 87H
+	dw YM2612_instance.ProcessPCMWriteWait8       ; 88H
+	dw YM2612_instance.ProcessPCMWriteWait9       ; 89H
+	dw YM2612_instance.ProcessPCMWriteWait10      ; 8AH
+	dw YM2612_instance.ProcessPCMWriteWait11      ; 8BH
+	dw YM2612_instance.ProcessPCMWriteWait12      ; 8CH
+	dw YM2612_instance.ProcessPCMWriteWait13      ; 8DH
+	dw YM2612_instance.ProcessPCMWriteWait14      ; 8EH
+	dw YM2612_instance.ProcessPCMWriteWait15      ; 8FH
 	dw Player_Skip5               ; 90H
 	dw Player_Skip5               ; 91H
 	dw Player_Skip6               ; 92H
@@ -594,7 +556,7 @@ Player_commandsJumpTable:
 	dw Player_UnsupportedCommand  ; 9DH
 	dw Player_UnsupportedCommand  ; 9EH
 	dw Player_UnsupportedCommand  ; 9FH
-	dw Player_Skip3               ; A0H
+	dw AY8910_instance.ProcessCommand             ; A0H
 	dw Player_Skip3               ; A1H
 	dw Player_Skip3               ; A2H
 	dw Player_Skip3               ; A3H
@@ -642,9 +604,9 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; CDH
 	dw Player_Skip4               ; CEH
 	dw Player_Skip4               ; CFH
-	dw Player_Skip4               ; D0H
+	dw YMF278B_instance.ProcessCommand            ; D0H
 	dw Player_Skip4               ; D1H
-	dw Player_Skip4               ; D2H
+	dw K051649_instance.ProcessCommand            ; D2H
 	dw Player_Skip4               ; D3H
 	dw Player_Skip4               ; D4H
 	dw Player_Skip4               ; D5H
@@ -658,7 +620,7 @@ Player_commandsJumpTable:
 	dw Player_Skip4               ; DDH
 	dw Player_Skip4               ; DEH
 	dw Player_Skip4               ; DFH
-	dw Player_Skip5               ; E0H
+	dw YM2612_instance.ProcessPCMDataSeek         ; E0H
 	dw Player_Skip5               ; E1H
 	dw Player_Skip5               ; E2H
 	dw Player_Skip5               ; E3H
@@ -690,15 +652,6 @@ Player_commandsJumpTable:
 	dw Player_Skip5               ; FDH
 	dw Player_Skip5               ; FEH
 	dw Player_Skip5               ; FFH
-
-	ALIGN 100H
-Player_dataBlockJumpTable:
-	REPT 256
-	db Player_SkipDataBlock & 0FFH
-	ENDM
-	REPT 256
-	db Player_SkipDataBlock >> 8
-	ENDM
 
 	ENDS
 
