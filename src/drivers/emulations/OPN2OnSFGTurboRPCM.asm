@@ -15,9 +15,9 @@ OPN2OnSFGTurboRPCM: MACRO
 	SafeWriteRegister: PROC
 		ld a,e
 		cp 2AH
-		jp z,0
+		jp z,System_Return
 	writePCMRegister: equ $ - 2
-		jp 0
+		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
 
@@ -25,7 +25,7 @@ OPN2OnSFGTurboRPCM: MACRO
 	; d = value
 	SafeWriteRegister2: PROC
 		ld a,e
-		jp 0
+		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
 	ENDM

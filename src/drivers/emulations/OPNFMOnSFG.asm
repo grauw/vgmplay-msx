@@ -52,7 +52,7 @@ OPNFMOnSFG: MACRO
 		ld a,8
 		jr WriteSFGRegister
 	WriteSFGRegister:
-		jp 0
+		jp System_Return
 	writeSFGRegister: equ $ - 2
 	WriteSlots:
 		and 03H
@@ -160,7 +160,7 @@ OPNFMOnSFG: MACRO
 		jr nc,WriteChannels
 		ret
 	WriteSFGRegister:
-		jp 0
+		jp System_Return
 	writeSFGRegister: equ $ - 2
 	WriteSlots:
 		and 03H

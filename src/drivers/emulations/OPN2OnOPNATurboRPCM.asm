@@ -18,7 +18,7 @@ OPN2OnOPNATurboRPCM: MACRO
 	SafeWriteRegister: PROC
 		ld a,e
 		cp 2AH
-		jp z,0
+		jp z,System_Return
 	writePCMRegister: equ $ - 2
 		cp 0A0H
 		jr c,SafeWriteFMRegister
@@ -27,7 +27,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		cp 0A8H
 		jr c,WriteFrequencyMSB
 	SafeWriteFMRegister:
-		jp 0
+		jp System_Return
 	safeWriteFMRegister: equ $ - 2
 	WriteFrequencyMSB:
 		ld c,a
@@ -55,7 +55,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		pop de
 		ld a,e
 	WriteFMRegister:
-		jp 0
+		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
 
@@ -70,7 +70,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		cp 0A8H
 		jr c,WriteFrequencyMSB
 	SafeWriteFMRegister:
-		jp 0
+		jp System_Return
 	safeWriteFMRegister: equ $ - 2
 	WriteFrequencyMSB:
 		ld c,a
@@ -98,7 +98,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		pop de
 		ld a,e
 	WriteFMRegister:
-		jp 0
+		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
 	ENDM

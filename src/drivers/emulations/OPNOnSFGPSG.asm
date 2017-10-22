@@ -22,9 +22,9 @@ OPNOnSFGPSG: MACRO
 	; d = value
 	WriteRegister: PROC
 		cp 10H
-		jp c,0
+		jp c,System_Return
 	writePSGRegister: equ $ - 2
-		jp 0
+		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
 
@@ -35,7 +35,7 @@ OPNOnSFGPSG: MACRO
 	; a = register
 	; d = value
 	WriteRegister2: PROC
-		jp 0
+		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
 	ENDM
