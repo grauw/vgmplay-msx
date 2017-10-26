@@ -12,14 +12,12 @@ AY8910: MACRO
 		call Reader_ReadWord_IY
 		bit 7,e
 		jr nz,DualChip
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 	DualChip:
 		res 7,e
-		call System_Return
+		jp System_Return
 	writeRegisterDual: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 	ENDM
 

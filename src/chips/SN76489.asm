@@ -8,18 +8,16 @@ SN76489: MACRO
 	; iy = reader
 	ProcessCommand: PROC
 		call Reader_Read_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 
 	; ix = player
 	; iy = reader
 	ProcessCommandDual: PROC
 		call Reader_Read_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 	ENDM
 

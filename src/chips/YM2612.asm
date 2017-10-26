@@ -14,18 +14,16 @@ YM2612: MACRO
 	; iy = reader
 	ProcessPort0Command: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 
 	; ix = player
 	; iy = reader
 	ProcessPort1Command: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 
 	; ix = player
@@ -67,8 +65,7 @@ YM2612: MACRO
 		pop hl
 		pop de
 		call MappedReader_Skip_IY
-		call BufferPCMData
-		ret
+		jr BufferPCMData
 
 	; ix = player
 	; iy = reader
@@ -84,8 +81,7 @@ YM2612: MACRO
 		ld bc,(pcmDataStart + 2)
 		add hl,bc
 		ld (pcmDataPosition + 2),hl
-		call BufferPCMData
-		jp Player_ProcessNext
+		jr BufferPCMData
 
 	; ix = player
 	; iy = reader
@@ -108,8 +104,7 @@ YM2612: MACRO
 	; ix = player
 	; iy = reader
 	ProcessPCMWriteWait0:
-		call ProcessPCMWrite
-		jp Player_ProcessNext
+		jp ProcessPCMWrite
 	ProcessPCMWriteWait1:
 		call ProcessPCMWrite
 		ld de,1

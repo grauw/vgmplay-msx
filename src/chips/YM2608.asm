@@ -9,18 +9,16 @@ YM2608: MACRO
 	; iy = reader
 	ProcessPort0Command: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 
 	; ix = player
 	; iy = reader
 	ProcessPort1Command: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 
 	; ix = player

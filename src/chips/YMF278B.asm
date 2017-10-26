@@ -14,21 +14,18 @@ YMF278B: MACRO
 		jp p,Wave
 	FM1: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 	FM2: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 	Wave: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 		ENDP
 

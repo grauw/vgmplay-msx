@@ -8,9 +8,8 @@ YM2413: MACRO
 	; iy = reader
 	ProcessCommand: PROC
 		call Reader_ReadWord_IY
-		call System_Return
+		jp System_Return
 	writeRegister: equ $ - 2
-		jp Player_ProcessNext
 		ENDP
 	ENDM
 

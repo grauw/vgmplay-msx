@@ -17,8 +17,9 @@ Player: MACRO
 		and a
 		sbc hl,de
 		ld (time),hl
-		jp nc,Player_ProcessNext
+		ret nc
 	Yield:
+		pop af  ; break out of ProcessNext
 		ex de,hl
 		ld hl,0
 		ld (time),hl
@@ -54,6 +55,8 @@ Player: MACRO
 		ld ix,this
 		ld (time),de
 		ld de,(wait)
+		ld hl,Player_ProcessNext  ; return to ProcessNext
+		push hl
 		jp Wait
 
 	; de = time passed
@@ -184,9 +187,12 @@ Player_Wait_JP_INLINE: MACRO
 	jp ix
 	ENDM
 
+; (sp - 2) = ProcessNext
 ; ix = this
 ; iy = reader
 Player_ProcessNext:
+	dec sp
+	dec sp
 	call Reader_Read_IY
 	ld l,a
 	ld h,Player_commandsJumpTable >> 8
@@ -238,7 +244,7 @@ Player_ProcessDataBlock:
 	call Player_GetTimer
 	call Timer_Reset
 	pop ix
-	jp Player_ProcessNext
+	ret
 
 ; a = data type
 ; ix = this
@@ -273,10 +279,11 @@ Player_EndOfSoundData: PROC
 	inc (ix + Player.loopCount)
 	ld a,(ix + Player.maxLoops)
 	and a
-	jp z,Player_ProcessNext
+	ret z
 	cp (ix + Player.loopCount)
-	jp nz,Player_ProcessNext
+	ret nz
 NoLoop:
+	pop af  ; break out of ProcessNext
 	ld (ix + Player.ended),-1
 	ret
 	ENDP
@@ -294,12 +301,12 @@ Set60th:
 	call Reader_ReadWord_IY
 	ld (ix + Player.wait60th),e
 	ld (ix + Player.wait60th + 1),d
-	jp Player_ProcessNext
+	ret
 Set50th:
 	call Reader_ReadWord_IY
 	ld (ix + Player.wait50th),e
 	ld (ix + Player.wait50th + 1),d
-	jp Player_ProcessNext
+	ret
 	ENDP
 
 ; ix = this
@@ -383,9 +390,9 @@ Player_Skip4:
 Player_Skip3:
 	call Reader_Read_IY
 Player_Skip2:
-	call Reader_Read_IY
+	jp Reader_Read_IY
 Player_Skip1:
-	jp Player_ProcessNext
+	ret
 
 ; ix = this
 Player_UnsupportedCommand:
