@@ -49,13 +49,29 @@ Player: MACRO
 	ended:
 		db 0
 
+	; (sp - 2) = ProcessNext
+	; ix = this
+	; iy = reader
+	ProcessNext:
+		dec sp
+		dec sp
+		call Reader_Read_IY
+		ld l,a
+		ld h,0
+	commandsJumpTable: equ $ - 1
+		ld a,(hl)
+		inc h
+		ld h,(hl)
+		ld l,a
+		jp hl
+
 	; de = time passed
 	; ix = this
 	Update:
 		ld ix,this
 		ld (time),de
 		ld de,(wait)
-		ld hl,Player_ProcessNext  ; return to ProcessNext
+		ld hl,ProcessNext  ; return to ProcessNext
 		push hl
 		jp Wait
 
@@ -85,6 +101,7 @@ Player_Construct:
 	ld (ix + Player.header),l
 	ld (ix + Player.header + 1),h
 	ld (ix + Player.maxLoops),a
+	ld (ix + Player.commandsJumpTable),Player_commandsJumpTable >> 8
 	push ix
 	ld e,ixl
 	ld d,ixh
@@ -186,21 +203,6 @@ Loop:
 Player_Wait_JP_INLINE: MACRO
 	jp ix
 	ENDM
-
-; (sp - 2) = ProcessNext
-; ix = this
-; iy = reader
-Player_ProcessNext:
-	dec sp
-	dec sp
-	call Reader_Read_IY
-	ld l,a
-	ld h,Player_commandsJumpTable >> 8
-	ld a,(hl)
-	inc h
-	ld h,(hl)
-	ld l,a
-	jp hl
 
 ; ix = this
 ; iy = reader
