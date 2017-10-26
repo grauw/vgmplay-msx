@@ -299,8 +299,6 @@ Set50th:
 
 ; ix = this
 ; iy = reader
-Player_Wait0Samples:
-	jp Player_ProcessNext
 Player_Wait1Samples:
 	ld de,1
 	Player_Wait_JP_INLINE
