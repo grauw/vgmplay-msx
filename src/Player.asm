@@ -51,20 +51,21 @@ Player: MACRO
 	; de = time passed
 	; ix = this
 	Update:
-		IF DEBUG
-		ld a,0F6H
-		call VDP_SetColor
-		ENDIF
 		ld ix,this
 		ld (time),de
 		ld de,(wait)
+		jp Wait
+
+	; de = time passed
+	; ix = this
+	UpdateDebug:
 		IF DEBUG
-		call Wait
+		ld a,0F6H
+		call VDP_SetColor
+		call Update
 		ld a,(VDP_MIRROR_0 + 7)
 		call VDP_SetColor
 		ret
-		ELSE
-		jp Wait
 		ENDIF
 
 	size:
@@ -84,7 +85,11 @@ Player_Construct:
 	push ix
 	ld e,ixl
 	ld d,ixh
+	IF DEBUG
+	ld hl,Player.UpdateDebug
+	ELSE
 	ld hl,Player.Update
+	ENDIF
 	add hl,de
 	call TimerFactory_CreateTimer
 	pop ix
