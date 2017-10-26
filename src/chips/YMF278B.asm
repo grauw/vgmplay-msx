@@ -35,7 +35,6 @@ YMF278B: MACRO
 	; ix = player
 	; iy = reader
 	ProcessROMDataBlock: PROC
-		ld ix,this
 		jp Player_SkipDataBlock
 	process: equ $ - 2
 		ENDP
