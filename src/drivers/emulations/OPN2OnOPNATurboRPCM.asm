@@ -11,7 +11,7 @@ OPN2OnOPNATurboRPCM: MACRO
 	turboRPCMDriver:
 		dw 0
 	frequencyMSBs:
-		ds 8
+		ds 12
 
 	; e = register
 	; d = value
@@ -26,6 +26,10 @@ OPN2OnOPNATurboRPCM: MACRO
 		jr c,WriteFrequencyLSB
 		cp 0A8H
 		jr c,WriteFrequencyMSB
+		cp 0ABH
+		jr c,Write3chFrequencyLSB
+		cp 0B0H
+		jr c,Write3chFrequencyMSB
 	SafeWriteFMRegister:
 		jp System_Return
 	safeWriteFMRegister: equ $ - 2
@@ -57,6 +61,32 @@ OPN2OnOPNATurboRPCM: MACRO
 	WriteFMRegister:
 		jp System_Return
 	writeFMRegister: equ $ - 2
+	Write3chFrequencyMSB:
+		ld c,a
+		ld b,0
+		ld hl,-0ABH + frequencyMSBs + 8
+		add hl,bc
+		ld (hl),d
+		ret
+	Write3chFrequencyLSB:
+		push af
+		ld c,a
+		ld b,0
+		ld hl,-0A8H + frequencyMSBs + 8
+		add hl,bc
+		ld h,(hl)
+		ld l,d
+		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
+		call OPN2OnOPNATurboRPCM_AdjustFrequency
+		pop af
+		ld h,e
+		ld l,a
+		push hl
+		add a,-0A8H + 0ABH
+		call WriteFMRegister
+		pop de
+		ld a,e
+		jr WriteFMRegister
 		ENDP
 
 	; e = register
@@ -131,14 +161,14 @@ OPN2OnOPNATurboRPCM_Construct:
 	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
-	ld hl,OPNA.SafeWriteRegister2
-	add hl,bc
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister + 1),h
-	ld hl,OPNA.WriteRegister2
-	add hl,bc
 	ld bc,128
 	add ix,bc
+	ld hl,OPNA.SafeWriteRegister2
+	add hl,bc
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128 + 1),h
+	ld hl,OPNA.WriteRegister2
+	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
 	ld bc,-128
