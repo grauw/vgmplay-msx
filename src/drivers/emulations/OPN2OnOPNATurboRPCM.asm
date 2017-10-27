@@ -26,7 +26,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		jr c,WriteFrequencyLSB
 		cp 0A8H
 		jr c,WriteFrequencyMSB
-		cp 0ABH
+		cp 0ACH
 		jr c,Write3chFrequencyLSB
 		cp 0B0H
 		jr c,Write3chFrequencyMSB
@@ -64,7 +64,7 @@ OPN2OnOPNATurboRPCM: MACRO
 	Write3chFrequencyMSB:
 		ld c,a
 		ld b,0
-		ld hl,-0ABH + frequencyMSBs + 8
+		ld hl,-0ACH + frequencyMSBs + 8
 		add hl,bc
 		ld (hl),d
 		ret
@@ -82,7 +82,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		ld h,e
 		ld l,a
 		push hl
-		add a,-0A8H + 0ABH
+		add a,-0A8H + 0ACH
 		call WriteFMRegister
 		pop de
 		ld a,e
