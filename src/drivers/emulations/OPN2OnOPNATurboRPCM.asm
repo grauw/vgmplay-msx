@@ -161,8 +161,8 @@ OPN2OnOPNATurboRPCM_Construct:
 	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
-	ld bc,128
-	add ix,bc
+	ld de,128
+	add ix,de
 	ld hl,OPNA.SafeWriteRegister2
 	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128),l
@@ -171,8 +171,8 @@ OPN2OnOPNATurboRPCM_Construct:
 	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
-	ld bc,-128
-	add ix,bc
+	ld de,-128
+	add ix,de
 	ret
 
 ; ix = this
