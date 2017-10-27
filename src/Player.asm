@@ -49,12 +49,11 @@ Player: MACRO
 	ended:
 		db 0
 
-	; (sp - 2) = ProcessNext
 	; ix = this
 	; iy = reader
 	ProcessNext:
-		dec sp
-		dec sp
+		ld hl,ProcessNext  ; return to ProcessNext
+		push hl
 		call Reader_Read_IY
 		ld l,a
 		ld h,0
