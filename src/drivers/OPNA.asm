@@ -71,7 +71,7 @@ OPNA: MACRO
 		ENDP
 	TimerControl:
 		ld a,d
-		and 11110011b
+		and 11000000b
 		ld d,a
 		ld a,e
 		jr WriteRegister
