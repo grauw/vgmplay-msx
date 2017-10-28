@@ -278,109 +278,62 @@ OPNA_FillRegisters:
 ; e = register base
 ; d = value
 ; ix = this
-OPNA_FillRegisters2:
+OPNA_FillRegisterPairs:
 	push bc
 	push de
+	call OPNA_SafeWriteRegister
 	call OPNA_SafeWriteRegister2
 	pop de
 	pop bc
 	inc e
-	djnz OPNA_FillRegisters2
+	djnz OPNA_FillRegisterPairs
 	ret
 
-; e = register
-; d = value
 ; ix = this
-OPNA_Mute:
+OPNA_Mute: PROC
+	ld b,3  ; mute SSG
 	ld de,0008H
-	call OPNA_WriteRegister
-	ld de,0009H
-	call OPNA_WriteRegister
-	ld de,000AH
-	call OPNA_WriteRegister
-	ld b,0EH
+	call OPNA_FillRegisters
+	ld b,14
 	ld de,0000H
-	call OPNA_FillRegisters  ; mute SSG
-
-	ld de,00010H
-	call OPNA_WriteRegister  ; rhythm key off
-
-	ld d,001H
-	ld e,OPNA_ADPCM_CONTROL
+	call OPNA_FillRegisters
+	ld de,01H << 8 | OPNA_ADPCM_CONTROL
 	call OPNA_WriteRegister2  ; stop ADPCM
-
-	ld de,0028H
+	ld b,10H
+	ld de,0F80H
+	call OPNA_FillRegisterPairs  ; max release rate
+	ld b,10H
+	ld de,7F40H
+	call OPNA_FillRegisterPairs  ; total level = -96db
+	ld b,08H
+	ld de,0028H  ; key off FM OPs
+KeyOffLoop:
+	push bc
+	push de
 	call OPNA_WriteRegister
-	ld de,0128H
-	call OPNA_WriteRegister
-	ld de,0228H
-	call OPNA_WriteRegister
-	ld de,0428H
-	call OPNA_WriteRegister
-	ld de,0528H
-	call OPNA_WriteRegister
-	ld de,0628H
-	call OPNA_WriteRegister  ; key off FM 1-6
+	pop de
+	pop bc
+	inc d
+	djnz KeyOffLoop
 	ret
+	ENDP
 
 ; ix = this
 OPNA_Reset:
-	call OPNA_Mute            ; key off all channels
-	ld de,0021H
-	call OPNA_WriteRegister   ; reset FM TEST register
-	ld de,0022H
-	call OPNA_WriteRegister   ; reset LFO
-	ld de,0027H
-	call OPNA_WriteRegister   ; disable CSM mode, reset and stop timers
+	ld b,0B8H
+	ld de,0000H
+	call OPNA_FillRegisterPairs  ; zero all registers
 	ld de,8029H
-	call OPNA_WriteRegister   ; mark ADPCM and timer interrupts as disabled, set six voices mode
-;	Prescaler
-	ld de,012DH
-	call OPNA_WriteRegister   ; setup prescaler for 8 MHz
-;	Rhythm
-	ld de,03F11H
-	call OPNA_WriteRegister   ; set max volume rhythm global
-	ld de,00012H
-	call OPNA_WriteRegister   ; reset rythm TEST register
-	ld b,006H
-	ld de,0DF18H
-	call OPNA_FillRegisters   ; set max volume / mono all tones.
-;	ADPCM (DELTA-T)
-	ld d,0F4H
-	ld e,OPNA_PRESCALE_L
+	call OPNA_WriteRegister  ; mask ADPCM and timer interrupts as disabled, set six voices mode
+	ld de,0FFH << 8 | OPNA_LIMIT_L
 	call OPNA_WriteRegister2
-	ld d,001H
-	ld e,OPNA_PRESCALE_H
+	ld de,0FFH << 8 | OPNA_LIMIT_H
 	call OPNA_WriteRegister2
-	ld d,0FFH
-	ld e,OPNA_LIMIT_L
-	call OPNA_WriteRegister2
-	ld d,0FFH
-	ld e,OPNA_LIMIT_H
-	call OPNA_WriteRegister2
-	ld d,0FFH
-	ld e,OPNA_FLAG_CONTROL
-	call OPNA_WriteRegister2
-	ld d,080H
-	ld e,OPNA_FLAG_CONTROL
-	call OPNA_WriteRegister2
-	ld d,080H
-	ld e,OPNA_MISC_CONTROL
+	ld de,80H << 8 | OPNA_MISC_CONTROL
 	call OPNA_WriteRegister2  ; configure ADPCM 1bit / DRAM
-;	FM 1-3
-	ld b,00EH
-	ld de,07F40H
-	call OPNA_FillRegisters   ; total level = 127
-	ld b,003H
+	ld b,04H
 	ld de,0C0B4H
-	call OPNA_FillRegisters   ; restore panpots 0-3
-;	FM 4-6
-	ld b,00EH
-	ld de,07F40H
-	call OPNA_FillRegisters2  ; total level = 127
-	ld b,003H
-	ld de,0C0B4H
-	call OPNA_FillRegisters2  ; restore panpots 4-6
+	call OPNA_FillRegisterPairs  ; restore panpots
 	ret
 
 ; ix = this
