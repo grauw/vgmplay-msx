@@ -114,7 +114,6 @@ MSXAudio: MACRO
 	; bc = count
 	; hl = source
 	WriteADPCMData: PROC
-		di
 		ld d,70H
 		ld a,MSXAudio_FLAG_CONTROL
 		call WriteRegister
@@ -150,7 +149,6 @@ MSXAudio: MACRO
 		ld d,78H
 		ld a,MSXAudio_FLAG_CONTROL
 		call WriteRegister
-		ei
 		ret
 		ENDP
 

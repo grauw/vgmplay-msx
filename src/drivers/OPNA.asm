@@ -171,7 +171,6 @@ OPNA: MACRO
 	; bc = count
 	; hl = source
 	WriteADPCMData: PROC
-		di
 		ld d,17H
 		ld a,OPNA_FLAG_CONTROL
 		call WriteRegister2
@@ -207,7 +206,6 @@ OPNA: MACRO
 		ld d,1FH
 		ld a,OPNA_FLAG_CONTROL
 		call WriteRegister2
-		ei
 		ret
 		ENDP
 
