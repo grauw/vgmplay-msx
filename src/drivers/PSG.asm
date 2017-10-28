@@ -63,26 +63,29 @@ PSG_SafeWriteRegister:
 	ld bc,PSG.SafeWriteRegister
 	jp Utils_JumpIXOffsetBC
 
+; b = count
+; e = register
+; d = value
 ; ix = this
-PSG_Reset: PROC
-	ld de,0008H
-	call PSG_WriteRegister
-	ld de,0009H
-	call PSG_WriteRegister
-	ld de,000AH
-	call PSG_WriteRegister
-	ld b,14
-	ld de,0000H
-Loop:
+PSG_FillRegisters:
 	push bc
 	push de
 	call PSG_SafeWriteRegister
 	pop de
 	pop bc
 	inc e
-	djnz Loop
+	djnz PSG_FillRegisters
 	ret
-	ENDP
+
+; ix = this
+PSG_Reset:
+	ld b,3
+	ld de,0008H
+	call PSG_FillRegisters
+	ld b,14
+	ld de,0000H
+	call PSG_FillRegisters
+	ret
 
 ; f <- c: found
 PSG_Detect:
