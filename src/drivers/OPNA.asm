@@ -113,7 +113,7 @@ OPNA: MACRO
 		jr z,MaskMiscControl
 		jr c,WriteRegister2
 		cp OPNA_FLAG_CONTROL
-		jr z,MaskFlagControl
+		ret z
 		cp OPNA_START_ADDRESS_H + 1
 		jr c,WriteStartAddress
 		cp OPNA_STOP_ADDRESS_H + 1
@@ -128,12 +128,6 @@ OPNA: MACRO
 	MaskMiscControl:
 		ld a,d
 		and 11000100b  ; force x1 bit and DRAM mode
-		ld d,a
-		ld a,e
-		jr WriteRegister2
-	MaskFlagControl:
-		ld a,d
-		and 10001000b
 		ld d,a
 		ld a,e
 		jr WriteRegister2
