@@ -81,12 +81,6 @@ MMM_WriteRegister:
 	ld bc,MMM.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; a = value
-; ix = this
-MMM_SafeWriteRegister:
-	ld bc,MMM.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; ix = this
 MMM_Reset:
 	ld a,9FH

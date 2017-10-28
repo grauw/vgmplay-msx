@@ -59,13 +59,6 @@ MSXMusic_WriteRegister:
 	ld bc,MSXMusic.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; e = register
-; d = value
-; ix = this
-MSXMusic_SafeWriteRegister:
-	ld bc,MSXMusic.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; ix = this
 MSXMusic_Enable:
 	bit 0,(ix + MSXMusic.internal)
@@ -101,7 +94,7 @@ MSXMusic_Disable:
 MSXMusic_FillRegisters:
 	push bc
 	push de
-	call MSXMusic_SafeWriteRegister
+	call MSXMusic_WriteRegister
 	in a,(09AH)  ; R800 wait: ~62 cycles - 5 (ret)
 	pop de
 	pop bc
@@ -112,7 +105,7 @@ MSXMusic_FillRegisters:
 ; ix = this
 MSXMusic_Mute:
 	ld de,000EH
-	call MSXMusic_SafeWriteRegister
+	call MSXMusic_WriteRegister
 	ld b,4
 	ld de,0FF04H
 	call MSXMusic_FillRegisters

@@ -92,13 +92,6 @@ SFG_WriteRegister:
 	ld bc,SFG.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; e = register
-; d = value
-; ix = this
-SFG_SafeWriteRegister:
-	ld bc,SFG.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; ix = this
 SFG_Reset:
 	call SFG_AllNotesOff

@@ -62,12 +62,6 @@ PlaySoniq_WriteRegister:
 	ld bc,PlaySoniq.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; a = value
-; ix = this
-PlaySoniq_SafeWriteRegister:
-	ld bc,PlaySoniq.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; ix = this
 PlaySoniq_Reset:
 	ld a,9FH

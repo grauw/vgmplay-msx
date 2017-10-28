@@ -37,12 +37,6 @@ Franky_WriteRegister:
 	ld bc,Franky.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; a = value
-; ix = this
-Franky_SafeWriteRegister:
-	ld bc,Franky.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; ix = this
 Franky_Reset:
 	ld a,9FH

@@ -150,13 +150,6 @@ SCCPlus_WriteRegister:
 	ld bc,SCCPlus.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; e = register
-; d = value
-; ix = this
-SCCPlus_SafeWriteRegister:
-	ld bc,SCCPlus.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; b = count
 ; e = register base
 ; d = value
@@ -164,7 +157,7 @@ SCCPlus_SafeWriteRegister:
 SCCPlus_FillRegisters:
 	push bc
 	push de
-	call SCCPlus_SafeWriteRegister
+	call SCCPlus_WriteRegister
 	pop de
 	pop bc
 	inc e

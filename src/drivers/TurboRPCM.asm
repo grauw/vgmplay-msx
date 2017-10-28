@@ -38,12 +38,6 @@ TurboRPCM_WriteRegister:
 	ld bc,TurboRPCM.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
-; d = value
-; ix = this
-TurboRPCM_SafeWriteRegister:
-	ld bc,TurboRPCM.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
 ; ix = this
 TurboRPCM_Enable:
 	ld a,80H
