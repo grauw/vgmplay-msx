@@ -82,54 +82,36 @@ OPN_FillRegisters:
 
 ; ix = this
 OPN_Mute: PROC
-	ld b,0EH
-	ld de,07F40H
-	call OPN_FillRegisters		; TL
-	ld de,0022H					; Reset LFO
-	call OPN_WriteRegister
-	ld de,0027H					; Disable CSM/Timers
-	call OPN_WriteRegister
-	ld de,0028H					; KEY-OFF 1
-	call OPN_WriteRegister
-	ld de,0128H					; KEY-OFF 2
-	call OPN_WriteRegister
-	ld de,0228H					; KEY-OFF 3
-	call OPN_WriteRegister
-	ld de,0428H					; KEY-OFF 4
-	call OPN_WriteRegister
-	ld de,0528H					; KEY-OFF 5
-	call OPN_WriteRegister
-	ld de,0628H					; KEY-OFF 6
-	call OPN_WriteRegister
-	ld de,002BH					; Toggle DAC off
-	call OPN_WriteRegister
+	ld b,3  ; mute SSG
 	ld de,0008H
-	call OPN_WriteRegister
-	ld de,0009H
-	call OPN_WriteRegister
-	ld de,000AH
-	call OPN_WriteRegister
+	call OPN_FillRegisters
 	ld b,14
 	ld de,0000H
-PSGLoop:
+	call OPN_FillRegisters
+	ld b,10H
+	ld de,0F80H
+	call OPN_FillRegisters  ; max release rate
+	ld b,10H
+	ld de,7F40H
+	call OPN_FillRegisters  ; total level = -96db
+	ld b,04H
+	ld de,0028H  ; key off FM OPs
+KeyOffLoop:
 	push bc
 	push de
-	call OPN_SafeWriteRegister
+	call OPN_WriteRegister
 	pop de
 	pop bc
-	inc e
-	djnz PSGLoop
+	inc d
+	djnz KeyOffLoop
 	ret
 	ENDP
 
 ; ix = this
 OPN_Reset:
-	ld b,83H
-	ld de,0030H
-	call OPN_FillRegisters		; Zero fill registers
-	ld b,03H
-	ld de,0C0B4H
-	call OPN_FillRegisters		; Reset the PANPOTs to middle (monaural)
+	ld b,0B4H
+	ld de,0000H
+	call OPN_FillRegisters
 	ret
 
 ; ix = this
