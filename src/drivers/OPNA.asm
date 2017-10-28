@@ -65,8 +65,8 @@ OPNA: MACRO
 		out (OPNA_FM1_DATA),a
 	Wait:
 		in a,(OPNA_STATUS0)
-		bit 7,a
-		jr nz,Wait
+		rla
+		jr c,Wait
 		ret
 		ENDP
 	TimerControl:
@@ -93,8 +93,8 @@ OPNA: MACRO
 		out (OPNA_FM2_DATA),a
 	Wait:
 		in a,(OPNA_STATUS0)
-		bit 7,a
-		jr nz,Wait
+		rla
+		jr c,Wait
 		ret
 		ENDP
 	MaskControl2:
