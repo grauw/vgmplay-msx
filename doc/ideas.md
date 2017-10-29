@@ -24,7 +24,7 @@ Show song length
 Chip emulations
 
   * Play OPLL on OPL4 (with current best known instrument settings)
-  * Play PCM chips on OPL4 (C140, OKIM, and SegaPCM which is similar to OPL4)
+  * Play PCM chips on OPL4 (C140, OKIM, and MultiPCM which is similar to OPL4)
 
 Sparse MSX-AUDIO and OPL4 (AD)PCM loading
 
