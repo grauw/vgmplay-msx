@@ -171,7 +171,6 @@ MSXAudio_Construct:
 ; ix = this
 MSXAudio_Destruct:
 	call MSXAudio_Mute
-	call MSXAudio_Reset
 	ret
 
 ; e = register
@@ -206,19 +205,28 @@ MSXAudio_FillRegisters:
 
 ; ix = this
 MSXAudio_Mute:
+	ld de,01H << 8 | MSXAudio_ADPCM_CONTROL
+	call MSXAudio_WriteRegister  ; reset ADPCM
+	ld de,00BDH
+	call MSXAudio_WriteRegister  ; rhythm off
+	ld b,16H
+	ld de,0F80H
+	call MSXAudio_FillRegisters  ; max release rate
 	ld b,16H
 	ld de,3F40H
-	call MSXAudio_FillRegisters
+	call MSXAudio_FillRegisters  ; min total level
+	ld b,09H
+	ld de,00A0H
+	call MSXAudio_FillRegisters  ; frequency 0
+	ld b,09H
+	ld de,00A0H
+	call MSXAudio_FillRegisters  ; key off
 	ret
 
 ; ix = this
 MSXAudio_Reset:
-	call MSXAudio_Mute
-	ld b,040H
+	ld b,0C9H
 	ld de,0000H
-	call MSXAudio_FillRegisters
-	ld b,069H
-	ld de,0060H
 	call MSXAudio_FillRegisters
 	ret
 
