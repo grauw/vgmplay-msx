@@ -105,19 +105,18 @@ MSXMusic_FillRegisters:
 ; ix = this
 MSXMusic_Mute:
 	ld de,000EH
-	call MSXMusic_WriteRegister
-	ld b,4
-	ld de,0FF04H
-	call MSXMusic_FillRegisters
+	call MSXMusic_WriteRegister  ; rhythm off
+	ld de,0F07H
+	call MSXMusic_WriteRegister  ; max carrier release rate
 	ld b,9
-	ld de,0030H
-	call MSXMusic_FillRegisters
+	ld de,0F30H
+	call MSXMusic_FillRegisters  ; instrument 0, min volume
 	ld b,9
 	ld de,0010H
-	call MSXMusic_FillRegisters
+	call MSXMusic_FillRegisters  ; frequency 0
 	ld b,9
 	ld de,0020H
-	call MSXMusic_FillRegisters
+	call MSXMusic_FillRegisters  ; key off
 	ret
 
 ; ix = this
