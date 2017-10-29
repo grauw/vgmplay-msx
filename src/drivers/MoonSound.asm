@@ -173,13 +173,6 @@ MoonSound_WriteRegister:
 ; e = register
 ; d = value
 ; ix = this
-MoonSound_SafeWriteRegister:
-	ld bc,MoonSound.SafeWriteRegister
-	jp Utils_JumpIXOffsetBC
-
-; e = register
-; d = value
-; ix = this
 MoonSound_WriteRegister2:
 	ld a,e
 	ld bc,MoonSound.WriteRegister2
@@ -188,23 +181,9 @@ MoonSound_WriteRegister2:
 ; e = register
 ; d = value
 ; ix = this
-MoonSound_SafeWriteRegister2:
-	ld bc,MoonSound.SafeWriteRegister2
-	jp Utils_JumpIXOffsetBC
-
-; e = register
-; d = value
-; ix = this
 MoonSound_WriteRegisterWave:
 	ld a,e
 	ld bc,MoonSound.WriteRegisterWave
-	jp Utils_JumpIXOffsetBC
-
-; e = register
-; d = value
-; ix = this
-MoonSound_SafeWriteRegisterWave:
-	ld bc,MoonSound.SafeWriteRegisterWave
 	jp Utils_JumpIXOffsetBC
 
 ; a = register
@@ -428,10 +407,10 @@ MoonSound_SetMemoryAddress:
 MoonSound_FillRegisterPairs:
 	push bc
 	push de
-	call MoonSound_SafeWriteRegister
+	call MoonSound_WriteRegister
 	pop de
 	push de
-	call MoonSound_SafeWriteRegister2
+	call MoonSound_WriteRegister2
 	pop de
 	pop bc
 	inc e
@@ -445,7 +424,7 @@ MoonSound_FillRegisterPairs:
 MoonSound_FillRegistersWave:
 	push bc
 	push de
-	call MoonSound_SafeWriteRegisterWave
+	call MoonSound_WriteRegisterWave
 	pop de
 	pop bc
 	inc e
