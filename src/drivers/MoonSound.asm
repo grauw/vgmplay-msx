@@ -159,7 +159,7 @@ MoonSound_Construct:
 
 ; ix = this
 MoonSound_Destruct:
-	call MoonSound_Reset
+	call MoonSound_Mute
 	ret
 
 ; e = register
@@ -425,28 +425,17 @@ MoonSound_SetMemoryAddress:
 ; e = register base
 ; d = value
 ; ix = this
-MoonSound_FillRegisters:
+MoonSound_FillRegisterPairs:
 	push bc
 	push de
 	call MoonSound_SafeWriteRegister
 	pop de
-	pop bc
-	inc e
-	djnz MoonSound_FillRegisters
-	ret
-
-; b = count
-; e = register base
-; d = value
-; ix = this
-MoonSound_FillRegisters2:
-	push bc
 	push de
 	call MoonSound_SafeWriteRegister2
 	pop de
 	pop bc
 	inc e
-	djnz MoonSound_FillRegisters2
+	djnz MoonSound_FillRegisterPairs
 	ret
 
 ; b = count
@@ -466,45 +455,38 @@ MoonSound_FillRegistersWave:
 ; ix = this
 MoonSound_Mute:
 	ld b,16H
-	ld de,3F40H
-	call MoonSound_FillRegisters
+	ld de,0F80H
+	call MoonSound_FillRegisterPairs  ; max release rate
 	ld b,16H
 	ld de,3F40H
-	call MoonSound_FillRegisters2
-	ld b,048H
-	ld de,0FF98H
-	call MoonSound_FillRegistersWave
+	call MoonSound_FillRegisterPairs  ; min total level
+	ld b,09H
+	ld de,00A0H
+	call MoonSound_FillRegisterPairs  ; frequency 0
+	ld b,09H
+	ld de,00B0H
+	call MoonSound_FillRegisterPairs  ; key off
 	ld b,18H
-	ld de,0FF50H
-	call MoonSound_FillRegistersWave
+	ld de,4068H
+	call MoonSound_FillRegistersWave  ; key off, damp
 	ret
 
 ; ix = this
 MoonSound_Reset:
-	call MoonSound_Mute
+	ld de,00000011B << 8 | MoonSound_FM2_NEW
+	call MoonSound_WriteRegister2
 	ld b,0DAH
 	ld de,0020H
 	call MoonSound_FillRegistersWave
 	ld de,1BF8H
-	call MoonSound_SafeWriteRegisterWave
-	ld b,020H
+	call MoonSound_WriteRegisterWave
+	ld b,0D6H
 	ld de,0020H
-	call MoonSound_FillRegisters
-	ld b,020H
-	ld de,0020H
-	call MoonSound_FillRegisters2
-	ld b,096H
-	ld de,0060H
-	call MoonSound_FillRegisters
-	ld b,096H
-	ld de,0060H
-	call MoonSound_FillRegisters2
-	ld b,020H
-	ld de,0000H
-	call MoonSound_FillRegisters
-	ld b,020H
-	ld de,0000H
-	call MoonSound_FillRegisters2
+	call MoonSound_FillRegisterPairs
+	ld de,0008H
+	call MoonSound_WriteRegister
+	ld de,0004H
+	call MoonSound_WriteRegister2
 	ret
 
 ; f <- c: Found
