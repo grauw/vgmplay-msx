@@ -244,8 +244,7 @@ MoonSound_ProcessROMDataBlock:
 MoonSound_LoadSampleFromReader: PROC
 	push de
 	push hl
-	ld d,00000011B
-	ld e,MoonSound_FM2_NEW
+	ld de,00000011B << 8 | MoonSound_FM2_NEW
 	call MoonSound_WriteRegister2
 	pop hl
 	pop de
@@ -367,14 +366,12 @@ MoonSound_ReadMemoryByte:
 	push de
 	push hl
 	call MoonSound_SetMemoryAddress
-	ld d,00010001B
-	ld e,MoonSound_WAVE_MEMORY_CONTROL
+	ld de,00010001B << 8 | MoonSound_WAVE_MEMORY_CONTROL
 	call MoonSound_WriteRegisterWave
 	ld a,MoonSound_WAVE_MEMORY_DATA
 	call MoonSound_ReadRegisterWave
 	push af
-	ld d,00010000B
-	ld e,MoonSound_WAVE_MEMORY_CONTROL
+	ld de,00010000B << 8 | MoonSound_WAVE_MEMORY_CONTROL
 	call MoonSound_WriteRegisterWave
 	pop af
 	pop hl
@@ -389,14 +386,12 @@ MoonSound_WriteMemoryByte:
 	push hl
 	push af
 	call MoonSound_SetMemoryAddress
-	ld d,00010001B
-	ld e,MoonSound_WAVE_MEMORY_CONTROL
+	ld de,00010001B << 8 | MoonSound_WAVE_MEMORY_CONTROL
 	call MoonSound_WriteRegisterWave
 	pop de
 	ld e,MoonSound_WAVE_MEMORY_DATA
 	call MoonSound_WriteRegisterWave
-	ld d,00010000B
-	ld e,MoonSound_WAVE_MEMORY_CONTROL
+	ld de,00010000B << 8 | MoonSound_WAVE_MEMORY_CONTROL
 	call MoonSound_WriteRegisterWave
 	pop hl
 	pop de
