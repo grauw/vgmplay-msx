@@ -72,7 +72,7 @@ SFG_Construct:
 
 ; ix = this
 SFG_Destruct:
-	call SFG_Reset
+	call SFG_Mute
 	ret
 
 ; a = slot
@@ -92,39 +92,45 @@ SFG_WriteRegister:
 	ld bc,SFG.WriteRegister
 	jp Utils_JumpIXOffsetBC
 
+; b = count
+; e = register base
+; d = value
 ; ix = this
-SFG_Reset:
-	call SFG_AllNotesOff
-	call SFG_Mute
-	ret
-
-; ix = this
-SFG_AllNotesOff: PROC
-	ld b,8
-	ld de,0008H
-Loop:
-	push bc
-	push de
-	call SFG_WriteRegister
-	pop de
-	pop bc
-	inc d
-	djnz Loop
-	ret
-	ENDP
-
-; ix = this
-SFG_Mute: PROC
-	ld b,32
-	ld de,7F60H
-Loop:
+SFG_FillRegisters:
 	push bc
 	push de
 	call SFG_WriteRegister
 	pop de
 	pop bc
 	inc e
-	djnz Loop
+	djnz SFG_FillRegisters
+	ret
+
+; ix = this
+SFG_Reset:
+	ld b,100H
+	ld de,0000H
+	call SFG_FillRegisters
+	ret
+
+; ix = this
+SFG_Mute: PROC
+	ld b,20H
+	ld de,0FE0H
+	call SFG_FillRegisters  ; max release rate
+	ld b,20H
+	ld de,7F60H
+	call SFG_FillRegisters  ; min total level
+	ld b,08H
+	ld de,0008H
+KeyOffLoop:
+	push bc
+	push de
+	call SFG_WriteRegister
+	pop de
+	pop bc
+	inc d
+	djnz KeyOffLoop
 	ret
 	ENDP
 
