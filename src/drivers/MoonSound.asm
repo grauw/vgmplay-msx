@@ -433,6 +433,8 @@ MoonSound_FillRegistersWave:
 
 ; ix = this
 MoonSound_Mute:
+	ld de,00BDH
+	call MoonSound_WriteRegister  ; rhythm off
 	ld b,16H
 	ld de,0F80H
 	call MoonSound_FillRegisterPairs  ; max release rate
