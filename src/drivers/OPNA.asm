@@ -304,9 +304,9 @@ OPNA_Mute: PROC
 	call OPNA_FillRegisterPairs  ; max release rate
 	ld b,10H
 	ld de,7F40H
-	call OPNA_FillRegisterPairs  ; total level = -96db
+	call OPNA_FillRegisterPairs  ; min total level
 	ld b,08H
-	ld de,0028H  ; key off FM OPs
+	ld de,0028H
 KeyOffLoop:
 	push bc
 	push de

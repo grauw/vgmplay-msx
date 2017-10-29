@@ -93,9 +93,9 @@ OPN_Mute: PROC
 	call OPN_FillRegisters  ; max release rate
 	ld b,10H
 	ld de,7F40H
-	call OPN_FillRegisters  ; total level = -96db
+	call OPN_FillRegisters  ; min total level
 	ld b,04H
-	ld de,0028H  ; key off FM OPs
+	ld de,0028H
 KeyOffLoop:
 	push bc
 	push de
