@@ -282,6 +282,8 @@ OPNA_FillRegisterPairs:
 	push bc
 	push de
 	call OPNA_SafeWriteRegister
+	pop de
+	push de
 	call OPNA_SafeWriteRegister2
 	pop de
 	pop bc
