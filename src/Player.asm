@@ -104,11 +104,7 @@ Player_Construct:
 	push ix
 	ld e,ixl
 	ld d,ixh
-	IF DEBUG
-	ld hl,Player.UpdateDebug
-	ELSE
-	ld hl,Player.Update
-	ENDIF
+	ld hl,DEBUG ? Player.UpdateDebug : Player.Update
 	add hl,de
 	call TimerFactory_CreateTimer
 	pop ix
