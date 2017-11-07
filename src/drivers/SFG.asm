@@ -79,7 +79,8 @@ SFG_Destruct:
 ; ix = this
 SFG_SetSlot:
 	ld (ix + SFG.slot),a
-	call Memory_PrepareSlotPage0
+	ld h,00H
+	call Memory_PrepareSlot
 	ld (ix + SFG.preparedSlot),d
 	ld (ix + SFG.preparedSubslot),e
 	ret

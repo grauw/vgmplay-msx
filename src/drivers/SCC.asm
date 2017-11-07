@@ -98,7 +98,8 @@ SCC_Destruct:
 ; ix = this
 SCC_SetSlot:
 	ld (ix + SCC.slot),a
-	call Memory_PrepareSlotPage2
+	ld h,80H
+	call Memory_PrepareSlot
 	ld (ix + SCC.preparedSlot),d
 	ld (ix + SCC.preparedSubslot),e
 	ret
@@ -167,10 +168,12 @@ SCC_Detect:
 ; f <- c: found
 SCC_MatchSlot: PROC
 	ex af,af'
-	call Memory_GetSlotPage2
+	ld h,80H
+	call Memory_GetSlot
 	push af
 	ex af,af'
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 	ld a,(SCC_BANK_SELECT)
 	ld d,a
 	ld a,SCC_BANK
@@ -201,14 +204,16 @@ NoSCC:
 	ld a,d
 	ld (SCC_BANK_SELECT),a
 	pop af
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 	and a
 	ret
 Found:
 	ld a,SCC_BANK_DEFAULT
 	ld (SCC_BANK_SELECT),a
 	pop af
-	call Memory_SetSlotPage2
+	ld h,80H
+	call Memory_SetSlot
 	scf
 	ret
 	ENDP

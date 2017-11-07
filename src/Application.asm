@@ -191,7 +191,8 @@ Application_ConstructMappedBuffer:
 	push ix
 	ld ix,MappedBuffer_instance
 	call MappedBuffer_Construct
-	call Memory_GetSlotPage2
+	ld h,80H
+	call Memory_GetSlot
 	ld b,a
 	call Mapper_instance.GetP2
 	call MappedBuffer_SetFreebie
