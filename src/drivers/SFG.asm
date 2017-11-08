@@ -24,27 +24,15 @@ SFG: MACRO
 		jr z,MaskCT
 	; a = register
 	; d = value
-	WriteRegister:
-		ld c,0A8H
-		ld hl,0FFFFH
-		di
-		in b,(c)
-		ld e,0
-	preparedSlot: equ $ - 1
-		out (c),e
-		ld e,(hl)
-		ld (hl),0
-	preparedSubslot: equ $ - 1
+	WriteRegister: PROC
+	begin: Memory_AccessPreparedSlot_BEGIN
 		ld (SFG_YM2151_ADDRESS),a
 		cp (hl)  ; R800 wait: ~4 bus cycles
 		ld a,d
 		ld (SFG_YM2151_DATA),a
-		ld a,e
-		cpl
-		ld (hl),a
-		ei
-		out (c),b
+		Memory_AccessPreparedSlot_END_HL
 		ret
+		ENDP
 	MaskCT:
 		ld a,d
 		and 00111111B
@@ -81,8 +69,8 @@ SFG_SetSlot:
 	ld (ix + SFG.slot),a
 	ld h,00H
 	call Memory_PrepareSlot
-	ld (ix + SFG.preparedSlot),d
-	ld (ix + SFG.preparedSubslot),e
+	ld (ix + SFG.WriteRegister.begin.preparedSlot),d
+	ld (ix + SFG.WriteRegister.begin.preparedSubslot),e
 	ret
 
 ; e = register

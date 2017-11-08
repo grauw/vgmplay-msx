@@ -24,26 +24,14 @@ SCC: MACRO
 		ld a,e
 	; a = register
 	; d = value
-	WriteRegister:
-		ld c,0A8H
-		ld hl,0FFFFH
-		di
-		in b,(c)
-		ld e,0
-	preparedSlot: equ $ - 1
-		out (c),e
-		ld e,(hl)
-		ld (hl),0
-	preparedSubslot: equ $ - 1
+	WriteRegister: PROC
+	begin: Memory_AccessPreparedSlot_BEGIN
 		ld h,SCC_REGISTER_BASE >> 8
 		ld l,a
 		ld (hl),d
-		ld a,e
-		cpl
-		ld (0FFFFH),a
-		ei
-		out (c),b
+		Memory_AccessPreparedSlot_END
 		ret
+		ENDP
 
 	; e = channel * 20H + offset
 	; d = value
@@ -100,8 +88,8 @@ SCC_SetSlot:
 	ld (ix + SCC.slot),a
 	ld h,80H
 	call Memory_PrepareSlot
-	ld (ix + SCC.preparedSlot),d
-	ld (ix + SCC.preparedSubslot),e
+	ld (ix + SCC.WriteRegister.begin.preparedSlot),d
+	ld (ix + SCC.WriteRegister.begin.preparedSubslot),e
 	ret
 
 ; ix = this
