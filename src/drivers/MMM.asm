@@ -47,7 +47,7 @@ MMM_Destruct:
 MMM_Enable:
 	ld a,080H
 	out (MMM_CONTROL),a
-	ld c,0C0H
+	ld e,0C0H
 	ld a,(ix + MMM.slot)
 	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	call Memory_WriteSlot
@@ -59,7 +59,7 @@ MMM_Enable:
 MMM_Disable:
 	ld a,080H
 	out (MMM_CONTROL),a
-	ld c,080H
+	ld e,080H
 	ld a,(ix + MMM.slot)
 	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	call Memory_WriteSlot

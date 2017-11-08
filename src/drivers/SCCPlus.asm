@@ -122,11 +122,11 @@ SCCPlus_SetSlot:
 ; ix = this
 SCCPlus_Select:
 	ld hl,SCCPlus_MODE
-	ld c,SCCPlus_MODE_SCCPLUS
+	ld e,SCCPlus_MODE_SCCPLUS
 	ld a,(ix + SCCPlus.slot)
 	call Memory_WriteSlot
 	ld hl,SCCPlus_BANK_SELECT
-	ld c,SCCPlus_BANK
+	ld e,SCCPlus_BANK
 	ld a,(ix + SCCPlus.slot)
 	call Memory_WriteSlot
 	ret
@@ -134,11 +134,11 @@ SCCPlus_Select:
 ; ix = this
 SCCPlus_Deselect:
 	ld hl,SCCPlus_BANK_SELECT
-	ld c,SCCPlus_BANK_DEFAULT
+	ld e,SCCPlus_BANK_DEFAULT
 	ld a,(ix + SCCPlus.slot)
 	call Memory_WriteSlot
 	ld hl,SCCPlus_MODE
-	ld c,SCCPlus_MODE_SCC
+	ld e,SCCPlus_MODE_SCC
 	ld a,(ix + SCCPlus.slot)
 	call Memory_WriteSlot
 	ret

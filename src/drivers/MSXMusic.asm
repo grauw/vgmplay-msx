@@ -23,7 +23,7 @@ MSXMusic: MACRO
 	WriteRegister:
 		out (MSXMusic_ADDRESS),a
 		in a,(MSXMusic_ADDRESS)  ; wait 12 cycles
-		ld a,(hl)                ;  "
+		in a,(MSXMusic_ADDRESS)  ;  "
 		ld a,d
 		out (MSXMusic_DATA),a
 		in a,(09AH)  ; R800 wait: ~72 cycles
@@ -67,7 +67,7 @@ MSXMusic_Enable:
 	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_ReadSlot
 	set 0,a
-	ld c,a
+	ld e,a
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_WriteSlot
@@ -81,7 +81,7 @@ MSXMusic_Disable:
 	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_ReadSlot
 	res 0,a
-	ld c,a
+	ld e,a
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic_ENABLE_ADDRESS
 	call Memory_WriteSlot

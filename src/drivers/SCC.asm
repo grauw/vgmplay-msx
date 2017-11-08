@@ -107,7 +107,7 @@ SCC_SetSlot:
 ; ix = this
 SCC_Select:
 	ld hl,SCC_BANK_SELECT
-	ld c,SCC_BANK
+	ld e,SCC_BANK
 	ld a,(ix + SCC.slot)
 	call Memory_WriteSlot
 	ret
@@ -115,7 +115,7 @@ SCC_Select:
 ; ix = this
 SCC_Deselect:
 	ld hl,SCC_BANK_SELECT
-	ld c,SCC_BANK_DEFAULT
+	ld e,SCC_BANK_DEFAULT
 	ld a,(ix + SCC.slot)
 	call Memory_WriteSlot
 	ret
