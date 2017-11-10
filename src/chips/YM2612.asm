@@ -103,8 +103,6 @@ YM2612: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessPCMWriteWait0:
-		jp ProcessPCMWrite
 	ProcessPCMWriteWait1:
 		call ProcessPCMWrite
 		ld de,1

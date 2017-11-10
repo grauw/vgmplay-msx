@@ -523,7 +523,7 @@ Player_commandsJumpTable:
 	dw Player_Wait14Samples       ; 7DH
 	dw Player_Wait15Samples       ; 7EH
 	dw Player_Wait16Samples       ; 7FH
-	dw YM2612_instance.ProcessPCMWriteWait0       ; 80H
+	dw YM2612_instance.ProcessPCMWrite            ; 80H
 	dw YM2612_instance.ProcessPCMWriteWait1       ; 81H
 	dw YM2612_instance.ProcessPCMWriteWait2       ; 82H
 	dw YM2612_instance.ProcessPCMWriteWait3       ; 83H
