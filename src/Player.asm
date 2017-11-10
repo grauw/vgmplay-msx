@@ -12,10 +12,9 @@ Player: MACRO
 	; de = wait period
 	; ix = this
 	Wait:
-		ld hl,-1
+		ld hl,0
 	time: equ $ - 2
-		and a
-		sbc hl,de
+		add hl,de
 		ld (time),hl
 		ret nc
 	Yield:
@@ -60,7 +59,8 @@ Player: MACRO
 	; ix = this
 	Update:
 		ld hl,(time)
-		add hl,de
+		and a
+		sbc hl,de
 		ld (time),hl
 		ret nc
 		ld ix,this
