@@ -243,7 +243,7 @@ Application_InflateFile:
 	call FileReader_class.New
 	call FileReader_Construct
 	push ix
-	ld a,0
+	ld a,GZIP_CRC32 ? -1 : 0
 	call GzipArchive_class.New
 	call GzipArchive_Construct
 	push ix
