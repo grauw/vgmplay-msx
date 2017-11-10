@@ -7,6 +7,7 @@
 	INCLUDE "Macros.asm"
 
 DEBUG: equ 0
+GZIP_CRC32: equ 0
 
 HEAP: equ 0C000H
 HEAP_SIZE: equ 1180H
@@ -58,10 +59,6 @@ COM_Main:
 	INCLUDE "Reader.asm"
 	INCLUDE "Writer.asm"
 	INCLUDE "FileReader.asm"
-	INCLUDE "CRC32Checker.asm"
-
-CRC32Table:
-	; not present
 
 	ENDS
 
