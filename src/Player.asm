@@ -12,7 +12,7 @@ Player: MACRO
 	; de = wait period
 	; ix = this
 	Wait:
-		ld hl,0
+		ld hl,-1
 	time: equ $ - 2
 		and a
 		sbc hl,de
@@ -20,12 +20,6 @@ Player: MACRO
 		ret nc
 	Yield:
 		pop af  ; break out of ProcessNext
-		ex de,hl
-		ld hl,0
-		ld (time),hl
-		and a
-		sbc hl,de
-		ld (wait),hl
 		ret
 
 	reader:
@@ -33,8 +27,6 @@ Player: MACRO
 	header:
 		dw 0
 	timer:
-		dw 0
-	wait:
 		dw 0
 	wait60th:
 		dw Player_SAMPLES_60HZ
@@ -67,12 +59,12 @@ Player: MACRO
 	; de = time passed
 	; ix = this
 	Update:
+		ld hl,(time)
+		add hl,de
+		ld (time),hl
+		ret nc
 		ld ix,this
-		ld (time),de
-		ld de,(wait)
-		ld hl,ProcessNext  ; return to ProcessNext
-		push hl
-		jp Wait
+		jr ProcessNext
 
 	; de = time passed
 	; ix = this
