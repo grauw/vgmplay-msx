@@ -214,6 +214,7 @@ MoonSound_ProcessROMDataBlock:
 	ret z
 	exx
 	call MoonSound_LoadSampleFromReader
+	exx
 	ret
 
 ; ehl = sample start address
