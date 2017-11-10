@@ -38,13 +38,14 @@ YM2612: MACRO
 		ld hl,position
 		inc (hl)
 		ret nz
-		ld a,(pcmDataPosition + 1)
-		inc a
-		ld (pcmDataPosition + 1),a
+		ld hl,pcmDataPosition + 1
+		inc (hl)
 		jr nz,BufferPCMData
-		ld de,(pcmDataPosition + 2)
-		inc de
-		ld (pcmDataPosition + 2),de
+		inc hl
+		inc (hl)
+		jr nz,BufferPCMData
+		inc hl
+		inc (hl)
 		jr BufferPCMData
 		ENDP
 
