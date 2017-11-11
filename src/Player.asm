@@ -11,6 +11,7 @@ Player: MACRO
 
 	; de = wait period
 	; ix = this
+	; iy = reader
 	Wait:
 		ld hl,0
 	time: equ $ - 2
@@ -187,7 +188,10 @@ Loop:
 	ret
 	ENDP
 
-Player_Wait_JP_INLINE: MACRO
+; de = wait period
+; ix = this
+; iy = reader
+Player_WAIT: MACRO
 	jp ix
 	ENDM
 
@@ -302,63 +306,63 @@ Set50th:
 ; iy = reader
 Player_Wait1Samples:
 	ld de,1
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait2Samples:
 	ld de,2
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait3Samples:
 	ld de,3
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait4Samples:
 	ld de,4
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait5Samples:
 	ld de,5
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait6Samples:
 	ld de,6
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait7Samples:
 	ld de,7
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait8Samples:
 	ld de,8
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait9Samples:
 	ld de,9
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait10Samples:
 	ld de,10
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait11Samples:
 	ld de,11
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait12Samples:
 	ld de,12
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait13Samples:
 	ld de,13
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait14Samples:
 	ld de,14
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait15Samples:
 	ld de,15
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait16Samples:
 	ld de,16
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait735Samples:
 	ld e,(ix + Player.wait60th)
 	ld d,(ix + Player.wait60th + 1)
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_Wait882Samples:
 	ld e,(ix + Player.wait50th)
 	ld d,(ix + Player.wait50th + 1)
-	Player_Wait_JP_INLINE
+	Player_WAIT
 Player_WaitNSamples:
 	call Reader_ReadWord_IY
-	Player_Wait_JP_INLINE
+	Player_WAIT
 
 ; ix = this
 ; iy = reader

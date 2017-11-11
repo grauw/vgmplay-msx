@@ -107,63 +107,63 @@ YM2612: MACRO
 	ProcessPCMWriteWait1:
 		call ProcessPCMWrite
 		ld de,1
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait2:
 		call ProcessPCMWrite
 		ld de,2
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait3:
 		call ProcessPCMWrite
 		ld de,3
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait4:
 		call ProcessPCMWrite
 		ld de,4
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait5:
 		call ProcessPCMWrite
 		ld de,5
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait6:
 		call ProcessPCMWrite
 		ld de,6
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait7:
 		call ProcessPCMWrite
 		ld de,7
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait8:
 		call ProcessPCMWrite
 		ld de,8
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait9:
 		call ProcessPCMWrite
 		ld de,9
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait10:
 		call ProcessPCMWrite
 		ld de,10
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait11:
 		call ProcessPCMWrite
 		ld de,11
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait12:
 		call ProcessPCMWrite
 		ld de,12
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait13:
 		call ProcessPCMWrite
 		ld de,13
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait14:
 		call ProcessPCMWrite
 		ld de,14
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ProcessPCMWriteWait15:
 		call ProcessPCMWrite
 		ld de,15
-		Player_Wait_JP_INLINE
+		Player_WAIT
 	ENDM
 
 ; ix = this
