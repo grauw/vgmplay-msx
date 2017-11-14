@@ -3,8 +3,8 @@
 ;
 ; Time and wait codes are in units of 44100 Hz samples
 ;
-Player_SAMPLES_60HZ: equ 735
-Player_SAMPLES_50HZ: equ 882
+Player_SAMPLES_60TH: equ 735
+Player_SAMPLES_50TH: equ 882
 
 Player: MACRO
 	this:
@@ -28,10 +28,6 @@ Player: MACRO
 		dw 0
 	timer:
 		dw 0
-	wait60th:
-		dw Player_SAMPLES_60HZ
-	wait50th:
-		dw Player_SAMPLES_50HZ
 	loopCount:
 		db 0
 	maxLoops:
@@ -283,27 +279,6 @@ NoLoop:
 
 ; ix = this
 ; iy = reader
-Player_SetWait: PROC
-	call Reader_Read_IY
-	cp 62H
-	jp z,Set60th
-	cp 63H
-	jp z,Set50th
-	call System_ThrowException
-Set60th:
-	call Reader_ReadWord_IY
-	ld (ix + Player.wait60th),e
-	ld (ix + Player.wait60th + 1),d
-	ret
-Set50th:
-	call Reader_ReadWord_IY
-	ld (ix + Player.wait50th),e
-	ld (ix + Player.wait50th + 1),d
-	ret
-	ENDP
-
-; ix = this
-; iy = reader
 Player_Wait1Samples:
 	ld de,1
 	Player_WAIT
@@ -353,12 +328,10 @@ Player_Wait16Samples:
 	ld de,16
 	Player_WAIT
 Player_Wait735Samples:
-	ld e,(ix + Player.wait60th)
-	ld d,(ix + Player.wait60th + 1)
+	ld de,Player_SAMPLES_60TH
 	Player_WAIT
 Player_Wait882Samples:
-	ld e,(ix + Player.wait50th)
-	ld d,(ix + Player.wait50th + 1)
+	ld de,Player_SAMPLES_50TH
 	Player_WAIT
 Player_WaitNSamples:
 	call Reader_ReadWord_IY
@@ -499,7 +472,7 @@ Player_commandsJumpTable:
 	dw Player_WaitNSamples        ; 61H
 	dw Player_Wait735Samples      ; 62H
 	dw Player_Wait882Samples      ; 63H
-	dw Player_SetWait             ; 64H
+	dw Player_UnsupportedCommand  ; 64H
 	dw Player_UnsupportedCommand  ; 65H
 	dw Player_EndOfSoundData      ; 66H
 	dw Player_ProcessDataBlock    ; 67H
