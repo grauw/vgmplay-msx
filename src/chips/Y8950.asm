@@ -30,9 +30,9 @@ Y8950_Construct:
 
 ; iy = drivers
 ; ix = this
-Y8950_Connect:
+Y8950_Connect: PROC
 	call Drivers_TryCreateMSXAudio_IY
-	ret nc
+	jr nc,TryMoonSound
 	call Chip_SetDriver
 	ld hl,MSXAudio.SafeWriteRegister
 	add hl,de
@@ -43,6 +43,16 @@ Y8950_Connect:
 	ld (ix + Y8950.ProcessDataBlock.process),l
 	ld (ix + Y8950.ProcessDataBlock.process + 1),h
 	ret
+TryMoonSound:
+	call Drivers_TryCreateMoonSound_IY
+	ret nc
+	call Chip_SetDriver
+	ld hl,MoonSound.SafeWriteRegister
+	add hl,de
+	ld (ix + Y8950.ProcessCommand.writeRegister),l
+	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
+	ret
+	ENDP
 
 ;
 	SECTION RAM
