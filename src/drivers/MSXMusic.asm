@@ -23,7 +23,7 @@ MSXMusic: MACRO
 	WriteRegister:
 		out (MSXMusic_ADDRESS),a
 		in a,(MSXMusic_ADDRESS)  ; wait 12 cycles
-		ld a,(hl)                ;  "
+		in a,(MSXMusic_ADDRESS)  ;  "
 		ld a,d
 		out (MSXMusic_DATA),a
 		in a,(09AH)  ; R800 wait: ~72 cycles
