@@ -469,6 +469,8 @@ MoonSound_Reset:
 	call MoonSound_WriteRegister
 	ld de,0004H
 	call MoonSound_WriteRegister2
+	ld de,00000000B << 8 | MoonSound_FM2_NEW
+	call MoonSound_WriteRegister2
 	ret
 
 ; f <- c: Found
