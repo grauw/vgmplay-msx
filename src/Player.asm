@@ -68,10 +68,10 @@ Player: MACRO
 	UpdateDebug:
 		IF DEBUG
 		ld a,0F6H
-		call VDP_SetColor
+		out (VDP_PORT_3),a
 		call Update
 		ld a,(VDP_MIRROR_0 + 7)
-		call VDP_SetColor
+		out (VDP_PORT_3),a
 		ret
 		ENDIF
 
@@ -164,6 +164,11 @@ LSBExtractionLoop:
 
 ; ix = this
 Player_Play: PROC
+	IF DEBUG
+	ld a,7 | 128
+	ld b,17
+	call VDP_SetRegister
+	ENDIF
 	call Player_GetReaderIY
 	call Player_ResetPosition
 	push ix
