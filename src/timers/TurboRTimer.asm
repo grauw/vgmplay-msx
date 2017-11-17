@@ -14,10 +14,27 @@ TurboRTimer: MACRO
 		db 0
 
 	; ix = this
-	Update:
-		call TurboRTimer_UpdateTimePassed
+	Update: PROC
+		ld b,(ix + TurboRTimer.lastTimer)
+	Wait:
+		call TurboRTimer_GetTimerValue
+		cp b
+		jr z,Wait
+		ld (ix + TurboRTimer.lastTimer),a
+		sub b
+		ld b,a
+		ld hl,0
+		ld de,TurboRTimer_SAMPLES
+	Loop:
+		add hl,de
+		djnz Loop
 		ex de,hl
+		ld a,d
+		and ~((TurboRTimer_SAMPLES_CAP - 1) >> 8)
+		jr z,super.Callback
+		ld de,TurboRTimer_SAMPLES_CAP
 		jr super.Callback
+		ENDP
 	ENDM
 
 ; hl = callback
@@ -40,29 +57,6 @@ TurboRTimer_Reset:
 	call TurboRTimer_GetTimerValue
 	ld (ix + TurboRTimer.lastTimer),a
 	ret
-
-; ix = this
-; hl <- time passed
-TurboRTimer_UpdateTimePassed: PROC
-	ld b,(ix + TurboRTimer.lastTimer)
-Wait:
-	call TurboRTimer_GetTimerValue
-	cp b
-	jp z,Wait
-	ld (ix + TurboRTimer.lastTimer),a
-	sub b
-	ld b,a
-	ld hl,0
-	ld de,TurboRTimer_SAMPLES
-Loop:
-	add hl,de
-	djnz Loop
-	ld a,h
-	and ~((TurboRTimer_SAMPLES_CAP - 1) >> 8)
-	ret z
-	ld hl,TurboRTimer_SAMPLES_CAP
-	ret
-	ENDP
 
 ; ix = this
 ; a <- 3995 Hz timer value

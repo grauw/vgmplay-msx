@@ -16,10 +16,28 @@ LineTimer: MACRO
 		db 0
 
 	; ix = this
-	Update:
-		call LineTimer_UpdateTimePassed
+	; de <- time passed
+	Update: PROC
+		ld b,(ix + LineTimer.lastLiffy)
+	Wait:
+		ld a,(ix + LineTimer.liffy)
+		cp b
+		jr z,Wait
+		ld (ix + LineTimer.lastLiffy),a
+		sub b
+		ld b,a
+		ld hl,0
+		ld de,LineTimer_SAMPLES
+	Loop:
+		add hl,de
+		djnz Loop
 		ex de,hl
+		ld a,d
+		and ~((LineTimer_SAMPLES_CAP - 1) >> 8)
+		jr z,super.Callback
+		ld de,LineTimer_SAMPLES_CAP
 		jr super.Callback
+		ENDP
 
 	InterruptHandler: PROC
 		push af
@@ -150,29 +168,6 @@ LineTimer_Reset:
 	ld a,(ix + LineTimer.liffy)
 	ld (ix + LineTimer.lastLiffy),a
 	ret
-
-; ix = this
-; hl <- time passed
-LineTimer_UpdateTimePassed: PROC
-	ld b,(ix + LineTimer.lastLiffy)
-Wait:
-	ld a,(ix + LineTimer.liffy)
-	cp b
-	jp z,Wait
-	ld (ix + LineTimer.lastLiffy),a
-	sub b
-	ld b,a
-	ld hl,0
-	ld de,LineTimer_SAMPLES
-Loop:
-	add hl,de
-	djnz Loop
-	ld a,h
-	and ~((LineTimer_SAMPLES_CAP - 1) >> 8)
-	ret z
-	ld hl,LineTimer_SAMPLES_CAP
-	ret
-	ENDP
 
 ; f <- c: found
 LineTimer_Detect:
