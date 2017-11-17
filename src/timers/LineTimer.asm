@@ -18,9 +18,6 @@ LineTimer: MACRO
 	; ix = this
 	Update:
 		call LineTimer_UpdateTimePassed
-		ld a,l
-		or h
-		ret z
 		ex de,hl
 		jr super.Callback
 

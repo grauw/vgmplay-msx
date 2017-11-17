@@ -15,9 +15,6 @@ VBlankTimer: MACRO
 	; ix = this
 	Update:
 		call VBlankTimer_UpdateTimePassed
-		ld a,l
-		or h
-		ret z
 		ex de,hl
 		jr super.Callback
 	ENDM
