@@ -9,8 +9,6 @@ VBlankTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 VBlankTimer: MACRO
 	super: Timer VBlankTimer_Start, VBlankTimer_Stop, VBlankTimer_Reset, Update
-	time:
-		dw 0
 	lastJiffy:
 		db 0
 
@@ -21,8 +19,6 @@ VBlankTimer: MACRO
 		or h
 		ret z
 		ex de,hl
-		ld (ix + VBlankTimer.time),0
-		ld (ix + VBlankTimer.time + 1),0
 		jr super.Callback
 	ENDM
 
@@ -45,8 +41,6 @@ VBlankTimer_Stop:
 VBlankTimer_Reset:
 	ld a,(JIFFY)
 	ld (ix + VBlankTimer.lastJiffy),a
-	ld (ix + VBlankTimer.time),0
-	ld (ix + VBlankTimer.time + 1),0
 	ret
 
 ; ix = this
@@ -60,8 +54,7 @@ Wait:
 	ld (ix + VBlankTimer.lastJiffy),a
 	sub b
 	ld b,a
-	ld l,(ix + VBlankTimer.time)
-	ld h,(ix + VBlankTimer.time + 1)
+	ld hl,0
 	call VDP_Is60Hz
 	ld de,VBlankTimer_SAMPLES_60HZ
 	jr z,Loop
@@ -69,13 +62,9 @@ Wait:
 Loop:
 	add hl,de
 	djnz Loop
-	ld (ix + VBlankTimer.time),l
-	ld (ix + VBlankTimer.time + 1),h
 	ld a,h
 	and ~((VBlankTimer_SAMPLES_CAP - 1) >> 8)
 	ret z
 	ld hl,VBlankTimer_SAMPLES_CAP
-	ld (ix + VBlankTimer.time),l
-	ld (ix + VBlankTimer.time + 1),h
 	ret
 	ENDP

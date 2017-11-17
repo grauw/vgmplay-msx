@@ -10,8 +10,6 @@ TurboRTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 TurboRTimer: MACRO
 	super: Timer TurboRTimer_Start, TurboRTimer_Stop, TurboRTimer_Reset, Update
-	time:
-		dw 0
 	lastTimer:
 		db 0
 
@@ -22,8 +20,6 @@ TurboRTimer: MACRO
 		or h
 		ret z
 		ex de,hl
-		ld (ix + TurboRTimer.time),0
-		ld (ix + TurboRTimer.time + 1),0
 		jr super.Callback
 	ENDM
 
@@ -46,8 +42,6 @@ TurboRTimer_Stop:
 TurboRTimer_Reset:
 	call TurboRTimer_GetTimerValue
 	ld (ix + TurboRTimer.lastTimer),a
-	ld (ix + TurboRTimer.time),0
-	ld (ix + TurboRTimer.time + 1),0
 	ret
 
 ; ix = this
@@ -61,20 +55,15 @@ Wait:
 	ld (ix + TurboRTimer.lastTimer),a
 	sub b
 	ld b,a
-	ld l,(ix + TurboRTimer.time)
-	ld h,(ix + TurboRTimer.time + 1)
+	ld hl,0
 	ld de,TurboRTimer_SAMPLES
 Loop:
 	add hl,de
 	djnz Loop
-	ld (ix + TurboRTimer.time),l
-	ld (ix + TurboRTimer.time + 1),h
 	ld a,h
 	and ~((TurboRTimer_SAMPLES_CAP - 1) >> 8)
 	ret z
 	ld hl,TurboRTimer_SAMPLES_CAP
-	ld (ix + TurboRTimer.time),l
-	ld (ix + TurboRTimer.time + 1),h
 	ret
 	ENDP
 

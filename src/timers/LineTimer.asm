@@ -11,8 +11,6 @@ LineTimer_IE1: equ 00010000B
 
 LineTimer: MACRO
 	super: Timer LineTimer_Start, LineTimer_Stop, LineTimer_Reset, Update
-	time:
-		dw 0
 	liffy: equ LineInterruptHandler.liffy
 	lastLiffy:
 		db 0
@@ -24,8 +22,6 @@ LineTimer: MACRO
 		or h
 		ret z
 		ex de,hl
-		ld (ix + LineTimer.time),0
-		ld (ix + LineTimer.time + 1),0
 		jr super.Callback
 
 	InterruptHandler: PROC
@@ -156,8 +152,6 @@ LineTimer_UninstallInterruptHandler:
 LineTimer_Reset:
 	ld a,(ix + LineTimer.liffy)
 	ld (ix + LineTimer.lastLiffy),a
-	ld (ix + LineTimer.time),0
-	ld (ix + LineTimer.time + 1),0
 	ret
 
 ; ix = this
@@ -171,20 +165,15 @@ Wait:
 	ld (ix + LineTimer.lastLiffy),a
 	sub b
 	ld b,a
-	ld l,(ix + LineTimer.time)
-	ld h,(ix + LineTimer.time + 1)
+	ld hl,0
 	ld de,LineTimer_SAMPLES
 Loop:
 	add hl,de
 	djnz Loop
-	ld (ix + LineTimer.time),l
-	ld (ix + LineTimer.time + 1),h
 	ld a,h
 	and ~((LineTimer_SAMPLES_CAP - 1) >> 8)
 	ret z
 	ld hl,LineTimer_SAMPLES_CAP
-	ld (ix + LineTimer.time),l
-	ld (ix + LineTimer.time + 1),h
 	ret
 	ENDP
 
