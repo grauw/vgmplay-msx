@@ -9,11 +9,22 @@ TurboRTimer_SAMPLES: equ 11  ; every 64 timer cycles = 11 samples
 TurboRTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 TurboRTimer: MACRO
-	super: Timer TurboRTimer_Start, TurboRTimer_Stop, TurboRTimer_Reset, TurboRTimer_Update
+	super: Timer TurboRTimer_Start, TurboRTimer_Stop, TurboRTimer_Reset, Update
 	time:
 		dw 0
 	lastTimer:
 		db 0
+
+	; ix = this
+	Update:
+		call TurboRTimer_UpdateTimePassed
+		ld a,l
+		or h
+		ret z
+		ex de,hl
+		ld (ix + TurboRTimer.time),0
+		ld (ix + TurboRTimer.time + 1),0
+		jr super.Callback
 	ENDM
 
 ; hl = callback
@@ -38,17 +49,6 @@ TurboRTimer_Reset:
 	ld (ix + TurboRTimer.time),0
 	ld (ix + TurboRTimer.time + 1),0
 	ret
-
-; ix = this
-TurboRTimer_Update:
-	call TurboRTimer_UpdateTimePassed
-	ld a,l
-	or h
-	ret z
-	ex de,hl
-	ld (ix + TurboRTimer.time),0
-	ld (ix + TurboRTimer.time + 1),0
-	jp Timer_Callback
 
 ; ix = this
 ; hl <- time passed

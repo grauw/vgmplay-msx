@@ -8,11 +8,22 @@ VBlankTimer_SAMPLES_50HZ: equ 882
 VBlankTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 VBlankTimer: MACRO
-	super: Timer VBlankTimer_Start, VBlankTimer_Stop, VBlankTimer_Reset, VBlankTimer_Update
+	super: Timer VBlankTimer_Start, VBlankTimer_Stop, VBlankTimer_Reset, Update
 	time:
 		dw 0
 	lastJiffy:
 		db 0
+
+	; ix = this
+	Update:
+		call VBlankTimer_UpdateTimePassed
+		ld a,l
+		or h
+		ret z
+		ex de,hl
+		ld (ix + VBlankTimer.time),0
+		ld (ix + VBlankTimer.time + 1),0
+		jr super.Callback
 	ENDM
 
 ; hl = callback
@@ -37,17 +48,6 @@ VBlankTimer_Reset:
 	ld (ix + VBlankTimer.time),0
 	ld (ix + VBlankTimer.time + 1),0
 	ret
-
-; ix = this
-VBlankTimer_Update:
-	call VBlankTimer_UpdateTimePassed
-	ld a,l
-	or h
-	ret z
-	ex de,hl
-	ld (ix + VBlankTimer.time),0
-	ld (ix + VBlankTimer.time + 1),0
-	jp Timer_Callback
 
 ; ix = this
 ; hl <- time passed

@@ -10,12 +10,23 @@ LineTimer_LINESTEP_50HZ: equ 51
 LineTimer_IE1: equ 00010000B
 
 LineTimer: MACRO
-	super: Timer LineTimer_Start, LineTimer_Stop, LineTimer_Reset, LineTimer_Update
+	super: Timer LineTimer_Start, LineTimer_Stop, LineTimer_Reset, Update
 	time:
 		dw 0
 	liffy: equ LineInterruptHandler.liffy
 	lastLiffy:
 		db 0
+
+	; ix = this
+	Update:
+		call LineTimer_UpdateTimePassed
+		ld a,l
+		or h
+		ret z
+		ex de,hl
+		ld (ix + LineTimer.time),0
+		ld (ix + LineTimer.time + 1),0
+		jr super.Callback
 
 	InterruptHandler: PROC
 		push af
@@ -148,17 +159,6 @@ LineTimer_Reset:
 	ld (ix + LineTimer.time),0
 	ld (ix + LineTimer.time + 1),0
 	ret
-
-; ix = this
-LineTimer_Update:
-	call LineTimer_UpdateTimePassed
-	ld a,l
-	or h
-	ret z
-	ex de,hl
-	ld (ix + LineTimer.time),0
-	ld (ix + LineTimer.time + 1),0
-	jp Timer_Callback
 
 ; ix = this
 ; hl <- time passed

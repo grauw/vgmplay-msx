@@ -13,6 +13,8 @@
 	INCLUDE "TurboRTimer.asm"
 
 Timer: MACRO ?start, ?stop, ?reset, ?update
+	Update_:
+		jr ?update
 	isActive:
 		db 0
 	start:
@@ -21,10 +23,11 @@ Timer: MACRO ?start, ?stop, ?reset, ?update
 		dw ?stop
 	reset:
 		dw ?reset
-	update:
-		dw ?update
-	callback:
-		dw 0
+	; ix = this
+	; de = time passed
+	Callback:
+		jp 0
+	callback: equ $ - 2
 	ENDM
 
 ; hl = callback
@@ -66,12 +69,4 @@ Timer_Reset:
 
 ; ix = this
 Timer_Update:
-	ld l,(ix + Timer.update)
-	ld h,(ix + Timer.update + 1)
-	jp hl
-
-; ix = this
-Timer_Callback:
-	ld l,(ix + Timer.callback)
-	ld h,(ix + Timer.callback + 1)
-	jp hl
+	jp ix
