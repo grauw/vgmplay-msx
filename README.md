@@ -114,9 +114,15 @@ mentioned in the project information section.
 You are also free to re-use code for your own projects, provided you abide by
 the license terms.
 
-Building the project with some of your own modifications is really easy on all
-modern desktop platforms. On Mac OS X and Linux, simply invoke `make` to build
-the binary and symbol files into the `bin` directory:
+VGMPlay depends on the library projects Neonlib and Gunzip; it is recommended
+to clone the project with Mercurial so they will automatically be pulled in
+at the correct version, otherwise you have to download them manually:
+
+    hg clone https://bitbucket.org/grauw/vgmplay-msx
+
+Building the project is really easy on all modern desktop platforms. On MacOS
+and Linux, simply invoke `make` to build the binary and symbol files into the
+`bin` directory:
 
     make
 
