@@ -21,12 +21,16 @@ TurboRTimer: MACRO
 		jr z,Wait
 		ld (ix + TurboRTimer.lastTimer),a
 		sub b
-		ld b,a
-		ld hl,0
-		ld de,TurboRTimer_SAMPLES
-	Loop:
-		add hl,de
-		djnz Loop
+		ld l,a
+		ld h,0
+		ld c,l
+		ld b,h
+		add hl,hl  ; x11 (TurboRTimer_SAMPLES)
+		add hl,hl
+		add hl,hl
+		add hl,bc
+		add hl,bc
+		add hl,bc
 		ex de,hl
 		jr super.Callback
 		ENDP
