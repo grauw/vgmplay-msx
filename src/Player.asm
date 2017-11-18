@@ -5,6 +5,7 @@
 ;
 Player_SAMPLES_60TH: equ 735
 Player_SAMPLES_50TH: equ 882
+Player_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 Player: MACRO
 	this:
@@ -61,6 +62,10 @@ Player: MACRO
 		ld (time),hl
 		ret nc
 		ld ix,this
+		ld a,h
+		and ~((Player_SAMPLES_CAP - 1) >> 8)
+		jr z,ProcessNext
+		ld hl,Player_SAMPLES_CAP
 		jr ProcessNext
 
 	; de = time passed

@@ -6,7 +6,6 @@
 ; There is a slight deviation of +1 second every 5 minutes (+0.35%).
 ;
 TurboRTimer_SAMPLES: equ 11  ; every 64 timer cycles = 11 samples
-TurboRTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 TurboRTimer: MACRO
 	super: Timer TurboRTimer_Start, TurboRTimer_Stop, TurboRTimer_Reset, Update
@@ -29,10 +28,6 @@ TurboRTimer: MACRO
 		add hl,de
 		djnz Loop
 		ex de,hl
-		ld a,d
-		and ~((TurboRTimer_SAMPLES_CAP - 1) >> 8)
-		jr z,super.Callback
-		ld de,TurboRTimer_SAMPLES_CAP
 		jr super.Callback
 		ENDP
 	ENDM

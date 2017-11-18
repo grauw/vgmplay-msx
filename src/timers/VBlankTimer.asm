@@ -5,7 +5,6 @@
 ;
 VBlankTimer_SAMPLES_60HZ: equ 735
 VBlankTimer_SAMPLES_50HZ: equ 882
-VBlankTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 VBlankTimer: MACRO
 	super: Timer VBlankTimer_Start, VBlankTimer_Stop, VBlankTimer_Reset, Update
@@ -31,10 +30,6 @@ VBlankTimer: MACRO
 		add hl,de
 		djnz Loop
 		ex de,hl
-		ld a,d
-		and ~((VBlankTimer_SAMPLES_CAP - 1) >> 8)
-		jr z,super.Callback
-		ld de,VBlankTimer_SAMPLES_CAP
 		jr super.Callback
 		ENDP
 	ENDM

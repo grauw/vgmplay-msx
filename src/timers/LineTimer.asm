@@ -4,7 +4,6 @@
 ; 300 Hz resolution
 ;
 LineTimer_SAMPLES: equ 147
-LineTimer_SAMPLES_CAP: equ 1 << 10  ; 1024
 LineTimer_LINESTEP_60HZ: equ 52
 LineTimer_LINESTEP_50HZ: equ 51
 LineTimer_IE1: equ 00010000B
@@ -32,10 +31,6 @@ LineTimer: MACRO
 		add hl,de
 		djnz Loop
 		ex de,hl
-		ld a,d
-		and ~((LineTimer_SAMPLES_CAP - 1) >> 8)
-		jr z,super.Callback
-		ld de,LineTimer_SAMPLES_CAP
 		jr super.Callback
 		ENDP
 
