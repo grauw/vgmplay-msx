@@ -303,6 +303,8 @@ OPNA_Mute: PROC
 	call OPNA_FillRegisters
 	ld de,01H << 8 | OPNA_ADPCM_CONTROL
 	call OPNA_WriteRegister2  ; stop ADPCM
+	ld de,0BF10H
+	call OPNA_WriteRegister  ; stop rhythm
 	ld b,10H
 	ld de,0F80H
 	call OPNA_FillRegisterPairs  ; max release rate
