@@ -70,14 +70,22 @@ YM2612: MACRO
 
 	; ix = player
 	; iy = reader
-	ProcessPCMDataSeek:
+	ProcessPCMDataSeek: PROC
 		call Reader_ReadDoubleWord_IY
 		ld a,l
 		ld (ProcessPCMWrite.position),a
+		ld a,(pcmDataPosition + 1)
+		cp h
 		ld a,h
+		jr nz,Buffer
+		ld hl,(pcmDataPosition + 2)
+		sbc hl,de
+		ret z  ; buffer block position didn’t change
+	Buffer:
 		ld (pcmDataPosition + 1),a
 		ld (pcmDataPosition + 2),de
 		jr BufferPCMData
+		ENDP
 
 	; ix = player
 	; iy = reader
