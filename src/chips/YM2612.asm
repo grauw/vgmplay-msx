@@ -56,13 +56,13 @@ YM2612: MACRO
 		push de
 		push hl
 		call MappedReader_GetPosition_IY
-		ld (pcmDataStart),hl
-		ld (pcmDataStart + 2),de
-		ld a,l
+		ld (pcmDataStartLSW),hl
+		ld (pcmDataStartMSW),de
+		xor a
 		ld (ProcessPCMWrite.position),a
-		ld a,h
 		ld (pcmDataPosition + 1),a
-		ld (pcmDataPosition + 2),de
+		ld (pcmDataPosition + 2),a
+		ld (pcmDataPosition + 3),a
 		pop hl
 		pop de
 		call MappedReader_Skip_IY
@@ -72,16 +72,11 @@ YM2612: MACRO
 	; iy = reader
 	ProcessPCMDataSeek:
 		call Reader_ReadDoubleWord_IY
-		ld bc,(pcmDataStart)
-		add hl,bc
 		ld a,l
 		ld (ProcessPCMWrite.position),a
 		ld a,h
 		ld (pcmDataPosition + 1),a
-		ex de,hl
-		ld bc,(pcmDataStart + 2)
-		add hl,bc
-		ld (pcmDataPosition + 2),hl
+		ld (pcmDataPosition + 2),de
 		jr BufferPCMData
 
 	; ix = player
@@ -92,7 +87,14 @@ YM2612: MACRO
 		push hl
 		ld hl,(pcmDataPosition)
 		ld de,(pcmDataPosition + 2)
-		ld l,0
+		ld bc,0
+	pcmDataStartLSW: equ $ - 2
+		add hl,bc
+		ld bc,0
+	pcmDataStartMSW: equ $ - 2
+		ex de,hl
+		adc hl,bc
+		ex de,hl
 		call MappedReader_SetPosition_IY
 		ld de,YM2612_pcmBuffer
 		ld bc,100H
