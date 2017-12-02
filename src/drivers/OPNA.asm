@@ -2,7 +2,7 @@
 ; OPNA YM2608
 ;
 OPNA_BASE: equ 14H
-OPNA_STATUS0: equ OPNA_BASE
+OPNA_STATUS0: equ OPNA_BASE  ; do not use, bus conflict with Music Module
 OPNA_STATUS1: equ OPNA_BASE + 2
 OPNA_FM1_ADDRESS: equ OPNA_BASE
 OPNA_FM1_DATA: equ OPNA_BASE + 1
@@ -58,13 +58,13 @@ OPNA: MACRO
 	; d = value
 	WriteRegister: PROC
 		out (OPNA_FM1_ADDRESS),a
-		in a,(OPNA_STATUS0)  ; wait 17 cycles
-		in a,(OPNA_STATUS0)
+		in a,(OPNA_STATUS1)  ; wait 17 cycles
+		in a,(OPNA_STATUS1)
 		or (hl)
 		ld a,d
 		out (OPNA_FM1_DATA),a
 	Wait:
-		in a,(OPNA_STATUS0)
+		in a,(OPNA_STATUS1)
 		rla
 		jr c,Wait
 		ret
@@ -86,13 +86,13 @@ OPNA: MACRO
 	; d = value
 	WriteRegister2: PROC
 		out (OPNA_FM2_ADDRESS),a
-		in a,(OPNA_STATUS0)  ; wait 17 cycles
-		in a,(OPNA_STATUS0)
+		in a,(OPNA_STATUS1)  ; wait 17 cycles
+		in a,(OPNA_STATUS1)
 		or (hl)
 		ld a,d
 		out (OPNA_FM2_DATA),a
 	Wait:
-		in a,(OPNA_STATUS0)
+		in a,(OPNA_STATUS1)
 		rla
 		jr c,Wait
 		ret
@@ -185,14 +185,14 @@ OPNA: MACRO
 		out (OPNA_FM2_ADDRESS),a  ; wait 12 cycles after
 		jr Wait
 	Next:
-		in a,(OPNA_STATUS0)  ; wait 12 cycles
+		in a,(OPNA_STATUS1)  ; wait 12 cycles
 		ld a,OPNA_FLAG_CONTROL
 		out (OPNA_FM2_ADDRESS),a
-		in a,(OPNA_STATUS0)  ; wait 12 cycles
+		in a,(OPNA_STATUS1)  ; wait 12 cycles
 		ld a,(hl)            ;  "
 		ld a,80H
 		out (OPNA_FM2_DATA),a
-		in a,(OPNA_STATUS0)  ; wait 12 cycles
+		in a,(OPNA_STATUS1)  ; wait 12 cycles
 		ld a,(hl)            ;  "
 		ld a,OPNA_ADPCM_DATA
 		out (OPNA_FM2_ADDRESS),a  ; wait 12 cycles after
@@ -437,8 +437,8 @@ OPNA_WriteADPCMData:
 OPNA_Detect:
 	ld a,255
 	out (OPNA_FM1_ADDRESS),a
-	in a,(OPNA_STATUS0)
-	in a,(OPNA_STATUS0)
+	in a,(OPNA_STATUS1)
+	in a,(OPNA_STATUS1)
 	or (hl)
 	in a,(OPNA_FM1_DATA)
 	sub 01H
