@@ -434,18 +434,45 @@ OPNA_WriteADPCMData:
 	jp Utils_JumpIXOffsetDE
 
 ; f <- c: Found
-OPNA_Detect:
-	ld a,255
-	out (OPNA_FM1_ADDRESS),a
+OPNA_Detect: PROC
 	in a,(OPNA_STATUS1)
+	and a
+	ret nz
+	di
+	ld de,10000000B << 8 | 29H  ; 6ch mode, disable all interrupts
+	call WriteRegister
+	ld de,0FFH << 8 | 24H  ; set minimum timer period (9 µs @ 8 MHz)
+	call WriteRegister
+	ld de,03H << 8 | 25H
+	call WriteRegister
+	ld de,00110101B << 8 | 27H  ; reset, enable & start timer a
+	call WriteRegister
+	ld b,48  ; wait 144 cycles for timer to lapse
+	djnz $
 	in a,(OPNA_STATUS1)
-	or (hl)
-	in a,(OPNA_FM1_DATA)
-	sub 01H
+	push af
+	ld de,00110000B << 8 | 27H  ; reset, disable & stop timer a
+	call WriteRegister
+	ld de,00000000B << 8 | 29H  ; 3ch mode
+	call WriteRegister
+	ei
+	pop af
+	sub 1
 	and a
 	ret nz
 	scf
 	ret
+WriteRegister:
+	ld a,e
+	out (OPNA_FM1_ADDRESS),a
+	ld b,5  ; wait 17 cycles
+	djnz $
+	ld a,d
+	out (OPNA_FM1_DATA),a
+	ld b,28  ; wait 83 cycles
+	djnz $
+	ret
+	ENDP
 
 ;
 OPNA_name:
