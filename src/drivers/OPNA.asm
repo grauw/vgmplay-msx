@@ -434,7 +434,23 @@ OPNA_WriteADPCMData:
 	jp Utils_JumpIXOffsetDE
 
 ; f <- c: Found
-OPNA_Detect: PROC
+OPNA_Detect:
+	call OPNA_DetectOPN
+	ret nc
+	call MSXAudio_Detect  ; if MSX-Audio is present as well, just return found
+	ret c
+	ld a,0FFH  ; otherwise also check the ID register
+	out (OPNA_FM1_ADDRESS),a
+	ld b,6  ; wait 17 cycles
+	djnz $
+	in a,(OPNA_FM1_DATA)
+	sub 01H
+	and a
+	ret nz
+	scf
+
+; f <- c: Found
+OPNA_DetectOPN: PROC
 	in a,(OPNA_STATUS1)
 	and a
 	ret nz
