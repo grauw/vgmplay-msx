@@ -73,7 +73,11 @@ MSXAudio: MACRO
 		jr c,WriteStartAddress
 		cp MSXAudio_STOP_ADDRESS_H + 1
 		jr c,WriteStopAddress
-		jr WriteRegister
+		cp MSXAudio_IO_CONTROL
+		jr c,WriteRegister
+		cp MSXAudio_PCM_DATA
+		jr nc,WriteRegister
+		ret
 	MaskMiscControl:
 		ld a,d
 		and 11000100B
