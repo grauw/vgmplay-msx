@@ -172,7 +172,7 @@ OPNA: MACRO
 	; hl = source
 	WriteADPCMData: PROC
 		di
-		ld d,17H
+		ld d,14H
 		ld a,OPNA_FLAG_CONTROL
 		call WriteRegister2
 		dec bc
@@ -204,7 +204,7 @@ OPNA: MACRO
 		jr nz,Next
 		dec e
 		jr nz,Next
-		ld d,1FH
+		ld d,1CH
 		ld a,OPNA_FLAG_CONTROL
 		call WriteRegister2
 		ei
