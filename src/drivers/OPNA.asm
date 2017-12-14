@@ -71,7 +71,7 @@ OPNA: MACRO
 		ENDP
 	TimerControl:
 		ld a,d
-		and 11000000b
+		and 11000000B
 		ld d,a
 		ld a,e
 		jr WriteRegister
@@ -121,13 +121,13 @@ OPNA: MACRO
 		jr WriteRegister2
 	MaskAdpcmControl:
 		ld a,d
-		and 10110001b
+		and 10110001B
 		ld d,a
 		ld a,e
 		jr WriteRegister2
 	MaskMiscControl:
 		ld a,d
-		and 11000100b  ; force x1 bit and DRAM mode
+		and 11000100B  ; force x1 bit and DRAM mode
 		ld d,a
 		ld a,e
 		jr WriteRegister2
@@ -160,7 +160,7 @@ OPNA: MACRO
 		add hl,hl
 		add hl,hl
 		ld a,l
-		or 00000111b
+		or 00000111B
 		ld d,a
 		ld a,OPNA_STOP_ADDRESS_L
 		call WriteRegister2
@@ -198,7 +198,7 @@ OPNA: MACRO
 		out (OPNA_FM2_ADDRESS),a  ; wait 12 cycles after
 	Wait:
 		in a,(OPNA_STATUS1)
-		and 00001000b
+		and 00001000B
 		jr z,Wait
 		outi
 		jr nz,Next
