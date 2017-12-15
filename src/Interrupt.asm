@@ -1,12 +1,10 @@
 ;
 ; Interrupt handler (IM2 mode)
 ;
-Interrupt_HEAPBLOCK_SIZE: equ 300H
+Interrupt_HEAPBLOCK_SIZE: equ 200H
 Interrupt_HOOK_SIZE: equ 5
 
 Interrupt: MACRO
-	heapBlock:
-		dw 0
 	table:
 		dw 0
 	entry:
@@ -18,18 +16,13 @@ Interrupt_Construct:
 	ld bc,Interrupt_HEAPBLOCK_SIZE
 	push ix
 	ld ix,Heap_main
-	call Heap_Allocate
+	call Heap_AllocateAligned
 	pop ix
 	ld a,d
 	cp 0C0H
 	call c,System_ThrowException
-	cp 100H - Interrupt_HOOK_SIZE - (Interrupt_HEAPBLOCK_SIZE + 0FFH >> 8) + 1
+	cp 100H - Interrupt_HOOK_SIZE
 	call nc,System_ThrowException
-	ld (ix + Interrupt.heapBlock),e
-	ld (ix + Interrupt.heapBlock + 1),d
-	dec de
-	ld e,0
-	inc d
 	ld (ix + Interrupt.table),e
 	ld (ix + Interrupt.table + 1),d
 	ld a,d
@@ -61,8 +54,8 @@ Interrupt_Construct:
 ; ix = this
 Interrupt_Destruct:
 	im 1
-	ld e,(ix + Interrupt.heapBlock)
-	ld d,(ix + Interrupt.heapBlock + 1)
+	ld e,(ix + Interrupt.table)
+	ld d,(ix + Interrupt.table + 1)
 	ld bc,Interrupt_HEAPBLOCK_SIZE
 	push ix
 	ld ix,Heap_main
