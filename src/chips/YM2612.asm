@@ -9,6 +9,8 @@ YM2612: MACRO
 		dd 0
 	pcmDataPosition:
 		dd 0
+	pcmBuffer:
+		dw 0
 
 	; ix = player
 	; iy = reader
@@ -29,7 +31,7 @@ YM2612: MACRO
 	; ix = player
 	; iy = reader
 	ProcessPCMWrite: PROC
-		ld a,(YM2612_pcmBuffer)
+		ld a,(0)
 	position: equ $ - 2
 		ld d,a
 		ld e,YM2612_PCM_REGISTER
@@ -104,7 +106,7 @@ YM2612: MACRO
 		adc hl,bc
 		ex de,hl
 		call MappedReader_SetPosition_IY
-		ld de,YM2612_pcmBuffer
+		ld de,(pcmBuffer)
 		ld bc,100H
 		call MappedReader_ReadBlock_IY
 		pop hl
@@ -181,10 +183,30 @@ YM2612: MACRO
 YM2612_Construct:
 	ld de,Header.ym2612Clock
 	call Chip_Construct
+	push ix
+	ld bc,100H
+	ld ix,Heap_main
+	call Heap_AllocateAligned
+	pop ix
+	ld (ix + YM2612.pcmBuffer),e
+	ld (ix + YM2612.pcmBuffer + 1),d
+	ld (ix + YM2612.ProcessPCMWrite.position),e
+	ld (ix + YM2612.ProcessPCMWrite.position + 1),d
 	call YM2612_IsYM3438
 	ret z
 	ld hl,YM2612_ym3438Name
 	call Chip_SetName
+	ret
+
+; ix = this
+YM2612_Destruct:
+	push ix
+	ld e,(ix + YM2612.pcmBuffer)
+	ld d,(ix + YM2612.pcmBuffer + 1)
+	ld bc,100H
+	ld ix,Heap_main
+	call Heap_Free
+	pop ix
 	ret
 
 ; ix = this
@@ -231,13 +253,6 @@ TryOPN2OnSFGTurboRPCM:
 	SECTION RAM
 
 YM2612_instance: YM2612
-
-	ENDS
-
-	SECTION RAM_PAGE1_ALIGNED
-
-	ALIGN 100H
-YM2612_pcmBuffer: ds 100H
 
 	ENDS
 
