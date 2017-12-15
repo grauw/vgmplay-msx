@@ -23,6 +23,7 @@ Show song length
 
 Chip emulations
 
+  * Play Y8950 on OPL4 (with samples)
   * Play OPLL on OPL4 (with current best known instrument settings)
   * Play PCM chips on OPL4 (C140, OKIM, and MultiPCM which is similar to OPL4)
 
@@ -37,7 +38,6 @@ Playlist support (m3u)
 Reduce TPA usage (to allow selecting more files in Multi Mente)
 
   * Franky detection
-  * PlaySoniq detection
   * MegaFlashROM PSG detection
 
 Suspend VDP interrupts during vgz loading to improve performance
