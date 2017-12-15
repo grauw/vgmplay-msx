@@ -11,7 +11,7 @@ dist: all
 
 copy: all
 	cp bin/vgmplay.com $(COPY_TARGET)/
-	diskutil umountDisk `mount | grep $(COPY_TARGET) | cut -d" " -f 1`
+	diskutil umountDisk $(COPY_TARGET)
 
 run: all
 	openmsx -machine Panasonic_FS-A1GT -ext slotexpander -ext slotexpander -ext ide -ext Yamaha_SFG-05 -ext mbstereo -ext moonsound -ext ram4mb -ext MegaFlashROM_SCC\+ -script openmsx.tcl
