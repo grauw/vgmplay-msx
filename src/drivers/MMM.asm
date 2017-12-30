@@ -46,24 +46,28 @@ MMM_Destruct:
 ; ix = this
 MMM_Enable:
 	ld a,080H
+	di
 	out (MMM_CONTROL),a
 	ld e,0C0H
 	ld a,(ix + MMM.slot)
 	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	call Memory_WriteSlot
 	ld a,0
+	ei
 	out (MMM_CONTROL),a
 	ret
 
 ; ix = this
 MMM_Disable:
 	ld a,080H
+	di
 	out (MMM_CONTROL),a
 	ld e,080H
 	ld a,(ix + MMM.slot)
 	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	call Memory_WriteSlot
 	ld a,0
+	ei
 	out (MMM_CONTROL),a
 	ret
 
@@ -123,6 +127,7 @@ TestValue:
 	call Mapper_instance.GetP2
 	push af
 	ld a,080H
+	di
 	out (MMM_CONTROL),a
 	ld a,b
 	out (MMM_PAGE2),a
@@ -136,6 +141,7 @@ TestValue:
 	out (MMM_CONTROL),a
 	pop af
 	call Mapper_instance.PutP2
+	ei
 	ld a,c
 	and 00111111B
 	cp b
