@@ -132,7 +132,7 @@ TestValue:
 	ld a,c
 	ld hl,MMM_BASE_ADDRESS + MMM_PAGE1
 	push bc
-	call Memory_ReadSlot
+	call RDSLT
 	pop bc
 	ld e,a
 	ld a,0
