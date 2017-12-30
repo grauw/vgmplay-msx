@@ -111,18 +111,15 @@ MMM_Detect:
 ; a = slot id
 ; f <- c: found
 MMM_MatchSlot: PROC
-	ld hl,MMM_detectValues
 	ld c,a
-	ld b,4
-Loop:
-	ld a,(hl)
-	push bc
-	push hl
+	ld a,0CH
 	call TestValue
-	pop hl
-	pop bc
-	ret nc
-	djnz Loop
+	ld a,13H
+	call c,TestValue
+	ld a,2FH
+	call c,TestValue
+	ld a,3DH
+	call c,TestValue
 	ret
 TestValue:
 	ld b,a
@@ -138,13 +135,13 @@ TestValue:
 	push bc
 	call Memory_ReadSlot
 	pop bc
-	ld c,a
+	ld e,a
 	ld a,0
 	out (MMM_CONTROL),a
 	pop af
 	call Mapper_instance.PutP1
 	ei
-	ld a,c
+	ld a,e
 	and 00111111B
 	cp b
 	scf
@@ -164,14 +161,3 @@ MMM_name:
 	db "Musical Memory Mapper",0
 
 MMM_instance: MMM
-
-	SECTION RAM_PAGE0
-
-MMM_detectValues:
-	db 0CH, 13H, 2FH, 3DH
-
-	IF $ > 4000H
-		ERROR "Must not be in pages 1-2."
-	ENDIF
-
-	ENDS
