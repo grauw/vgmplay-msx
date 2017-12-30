@@ -45,12 +45,13 @@ MMM_Destruct:
 
 ; ix = this
 MMM_Enable:
+	ld d,(ix + MMM.slot)
+	ld e,0C0H
+	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	ld a,080H
 	di
 	out (MMM_CONTROL),a
-	ld e,0C0H
-	ld a,(ix + MMM.slot)
-	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
+	ld a,d
 	call Memory_WriteSlot
 	ld a,0
 	ei
@@ -59,12 +60,13 @@ MMM_Enable:
 
 ; ix = this
 MMM_Disable:
+	ld d,(ix + MMM.slot)
+	ld e,080H
+	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
 	ld a,080H
 	di
 	out (MMM_CONTROL),a
-	ld e,080H
-	ld a,(ix + MMM.slot)
-	ld hl,MMM_BASE_ADDRESS + MMM_CONTROL
+	ld a,d
 	call Memory_WriteSlot
 	ld a,0
 	ei
@@ -161,9 +163,9 @@ TestValue:
 MMM_name:
 	db "Musical Memory Mapper",0
 
-	SECTION RAM_PAGE0
-
 MMM_instance: MMM
+
+	SECTION RAM_PAGE0
 
 MMM_detectValues:
 	db 0CH, 13H, 2FH, 3DH
