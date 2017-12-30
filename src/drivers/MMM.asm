@@ -112,17 +112,16 @@ MMM_Detect:
 ; f <- c: found
 MMM_MatchSlot: PROC
 	ld c,a
-	ld a,0CH
+	ld b,0CH
 	call TestValue
-	ld a,13H
+	ld b,13H
 	call c,TestValue
-	ld a,2FH
+	ld b,2FH
 	call c,TestValue
-	ld a,3DH
+	ld b,3DH
 	call c,TestValue
 	ret
 TestValue:
-	ld b,a
 	call Mapper_instance.GetP1
 	push af
 	ld a,080H
