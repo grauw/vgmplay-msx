@@ -126,15 +126,15 @@ Loop:
 	ret
 TestValue:
 	ld b,a
-	call Mapper_instance.GetP2
+	call Mapper_instance.GetP1
 	push af
 	ld a,080H
 	di
 	out (MMM_CONTROL),a
 	ld a,b
-	out (MMM_PAGE2),a
+	out (MMM_PAGE1),a
 	ld a,c
-	ld hl,MMM_BASE_ADDRESS + MMM_PAGE2
+	ld hl,MMM_BASE_ADDRESS + MMM_PAGE1
 	push bc
 	call Memory_ReadSlot
 	pop bc
@@ -142,7 +142,7 @@ TestValue:
 	ld a,0
 	out (MMM_CONTROL),a
 	pop af
-	call Mapper_instance.PutP2
+	call Mapper_instance.PutP1
 	ei
 	ld a,c
 	and 00111111B
