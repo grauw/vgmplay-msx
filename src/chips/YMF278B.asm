@@ -35,6 +35,13 @@ YMF278B: MACRO
 		jp Player_SkipDataBlock
 	process: equ $ - 2
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessRAMDataBlock: PROC
+		jp Player_SkipDataBlock
+	process: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -66,6 +73,10 @@ YMF278B_Connect:
 	add hl,de
 	ld (ix + YMF278B.ProcessROMDataBlock.process),l
 	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),h
+	ld hl,MoonSound.ProcessRAMDataBlock
+	add hl,de
+	ld (ix + YMF278B.ProcessRAMDataBlock.process),l
+	ld (ix + YMF278B.ProcessRAMDataBlock.process + 1),h
 	ret
 
 ;

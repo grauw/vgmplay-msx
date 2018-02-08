@@ -255,6 +255,8 @@ Player_ProcessDataBlockByType:
 	jp z,YM2608_instance.ProcessDataBlock
 	cp 84H
 	jp z,YMF278B_instance.ProcessROMDataBlock
+	cp 87H
+	jp z,YMF278B_instance.ProcessRAMDataBlock
 	cp 88H
 	jp z,Y8950_instance.ProcessDataBlock
 	jp Player_SkipDataBlock

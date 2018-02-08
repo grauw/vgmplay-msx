@@ -114,6 +114,12 @@ MoonSound: MACRO
 		ld ix,this
 		jp MoonSound_ProcessROMDataBlock
 
+	; ix = player
+	; iy = reader
+	ProcessRAMDataBlock:
+		ld ix,this
+		jp MoonSound_ProcessRAMDataBlock
+
 	; e = register
 	; d = value
 	MapWaveNumber: PROC
@@ -215,6 +221,31 @@ MoonSound_ProcessROMDataBlock:
 	exx
 	call MoonSound_LoadSampleFromReader
 	exx
+	call MoonSound_FixUpWaveHeaders
+	ret
+
+; ix = this
+; iy = reader
+MoonSound_ProcessRAMDataBlock:
+	call Reader_ReadDoubleWord_IY  ; block size
+	ld a,d
+	and a
+	call nz,System_ThrowException
+	exx
+	call Reader_ReadDoubleWord_IY  ; total ram size
+	call Reader_ReadDoubleWord_IY  ; start address
+	ld a,d
+	and a
+	call nz,System_ThrowException
+	set 5,e
+	exx
+	ld bc,8  ; subtract header from block size
+	call MoonSound_SubEHL_BC
+	call c,System_ThrowException
+	ret z
+	exx
+	call MoonSound_LoadSampleFromReader
+	exx
 	ret
 
 ; ehl = sample start address
@@ -249,7 +280,6 @@ LessThan64K:
 	call MoonSound_SubEHL_BC
 	call c,System_ThrowException
 	jr nz,Loop
-	call MoonSound_FixUpWaveHeaders
 	ret
 	ENDP
 
