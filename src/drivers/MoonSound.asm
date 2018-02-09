@@ -108,13 +108,11 @@ MoonSound: MACRO
 		ret
 		ENDP
 
-	; ix = player
 	; iy = reader
 	ProcessROMDataBlock:
 		ld ix,this
 		jp MoonSound_ProcessROMDataBlock
 
-	; ix = player
 	; iy = reader
 	ProcessRAMDataBlock:
 		ld ix,this
