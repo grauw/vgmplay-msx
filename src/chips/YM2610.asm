@@ -41,6 +41,19 @@ YM2610_IsYM2610B:
 ; iy = drivers
 ; ix = this
 YM2610_Connect: PROC
+	call Drivers_TryCreateNeotron_IY
+	jr nc,TryOPNA
+	call Chip_SetDriver
+	ld hl,Neotron.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2610.ProcessPort0Command.writeRegister),l
+	ld (ix + YM2610.ProcessPort0Command.writeRegister + 1),h
+	ld hl,Neotron.SafeWriteRegister2
+	add hl,de
+	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
+	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
+	ret
+TryOPNA:
 	call Drivers_TryCreateOPNA_IY
 	jr nc,TryOPNOnSFGPSG
 	call Chip_SetDriver

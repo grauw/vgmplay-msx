@@ -17,6 +17,7 @@
 	INCLUDE "TurboRPCM.asm"
 	INCLUDE "OPN.asm"
 	INCLUDE "OPNA.asm"
+	INCLUDE "Neotron.asm"
 	INCLUDE "emulations/OPNFMOnSFG.asm"
 	INCLUDE "emulations/OPNOnSFGPSG.asm"
 	INCLUDE "emulations/OPN2OnSFGTurboRPCM.asm"
@@ -52,6 +53,8 @@ Drivers: MACRO
 	opn:
 		dw 0
 	opna:
+		dw 0
+	neotron:
 		dw 0
 	opnFMOnSFG:
 		dw 0
@@ -131,6 +134,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetOPNA
 	call nz,OPNA_Destruct
+	pop ix
+	push ix
+	call Drivers_GetNeotron
+	call nz,Neotron_Destruct
 	pop ix
 	push ix
 	call Drivers_GetOPNFMOnSFG
@@ -451,6 +458,26 @@ Drivers_TryCreateOPNA_IY:
 	ret
 
 ; ix = this
+; de <- Neotron driver
+; f <- c: succeeded
+Drivers_TryCreateNeotron_IY:
+	ld a,(iy + Drivers.neotron)
+	or (iy + Drivers.neotron + 1)
+	ret nz
+	call Neotron_Detect
+	ret nc
+	push ix
+	ld ix,Neotron_instance
+	call Neotron_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.neotron),e
+	ld (iy + Drivers.neotron + 1),d
+	scf
+	ret
+
+; ix = this
 ; de <- OPN FM on SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNFMOnSFG_IY:
@@ -731,6 +758,19 @@ Drivers_GetOPN:
 Drivers_GetOPNA:
 	ld e,(ix + Drivers.opna)
 	ld d,(ix + Drivers.opna + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- Neotron driver
+; ix <- Neotron driver
+; f <- z: not set
+Drivers_GetNeotron:
+	ld e,(ix + Drivers.neotron)
+	ld d,(ix + Drivers.neotron + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e
