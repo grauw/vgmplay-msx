@@ -9,6 +9,7 @@
 	INCLUDE "MSXMusic.asm"
 	INCLUDE "MSXAudio.asm"
 	INCLUDE "MoonSound.asm"
+	INCLUDE "MoonSoundC0.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCPlus.asm"
 	INCLUDE "Franky.asm"
@@ -35,6 +36,8 @@ Drivers: MACRO
 	msxAudio:
 		dw 0
 	moonSound:
+		dw 0
+	moonSoundC0:
 		dw 0
 	scc:
 		dw 0
@@ -94,6 +97,10 @@ Drivers_Destruct:
 	push ix
 	call Drivers_GetMoonSound
 	call nz,MoonSound_Destruct
+	pop ix
+	push ix
+	call Drivers_GetMoonSoundC0
+	call nz,MoonSoundC0_Destruct
 	pop ix
 	push ix
 	call Drivers_GetSCC
@@ -262,6 +269,26 @@ Drivers_TryCreateMoonSound_IY:
 	pop ix
 	ld (iy + Drivers.moonSound),e
 	ld (iy + Drivers.moonSound + 1),d
+	scf
+	ret
+
+; ix = this
+; de <- MoonSound at C0 driver
+; f <- c: succeeded
+Drivers_TryCreateMoonSoundC0_IY:
+	ld a,(iy + Drivers.moonSoundC0)
+	or (iy + Drivers.moonSoundC0 + 1)
+	ret nz
+	call MoonSoundC0_Detect
+	ret nc
+	push ix
+	ld ix,MoonSoundC0_instance
+	call MoonSoundC0_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (iy + Drivers.moonSoundC0),e
+	ld (iy + Drivers.moonSoundC0 + 1),d
 	scf
 	ret
 
@@ -589,6 +616,19 @@ Drivers_GetMSXAudio:
 Drivers_GetMoonSound:
 	ld e,(ix + Drivers.moonSound)
 	ld d,(ix + Drivers.moonSound + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	ret
+
+; ix = this
+; de <- MoonSound at C0 driver
+; ix <- MoonSound at C0 driver
+; f <- z: not set
+Drivers_GetMoonSoundC0:
+	ld e,(ix + Drivers.moonSoundC0)
+	ld d,(ix + Drivers.moonSoundC0 + 1)
 	ld ixl,e
 	ld ixh,d
 	ld a,e

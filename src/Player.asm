@@ -554,7 +554,7 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; A7H
 	dw Player_Skip3               ; A8H
 	dw Player_Skip3               ; A9H
-	dw Player_Skip3               ; AAH
+	dw YM3812_instance.ProcessCommandDual         ; AAH
 	dw Player_Skip3               ; ABH
 	dw Player_Skip3               ; ACH
 	dw Player_Skip3               ; ADH

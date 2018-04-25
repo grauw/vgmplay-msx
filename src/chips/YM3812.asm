@@ -11,6 +11,14 @@ YM3812: MACRO
 		jp System_Return
 	writeRegister: equ $ - 2
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -24,12 +32,22 @@ YM3812_Construct:
 ; ix = this
 YM3812_Connect:
 	call Drivers_TryCreateMoonSound_IY
-	ret nc
+	jr nc,TryMoonSoundC0
 	call Chip_SetDriver
 	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3812.ProcessCommand.writeRegister),l
 	ld (ix + YM3812.ProcessCommand.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+TryMoonSoundC0:
+	call Drivers_TryCreateMoonSoundC0_IY
+	ret nc
+	call Chip_SetDriver2
+	ld hl,MoonSoundC0.SafeWriteRegister
+	add hl,de
+	ld (ix + YM3812.ProcessCommandDual.writeRegister),l
+	ld (ix + YM3812.ProcessCommandDual.writeRegister + 1),h
 	ret
 
 ;

@@ -1,11 +1,12 @@
 ;
 ; MoonSound YMF278B OPL4
 ;
-MoonSound_STATUS: equ 0C4H
-MoonSound_FM_ADDRESS: equ 0C4H
-MoonSound_FM_DATA: equ 0C5H
-MoonSound_FM2_ADDRESS: equ 0C6H
-MoonSound_FM2_DATA: equ 0C7H
+MoonSound_BASE_PORT: equ 0C4H
+MoonSound_STATUS: equ 00H
+MoonSound_FM_ADDRESS: equ 00H
+MoonSound_FM_DATA: equ 01H
+MoonSound_FM2_ADDRESS: equ 02H
+MoonSound_FM2_DATA: equ 03H
 MoonSound_WAVE_ADDRESS: equ 07EH
 MoonSound_WAVE_DATA: equ 07FH
 MoonSound_FM2_NEW: equ 05H
@@ -16,7 +17,7 @@ MoonSound_WAVE_MEMORY_ADDRESS_L: equ 05H
 MoonSound_WAVE_MEMORY_DATA: equ 06H
 MoonSound_FREQUENCY: equ 33868800
 
-MoonSound: MACRO
+MoonSound: MACRO ?base
 	this:
 	super: Driver Driver_PrintInfoImpl
 	waveNumberMap:
@@ -33,10 +34,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegister:
-		out (MoonSound_FM_ADDRESS),a
+		out (?base + MoonSound_FM_ADDRESS),a
 		nop     ; wait 56 cycles (5.9 bus cycles)
 		ld a,d
-		out (MoonSound_FM_DATA),a
+		out (?base + MoonSound_FM_DATA),a
 		ret
 	MaskControl:
 		cp 8H
@@ -50,10 +51,10 @@ MoonSound: MACRO
 	; a = register
 	; d = value
 	WriteRegister2:
-		out (MoonSound_FM2_ADDRESS),a
+		out (?base + MoonSound_FM2_ADDRESS),a
 		nop     ; wait 56 cycles (5.9 bus cycles)
 		ld a,d
-		out (MoonSound_FM2_DATA),a
+		out (?base + MoonSound_FM2_DATA),a
 		ret
 
 	; e = register
@@ -503,7 +504,7 @@ MoonSound_Reset:
 
 ; f <- c: Found
 MoonSound_Detect:
-	in a,(MoonSound_STATUS)
+	in a,(MoonSound_BASE_PORT + MoonSound_STATUS)
 	and 11111101B  ; sometimes LD is set
 	sub 00H
 	and a
@@ -517,6 +518,6 @@ MoonSound_name:
 
 	SECTION RAM
 
-MoonSound_instance: MoonSound
+MoonSound_instance: MoonSound MoonSound_BASE_PORT
 
 	ENDS
