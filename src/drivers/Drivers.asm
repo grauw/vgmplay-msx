@@ -1,7 +1,6 @@
 ;
 ; Driver manager
 ;
-
 	INCLUDE "Driver.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "MFRPSG.asm"
@@ -22,7 +21,6 @@
 	INCLUDE "emulations/OPNOnSFGPSG.asm"
 	INCLUDE "emulations/OPN2OnSFGTurboRPCM.asm"
 	INCLUDE "emulations/OPN2OnOPNATurboRPCM.asm"
-
 
 Drivers: MACRO
 	psg:
