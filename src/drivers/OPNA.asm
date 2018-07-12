@@ -329,16 +329,16 @@ OPNA_Reset:
 	ld de,0000H
 	call OPNA_FillRegisterPairs  ; zero all registers
 	ld de,8029H
-	call OPNA_WriteRegister  ; mask ADPCM and timer interrupts as disabled, set six voices mode
+	call OPNA_WriteRegister  ; disable ADPCM and timer interrupts, six voices mode
 	ld de,0FFH << 8 | OPNA_LIMIT_L
 	call OPNA_WriteRegister2
 	ld de,0FFH << 8 | OPNA_LIMIT_H
 	call OPNA_WriteRegister2
-	ld de,80H << 8 | OPNA_MISC_CONTROL
-	call OPNA_WriteRegister2  ; configure ADPCM 1bit / DRAM
+	ld de,0C0H << 8 | OPNA_MISC_CONTROL
+	call OPNA_WriteRegister2  ; ADPCM 1bit / DRAM / panpot
 	ld b,04H
 	ld de,0C0B4H
-	call OPNA_FillRegisterPairs  ; restore panpots
+	call OPNA_FillRegisterPairs  ; FM panpots
 	ret
 
 ; ix = this
