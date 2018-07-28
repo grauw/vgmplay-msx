@@ -26,8 +26,8 @@ VGM_Construct:
 	ld (ix + VGM.drivers),l
 	ld (ix + VGM.drivers + 1),h
 	ld bc,256
-	call VGM_GetHeaderHL
-	call VGM_GetReaderIY
+	call VGM_GetHeader_HL
+	call VGM_GetReader_IY
 	ex de,hl
 	call MappedReader_ReadBlock_IY
 	push ix
@@ -61,7 +61,7 @@ VGM_Destruct:
 
 ; ix = this
 ; iy <- reader
-VGM_GetReaderIY:
+VGM_GetReader_IY:
 	ld e,(ix + VGM.reader)
 	ld d,(ix + VGM.reader + 1)
 	ld iyl,e
@@ -86,7 +86,7 @@ VGM_GetHeader:
 
 ; ix = this
 ; hl <- header
-VGM_GetHeaderHL:
+VGM_GetHeader_HL:
 	ld e,ixl
 	ld d,ixh
 	ld hl,VGM.header
@@ -123,7 +123,7 @@ VGM_PrintInfo:
 	call Header_GetGD3Offset
 	pop ix
 	push de
-	call VGM_GetReaderIY
+	call VGM_GetReader_IY
 	pop de
 	call nz,System_PrintCrLf
 	call nz,GD3_PrintInfoEnglish
@@ -141,8 +141,8 @@ VGM_PrintInfo:
 ; a = nr of loops
 ; ix = this
 VGM_Play:
-	call VGM_GetHeaderHL
-	call VGM_GetReaderIY
+	call VGM_GetHeader_HL
+	call VGM_GetReader_IY
 	push ix
 	call VGM_GetPlayer
 	ld e,iyl

@@ -116,7 +116,7 @@ Player_Destruct:
 ; ix = this
 ; de <- reader
 ; iy <- reader
-Player_GetReaderIY:
+Player_GetReader_IY:
 	ld e,(ix + Player.reader)
 	ld d,(ix + Player.reader + 1)
 	ld iyl,e
@@ -174,7 +174,7 @@ Player_Play: PROC
 	ld b,17
 	call VDP_SetRegister
 	ENDIF
-	call Player_GetReaderIY
+	call Player_GetReader_IY
 	call Player_ResetPosition
 	push ix
 	call Player_GetTimer
