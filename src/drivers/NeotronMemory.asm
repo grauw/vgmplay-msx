@@ -34,6 +34,63 @@ NeotronMemory_Construct:
 	ldir
 	ret
 
+; de = address [32:8]
+; ix = this
+NeotronMemory_SetAddress:
+	push ix
+	push iy
+	ld a,(ix + NeotronMemory.slot)
+	ld iyh,a
+	ld a,(ix + NeotronMemory.smemId)
+	ld ix,SIOS_SET_SMEM
+	call Memory_CallSlot
+	pop iy
+	pop ix
+	ret
+
+; b = number of blocks to erase (64K, 0 = all)
+; ix = this
+; f <- c: error
+NeotronMemory_Erase:
+	push ix
+	push iy
+	ld a,(ix + NeotronMemory.slot)
+	ld iyh,a
+	ld a,(ix + NeotronMemory.smemId)
+	ld ix,SIOS_ERASE_SMEM
+	call Memory_CallSlot
+	pop iy
+	pop ix
+	ret
+
+; bc = length (c ignored)
+; hl = source address
+; ix = this
+; f <- c: error
+NeotronMemory_Write:
+	push ix
+	push iy
+	ld a,(ix + NeotronMemory.slot)
+	ld iyh,a
+	ld a,(ix + NeotronMemory.smemId)
+	ld ix,SIOS_WRITE_SMEM
+	call Memory_CallSlot  ; write data
+	pop iy
+	pop ix
+	ret
+
+; ix = this
+NeotronMemory_Reset:
+	push ix
+	push iy
+	ld a,(ix + NeotronMemory.slot)
+	ld iyh,a
+	ld ix,SIOS_RESET
+	call Memory_CallSlot  ; return to normal operation
+	pop iy
+	pop ix
+	ret
+
 ; ix = this
 ; iy = reader
 NeotronMemory_ProcessDataBlock: PROC
@@ -80,28 +137,13 @@ Loop:
 	pop hl
 	push bc
 	ld bc,100H
-	push ix
-	push iy
-	ld a,(ix + NeotronMemory.slot)
-	ld iyh,a
-	ld a,(ix + NeotronMemory.smemId)
-	ld ix,SIOS_WRITE_SMEM
-	call Memory_CallSlot  ; write data
-	pop iy
-	pop ix
+	call NeotronMemory_Write
 	pop bc
 	pop hl
 	pop de
 	jp Loop
 Finish:
-	push ix
-	push iy
-	ld a,(ix + NeotronMemory.slot)
-	ld iyh,a
-	ld ix,SIOS_RESET
-	call Memory_CallSlot  ; return to normal operation
-	pop iy
-	pop ix
+	call NeotronMemory_Reset
 	ret
 	ENDP
 
@@ -120,25 +162,9 @@ Loop:
 	pop de
 	jr nz,Next
 	push de
-	push ix
-	push iy
-	ld a,(ix + NeotronMemory.slot)
-	ld iyh,a
-	ld a,(ix + NeotronMemory.smemId)
-	ld ix,SIOS_SET_SMEM
-	call Memory_CallSlot
-	pop iy
-	pop ix
+	call NeotronMemory_SetAddress
 	ld b,1
-	push ix
-	push iy
-	ld a,(ix + NeotronMemory.slot)
-	ld iyh,a
-	ld a,(ix + NeotronMemory.smemId)
-	ld ix,SIOS_ERASE_SMEM
-	call Memory_CallSlot
-	pop iy
-	pop ix
+	call NeotronMemory_Erase
 	pop de
 Next:
 	inc d
@@ -146,15 +172,7 @@ Next:
 	djnz Loop
 	pop de
 SkipErase:
-	push ix
-	push iy
-	ld a,(ix + NeotronMemory.slot)
-	ld iyh,a
-	ld a,(ix + NeotronMemory.smemId)
-	ld ix,SIOS_SET_SMEM
-	call Memory_CallSlot
-	pop iy
-	pop ix
+	call NeotronMemory_SetAddress
 	ret
 	ENDP
 
