@@ -138,6 +138,7 @@ Loop:
 	push bc
 	ld bc,100H
 	call NeotronMemory_Write
+	call c,System_ThrowException
 	pop bc
 	pop hl
 	pop de
@@ -165,6 +166,7 @@ Loop:
 	call NeotronMemory_SetAddress
 	ld b,1
 	call NeotronMemory_Erase
+	call c,System_ThrowException
 	pop de
 Next:
 	inc d
