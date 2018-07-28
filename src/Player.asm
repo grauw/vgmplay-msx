@@ -253,6 +253,10 @@ Player_ProcessDataBlockByType:
 	jp z,YM2612_instance.ProcessPCMDataBlock
 	cp 81H
 	jp z,YM2608_instance.ProcessDataBlock
+	cp 82H
+	jp z,YM2610_instance.ProcessDataBlockA
+	cp 83H
+	jp z,YM2610_instance.ProcessDataBlockB
 	cp 84H
 	jp z,YMF278B_instance.ProcessROMDataBlock
 	cp 87H

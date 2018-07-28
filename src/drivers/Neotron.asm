@@ -1,6 +1,8 @@
 ;
 ; OSC1N0 Supersoniqs Neotron
 ;
+	INCLUDE "NeotronMemory.asm"
+
 Neotron_BASE: equ 0BC00H
 Neotron_STATUS0: equ Neotron_BASE
 Neotron_STATUS1: equ Neotron_BASE + 2
@@ -24,12 +26,24 @@ Neotron_ENVELOPE_CONTROL: equ 1BH
 Neotron_FLAG_CONTROL: equ 1CH
 
 ; SIOS API
+SIOS_SMEM_A: equ 1
+SIOS_SMEM_B: equ 2
+SIOS_RESET: equ 8019H
 SIOS_ENABLE_IO: equ 801CH
+SIOS_ERASE_SMEM: equ 8022H
+SIOS_WRITE_SMEM: equ 8025H
+SIOS_SET_SMEM: equ 802BH
 
 Neotron: MACRO
 	super: Driver Driver_PrintInfoImpl
 	slot:
 		db 0
+	buffer:
+		dw 0
+	memoryA:
+		dw 0
+	memoryB:
+		dw 0
 
 	; e = register
 	; d = value
@@ -80,6 +94,20 @@ Neotron: MACRO
 		in a,(9AH)
 		ret
 		ENDP
+
+	; iy = reader
+	ProcessDataBlockA:
+		ld de,0BFH << 8 | 0
+		call SafeWriteRegister2  ; stop ADPCM-A
+		ld ix,(memoryA)
+		jp NeotronMemory_ProcessDataBlock
+
+	; iy = reader
+	ProcessDataBlockB:
+		ld de,01H << 8 | Neotron_ADPCM_CONTROL
+		call SafeWriteRegister  ; stop ADPCM-B
+		ld ix,(memoryB)
+		jp NeotronMemory_ProcessDataBlock
 	ENDM
 
 ; a = slot
@@ -92,10 +120,46 @@ Neotron_Construct:
 	call Driver_Construct
 	call Neotron_Select
 	call Neotron_Reset
+	push ix
+	ld bc,100H + NeotronMemory._size * 2
+	ld ix,Heap_main
+	call Heap_Allocate
+	pop ix
+	ld (ix + Neotron.buffer + 0),e
+	ld (ix + Neotron.buffer + 1),d
+	ld hl,100H
+	add hl,de
+	ld (ix + Neotron.memoryA + 0),l
+	ld (ix + Neotron.memoryA + 1),h
+	push de
+	push hl
+	ld a,(ix + Neotron.slot)
+	ld b,SIOS_SMEM_A
+	ex (sp),ix
+	call NeotronMemory_Construct
+	pop ix
+	pop de
+	ld hl,100H + NeotronMemory._size
+	add hl,de
+	ld (ix + Neotron.memoryB + 0),l
+	ld (ix + Neotron.memoryB + 1),h
+	push hl
+	ld a,(ix + Neotron.slot)
+	ld b,SIOS_SMEM_B
+	ex (sp),ix
+	call NeotronMemory_Construct
+	pop ix
 	ret
 
 ; ix = this
 Neotron_Destruct:
+	push ix
+	ld e,(ix + Neotron.buffer + 0)
+	ld d,(ix + Neotron.buffer + 1)
+	ld bc,180H
+	ld ix,Heap_main
+	call Heap_Free
+	pop ix
 	call Neotron_Mute
 	call Neotron_Deselect
 	ret

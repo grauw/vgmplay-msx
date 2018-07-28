@@ -19,6 +19,20 @@ YM2610: MACRO
 		jp System_Return
 	writeRegister: equ $ - 2
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessDataBlockA: PROC
+		jp Player_SkipDataBlock
+	process: equ $ - 2
+		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessDataBlockB: PROC
+		jp Player_SkipDataBlock
+	process: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -52,6 +66,14 @@ YM2610_Connect: PROC
 	add hl,de
 	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
+	ld hl,Neotron.ProcessDataBlockA
+	add hl,de
+	ld (ix + YM2610.ProcessDataBlockA.process),l
+	ld (ix + YM2610.ProcessDataBlockA.process + 1),h
+	ld hl,Neotron.ProcessDataBlockB
+	add hl,de
+	ld (ix + YM2610.ProcessDataBlockB.process),l
+	ld (ix + YM2610.ProcessDataBlockB.process + 1),h
 	ret
 TryOPNA:
 	call Drivers_TryCreateOPNA_IY
