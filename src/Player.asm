@@ -167,6 +167,33 @@ LSBExtractionLoop:
 	ENDP
 
 ; ix = this
+; f <- z: yes
+Player_HasDataBlocks:
+	call Player_GetReader_IY
+	call Player_ResetPosition
+	call Reader_Read_IY
+	cp 67H
+	ret
+
+; ix = this
+Player_LoadDataBlocks: PROC
+	call Player_GetReader_IY
+	call Player_ResetPosition
+Loop:
+	call Reader_Read_IY
+	cp 67H
+	ret nz
+	call Reader_Read_IY
+	cp 66H
+	jp nz,Player_UnsupportedCommand
+	call Reader_Read_IY
+	push ix
+	call Player_LoadDataBlockByType
+	pop ix
+	jr Loop
+	ENDP
+
+; ix = this
 Player_Play: PROC
 	IF DEBUG
 	ld a,7 | 128
@@ -238,10 +265,6 @@ Player_ProcessDataBlock:
 	push ix
 	call Player_ProcessDataBlockByType
 	pop ix
-	push ix
-	call Player_GetTimer
-	call Timer_Reset
-	pop ix
 	ret
 
 ; a = data type
@@ -250,6 +273,12 @@ Player_ProcessDataBlock:
 Player_ProcessDataBlockByType:
 	cp 00H
 	jp z,YM2612_instance.ProcessPCMDataBlock
+	jp Player_SkipDataBlock
+
+; a = data type
+; ix = this
+; iy = reader
+Player_LoadDataBlockByType:
 	cp 81H
 	jp z,YM2608_instance.ProcessDataBlock
 	cp 82H

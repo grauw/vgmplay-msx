@@ -348,6 +348,17 @@ Application_ConstructPlayer:
 	pop ix
 	ld (ix + Application.playerReference),e
 	ld (ix + Application.playerReference + 1),d
+	push ix
+	call Application_GetPlayerReference
+	call Player_HasDataBlocks
+	pop ix
+	ret nz
+	ld hl,Application_loadingSamples
+	call System_Print
+	push ix
+	call Application_GetPlayerReference
+	call Player_LoadDataBlocks
+	pop ix
 	ret
 
 ; ix = this
@@ -492,6 +503,9 @@ Application_loadingFile:
 
 Application_dotDotDot:
 	db "...",13,10,0
+
+Application_loadingSamples:
+	db 13,10,"Loading samples...",13,10,0
 
 Application_playing:
 	db 13,10,"Playing...",13,10,0
