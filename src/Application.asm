@@ -6,6 +6,8 @@ Application_VGMREADER_BASE_ADDRESS: equ 8000H
 Application: MACRO
 	vgmReference:
 		dw 0
+	playerReference:
+		dw 0
 	cli:
 		CLI
 	loader:
@@ -16,6 +18,8 @@ Application: MACRO
 		Drivers
 	vgm:
 		VGM
+	player:
+		Player
 	size:
 	ENDM
 
@@ -85,9 +89,15 @@ Application_Construct:
 ; ix <- this
 Application_Destruct:
 	push ix
+	call Application_GetPlayerReference
+	ld a,ixl
+	or ixh
+	call nz,Player_Destruct
+	pop ix
+	push ix
 	call Application_GetVGMReference
-	ld a,e
-	or d
+	ld a,ixl
+	or ixh
 	call nz,VGM_Destruct
 	pop ix
 	push ix
@@ -145,11 +155,28 @@ Application_GetVGMReference:
 	ret
 
 ; ix = this
+; ix <- player
+Application_GetPlayer:
+	ld de,Application.player
+	add ix,de
+	ret
+
+; ix = this
+; ix <- player
+Application_GetPlayerReference:
+	ld e,(ix + Application.playerReference)
+	ld d,(ix + Application.playerReference + 1)
+	ld ixl,e
+	ld ixh,d
+	ret
+
+; ix = this
 Application_EnterMainLoop:
 	call Application_ParseCLI
 	call Application_CheckOCM
 	call Application_LoadFile
 	call Application_ConstructVGM
+	call Application_ConstructPlayer
 	call Application_EnterBlackout
 	call Application_Play
 	ret
@@ -304,16 +331,32 @@ Application_ConstructVGM:
 	ret
 
 ; ix = this
-Application_Play:
-	ld hl,Application_playing
-	call System_Print
+Application_ConstructPlayer:
 	push ix
 	call Application_GetCLI
 	ld a,(ix + CLI.loops)
 	pop ix
 	push ix
-	call Application_GetVGM
-	call VGM_Play
+	ld e,(ix + Application.vgmReference)
+	ld d,(ix + Application.vgmReference + 1)
+	push de
+	call Application_GetPlayer
+	pop de
+	call Player_Construct
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld (ix + Application.playerReference),e
+	ld (ix + Application.playerReference + 1),d
+	ret
+
+; ix = this
+Application_Play:
+	ld hl,Application_playing
+	call System_Print
+	push ix
+	call Application_GetPlayerReference
+	call Player_Play
 	pop ix
 	ret
 

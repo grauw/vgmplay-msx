@@ -23,9 +23,7 @@ Player: MACRO
 		pop af  ; break out of ProcessNext
 		ret
 
-	reader:
-		dw 0
-	header:
+	vgm:
 		dw 0
 	timer:
 		dw 0
@@ -84,15 +82,12 @@ Player: MACRO
 	ENDM
 
 ; a = max loops
-; de = reader
-; hl = header
+; de = vgm
 ; ix = this
 ; ix <- this
 Player_Construct:
-	ld (ix + Player.reader),e
-	ld (ix + Player.reader + 1),d
-	ld (ix + Player.header),l
-	ld (ix + Player.header + 1),h
+	ld (ix + Player.vgm),e
+	ld (ix + Player.vgm + 1),d
 	ld (ix + Player.maxLoops),a
 	ld (ix + Player.commandsJumpTable),Player_commandsJumpTable >> 8
 	push ix
@@ -114,24 +109,28 @@ Player_Destruct:
 	ret
 
 ; ix = this
-; de <- reader
-; iy <- reader
-Player_GetReader_IY:
-	ld e,(ix + Player.reader)
-	ld d,(ix + Player.reader + 1)
-	ld iyl,e
-	ld iyh,d
-	ret
-
-; ix = this
-; de <- header
-; ix <- header
-Player_GetHeader:
-	ld e,(ix + Player.header)
-	ld d,(ix + Player.header + 1)
+; ix <- vgm
+Player_GetVGM:
+	ld e,(ix + Player.vgm)
+	ld d,(ix + Player.vgm + 1)
 	ld ixl,e
 	ld ixh,d
 	ret
+
+; ix = this
+; iy <- reader
+Player_GetReader_IY:
+	push ix
+	call Player_GetVGM
+	call VGM_GetReader_IY
+	pop ix
+	ret
+
+; ix = this
+; ix <- header
+Player_GetHeader:
+	call Player_GetVGM
+	jp VGM_GetHeader
 
 ; ix = this
 ; de <- timer
