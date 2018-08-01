@@ -172,10 +172,6 @@ Header_FixPre102Clocks:
 	ld h,(ix + Header.ym2413Clock + 1)
 	ld e,(ix + Header.ym2413Clock + 2)
 	ld d,(ix + Header.ym2413Clock + 3)
-	ld (ix + Header.ym2151Clock),l
-	ld (ix + Header.ym2151Clock + 1),h
-	ld (ix + Header.ym2151Clock + 2),e
-	ld (ix + Header.ym2151Clock + 3),d
 	ld (ix + Header.ym2612Clock),l
 	ld (ix + Header.ym2612Clock + 1),h
 	ld (ix + Header.ym2612Clock + 2),e
