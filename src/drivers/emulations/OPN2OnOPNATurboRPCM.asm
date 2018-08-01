@@ -1,5 +1,5 @@
 ;
-; OPN2 PCM on OPNA + turboR PCM driver
+; OPN2 on OPNA + turboR PCM driver
 ;
 OPN2OnOPNATurboRPCM_FREQUENCY: equ 7670453
 OPN2OnOPNATurboRPCM_FREQUENCY_RATIO: equ (OPN2OnOPNATurboRPCM_FREQUENCY << 8) / (OPNA_FREQUENCY >> 7)
@@ -136,7 +136,7 @@ OPN2OnOPNATurboRPCM: MACRO
 ; bc = OPNA driver
 ; de = TurboR PCM driver
 ; ix = this
-OPN2OnOPNATurboRPCM_Construct:
+OPN2OnOPNATurboRPCM_Construct: PROC
 	push bc
 	push de
 	ld bc,OPN2OnOPNATurboRPCM_name
@@ -149,10 +149,14 @@ OPN2OnOPNATurboRPCM_Construct:
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),b
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1),d
+	ld a,e
+	or e
+	jr z,NoTurboRPCM
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
+NoTurboRPCM:
 	ld hl,OPNA.SafeWriteRegister
 	add hl,bc
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister),l
@@ -174,6 +178,7 @@ OPN2OnOPNATurboRPCM_Construct:
 	ld de,-128
 	add ix,de
 	ret
+	ENDP
 
 ; ix = this
 OPN2OnOPNATurboRPCM_Destruct:
@@ -223,7 +228,9 @@ OPN2OnOPNATurboRPCM_PrintInfoImpl:
 	ld d,(ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1)
 	ld ixl,e
 	ld ixh,d
-	call Driver_PrintInfo
+	ld a,e
+	or d
+	call nz,Driver_PrintInfo
 	pop ix
 	ret
 

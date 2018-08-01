@@ -524,7 +524,7 @@ Drivers_TryCreateOPNOnSFGPSG_IY:
 ; ix = this
 ; de <- OPN2 on SFG + turboR PCM driver
 ; f <- c: succeeded
-Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
+Drivers_TryCreateOPN2OnSFGTurboRPCM_IY: PROC
 	ld a,(iy + Drivers.opn2OnSFGTurboRPCM)
 	or (iy + Drivers.opn2OnSFGTurboRPCM + 1)
 	ret nz
@@ -533,7 +533,9 @@ Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
 	push de
 	call Drivers_TryCreateTurboRPCM_IY
 	pop bc
-	ret nc
+	jr c,FoundTurboRPCM
+	ld de,0
+FoundTurboRPCM:
 	push ix
 	ld ix,OPN2OnSFGTurboRPCM_instance
 	call OPN2OnSFGTurboRPCM_Construct
@@ -544,11 +546,12 @@ Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
 	ld (iy + Drivers.opn2OnSFGTurboRPCM + 1),d
 	scf
 	ret
+	ENDP
 
 ; ix = this
 ; de <- OPN2 on OPNA + turboR PCM driver
 ; f <- c: succeeded
-Drivers_TryCreateOPN2OnOPNATurboRPCM_IY:
+Drivers_TryCreateOPN2OnOPNATurboRPCM_IY: PROC
 	ld a,(iy + Drivers.opn2OnOPNATurboRPCM)
 	or (iy + Drivers.opn2OnOPNATurboRPCM + 1)
 	ret nz
@@ -557,7 +560,9 @@ Drivers_TryCreateOPN2OnOPNATurboRPCM_IY:
 	push de
 	call Drivers_TryCreateTurboRPCM_IY
 	pop bc
-	ret nc
+	jr c,FoundTurboRPCM
+	ld de,0
+FoundTurboRPCM:
 	push ix
 	ld ix,OPN2OnOPNATurboRPCM_instance
 	call OPN2OnOPNATurboRPCM_Construct
@@ -568,6 +573,7 @@ Drivers_TryCreateOPN2OnOPNATurboRPCM_IY:
 	ld (iy + Drivers.opn2OnOPNATurboRPCM + 1),d
 	scf
 	ret
+	ENDP
 
 ; ix = this
 ; de <- PSG driver

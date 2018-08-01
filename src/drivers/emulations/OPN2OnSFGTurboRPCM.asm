@@ -1,5 +1,5 @@
 ;
-; OPN2 PCM on SFG + turboR PCM driver
+; OPN2 on SFG + turboR PCM driver
 ;
 OPN2OnSFGTurboRPCM_FREQUENCY: equ 7670453
 
@@ -33,7 +33,7 @@ OPN2OnSFGTurboRPCM: MACRO
 ; bc = OPN on SFG driver
 ; de = TurboR PCM driver
 ; ix = this
-OPN2OnSFGTurboRPCM_Construct:
+OPN2OnSFGTurboRPCM_Construct: PROC
 	push bc
 	push de
 	ld bc,OPN2OnSFGTurboRPCM_name
@@ -46,10 +46,14 @@ OPN2OnSFGTurboRPCM_Construct:
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),b
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
+	ld a,e
+	or d
+	jr z,NoTurboRPCM
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
+NoTurboRPCM:
 	ld hl,OPNFMOnSFG.WriteRegister
 	add hl,bc
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister),l
@@ -65,6 +69,7 @@ OPN2OnSFGTurboRPCM_Construct:
 	call OPNFMOnSFG_SetFrequencyOffset
 	pop ix
 	ret
+	ENDP
 
 ; ix = this
 OPN2OnSFGTurboRPCM_Destruct:
@@ -84,7 +89,9 @@ OPN2OnSFGTurboRPCM_PrintInfoImpl:
 	ld d,(ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1)
 	ld ixl,e
 	ld ixh,d
-	call Driver_PrintInfo
+	ld a,e
+	or d
+	call nz,Driver_PrintInfo
 	pop ix
 	ret
 
