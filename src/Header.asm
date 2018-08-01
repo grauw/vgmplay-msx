@@ -168,14 +168,21 @@ Header_FixPre102Clocks:
 	ld bc,-102H
 	add hl,bc
 	ret c
-	ld l,(ix + Header.ym2413Clock)
-	ld h,(ix + Header.ym2413Clock + 1)
 	ld e,(ix + Header.ym2413Clock + 2)
 	ld d,(ix + Header.ym2413Clock + 3)
+	ld hl,-0040H
+	add hl,de
+	ret nc  ; consider as YM2612 when clock speed > 4.2 MHz
+	ld l,(ix + Header.ym2413Clock)
+	ld h,(ix + Header.ym2413Clock + 1)
 	ld (ix + Header.ym2612Clock),l
 	ld (ix + Header.ym2612Clock + 1),h
 	ld (ix + Header.ym2612Clock + 2),e
 	ld (ix + Header.ym2612Clock + 3),d
+	ld (ix + Header.ym2413Clock),0
+	ld (ix + Header.ym2413Clock + 1),0
+	ld (ix + Header.ym2413Clock + 2),0
+	ld (ix + Header.ym2413Clock + 3),0
 	ret
 
 ; ix = this
