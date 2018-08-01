@@ -40,8 +40,8 @@ Chips: MACRO
 	chips:
 		ChipInstance SN76489_instance, SN76489_Construct
 		ChipInstance YM2413_instance, YM2413_Construct
-		ChipInstance YM2612_instance, YM2612_Construct
 		ChipInstance YM2151_instance, YM2151_Construct
+		ChipInstance YM2612_instance, YM2612_Construct
 		ChipInstance SegaPCM_instance, SegaPCM_Construct
 		ChipInstance RF5C68_instance, RF5C68_Construct
 		ChipInstance YM2203_instance, YM2203_Construct
