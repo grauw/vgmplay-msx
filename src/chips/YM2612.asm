@@ -234,7 +234,7 @@ YM2612_Connect: PROC
 	ret
 TryOPN2OnSFGTurboRPCM:
 	call Drivers_TryCreateOPN2OnSFGTurboRPCM_IY
-	ret nc
+	jr nc,TryOPN2OnTurboRPCM
 	call Chip_SetDriver
 	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister
 	add hl,de
@@ -243,6 +243,21 @@ TryOPN2OnSFGTurboRPCM:
 	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
 	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
 	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister2
+	add hl,de
+	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
+	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
+	ret
+TryOPN2OnTurboRPCM:
+	call Drivers_TryCreateOPN2OnTurboRPCM_IY
+	ret nc
+	call Chip_SetDriver
+	ld hl,OPN2OnTurboRPCM.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2612.ProcessPort0Command.writeRegister),l
+	ld (ix + YM2612.ProcessPort0Command.writeRegister + 1),h
+	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
+	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
+	ld hl,OPN2OnTurboRPCM.SafeWriteRegister2
 	add hl,de
 	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
