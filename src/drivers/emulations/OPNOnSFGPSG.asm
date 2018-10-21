@@ -42,26 +42,24 @@ OPNOnSFGPSG_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateOPNFMOnSFG_IY
 	ret nc
-	push de
+	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),e
+	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),d
+	ld hl,OPNFMOnSFG.WriteRegister
+	add hl,de
+	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister),l
+	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister + 1),h
+	ld hl,OPNFMOnSFG.WriteRegister2
+	add hl,de
+	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister),l
+	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister + 1),h
 	call Drivers_TryCreatePSG_IY
-	pop bc
 	ret nc
-	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),c
-	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),b
 	ld (ix + OPNOnSFGPSG.psgDriver),e
 	ld (ix + OPNOnSFGPSG.psgDriver + 1),d
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister),l
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister + 1),h
-	ld hl,OPNFMOnSFG.WriteRegister
-	add hl,bc
-	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister),l
-	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister + 1),h
-	ld hl,OPNFMOnSFG.WriteRegister2
-	add hl,bc
-	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister),l
-	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister + 1),h
 	ld de,OPNOnSFGPSG_FREQUENCY >> 16
 	ld hl,OPNOnSFGPSG_FREQUENCY
 	jp Driver_SetClock

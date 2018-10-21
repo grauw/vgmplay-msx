@@ -36,38 +36,31 @@ OPN2OnSFGTurboRPCM_Construct: PROC
 	call Driver_Construct
 	call Drivers_TryCreateOPNFMOnSFG_IY
 	ret nc
-	push de
+	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),e
+	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),d
+	ld hl,OPNFMOnSFG.WriteRegister
+	add hl,de
+	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister),l
+	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
+	ld hl,OPNFMOnSFG.WriteRegister2
+	add hl,de
+	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister),l
+	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister + 1),h
+	push ix
+	ld ixl,e
+	ld ixh,d
+	ld de,38464
+	call OPNFMOnSFG_SetFrequencyOffset
+	pop ix
 	call Drivers_TryCreateTurboRPCM_IY
-	pop bc
-	jr c,FoundTurboRPCM
-	ld de,0
-FoundTurboRPCM:
-	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),c
-	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),b
+	jr nc,NoTurboRPCM
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
-	ld a,e
-	or d
-	jr z,NoTurboRPCM
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
 NoTurboRPCM:
-	ld hl,OPNFMOnSFG.WriteRegister
-	add hl,bc
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister),l
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
-	ld hl,OPNFMOnSFG.WriteRegister2
-	add hl,bc
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister),l
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister + 1),h
-	push ix
-	ld ixl,c
-	ld ixh,b
-	ld de,38464
-	call OPNFMOnSFG_SetFrequencyOffset
-	pop ix
 	ld de,OPN2OnSFGTurboRPCM_FREQUENCY >> 16
 	ld hl,OPN2OnSFGTurboRPCM_FREQUENCY
 	jp Driver_SetClock

@@ -139,44 +139,37 @@ OPN2OnOPNATurboRPCM_Construct: PROC
 	call Driver_Construct
 	call Drivers_TryCreateOPNA_IY
 	ret nc
-	push de
+	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),e
+	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),d
+	ld hl,OPNA.SafeWriteRegister
+	add hl,de
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister + 1),h
+	ld hl,OPNA.WriteRegister
+	add hl,de
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
+	ld bc,128
+	add ix,bc
+	ld hl,OPNA.SafeWriteRegister2
+	add hl,de
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128 + 1),h
+	ld hl,OPNA.WriteRegister2
+	add hl,de
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
+	ld bc,-128
+	add ix,bc
 	call Drivers_TryCreateTurboRPCM_IY
-	pop bc
-	jr c,FoundTurboRPCM
-	ld de,0
-FoundTurboRPCM:
-	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),c
-	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),b
+	jr nc,NoTurboRPCM
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1),d
-	ld a,e
-	or e
-	jr z,NoTurboRPCM
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
 NoTurboRPCM:
-	ld hl,OPNA.SafeWriteRegister
-	add hl,bc
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister + 1),h
-	ld hl,OPNA.WriteRegister
-	add hl,bc
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
-	ld de,128
-	add ix,de
-	ld hl,OPNA.SafeWriteRegister2
-	add hl,bc
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128 + 1),h
-	ld hl,OPNA.WriteRegister2
-	add hl,bc
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
-	ld de,-128
-	add ix,de
 	ld de,OPN2OnOPNATurboRPCM_FREQUENCY >> 16
 	ld hl,OPN2OnOPNATurboRPCM_FREQUENCY
 	jp Driver_SetClock
