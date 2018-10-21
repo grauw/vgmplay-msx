@@ -81,6 +81,15 @@ AY8910_TryCreate:
 	ret c
 	call Drivers_TryCreateMFRPSG_IY
 	ld hl,MFRPSG.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateOPN_IY
+	ld hl,OPN.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateOPNA_IY
+	ld hl,OPNA.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateNeotron_IY
+	ld hl,Neotron.SafeWriteRegister
 	ret
 
 ;
