@@ -271,12 +271,8 @@ OPNFMOnSFG: MACRO
 ; de = SFG driver
 ; ix = this
 OPNFMOnSFG_Construct:
-	push de
 	ld bc,OPNFMOnSFG_name
-	ld de,OPNFMOnSFG_FREQUENCY >> 16
-	ld hl,OPNFMOnSFG_FREQUENCY
 	call Driver_Construct
-	pop de
 	ld (ix + OPNFMOnSFG.sfgDriver),e
 	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
 	ld hl,SFG.WriteRegister
@@ -290,7 +286,9 @@ OPNFMOnSFG_Construct:
 	ld bc,-OPNFMOnSFG.WriteRegister2.writeSFGRegister
 	add ix,bc
 	call OPNFMOnSFG_Initialize
-	ret
+	ld de,OPNFMOnSFG_FREQUENCY >> 16
+	ld hl,OPNFMOnSFG_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 OPNFMOnSFG_Destruct:

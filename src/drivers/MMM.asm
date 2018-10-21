@@ -27,13 +27,13 @@ MMM: MACRO
 ; ix = this
 MMM_Construct:
 	ld bc,MMM_name
-	ld de,MMM_FREQUENCY >> 16
-	ld hl,MMM_FREQUENCY
 	call Driver_Construct
 	call MMM_SetSlot
 	call MMM_Enable
 	call MMM_Reset
-	ret
+	ld de,MMM_FREQUENCY >> 16
+	ld hl,MMM_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 MMM_Destruct:

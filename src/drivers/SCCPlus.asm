@@ -84,12 +84,12 @@ SCCPlus: MACRO
 SCCPlus_Construct:
 	call SCCPlus_SetSlot
 	ld bc,SCCPlus_name
-	ld de,SCCPlus_FREQUENCY_ >> 16
-	ld hl,SCCPlus_FREQUENCY_
 	call Driver_Construct
 	call SCCPlus_Select
 	call SCCPlus_Reset
-	ret
+	ld de,SCCPlus_FREQUENCY_ >> 16
+	ld hl,SCCPlus_FREQUENCY_
+	jp Driver_SetClock
 
 ; ix = this
 SCCPlus_Destruct:

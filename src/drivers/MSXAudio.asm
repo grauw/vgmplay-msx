@@ -167,11 +167,11 @@ MSXAudio: MACRO
 ; ix = this
 MSXAudio_Construct:
 	ld bc,MSXAudio_name
-	ld de,MSXAudio_FREQUENCY >> 16
-	ld hl,MSXAudio_FREQUENCY
 	call Driver_Construct
 	call MSXAudio_Reset
-	ret
+	ld de,MSXAudio_FREQUENCY >> 16
+	ld hl,MSXAudio_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 MSXAudio_Destruct:

@@ -156,11 +156,11 @@ MoonSound: MACRO ?base
 ; ix = this
 MoonSound_Construct:
 	ld bc,MoonSound_name
-	ld de,MoonSound_FREQUENCY >> 16
-	ld hl,MoonSound_FREQUENCY
 	call Driver_Construct
 	call MoonSound_Reset
-	ret
+	ld de,MoonSound_FREQUENCY >> 16
+	ld hl,MoonSound_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 MoonSound_Destruct:

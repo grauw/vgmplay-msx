@@ -41,12 +41,8 @@ OPNOnSFGPSG: MACRO
 ; ix = this
 OPNOnSFGPSG_Construct:
 	push bc
-	push de
 	ld bc,OPNOnSFGPSG_name
-	ld de,OPNOnSFGPSG_FREQUENCY >> 16
-	ld hl,OPNOnSFGPSG_FREQUENCY
 	call Driver_Construct
-	pop de
 	pop bc
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),c
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),b
@@ -64,7 +60,9 @@ OPNOnSFGPSG_Construct:
 	add hl,bc
 	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister),l
 	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister + 1),h
-	ret
+	ld de,OPNOnSFGPSG_FREQUENCY >> 16
+	ld hl,OPNOnSFGPSG_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 OPNOnSFGPSG_Destruct:

@@ -20,11 +20,11 @@ TurboRPCM: MACRO
 ; ix = this
 TurboRPCM_Construct:
 	ld bc,TurboRPCM_name
-	ld de,TurboRPCM_FREQUENCY >> 16
-	ld hl,TurboRPCM_FREQUENCY
 	call Driver_Construct
 	call TurboRPCM_Enable
-	ret
+	ld de,TurboRPCM_FREQUENCY >> 16
+	ld hl,TurboRPCM_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 TurboRPCM_Destruct:

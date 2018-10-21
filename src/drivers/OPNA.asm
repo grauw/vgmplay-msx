@@ -220,11 +220,11 @@ OPNA: MACRO
 ; ix = this
 OPNA_Construct:
 	ld bc,OPNA_name
-	ld de,OPNA_FREQUENCY >> 16
-	ld hl,OPNA_FREQUENCY
 	call Driver_Construct
 	call OPNA_Reset
-	ret
+	ld de,OPNA_FREQUENCY >> 16
+	ld hl,OPNA_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 OPNA_Destruct:

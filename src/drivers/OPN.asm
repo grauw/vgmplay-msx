@@ -40,11 +40,11 @@ OPN: MACRO
 ; ix = this
 OPN_Construct:
 	ld bc,OPN_name
-	ld de,OPN_FREQUENCY >> 16
-	ld hl,OPN_FREQUENCY
 	call Driver_Construct
 	call OPN_Reset
-	ret
+	ld de,OPN_FREQUENCY >> 16
+	ld hl,OPN_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 OPN_Destruct:

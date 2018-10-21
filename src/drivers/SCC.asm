@@ -69,12 +69,12 @@ SCC: MACRO
 SCC_Construct:
 	call SCC_SetSlot
 	ld bc,SCC_name
-	ld de,SCC_FREQUENCY_ >> 16
-	ld hl,SCC_FREQUENCY_
 	call Driver_Construct
 	call SCC_Select
 	call SCC_Reset
-	ret
+	ld de,SCC_FREQUENCY_ >> 16
+	ld hl,SCC_FREQUENCY_
+	jp Driver_SetClock
 
 ; ix = this
 SCC_Destruct:

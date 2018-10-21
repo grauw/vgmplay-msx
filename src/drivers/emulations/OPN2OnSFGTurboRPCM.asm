@@ -35,12 +35,8 @@ OPN2OnSFGTurboRPCM: MACRO
 ; ix = this
 OPN2OnSFGTurboRPCM_Construct: PROC
 	push bc
-	push de
 	ld bc,OPN2OnSFGTurboRPCM_name
-	ld de,OPN2OnSFGTurboRPCM_FREQUENCY >> 16
-	ld hl,OPN2OnSFGTurboRPCM_FREQUENCY
 	call Driver_Construct
-	pop de
 	pop bc
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),c
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),b
@@ -68,7 +64,9 @@ NoTurboRPCM:
 	ld de,38464
 	call OPNFMOnSFG_SetFrequencyOffset
 	pop ix
-	ret
+	ld de,OPN2OnSFGTurboRPCM_FREQUENCY >> 16
+	ld hl,OPN2OnSFGTurboRPCM_FREQUENCY
+	jp Driver_SetClock
 	ENDP
 
 ; ix = this

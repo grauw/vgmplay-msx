@@ -38,12 +38,12 @@ MSXMusic_Construct:
 	ld (ix + MSXMusic.slot),a
 	ld (ix + MSXMusic.internal),b
 	ld bc,MSXMusic_name
-	ld de,MSXMusic_FREQUENCY >> 16
-	ld hl,MSXMusic_FREQUENCY
 	call Driver_Construct
 	call MSXMusic_Enable
 	call MSXMusic_Reset
-	ret
+	ld de,MSXMusic_FREQUENCY >> 16
+	ld hl,MSXMusic_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 MSXMusic_Destruct:

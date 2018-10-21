@@ -52,11 +52,11 @@ SFG: MACRO
 SFG_Construct:
 	call SFG_SetSlot
 	call SFG_GetName
-	ld de,SFG_FREQUENCY >> 16
-	ld hl,SFG_FREQUENCY
 	call Driver_Construct
 	call SFG_Reset
-	ret
+	ld de,SFG_FREQUENCY >> 16
+	ld hl,SFG_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 SFG_Destruct:

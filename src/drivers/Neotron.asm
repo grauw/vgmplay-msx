@@ -137,8 +137,6 @@ Neotron: MACRO
 Neotron_Construct:
 	call Neotron_SetSlot
 	ld bc,Neotron_name
-	ld de,Neotron_FREQUENCY >> 16
-	ld hl,Neotron_FREQUENCY
 	call Driver_Construct
 	call Neotron_Select
 	call Neotron_Reset
@@ -171,7 +169,9 @@ Neotron_Construct:
 	ex (sp),ix
 	call NeotronMemory_Construct
 	pop ix
-	ret
+	ld de,Neotron_FREQUENCY >> 16
+	ld hl,Neotron_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 Neotron_Destruct:

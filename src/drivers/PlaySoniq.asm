@@ -25,12 +25,12 @@ PlaySoniq: MACRO
 ; ix = this
 PlaySoniq_Construct:
 	ld bc,PlaySoniq_name
-	ld de,PlaySoniq_FREQUENCY >> 16
-	ld hl,PlaySoniq_FREQUENCY
 	call Driver_Construct
 	call PlaySoniq_Select
 	call PlaySoniq_Reset
-	ret
+	ld de,PlaySoniq_FREQUENCY >> 16
+	ld hl,PlaySoniq_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 PlaySoniq_Destruct:

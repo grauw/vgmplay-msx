@@ -138,12 +138,8 @@ OPN2OnOPNATurboRPCM: MACRO
 ; ix = this
 OPN2OnOPNATurboRPCM_Construct: PROC
 	push bc
-	push de
 	ld bc,OPN2OnOPNATurboRPCM_name
-	ld de,OPN2OnOPNATurboRPCM_FREQUENCY >> 16
-	ld hl,OPN2OnOPNATurboRPCM_FREQUENCY
 	call Driver_Construct
-	pop de
 	pop bc
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),c
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),b
@@ -177,7 +173,9 @@ NoTurboRPCM:
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
 	ld de,-128
 	add ix,de
-	ret
+	ld de,OPN2OnOPNATurboRPCM_FREQUENCY >> 16
+	ld hl,OPN2OnOPNATurboRPCM_FREQUENCY
+	jp Driver_SetClock
 	ENDP
 
 ; ix = this

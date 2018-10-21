@@ -27,19 +27,17 @@ OPN2OnTurboRPCM: MACRO
 ; de = TurboR PCM driver
 ; ix = this
 OPN2OnTurboRPCM_Construct:
-	push de
 	ld bc,OPN2OnTurboRPCM_name
-	ld de,OPN2OnTurboRPCM_FREQUENCY >> 16
-	ld hl,OPN2OnTurboRPCM_FREQUENCY
 	call Driver_Construct
-	pop de
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-	ret
+	ld de,OPN2OnTurboRPCM_FREQUENCY >> 16
+	ld hl,OPN2OnTurboRPCM_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 OPN2OnTurboRPCM_Destruct:

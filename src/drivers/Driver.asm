@@ -11,15 +11,10 @@ Driver: MACRO ?printInfo
 	ENDM
 
 ; bc = name
-; dehl = clock
 ; ix = this
 Driver_Construct:
 	ld (ix + Driver.name),c
 	ld (ix + Driver.name + 1),b
-	ld (ix + Driver.clock),l
-	ld (ix + Driver.clock + 1),h
-	ld (ix + Driver.clock + 2),e
-	ld (ix + Driver.clock + 3),d
 	ret
 
 ; ix = this
@@ -29,6 +24,15 @@ Driver_GetClock:
 	ld h,(ix + Driver.clock + 1)
 	ld e,(ix + Driver.clock + 2)
 	ld d,(ix + Driver.clock + 3)
+	ret
+
+; ix = this
+; dehl <- clock (MHz)
+Driver_SetClock:
+	ld (ix + Driver.clock),l
+	ld (ix + Driver.clock + 1),h
+	ld (ix + Driver.clock + 2),e
+	ld (ix + Driver.clock + 3),d
 	ret
 
 ; ix = this

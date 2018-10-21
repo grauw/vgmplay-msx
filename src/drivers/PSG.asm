@@ -37,11 +37,11 @@ PSG: MACRO ?address, ?data
 ; ix = this
 PSG_Construct:
 	ld bc,PSG_name
-	ld de,PSG_FREQUENCY >> 16
-	ld hl,PSG_FREQUENCY
 	call Driver_Construct
 	call PSG_Reset
-	ret
+	ld de,PSG_FREQUENCY >> 16
+	ld hl,PSG_FREQUENCY
+	jp Driver_SetClock
 
 ; ix = this
 PSG_Destruct:
