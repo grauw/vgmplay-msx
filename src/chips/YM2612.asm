@@ -30,6 +30,22 @@ YM2612: MACRO
 
 	; ix = player
 	; iy = reader
+	ProcessPort0CommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessPort1CommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
+
+	; ix = player
+	; iy = reader
 	ProcessPCMWrite: PROC
 		ld a,(0)
 	position: equ $ - 2
@@ -231,6 +247,19 @@ YM2612_Connect:
 	add hl,de
 	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call YM2612_TryCreate
+	ret nc
+	call Chip_SetDriver2
+	add hl,de
+	ld (ix + YM2612.ProcessPort0CommandDual.writeRegister),l
+	ld (ix + YM2612.ProcessPort0CommandDual.writeRegister + 1),h
+	ld l,c
+	ld h,b
+	add hl,de
+	ld (ix + YM2612.ProcessPort1CommandDual.writeRegister),l
+	ld (ix + YM2612.ProcessPort1CommandDual.writeRegister + 1),h
 	ret
 
 ; iy = drivers
