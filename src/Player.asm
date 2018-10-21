@@ -613,7 +613,7 @@ Player_commandsJumpTable:
 	dw Player_Skip3               ; A2H
 	dw Player_Skip3               ; A3H
 	dw Player_Skip3               ; A4H
-	dw Player_Skip3               ; A5H
+	dw YM2203_instance.ProcessCommandDual         ; A5H
 	dw Player_Skip3               ; A6H
 	dw Player_Skip3               ; A7H
 	dw Player_Skip3               ; A8H

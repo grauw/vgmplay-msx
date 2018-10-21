@@ -11,6 +11,14 @@ YM2203: MACRO
 		jp System_Return
 	writeRegister: equ $ - 2
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -29,6 +37,14 @@ YM2203_Connect:
 	add hl,de
 	ld (ix + YM2203.ProcessCommand.writeRegister),l
 	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call YM2203_TryCreate
+	ret nc
+	call Chip_SetDriver2
+	add hl,de
+	ld (ix + YM2203.ProcessCommandDual.writeRegister),l
+	ld (ix + YM2203.ProcessCommandDual.writeRegister + 1),h
 	ret
 
 ; iy = drivers
