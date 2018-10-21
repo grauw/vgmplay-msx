@@ -1,7 +1,6 @@
 ;
-; OPN on SFG + PSG driver
+; OPN(A/B) on SFG + PSG driver
 ;
-OPNOnSFGPSG_PCM_REGISTER: equ 2AH
 OPNOnSFGPSG_FREQUENCY: equ 3579545
 
 OPNOnSFGPSG: MACRO
@@ -10,9 +9,6 @@ OPNOnSFGPSG: MACRO
 		dw 0
 	psgDriver:
 		dw 0
-	frequencies:
-		ds 7
-	alignedFrequencies: equ (frequencies + 3) & 0FFFCH
 
 	; e = register
 	; d = value
