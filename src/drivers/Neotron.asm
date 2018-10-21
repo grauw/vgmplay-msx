@@ -35,7 +35,7 @@ SIOS_WRITE_SMEM: equ 8025H
 SIOS_SET_SMEM: equ 802BH
 
 Neotron: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver Neotron_name, Driver_PrintInfoImpl
 	slot:
 		db 0
 	buffer:
@@ -135,7 +135,6 @@ Neotron: MACRO
 ; ix = this
 ; iy = drivers
 Neotron_Construct:
-	ld bc,Neotron_name
 	call Driver_Construct
 	call Neotron_Detect
 	ret nc

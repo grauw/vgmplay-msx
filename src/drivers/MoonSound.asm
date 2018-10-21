@@ -17,9 +17,9 @@ MoonSound_WAVE_MEMORY_ADDRESS_L: equ 05H
 MoonSound_WAVE_MEMORY_DATA: equ 06H
 MoonSound_FREQUENCY: equ 33868800
 
-MoonSound: MACRO ?base
+MoonSound: MACRO ?base, ?name = MoonSound_name
 	this:
-	super: Driver Driver_PrintInfoImpl
+	super: Driver ?name, Driver_PrintInfoImpl
 	waveNumberMap:
 		dw 0
 	waveNumberMSB:
@@ -161,7 +161,6 @@ MoonSound: MACRO ?base
 ; ix = this
 ; iy = drivers
 MoonSound_Construct:
-	ld bc,MoonSound_name
 	call Driver_Construct
 	call MoonSound_Detect
 	ret nc

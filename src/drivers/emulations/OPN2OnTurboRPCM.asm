@@ -4,7 +4,7 @@
 OPN2OnTurboRPCM_FREQUENCY: equ 7670453
 
 OPN2OnTurboRPCM: MACRO
-	super: Driver OPN2OnTurboRPCM_PrintInfoImpl
+	super: Driver OPN2OnTurboRPCM_name, OPN2OnTurboRPCM_PrintInfoImpl
 	turboRPCMDriver:
 		dw 0
 
@@ -27,7 +27,6 @@ OPN2OnTurboRPCM: MACRO
 ; ix = this
 ; iy = drivers
 OPN2OnTurboRPCM_Construct:
-	ld bc,OPN2OnTurboRPCM_name
 	call Driver_Construct
 	call Drivers_TryCreateTurboRPCM_IY
 	ret nc

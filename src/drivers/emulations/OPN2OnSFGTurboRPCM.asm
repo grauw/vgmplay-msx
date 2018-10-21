@@ -4,7 +4,7 @@
 OPN2OnSFGTurboRPCM_FREQUENCY: equ 7670453
 
 OPN2OnSFGTurboRPCM: MACRO
-	super: Driver OPN2OnSFGTurboRPCM_PrintInfoImpl
+	super: Driver OPN2OnSFGTurboRPCM_name, OPN2OnSFGTurboRPCM_PrintInfoImpl
 	opnFMOnSFGDriver:
 		dw 0
 	turboRPCMDriver:
@@ -33,7 +33,6 @@ OPN2OnSFGTurboRPCM: MACRO
 ; ix = this
 ; iy = drivers
 OPN2OnSFGTurboRPCM_Construct: PROC
-	ld bc,OPN2OnSFGTurboRPCM_name
 	call Driver_Construct
 	call Drivers_TryCreateOPNFMOnSFG_IY
 	ret nc

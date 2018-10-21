@@ -10,7 +10,7 @@ PlaySoniq_SN76489_DATA_DEFAULT: equ 49H
 PlaySoniq_FREQUENCY: equ 3579545
 
 PlaySoniq: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver PlaySoniq_name, Driver_PrintInfoImpl
 	originalSN76489Port:
 		db 0
 
@@ -25,7 +25,6 @@ PlaySoniq: MACRO
 ; ix = this
 ; iy = drivers
 PlaySoniq_Construct:
-	ld bc,PlaySoniq_name
 	call Driver_Construct
 	call PlaySoniq_Detect
 	ret nc

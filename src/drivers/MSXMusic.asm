@@ -8,7 +8,7 @@ MSXMusic_ENABLE_ADDRESS: equ 7FF6H
 MSXMusic_FREQUENCY: equ 3579545
 
 MSXMusic: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver MSXMusic_name, Driver_PrintInfoImpl
 	slot:
 		db 0
 	internal:
@@ -34,7 +34,6 @@ MSXMusic: MACRO
 ; ix = this
 ; iy = drivers
 MSXMusic_Construct:
-	ld bc,MSXMusic_name
 	call Driver_Construct
 	call MSXMusic_Detect
 	ret nc

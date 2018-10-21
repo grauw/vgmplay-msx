@@ -11,7 +11,7 @@ MMM_PAGE3: equ 0FFH
 MMM_FREQUENCY: equ 3579545
 
 MMM: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver MMM_name, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -26,7 +26,6 @@ MMM: MACRO
 ; ix = this
 ; iy = drivers
 MMM_Construct:
-	ld bc,MMM_name
 	call Driver_Construct
 	call MMM_Detect
 	ret nc

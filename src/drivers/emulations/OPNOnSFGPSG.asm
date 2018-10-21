@@ -4,7 +4,7 @@
 OPNOnSFGPSG_FREQUENCY: equ 3579545
 
 OPNOnSFGPSG: MACRO
-	super: Driver OPNOnSFGPSG_PrintInfoImpl
+	super: Driver OPNOnSFGPSG_name, OPNOnSFGPSG_PrintInfoImpl
 	opnFMOnSFGDriver:
 		dw 0
 	psgDriver:
@@ -39,7 +39,6 @@ OPNOnSFGPSG: MACRO
 ; ix = this
 ; iy = drivers
 OPNOnSFGPSG_Construct:
-	ld bc,OPNOnSFGPSG_name
 	call Driver_Construct
 	call Drivers_TryCreateOPNFMOnSFG_IY
 	ret nc

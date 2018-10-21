@@ -6,7 +6,7 @@
 OPNFMOnSFG_FREQUENCY: equ 3579545
 
 OPNFMOnSFG: MACRO
-	super: Driver OPNFMOnSFG_PrintInfoImpl
+	super: Driver OPNFMOnSFG_name, OPNFMOnSFG_PrintInfoImpl
 	sfgDriver:
 		dw 0
 	frequencyMSBs:
@@ -271,7 +271,6 @@ OPNFMOnSFG: MACRO
 ; ix = this
 ; iy = drivers
 OPNFMOnSFG_Construct:
-	ld bc,OPNFMOnSFG_name
 	call Driver_Construct
 	call Drivers_TryCreateSFG_IY
 	ret nc

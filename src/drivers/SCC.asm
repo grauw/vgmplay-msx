@@ -14,7 +14,7 @@ SCC_BANK_DEFAULT: equ 02H
 SCC_FREQUENCY_: equ 1789773
 
 SCC: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver SCC_name, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -67,7 +67,6 @@ SCC: MACRO
 ; ix = this
 ; iy = drivers
 SCC_Construct:
-	ld bc,SCC_name
 	call Driver_Construct
 	call SCC_Detect
 	ret nc

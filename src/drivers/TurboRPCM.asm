@@ -6,7 +6,7 @@ TurboRPCM_CONTROL: equ 0A5H
 TurboRPCM_FREQUENCY: equ 3579545
 
 TurboRPCM: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver TurboRPCM_name, Driver_PrintInfoImpl
 
 	; d = value
 	SafeWriteRegister:
@@ -20,7 +20,6 @@ TurboRPCM: MACRO
 ; ix = this
 ; iy = drivers
 TurboRPCM_Construct:
-	ld bc,TurboRPCM_name
 	call Driver_Construct
 	call TurboRPCM_Detect
 	ret nc

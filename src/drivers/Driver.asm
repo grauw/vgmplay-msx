@@ -1,20 +1,17 @@
 ;
 ; Sound module driver
 ;
-Driver: MACRO ?printInfo
+Driver: MACRO ?name, ?printInfo
 	name:
-		dw 0
+		dw ?name
 	clock:
 		dd 0
 	printInfo:
 		dw ?printInfo
 	ENDM
 
-; bc = name
 ; ix = this
 Driver_Construct:
-	ld (ix + Driver.name),c
-	ld (ix + Driver.name + 1),b
 	ret
 
 ; ix = this

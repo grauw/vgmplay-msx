@@ -5,7 +5,7 @@ OPN2OnOPNATurboRPCM_FREQUENCY: equ 7670453
 OPN2OnOPNATurboRPCM_FREQUENCY_RATIO: equ (OPN2OnOPNATurboRPCM_FREQUENCY << 8) / (OPNA_FREQUENCY >> 7)
 
 OPN2OnOPNATurboRPCM: MACRO
-	super: Driver OPN2OnOPNATurboRPCM_PrintInfoImpl
+	super: Driver OPN2OnOPNATurboRPCM_name, OPN2OnOPNATurboRPCM_PrintInfoImpl
 	opnaDriver:
 		dw 0
 	turboRPCMDriver:
@@ -136,7 +136,6 @@ OPN2OnOPNATurboRPCM: MACRO
 ; ix = this
 ; iy = drivers
 OPN2OnOPNATurboRPCM_Construct: PROC
-	ld bc,OPN2OnOPNATurboRPCM_name
 	call Driver_Construct
 	call Drivers_TryCreateOPNA_IY
 	ret nc

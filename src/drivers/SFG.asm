@@ -10,7 +10,7 @@ SFG_ID_ADDRESS: equ 80H
 SFG_FREQUENCY: equ 3579545
 
 SFG: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver SFG_sfg01Name, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -50,7 +50,6 @@ SFG: MACRO
 ; ix = this
 ; iy = drivers
 SFG_Construct:
-	ld bc,SFG_sfg01Name
 	call Driver_Construct
 	call SFG_Detect
 	ret nc

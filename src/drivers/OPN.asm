@@ -6,7 +6,7 @@ OPN_DATA: equ 13H
 OPN_FREQUENCY: equ 3579545
 
 OPN: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver OPN_name, Driver_PrintInfoImpl
 
 	; e = register
 	; d = value
@@ -40,7 +40,6 @@ OPN: MACRO
 ; ix = this
 ; iy = drivers
 OPN_Construct:
-	ld bc,OPN_name
 	call Driver_Construct
 	call OPN_Detect
 	ret nc

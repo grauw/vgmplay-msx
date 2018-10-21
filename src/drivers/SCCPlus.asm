@@ -16,7 +16,7 @@ SCCPlus_MODE_SCCPLUS: equ 20H
 SCCPlus_FREQUENCY_: equ 1789773
 
 SCCPlus: MACRO
-	super: Driver Driver_PrintInfoImpl
+	super: Driver SCCPlus_name, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -82,7 +82,6 @@ SCCPlus: MACRO
 ; ix = this
 ; iy = drivers
 SCCPlus_Construct:
-	ld bc,SCCPlus_name
 	call Driver_Construct
 	call SCCPlus_Detect
 	ret nc

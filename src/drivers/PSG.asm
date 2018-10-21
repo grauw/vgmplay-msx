@@ -5,8 +5,8 @@ PSG_ADDRESS: equ 0A0H
 PSG_DATA: equ 0A1H
 PSG_FREQUENCY: equ 1789773
 
-PSG: MACRO ?address, ?data
-	super: Driver Driver_PrintInfoImpl
+PSG: MACRO ?address, ?data, ?name = PSG_name
+	super: Driver ?name, Driver_PrintInfoImpl
 
 	; e = register
 	; d = value
@@ -37,7 +37,6 @@ PSG: MACRO ?address, ?data
 ; ix = this
 ; iy = drivers
 PSG_Construct:
-	ld bc,PSG_name
 	call Driver_Construct
 	call PSG_Detect
 	ret nc
