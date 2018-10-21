@@ -16,7 +16,7 @@ MoonSoundC0_Construct:
 	ret
 
 MoonSoundC0_name:
-	db "MoonSound @ C0H",0
+	db "MoonSound (C0H)",0
 
 	SECTION RAM
 
