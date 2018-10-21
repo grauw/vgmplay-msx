@@ -30,7 +30,7 @@ YM3812_Construct:
 
 ; iy = drivers
 ; ix = this
-YM3812_Connect:
+YM3812_Connect: PROC
 	call Drivers_TryCreateMoonSound_IY
 	jr nc,TryMoonSoundC0
 	call Chip_SetDriver
@@ -49,6 +49,7 @@ TryMoonSoundC0:
 	ld (ix + YM3812.ProcessCommandDual.writeRegister),l
 	ld (ix + YM3812.ProcessCommandDual.writeRegister + 1),h
 	ret
+	ENDP
 
 ;
 	SECTION RAM
