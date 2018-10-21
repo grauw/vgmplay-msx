@@ -19,6 +19,22 @@ YMF262: MACRO
 		jp System_Return
 	writeRegister: equ $ - 2
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessPort0CommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessPort1CommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -42,6 +58,19 @@ YMF262_Connect:
 	add hl,de
 	ld (ix + YMF262.ProcessPort1Command.writeRegister),l
 	ld (ix + YMF262.ProcessPort1Command.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call YMF262_TryCreate
+	ret nc
+	call Chip_SetDriver2
+	add hl,de
+	ld (ix + YMF262.ProcessPort0CommandDual.writeRegister),l
+	ld (ix + YMF262.ProcessPort0CommandDual.writeRegister + 1),h
+	ld l,c
+	ld h,b
+	add hl,de
+	ld (ix + YMF262.ProcessPort1CommandDual.writeRegister),l
+	ld (ix + YMF262.ProcessPort1CommandDual.writeRegister + 1),h
 	ret
 
 ; iy = drivers
@@ -54,6 +83,10 @@ YMF262_TryCreate:
 	call Drivers_TryCreateMoonSound_IY
 	ld hl,MoonSound.SafeWriteRegister
 	ld bc,MoonSound.SafeWriteRegister2
+	ret c
+	call Drivers_TryCreateMoonSoundC0_IY
+	ld hl,MoonSoundC0.SafeWriteRegister
+	ld bc,MoonSoundC0.SafeWriteRegister2
 	ret
 
 ;

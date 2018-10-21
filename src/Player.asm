@@ -622,8 +622,8 @@ Player_commandsJumpTable:
 	dw YM3526_instance.ProcessCommandDual         ; ABH
 	dw Player_Skip3               ; ACH
 	dw Player_Skip3               ; ADH
-	dw Player_Skip3               ; AEH
-	dw Player_Skip3               ; AFH
+	dw YMF262_instance.ProcessPort0CommandDual    ; AEH
+	dw YMF262_instance.ProcessPort1CommandDual    ; AFH
 	dw Player_Skip3               ; B0H
 	dw Player_Skip3               ; B1H
 	dw Player_Skip3               ; B2H
