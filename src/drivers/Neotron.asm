@@ -95,6 +95,28 @@ Neotron: MACRO
 		ret
 		ENDP
 
+	; e = register
+	; d = value
+	SafeWriteRegisterOPN: PROC
+		ld a,e
+		cp 28H
+		jr z,KeyOnOff
+		cp 30H
+		jr c,SafeWriteRegister
+		and 03H
+		jr nz,SafeWriteRegister
+		inc e
+		jr SafeWriteRegister2
+	KeyOnOff:
+		res 2,d
+		ld a,d
+		and 03H
+		jr nz,SafeWriteRegister
+		set 2,d
+		inc d
+		jr SafeWriteRegister
+		ENDP
+
 	; iy = reader
 	ProcessDataBlockA:
 		ld de,0BFH << 8 | 0

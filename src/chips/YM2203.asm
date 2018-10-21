@@ -33,9 +33,18 @@ YM2203_Connect: PROC
 	ret
 TryOPNA:
 	call Drivers_TryCreateOPNA_IY
-	jr nc,TryOPNOnSFGPSG
+	jr nc,TryNeotron
 	call Chip_SetDriver
 	ld hl,OPNA.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2203.ProcessCommand.writeRegister),l
+	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
+	ret
+TryNeotron:
+	call Drivers_TryCreateNeotron_IY
+	jr nc,TryOPNOnSFGPSG
+	call Chip_SetDriver
+	ld hl,Neotron.SafeWriteRegisterOPN
 	add hl,de
 	ld (ix + YM2203.ProcessCommand.writeRegister),l
 	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
