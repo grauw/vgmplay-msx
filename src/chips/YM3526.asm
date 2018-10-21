@@ -11,6 +11,14 @@ YM3526: MACRO
 		jp System_Return
 	writeRegister: equ $ - 2
 		ENDP
+
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -30,6 +38,15 @@ YM3526_Connect: PROC
 	add hl,de
 	ld (ix + YM3526.ProcessCommand.writeRegister),l
 	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call Drivers_TryCreateMoonSound_IY
+	ret nc
+	call Chip_SetDriver2
+	ld hl,MoonSound.SafeWriteRegister
+	add hl,de
+	ld (ix + YM3526.ProcessCommandDual.writeRegister),l
+	ld (ix + YM3526.ProcessCommandDual.writeRegister + 1),h
 	ret
 TryMoonSound:
 	call Drivers_TryCreateMoonSound_IY
@@ -39,6 +56,15 @@ TryMoonSound:
 	add hl,de
 	ld (ix + YM3526.ProcessCommand.writeRegister),l
 	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call Drivers_TryCreateMoonSoundC0_IY
+	ret nc
+	call Chip_SetDriver2
+	ld hl,MoonSoundC0.SafeWriteRegister
+	add hl,de
+	ld (ix + YM3526.ProcessCommandDual.writeRegister),l
+	ld (ix + YM3526.ProcessCommandDual.writeRegister + 1),h
 	ret
 	ENDP
 
