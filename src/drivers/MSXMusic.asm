@@ -31,14 +31,15 @@ MSXMusic: MACRO
 		ret
 	ENDM
 
-; a = slot
-; b = internal
 ; ix = this
+; iy = drivers
 MSXMusic_Construct:
-	ld (ix + MSXMusic.slot),a
-	ld (ix + MSXMusic.internal),b
 	ld bc,MSXMusic_name
 	call Driver_Construct
+	call MSXMusic_Detect
+	ret nc
+	ld (ix + MSXMusic.slot),a
+	ld (ix + MSXMusic.internal),b
 	call MSXMusic_Enable
 	call MSXMusic_Reset
 	ld de,MSXMusic_FREQUENCY >> 16
@@ -47,6 +48,8 @@ MSXMusic_Construct:
 
 ; ix = this
 MSXMusic_Destruct:
+	call Driver_IsFound
+	ret nc
 	call MSXMusic_Mute
 	call MSXMusic_Disable
 	ret
@@ -126,6 +129,7 @@ MSXMusic_Reset:
 	call MSXMusic_FillRegisters
 	ret
 
+; ix = this
 ; f <- c: found
 ; a <- slot
 ; b <- 0: external, -1: internal

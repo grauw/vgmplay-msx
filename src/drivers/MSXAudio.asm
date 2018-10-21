@@ -165,9 +165,12 @@ MSXAudio: MACRO
 	ENDM
 
 ; ix = this
+; iy = drivers
 MSXAudio_Construct:
 	ld bc,MSXAudio_name
 	call Driver_Construct
+	call MSXAudio_Detect
+	ret nc
 	call MSXAudio_Reset
 	ld de,MSXAudio_FREQUENCY >> 16
 	ld hl,MSXAudio_FREQUENCY
@@ -175,6 +178,8 @@ MSXAudio_Construct:
 
 ; ix = this
 MSXAudio_Destruct:
+	call Driver_IsFound
+	ret nc
 	call MSXAudio_Mute
 	ret
 
@@ -326,6 +331,7 @@ MSXAudio_WriteADPCMData:
 	ld de,MSXAudio.WriteADPCMData
 	jp Utils_JumpIXOffsetDE
 
+; ix = this
 ; f <- c: found
 MSXAudio_Detect: PROC
 	in a,(MSXAudio_STATUS_PORT)

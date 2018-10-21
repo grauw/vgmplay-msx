@@ -36,10 +36,27 @@ Driver_SetClock:
 	ret
 
 ; ix = this
+; f <- c: found
+Driver_IsFound:
+	ld a,(ix + Driver.clock)
+	or (ix + Driver.clock + 1)
+	or (ix + Driver.clock + 2)
+	or (ix + Driver.clock + 3)
+	neg
+	ret
+
+; ix = this
 ; hl <- name
 Driver_GetName:
 	ld l,(ix + Driver.name)
 	ld h,(ix + Driver.name + 1)
+	ret
+
+; bc = name
+; ix = this
+Driver_SetName:
+	ld (ix + Driver.name),c
+	ld (ix + Driver.name + 1),b
 	ret
 
 ; ix = this

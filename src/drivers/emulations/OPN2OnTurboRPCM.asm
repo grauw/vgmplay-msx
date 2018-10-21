@@ -24,11 +24,13 @@ OPN2OnTurboRPCM: MACRO
 		ret
 	ENDM
 
-; de = TurboR PCM driver
 ; ix = this
+; iy = drivers
 OPN2OnTurboRPCM_Construct:
 	ld bc,OPN2OnTurboRPCM_name
 	call Driver_Construct
+	call Drivers_TryCreateTurboRPCM_IY
+	ret nc
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM.SafeWriteRegister

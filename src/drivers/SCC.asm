@@ -64,12 +64,14 @@ SCC: MACRO
 		jp WriteRegister
 	ENDM
 
-; a = slot
 ; ix = this
+; iy = drivers
 SCC_Construct:
-	call SCC_SetSlot
 	ld bc,SCC_name
 	call Driver_Construct
+	call SCC_Detect
+	ret nc
+	call SCC_SetSlot
 	call SCC_Select
 	call SCC_Reset
 	ld de,SCC_FREQUENCY_ >> 16
@@ -78,6 +80,8 @@ SCC_Construct:
 
 ; ix = this
 SCC_Destruct:
+	call Driver_IsFound
+	ret nc
 	call SCC_Reset
 	call SCC_Deselect
 	ret
@@ -145,6 +149,7 @@ SCC_Mute:
 	call SCC_FillRegisters
 	ret
 
+; ix = this
 ; f <- c: found
 ; a <- slot
 SCC_Detect:

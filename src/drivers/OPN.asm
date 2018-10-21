@@ -38,9 +38,12 @@ OPN: MACRO
 	ENDM
 
 ; ix = this
+; iy = drivers
 OPN_Construct:
 	ld bc,OPN_name
 	call Driver_Construct
+	call OPN_Detect
+	ret nc
 	call OPN_Reset
 	ld de,OPN_FREQUENCY >> 16
 	ld hl,OPN_FREQUENCY
@@ -48,6 +51,8 @@ OPN_Construct:
 
 ; ix = this
 OPN_Destruct:
+	call Driver_IsFound
+	ret nc
 	call OPN_Mute
 	ret
 

@@ -35,9 +35,12 @@ PSG: MACRO ?address, ?data
 	ENDM
 
 ; ix = this
+; iy = drivers
 PSG_Construct:
 	ld bc,PSG_name
 	call Driver_Construct
+	call PSG_Detect
+	ret nc
 	call PSG_Reset
 	ld de,PSG_FREQUENCY >> 16
 	ld hl,PSG_FREQUENCY
@@ -45,6 +48,8 @@ PSG_Construct:
 
 ; ix = this
 PSG_Destruct:
+	call Driver_IsFound
+	ret nc
 	call PSG_Reset
 	ret
 
@@ -87,6 +92,7 @@ PSG_Reset:
 	call PSG_FillRegisters
 	ret
 
+; ix = this
 ; f <- c: found
 PSG_Detect:
 	scf

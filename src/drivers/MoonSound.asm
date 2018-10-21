@@ -83,6 +83,11 @@ MoonSound: MACRO ?base
 		in a,(MoonSound_WAVE_DATA)
 		ret
 
+	; a <- value
+	ReadRegisterStatus:
+		in a,(?base + MoonSound_STATUS)
+		ret
+
 	; bc = count
 	; hl = source
 	WriteMemory: PROC
@@ -154,9 +159,12 @@ MoonSound: MACRO ?base
 	ENDM
 
 ; ix = this
+; iy = drivers
 MoonSound_Construct:
 	ld bc,MoonSound_name
 	call Driver_Construct
+	call MoonSound_Detect
+	ret nc
 	call MoonSound_Reset
 	ld de,MoonSound_FREQUENCY >> 16
 	ld hl,MoonSound_FREQUENCY
@@ -164,6 +172,8 @@ MoonSound_Construct:
 
 ; ix = this
 MoonSound_Destruct:
+	call Driver_IsFound
+	ret nc
 	call MoonSound_Mute
 	ret
 
@@ -196,6 +206,12 @@ MoonSound_WriteRegisterWave:
 ; a <- value
 MoonSound_ReadRegisterWave:
 	ld bc,MoonSound.ReadRegisterWave
+	jp Utils_JumpIXOffsetBC
+
+; ix = this
+; a <- value
+MoonSound_ReadRegisterStatus:
+	ld bc,MoonSound.ReadRegisterStatus
 	jp Utils_JumpIXOffsetBC
 
 ; ix = this
@@ -502,9 +518,10 @@ MoonSound_Reset:
 	call MoonSound_WriteRegister2
 	ret
 
+; ix = this
 ; f <- c: Found
 MoonSound_Detect:
-	in a,(MoonSound_BASE_PORT + MoonSound_STATUS)
+	call MoonSound_ReadRegisterStatus
 	and 11111101B  ; sometimes LD is set
 	sub 00H
 	and a

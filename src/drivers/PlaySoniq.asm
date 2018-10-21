@@ -23,9 +23,12 @@ PlaySoniq: MACRO
 	ENDM
 
 ; ix = this
+; iy = drivers
 PlaySoniq_Construct:
 	ld bc,PlaySoniq_name
 	call Driver_Construct
+	call PlaySoniq_Detect
+	ret nc
 	call PlaySoniq_Select
 	call PlaySoniq_Reset
 	ld de,PlaySoniq_FREQUENCY >> 16
@@ -34,6 +37,8 @@ PlaySoniq_Construct:
 
 ; ix = this
 PlaySoniq_Destruct:
+	call Driver_IsFound
+	ret nc
 	call PlaySoniq_Reset
 	call PlaySoniq_Deselect
 	ret
@@ -74,6 +79,7 @@ PlaySoniq_Reset:
 	call PlaySoniq_WriteRegister
 	ret
 
+; ix = this
 ; f <- c: found
 PlaySoniq_Detect: PROC
 	ld a,PlaySoniq_REGISTER_PSGBASE

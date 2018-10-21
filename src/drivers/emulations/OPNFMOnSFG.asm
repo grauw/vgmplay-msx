@@ -268,11 +268,13 @@ OPNFMOnSFG: MACRO
 		ENDP
 	ENDM
 
-; de = SFG driver
 ; ix = this
+; iy = drivers
 OPNFMOnSFG_Construct:
 	ld bc,OPNFMOnSFG_name
 	call Driver_Construct
+	call Drivers_TryCreateSFG_IY
+	ret nc
 	ld (ix + OPNFMOnSFG.sfgDriver),e
 	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
 	ld hl,SFG.WriteRegister

@@ -18,9 +18,12 @@ TurboRPCM: MACRO
 	ENDM
 
 ; ix = this
+; iy = drivers
 TurboRPCM_Construct:
 	ld bc,TurboRPCM_name
 	call Driver_Construct
+	call TurboRPCM_Detect
+	ret nc
 	call TurboRPCM_Enable
 	ld de,TurboRPCM_FREQUENCY >> 16
 	ld hl,TurboRPCM_FREQUENCY
@@ -28,6 +31,8 @@ TurboRPCM_Construct:
 
 ; ix = this
 TurboRPCM_Destruct:
+	call Driver_IsFound
+	ret nc
 	call TurboRPCM_Disable
 	ret
 
@@ -54,6 +59,7 @@ TurboRPCM_Disable:
 	out (TurboRPCM_DATA),a
 	ret
 
+; ix = this
 ; f <- c: found
 TurboRPCM_Detect:
 	call System_IsTurboR

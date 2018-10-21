@@ -132,12 +132,14 @@ Neotron: MACRO
 		jp NeotronMemory_ProcessDataBlock
 	ENDM
 
-; a = slot
 ; ix = this
+; iy = drivers
 Neotron_Construct:
-	call Neotron_SetSlot
 	ld bc,Neotron_name
 	call Driver_Construct
+	call Neotron_Detect
+	ret nc
+	call Neotron_SetSlot
 	call Neotron_Select
 	call Neotron_Reset
 	push ix
@@ -175,6 +177,8 @@ Neotron_Construct:
 
 ; ix = this
 Neotron_Destruct:
+	call Driver_IsFound
+	ret nc
 	push ix
 	ld e,(ix + Neotron.buffer + 0)
 	ld d,(ix + Neotron.buffer + 1)
@@ -328,6 +332,7 @@ Neotron_Reset:
 	call Neotron_FillRegisterPairs  ; FM panpots
 	ret
 
+; ix = this
 ; f <- c: found
 ; a <- slot
 Neotron_Detect:

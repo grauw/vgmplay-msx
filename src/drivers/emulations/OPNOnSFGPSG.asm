@@ -36,14 +36,17 @@ OPNOnSFGPSG: MACRO
 		ENDP
 	ENDM
 
-; bc = OPN FM on SFG driver
-; de = PSG driver
 ; ix = this
+; iy = drivers
 OPNOnSFGPSG_Construct:
-	push bc
 	ld bc,OPNOnSFGPSG_name
 	call Driver_Construct
+	call Drivers_TryCreateOPNFMOnSFG_IY
+	ret nc
+	push de
+	call Drivers_TryCreatePSG_IY
 	pop bc
+	ret nc
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),c
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),b
 	ld (ix + OPNOnSFGPSG.psgDriver),e

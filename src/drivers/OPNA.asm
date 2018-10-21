@@ -218,9 +218,12 @@ OPNA: MACRO
 	ENDM
 
 ; ix = this
+; iy = drivers
 OPNA_Construct:
 	ld bc,OPNA_name
 	call Driver_Construct
+	call OPNA_Detect
+	ret nc
 	call OPNA_Reset
 	ld de,OPNA_FREQUENCY >> 16
 	ld hl,OPNA_FREQUENCY
@@ -228,6 +231,8 @@ OPNA_Construct:
 
 ; ix = this
 OPNA_Destruct:
+	call Driver_IsFound
+	ret nc
 	call OPNA_Mute
 	ret
 
@@ -432,6 +437,7 @@ OPNA_WriteADPCMData:
 	ld de,OPNA.WriteADPCMData
 	jp Utils_JumpIXOffsetDE
 
+; ix = this
 ; f <- c: Found
 OPNA_Detect:
 	call OPNA_DetectOPN

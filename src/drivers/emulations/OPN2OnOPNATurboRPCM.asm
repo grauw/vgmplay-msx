@@ -133,14 +133,19 @@ OPN2OnOPNATurboRPCM: MACRO
 		ENDP
 	ENDM
 
-; bc = OPNA driver
-; de = TurboR PCM driver
 ; ix = this
+; iy = drivers
 OPN2OnOPNATurboRPCM_Construct: PROC
-	push bc
 	ld bc,OPN2OnOPNATurboRPCM_name
 	call Driver_Construct
+	call Drivers_TryCreateOPNA_IY
+	ret nc
+	push de
+	call Drivers_TryCreateTurboRPCM_IY
 	pop bc
+	jr c,FoundTurboRPCM
+	ld de,0
+FoundTurboRPCM:
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),c
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),b
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e

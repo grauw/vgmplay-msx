@@ -47,12 +47,16 @@ SFG: MACRO
 		jr WriteRegister
 	ENDM
 
-; a = slot
 ; ix = this
+; iy = drivers
 SFG_Construct:
+	ld bc,SFG_sfg01Name
+	call Driver_Construct
+	call SFG_Detect
+	ret nc
 	call SFG_SetSlot
 	call SFG_GetName
-	call Driver_Construct
+	call Driver_SetName
 	call SFG_Reset
 	ld de,SFG_FREQUENCY >> 16
 	ld hl,SFG_FREQUENCY
@@ -60,6 +64,8 @@ SFG_Construct:
 
 ; ix = this
 SFG_Destruct:
+	call Driver_IsFound
+	ret nc
 	call SFG_Mute
 	ret
 
@@ -141,6 +147,7 @@ SFG_IsSFG01:
 	and 0F0H
 	ret
 
+; ix = this
 ; f <- c: found
 ; a <- slot
 SFG_Detect:

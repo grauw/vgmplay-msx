@@ -30,14 +30,19 @@ OPN2OnSFGTurboRPCM: MACRO
 		ENDP
 	ENDM
 
-; bc = OPN on SFG driver
-; de = TurboR PCM driver
 ; ix = this
+; iy = drivers
 OPN2OnSFGTurboRPCM_Construct: PROC
-	push bc
 	ld bc,OPN2OnSFGTurboRPCM_name
 	call Driver_Construct
+	call Drivers_TryCreateOPNFMOnSFG_IY
+	ret nc
+	push de
+	call Drivers_TryCreateTurboRPCM_IY
 	pop bc
+	jr c,FoundTurboRPCM
+	ld de,0
+FoundTurboRPCM:
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),c
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),b
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e

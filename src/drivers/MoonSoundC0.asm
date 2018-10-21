@@ -8,21 +8,11 @@ MoonSoundC0_Destruct: equ MoonSound_Destruct
 MoonSoundC0_SafeWriteRegister: equ MoonSound_SafeWriteRegister
 
 ; ix = this
+; iy = drivers
 MoonSoundC0_Construct:
 	call MoonSound_Construct
 	ld bc,MoonSoundC0_name
-	ld (ix + Driver.name),c
-	ld (ix + Driver.name + 1),b
-	ret
-
-; f <- c: Found
-MoonSoundC0_Detect:
-	in a,(MoonSoundC0_BASE_PORT + MoonSound_STATUS)
-	and 11111101B  ; sometimes LD is set
-	sub 00H
-	and a
-	ret nz
-	scf
+	call Driver_SetName
 	ret
 
 MoonSoundC0_name:

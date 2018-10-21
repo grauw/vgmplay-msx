@@ -23,11 +23,13 @@ MMM: MACRO
 		ret
 	ENDM
 
-; a = slot
 ; ix = this
+; iy = drivers
 MMM_Construct:
 	ld bc,MMM_name
 	call Driver_Construct
+	call MMM_Detect
+	ret nc
 	call MMM_SetSlot
 	call MMM_Enable
 	call MMM_Reset
@@ -37,6 +39,8 @@ MMM_Construct:
 
 ; ix = this
 MMM_Destruct:
+	call Driver_IsFound
+	ret nc
 	call MMM_Reset
 	call MMM_Disable
 	ret
@@ -99,6 +103,7 @@ MMM_Reset:
 	call MMM_WriteRegister
 	ret
 
+; ix = this
 ; f <- c: found
 ; a <- slot
 MMM_Detect:

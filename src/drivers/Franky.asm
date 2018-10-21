@@ -16,9 +16,12 @@ Franky: MACRO
 	ENDM
 
 ; ix = this
+; iy = drivers
 Franky_Construct:
 	ld bc,Franky_name
 	call Driver_Construct
+	call Franky_Detect
+	ret nc
 	ld a,0FFH
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset
@@ -28,6 +31,8 @@ Franky_Construct:
 
 ; ix = this
 Franky_Destruct:
+	call Driver_IsFound
+	ret nc
 	call Franky_Reset
 	ret
 
@@ -49,6 +54,7 @@ Franky_Reset:
 	call Franky_WriteRegister
 	ret
 
+; ix = this
 ; f <- c: found
 Franky_Detect:
 	scf
