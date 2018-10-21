@@ -26,53 +26,55 @@
 
 Drivers: MACRO
 	psg:
-		DriverInstance PSG_instance
+		DriverInstance PSG_instance, PSG_Construct
 	mfrPSG:
-		DriverInstance MFRPSG_instance
+		DriverInstance MFRPSG_instance, MFRPSG_Construct
 	sfg:
-		DriverInstance SFG_instance
+		DriverInstance SFG_instance, SFG_Construct
 	msxMusic:
-		DriverInstance MSXMusic_instance
+		DriverInstance MSXMusic_instance, MSXMusic_Construct
 	msxAudio:
-		DriverInstance MSXAudio_instance
+		DriverInstance MSXAudio_instance, MSXAudio_Construct
 	moonSound:
-		DriverInstance MoonSound_instance
+		DriverInstance MoonSound_instance, MoonSound_Construct
 	moonSoundC0:
-		DriverInstance MoonSoundC0_instance
+		DriverInstance MoonSoundC0_instance, MoonSoundC0_Construct
 	scc:
-		DriverInstance SCC_instance
+		DriverInstance SCC_instance, SCC_Construct
 	sccPlus:
-		DriverInstance SCCPlus_instance
+		DriverInstance SCCPlus_instance, SCCPlus_Construct
 	franky:
-		DriverInstance Franky_instance
+		DriverInstance Franky_instance, Franky_Construct
 	playSoniq:
-		DriverInstance PlaySoniq_instance
+		DriverInstance PlaySoniq_instance, PlaySoniq_Construct
 	mmm:
-		DriverInstance MMM_instance
+		DriverInstance MMM_instance, MMM_Construct
 	turboRPCM:
-		DriverInstance TurboRPCM_instance
+		DriverInstance TurboRPCM_instance, TurboRPCM_Construct
 	opn:
-		DriverInstance OPN_instance
+		DriverInstance OPN_instance, OPN_Construct
 	opna:
-		DriverInstance OPNA_instance
+		DriverInstance OPNA_instance, OPNA_Construct
 	neotron:
-		DriverInstance Neotron_instance
+		DriverInstance Neotron_instance, Neotron_Construct
 	opnFMOnSFG:
-		DriverInstance OPNFMOnSFG_instance
+		DriverInstance OPNFMOnSFG_instance, OPNFMOnSFG_Construct
 	opnOnSFGPSG:
-		DriverInstance OPNOnSFGPSG_instance
+		DriverInstance OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct
 	opn2OnSFGTurboRPCM:
-		DriverInstance OPN2OnSFGTurboRPCM_instance
+		DriverInstance OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct
 	opn2OnOPNATurboRPCM:
-		DriverInstance OPN2OnOPNATurboRPCM_instance
+		DriverInstance OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct
 	opn2OnTurboRPCM:
-		DriverInstance OPN2OnTurboRPCM_instance
+		DriverInstance OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct
 	size:
 	ENDM
 
-DriverInstance: MACRO ?instance
+DriverInstance: MACRO ?instance, ?constructor
 	instance:
 		dw ?instance
+	constructor:
+		dw ?constructor
 	constructed:
 		db 0
 	_size:
@@ -211,355 +213,171 @@ Drivers_GetDriver:
 ; de <- PSG driver
 ; f <- c: succeeded
 Drivers_TryCreatePSG_IY:
-	ld a,(iy + Drivers.psg + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,PSG_instance
-	call PSG_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.psg + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.psg
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- MegaFlashROM SCC+ SD PSG driver
 ; f <- c: succeeded
 Drivers_TryCreateMFRPSG_IY:
-	ld a,(iy + Drivers.mfrPSG + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,MFRPSG_instance
-	call MFRPSG_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.mfrPSG + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.mfrPSG
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateSFG_IY:
-	ld a,(iy + Drivers.sfg + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,SFG_instance
-	call SFG_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.sfg + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.sfg
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- MSX-MUSIC driver
 ; f <- c: succeeded
 Drivers_TryCreateMSXMusic_IY:
-	ld a,(iy + Drivers.msxMusic + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,MSXMusic_instance
-	call MSXMusic_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.msxMusic + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.msxMusic
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- MSX-AUDIO driver
 ; f <- c: succeeded
 Drivers_TryCreateMSXAudio_IY:
-	ld a,(iy + Drivers.msxAudio + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,MSXAudio_instance
-	call MSXAudio_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.msxAudio + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.msxAudio
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- MoonSound driver
 ; f <- c: succeeded
 Drivers_TryCreateMoonSound_IY:
-	ld a,(iy + Drivers.moonSound + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,MoonSound_instance
-	call MoonSound_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.moonSound + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.moonSound
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- MoonSound at C0 driver
 ; f <- c: succeeded
 Drivers_TryCreateMoonSoundC0_IY:
-	ld a,(iy + Drivers.moonSoundC0 + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,MoonSoundC0_instance
-	call MoonSoundC0_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.moonSoundC0 + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.moonSoundC0
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- SCC driver
 ; f <- c: succeeded
 Drivers_TryCreateSCC_IY:
-	ld a,(iy + Drivers.scc + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,SCC_instance
-	call SCC_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.scc + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.scc
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- SCC+ driver
 ; f <- c: succeeded
 Drivers_TryCreateSCCPlus_IY:
-	ld a,(iy + Drivers.sccPlus + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,SCCPlus_instance
-	call SCCPlus_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.sccPlus + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.sccPlus
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- Franky driver
 ; f <- c: succeeded
 Drivers_TryCreateFranky_IY:
-	ld a,(iy + Drivers.franky + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,Franky_instance
-	call Franky_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.franky + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.franky
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- PlaySoniq driver
 ; f <- c: succeeded
 Drivers_TryCreatePlaySoniq_IY:
-	ld a,(iy + Drivers.playSoniq + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,PlaySoniq_instance
-	call PlaySoniq_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.playSoniq + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.playSoniq
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- Musical Memory Mapper driver
 ; f <- c: succeeded
 Drivers_TryCreateMMM_IY:
-	ld a,(iy + Drivers.mmm + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,MMM_instance
-	call MMM_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.mmm + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.mmm
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateTurboRPCM_IY:
-	ld a,(iy + Drivers.turboRPCM + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,TurboRPCM_instance
-	call TurboRPCM_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.turboRPCM + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.turboRPCM
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPN driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN_IY:
-	ld a,(iy + Drivers.opn + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,OPN_instance
-	call OPN_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.opn + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.opn
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPNA driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNA_IY:
-	ld a,(iy + Drivers.opna + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,OPNA_instance
-	call OPNA_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.opna + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.opna
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- Neotron driver
 ; f <- c: succeeded
 Drivers_TryCreateNeotron_IY:
-	ld a,(iy + Drivers.neotron + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,Neotron_instance
-	call Neotron_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.neotron + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.neotron
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPN FM on SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNFMOnSFG_IY:
-	ld a,(iy + Drivers.opnFMOnSFG + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,OPNFMOnSFG_instance
-	call OPNFMOnSFG_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.opnFMOnSFG + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.opnFMOnSFG
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPN on SFG + PSG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNOnSFGPSG_IY:
-	ld a,(iy + Drivers.opnOnSFGPSG + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,OPNOnSFGPSG_instance
-	call OPNOnSFGPSG_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.opnOnSFGPSG + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.opnOnSFGPSG
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPN2 on SFG + turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
-	ld a,(iy + Drivers.opn2OnSFGTurboRPCM + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,OPN2OnSFGTurboRPCM_instance
-	call OPN2OnSFGTurboRPCM_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.opn2OnSFGTurboRPCM + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.opn2OnSFGTurboRPCM
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPN2 on OPNA + turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnOPNATurboRPCM_IY:
-	ld a,(iy + Drivers.opn2OnOPNATurboRPCM + DriverInstance.constructed)
-	and a
-	ret nz
-	push ix
-	ld ix,OPN2OnOPNATurboRPCM_instance
-	call OPN2OnOPNATurboRPCM_Construct
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (iy + Drivers.opn2OnOPNATurboRPCM + DriverInstance.constructed),1
-	ret
+	ld de,Drivers.opn2OnOPNATurboRPCM
+	jr Drivers_TryCreate_IY
 
 ; iy = this
 ; de <- OPN2 on turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnTurboRPCM_IY:
-	ld a,(iy + Drivers.opn2OnTurboRPCM + DriverInstance.constructed)
+	ld de,Drivers.opn2OnTurboRPCM
+	jr Drivers_TryCreate_IY
+
+; de = driver instance offset
+; iy = this
+; de <- PSG driver
+; f <- c: succeeded
+Drivers_TryCreate_IY:
+	push iy
+	add iy,de
+	ld e,(iy + DriverInstance.instance)
+	ld d,(iy + DriverInstance.instance + 1)
+	ld l,(iy + DriverInstance.constructor)
+	ld h,(iy + DriverInstance.constructor + 1)
+	ld a,(iy + DriverInstance.constructed)
+	ld (iy + DriverInstance.constructed),1
+	pop iy
 	and a
 	ret nz
 	push ix
-	ld ix,OPN2OnTurboRPCM_instance
-	call OPN2OnTurboRPCM_Construct
+	ld ixl,e
+	ld ixh,d
+	call System_JumpHL
 	call Driver_IsFound
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld (iy + Drivers.opn2OnTurboRPCM + DriverInstance.constructed),1
 	ret
