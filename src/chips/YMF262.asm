@@ -31,17 +31,29 @@ YMF262_Construct:
 ; iy = drivers
 ; ix = this
 YMF262_Connect:
-	call Drivers_TryCreateMoonSound_IY
+	call YMF262_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + YMF262.ProcessPort0Command.writeRegister),l
 	ld (ix + YMF262.ProcessPort0Command.writeRegister + 1),h
-	ld hl,MoonSound.SafeWriteRegister2
+	ld l,c
+	ld h,b
 	add hl,de
 	ld (ix + YMF262.ProcessPort1Command.writeRegister),l
 	ld (ix + YMF262.ProcessPort1Command.writeRegister + 1),h
+	ret
+
+; iy = drivers
+; ix = this
+; bc <- safe write register 2 offset
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+YMF262_TryCreate:
+	call Drivers_TryCreateMoonSound_IY
+	ld hl,MoonSound.SafeWriteRegister
+	ld bc,MoonSound.SafeWriteRegister2
 	ret
 
 ;

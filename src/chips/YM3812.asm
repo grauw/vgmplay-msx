@@ -30,26 +30,35 @@ YM3812_Construct:
 
 ; iy = drivers
 ; ix = this
-YM3812_Connect: PROC
-	call Drivers_TryCreateMoonSound_IY
-	jr nc,TryMoonSoundC0
+YM3812_Connect:
+	call YM3812_TryCreate
+	ret nc
 	call Chip_SetDriver
-	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3812.ProcessCommand.writeRegister),l
 	ld (ix + YM3812.ProcessCommand.writeRegister + 1),h
 	call Chip_IsDualChip
 	ret z
-TryMoonSoundC0:
-	call Drivers_TryCreateMoonSoundC0_IY
+	call YM3812_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	ld hl,MoonSoundC0.SafeWriteRegister
 	add hl,de
 	ld (ix + YM3812.ProcessCommandDual.writeRegister),l
 	ld (ix + YM3812.ProcessCommandDual.writeRegister + 1),h
 	ret
-	ENDP
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+YM3812_TryCreate:
+	call Drivers_TryCreateMoonSound_IY
+	ld hl,MoonSound.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateMoonSoundC0_IY
+	ld hl,MoonSoundC0.SafeWriteRegister
+	ret
 
 ;
 	SECTION RAM

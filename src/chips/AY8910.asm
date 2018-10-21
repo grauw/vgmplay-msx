@@ -53,36 +53,35 @@ AY8910_Construct:
 
 ; iy = drivers
 ; ix = this
-AY8910_Connect: PROC
-	call Drivers_TryCreatePSG_IY
-	jp nc,TryMFRPSG
-	call Chip_SetDriver
-	ld hl,PSG.SafeWriteRegister
-	add hl,de
-	ld (ix + AY8910.ProcessCommand.writeRegister),l
-	ld (ix + AY8910.ProcessCommand.writeRegister + 1),h
-	jr DualChip
-TryMFRPSG:
-	call Drivers_TryCreateMFRPSG_IY
+AY8910_Connect:
+	call AY8910_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,MFRPSG.SafeWriteRegister
 	add hl,de
 	ld (ix + AY8910.ProcessCommand.writeRegister),l
 	ld (ix + AY8910.ProcessCommand.writeRegister + 1),h
-	ret
-DualChip:
 	call Chip_IsDualChip
 	ret z
-	call Drivers_TryCreateMFRPSG_IY
+	call AY8910_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	ld hl,MFRPSG.SafeWriteRegister
 	add hl,de
 	ld (ix + AY8910.ProcessCommand.writeRegisterDual),l
 	ld (ix + AY8910.ProcessCommand.writeRegisterDual + 1),h
 	ret
-	ENDP
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+AY8910_TryCreate:
+	call Drivers_TryCreatePSG_IY
+	ld hl,PSG.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateMFRPSG_IY
+	ld hl,MFRPSG.SafeWriteRegister
+	ret
 
 ;
 	SECTION RAM

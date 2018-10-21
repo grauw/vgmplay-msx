@@ -30,43 +30,38 @@ YM3526_Construct:
 
 ; iy = drivers
 ; ix = this
-YM3526_Connect: PROC
+YM3526_Connect:
+	call YM3526_TryCreate
+	ret nc
+	call Chip_SetDriver
+	add hl,de
+	ld (ix + YM3526.ProcessCommand.writeRegister),l
+	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call YM3526_TryCreate
+	ret nc
+	call Chip_SetDriver2
+	add hl,de
+	ld (ix + YM3526.ProcessCommandDual.writeRegister),l
+	ld (ix + YM3526.ProcessCommandDual.writeRegister + 1),h
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+YM3526_TryCreate:
 	call Drivers_TryCreateMSXAudio_IY
-	jr nc,TryMoonSound
-	call Chip_SetDriver
 	ld hl,MSXAudio.SafeWriteRegister
-	add hl,de
-	ld (ix + YM3526.ProcessCommand.writeRegister),l
-	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
-	call Chip_IsDualChip
-	ret z
+	ret c
 	call Drivers_TryCreateMoonSound_IY
-	ret nc
-	call Chip_SetDriver2
 	ld hl,MoonSound.SafeWriteRegister
-	add hl,de
-	ld (ix + YM3526.ProcessCommandDual.writeRegister),l
-	ld (ix + YM3526.ProcessCommandDual.writeRegister + 1),h
-	ret
-TryMoonSound:
-	call Drivers_TryCreateMoonSound_IY
-	ret nc
-	call Chip_SetDriver
-	ld hl,MoonSound.SafeWriteRegister
-	add hl,de
-	ld (ix + YM3526.ProcessCommand.writeRegister),l
-	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
-	call Chip_IsDualChip
-	ret z
+	ret c
 	call Drivers_TryCreateMoonSoundC0_IY
-	ret nc
-	call Chip_SetDriver2
 	ld hl,MoonSoundC0.SafeWriteRegister
-	add hl,de
-	ld (ix + YM3526.ProcessCommandDual.writeRegister),l
-	ld (ix + YM3526.ProcessCommandDual.writeRegister + 1),h
 	ret
-	ENDP
 
 ;
 	SECTION RAM

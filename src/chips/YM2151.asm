@@ -23,13 +23,22 @@ YM2151_Construct:
 ; iy = drivers
 ; ix = this
 YM2151_Connect:
-	call Drivers_TryCreateSFG_IY
+	call YM2151_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,SFG.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2151.ProcessCommand.writeRegister),l
 	ld (ix + YM2151.ProcessCommand.writeRegister + 1),h
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+YM2151_TryCreate:
+	call Drivers_TryCreateSFG_IY
+	ld hl,SFG.SafeWriteRegister
 	ret
 
 ;

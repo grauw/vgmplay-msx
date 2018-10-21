@@ -22,43 +22,33 @@ YM2203_Construct:
 
 ; iy = drivers
 ; ix = this
-YM2203_Connect: PROC
-	call Drivers_TryCreateOPN_IY
-	jr nc,TryOPNA
-	call Chip_SetDriver
-	ld hl,OPN.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2203.ProcessCommand.writeRegister),l
-	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
-	ret
-TryOPNA:
-	call Drivers_TryCreateOPNA_IY
-	jr nc,TryNeotron
-	call Chip_SetDriver
-	ld hl,OPNA.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2203.ProcessCommand.writeRegister),l
-	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
-	ret
-TryNeotron:
-	call Drivers_TryCreateNeotron_IY
-	jr nc,TryOPNOnSFGPSG
-	call Chip_SetDriver
-	ld hl,Neotron.SafeWriteRegisterOPN
-	add hl,de
-	ld (ix + YM2203.ProcessCommand.writeRegister),l
-	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
-	ret
-TryOPNOnSFGPSG:
-	call Drivers_TryCreateOPNOnSFGPSG_IY
+YM2203_Connect:
+	call YM2203_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,OPNOnSFGPSG.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2203.ProcessCommand.writeRegister),l
 	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
 	ret
-	ENDP
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+YM2203_TryCreate:
+	call Drivers_TryCreateOPN_IY
+	ld hl,OPN.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateOPNA_IY
+	ld hl,OPNA.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateNeotron_IY
+	ld hl,Neotron.SafeWriteRegisterOPN
+	ret c
+	call Drivers_TryCreateOPNOnSFGPSG_IY
+	ld hl,OPNOnSFGPSG.SafeWriteRegister
+	ret
 
 ;
 	SECTION RAM

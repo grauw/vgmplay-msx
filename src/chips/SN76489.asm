@@ -30,54 +30,38 @@ SN76489_Construct:
 
 ; iy = drivers
 ; ix = this
-SN76489_Connect: PROC
-	call Drivers_TryCreateMMM_IY
-	jr nc,TryPlaySoniq
-	call Chip_SetDriver
-	ld hl,MMM.SafeWriteRegister
-	add hl,de
-	ld (ix + SN76489.ProcessCommand.writeRegister),l
-	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
-	jr DualChip
-TryPlaySoniq:
-	call Drivers_TryCreatePlaySoniq_IY
-	jr nc,TryFranky
-	call Chip_SetDriver
-	ld hl,PlaySoniq.SafeWriteRegister
-	add hl,de
-	ld (ix + SN76489.ProcessCommand.writeRegister),l
-	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
-	jr DualChip
-TryFranky:
-	call Drivers_TryCreateFranky_IY
+SN76489_Connect:
+	call SN76489_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,Franky.SafeWriteRegister
 	add hl,de
 	ld (ix + SN76489.ProcessCommand.writeRegister),l
 	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
-	ret
-DualChip:
 	call Chip_IsDualChip
 	ret z
-	call Drivers_TryCreatePlaySoniq_IY
-	jr nc,DualChipTryFranky
-	call Chip_SetDriver2
-	ld hl,PlaySoniq.SafeWriteRegister
-	add hl,de
-	ld (ix + SN76489.ProcessCommandDual.writeRegister),l
-	ld (ix + SN76489.ProcessCommandDual.writeRegister + 1),h
-	ret
-DualChipTryFranky:
-	call Drivers_TryCreateFranky_IY
+	call SN76489_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	ld hl,Franky.SafeWriteRegister
 	add hl,de
 	ld (ix + SN76489.ProcessCommandDual.writeRegister),l
 	ld (ix + SN76489.ProcessCommandDual.writeRegister + 1),h
 	ret
-	ENDP
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+SN76489_TryCreate:
+	call Drivers_TryCreateMMM_IY
+	ld hl,MMM.SafeWriteRegister
+	ret c
+	call Drivers_TryCreatePlaySoniq_IY
+	ld hl,PlaySoniq.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateFranky_IY
+	ld hl,Franky.SafeWriteRegister
+	ret
 
 ;
 	SECTION RAM

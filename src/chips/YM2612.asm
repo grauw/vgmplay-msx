@@ -217,52 +217,40 @@ YM2612_IsYM3438:
 
 ; iy = drivers
 ; ix = this
-YM2612_Connect: PROC
-	call Drivers_TryCreateOPN2OnOPNATurboRPCM_IY
-	jr nc,TryOPN2OnSFGTurboRPCM
-	call Chip_SetDriver
-	ld hl,OPN2OnOPNATurboRPCM.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2612.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2612.ProcessPort0Command.writeRegister + 1),h
-	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
-	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
-	ld hl,OPN2OnOPNATurboRPCM.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
-	ret
-TryOPN2OnSFGTurboRPCM:
-	call Drivers_TryCreateOPN2OnSFGTurboRPCM_IY
-	jr nc,TryOPN2OnTurboRPCM
-	call Chip_SetDriver
-	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2612.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2612.ProcessPort0Command.writeRegister + 1),h
-	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
-	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
-	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
-	ret
-TryOPN2OnTurboRPCM:
-	call Drivers_TryCreateOPN2OnTurboRPCM_IY
+YM2612_Connect:
+	call YM2612_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,OPN2OnTurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2612.ProcessPort0Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort0Command.writeRegister + 1),h
 	ld (ix + YM2612.ProcessPCMWrite.writeRegister),l
 	ld (ix + YM2612.ProcessPCMWrite.writeRegister + 1),h
-	ld hl,OPN2OnTurboRPCM.SafeWriteRegister2
+	ld l,c
+	ld h,b
 	add hl,de
 	ld (ix + YM2612.ProcessPort1Command.writeRegister),l
 	ld (ix + YM2612.ProcessPort1Command.writeRegister + 1),h
 	ret
-	ENDP
+
+; iy = drivers
+; ix = this
+; de <- OPN driver
+; hl <- entry offset
+; f <- c: succeeded
+YM2612_TryCreate:
+	call Drivers_TryCreateOPN2OnOPNATurboRPCM_IY
+	ld hl,OPN2OnOPNATurboRPCM.SafeWriteRegister
+	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister2
+	ret c
+	call Drivers_TryCreateOPN2OnSFGTurboRPCM_IY
+	ld hl,OPN2OnSFGTurboRPCM.SafeWriteRegister
+	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister2
+	ret c
+	call Drivers_TryCreateOPN2OnTurboRPCM_IY
+	ld hl,OPN2OnTurboRPCM.SafeWriteRegister
+	ld bc,OPN2OnTurboRPCM.SafeWriteRegister2
+	ret
 
 ;
 	SECTION RAM

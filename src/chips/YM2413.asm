@@ -23,13 +23,22 @@ YM2413_Construct:
 ; iy = drivers
 ; ix = this
 YM2413_Connect:
-	call Drivers_TryCreateMSXMusic_IY
+	call YM2413_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,MSXMusic.SafeWriteRegister
 	add hl,de
 	ld (ix + YM2413.ProcessCommand.writeRegister),l
 	ld (ix + YM2413.ProcessCommand.writeRegister + 1),h
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; f <- c: succeeded
+YM2413_TryCreate:
+	call Drivers_TryCreateMSXMusic_IY
+	ld hl,MSXMusic.SafeWriteRegister
 	ret
 
 ;
