@@ -79,89 +79,125 @@ Drivers_Construct:
 ; ix <- this
 Drivers_Destruct:
 	push ix
-	call Drivers_GetPSG
+	ld de,Drivers.psg
+	call Drivers_GetDriver
 	call nz,PSG_Destruct
 	pop ix
 	push ix
-	call Drivers_GetMFRPSG
+	ld de,Drivers.mfrPSG
+	call Drivers_GetDriver
 	call nz,MFRPSG_Destruct
 	pop ix
 	push ix
-	call Drivers_GetSFG
+	ld de,Drivers.sfg
+	call Drivers_GetDriver
 	call nz,SFG_Destruct
 	pop ix
 	push ix
-	call Drivers_GetMSXMusic
+	ld de,Drivers.msxMusic
+	call Drivers_GetDriver
 	call nz,MSXMusic_Destruct
 	pop ix
 	push ix
-	call Drivers_GetMSXAudio
+	ld de,Drivers.msxAudio
+	call Drivers_GetDriver
 	call nz,MSXAudio_Destruct
 	pop ix
 	push ix
-	call Drivers_GetMoonSound
+	ld de,Drivers.moonSound
+	call Drivers_GetDriver
 	call nz,MoonSound_Destruct
 	pop ix
 	push ix
-	call Drivers_GetMoonSoundC0
+	ld de,Drivers.moonSoundC0
+	call Drivers_GetDriver
 	call nz,MoonSoundC0_Destruct
 	pop ix
 	push ix
-	call Drivers_GetSCC
+	ld de,Drivers.scc
+	call Drivers_GetDriver
 	call nz,SCC_Destruct
 	pop ix
 	push ix
-	call Drivers_GetSCCPlus
+	ld de,Drivers.sccPlus
+	call Drivers_GetDriver
 	call nz,SCCPlus_Destruct
 	pop ix
 	push ix
-	call Drivers_GetFranky
+	ld de,Drivers.franky
+	call Drivers_GetDriver
 	call nz,Franky_Destruct
 	pop ix
 	push ix
-	call Drivers_GetPlaySoniq
+	ld de,Drivers.playSoniq
+	call Drivers_GetDriver
 	call nz,PlaySoniq_Destruct
 	pop ix
 	push ix
-	call Drivers_GetMMM
+	ld de,Drivers.mmm
+	call Drivers_GetDriver
 	call nz,MMM_Destruct
 	pop ix
 	push ix
-	call Drivers_GetTurboRPCM
+	ld de,Drivers.turboRPCM
+	call Drivers_GetDriver
 	call nz,TurboRPCM_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPN
+	ld de,Drivers.opn
+	call Drivers_GetDriver
 	call nz,OPN_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPNA
+	ld de,Drivers.opna
+	call Drivers_GetDriver
 	call nz,OPNA_Destruct
 	pop ix
 	push ix
-	call Drivers_GetNeotron
+	ld de,Drivers.neotron
+	call Drivers_GetDriver
 	call nz,Neotron_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPNFMOnSFG
+	ld de,Drivers.opnFMOnSFG
+	call Drivers_GetDriver
 	call nz,OPNFMOnSFG_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPNOnSFGPSG
+	ld de,Drivers.opnOnSFGPSG
+	call Drivers_GetDriver
 	call nz,OPNOnSFGPSG_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPN2OnSFGTurboRPCM
+	ld de,Drivers.opn2OnSFGTurboRPCM
+	call Drivers_GetDriver
 	call nz,OPN2OnSFGTurboRPCM_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPN2OnOPNATurboRPCM
+	ld de,Drivers.opn2OnOPNATurboRPCM
+	call Drivers_GetDriver
 	call nz,OPN2OnOPNATurboRPCM_Destruct
 	pop ix
 	push ix
-	call Drivers_GetOPN2OnTurboRPCM
+	ld de,Drivers.opn2OnTurboRPCM
+	call Drivers_GetDriver
 	call nz,OPN2OnTurboRPCM_Destruct
 	pop ix
+	ret
+
+; de = offset
+; ix = this
+; de <- driver
+; ix <- driver
+; f <- z: not set
+Drivers_GetDriver:
+	add ix,de
+	ld e,(ix)
+	ld d,(ix + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
 	ret
 
 ; ix = this
@@ -600,277 +636,4 @@ Drivers_TryCreateOPN2OnTurboRPCM_IY:
 	ld (iy + Drivers.opn2OnTurboRPCM),e
 	ld (iy + Drivers.opn2OnTurboRPCM + 1),d
 	scf
-	ret
-
-; ix = this
-; de <- PSG driver
-; ix <- PSG driver
-; f <- z: not set
-Drivers_GetPSG:
-	ld e,(ix + Drivers.psg)
-	ld d,(ix + Drivers.psg + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- MegaFlashROM SCC+ SD PSG driver
-; ix <- MegaFlashROM SCC+ SD PSG driver
-; f <- z: not set
-Drivers_GetMFRPSG:
-	ld e,(ix + Drivers.mfrPSG)
-	ld d,(ix + Drivers.mfrPSG + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- SFG driver
-; ix <- SFG driver
-; f <- z: not set
-Drivers_GetSFG:
-	ld e,(ix + Drivers.sfg)
-	ld d,(ix + Drivers.sfg + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- MSX-MUSIC driver
-; ix <- MSX-MUSIC driver
-; f <- z: not set
-Drivers_GetMSXMusic:
-	ld e,(ix + Drivers.msxMusic)
-	ld d,(ix + Drivers.msxMusic + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- MSX-AUDIO driver
-; ix <- MSX-AUDIO driver
-; f <- z: not set
-Drivers_GetMSXAudio:
-	ld e,(ix + Drivers.msxAudio)
-	ld d,(ix + Drivers.msxAudio + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- MoonSound driver
-; ix <- MoonSound driver
-; f <- z: not set
-Drivers_GetMoonSound:
-	ld e,(ix + Drivers.moonSound)
-	ld d,(ix + Drivers.moonSound + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- MoonSound at C0 driver
-; ix <- MoonSound at C0 driver
-; f <- z: not set
-Drivers_GetMoonSoundC0:
-	ld e,(ix + Drivers.moonSoundC0)
-	ld d,(ix + Drivers.moonSoundC0 + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- SCC driver
-; ix <- SCC driver
-; f <- z: not set
-Drivers_GetSCC:
-	ld e,(ix + Drivers.scc)
-	ld d,(ix + Drivers.scc + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- SCC+ driver
-; ix <- SCC+ driver
-; f <- z: not set
-Drivers_GetSCCPlus:
-	ld e,(ix + Drivers.sccPlus)
-	ld d,(ix + Drivers.sccPlus + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- Franky driver
-; ix <- Franky driver
-; f <- z: not set
-Drivers_GetFranky:
-	ld e,(ix + Drivers.franky)
-	ld d,(ix + Drivers.franky + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- PlaySoniq driver
-; ix <- PlaySoniq driver
-; f <- z: not set
-Drivers_GetPlaySoniq:
-	ld e,(ix + Drivers.playSoniq)
-	ld d,(ix + Drivers.playSoniq + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- Musical Memory Mapper driver
-; ix <- Musical Memory Mapper driver
-; f <- z: not set
-Drivers_GetMMM:
-	ld e,(ix + Drivers.mmm)
-	ld d,(ix + Drivers.mmm + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- turboR PCM driver
-; ix <- turboR PCM driver
-; f <- z: not set
-Drivers_GetTurboRPCM:
-	ld e,(ix + Drivers.turboRPCM)
-	ld d,(ix + Drivers.turboRPCM + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPN driver
-; ix <- OPN driver
-; f <- z: not set
-Drivers_GetOPN:
-	ld e,(ix + Drivers.opn)
-	ld d,(ix + Drivers.opn + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPNA driver
-; ix <- OPNA driver
-; f <- z: not set
-Drivers_GetOPNA:
-	ld e,(ix + Drivers.opna)
-	ld d,(ix + Drivers.opna + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- Neotron driver
-; ix <- Neotron driver
-; f <- z: not set
-Drivers_GetNeotron:
-	ld e,(ix + Drivers.neotron)
-	ld d,(ix + Drivers.neotron + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPN FM on SFG driver
-; ix <- OPN FM on SFG driver
-; f <- z: not set
-Drivers_GetOPNFMOnSFG:
-	ld e,(ix + Drivers.opnFMOnSFG)
-	ld d,(ix + Drivers.opnFMOnSFG + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPN on SFG + PSG driver
-; ix <- OPN on SFG + PSG driver
-; f <- z: not set
-Drivers_GetOPNOnSFGPSG:
-	ld e,(ix + Drivers.opnOnSFGPSG)
-	ld d,(ix + Drivers.opnOnSFGPSG + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPN2 on SFG + turboR PCM driver
-; ix <- OPN2 on SFG + turboR PCM driver
-; f <- z: not set
-Drivers_GetOPN2OnSFGTurboRPCM:
-	ld e,(ix + Drivers.opn2OnSFGTurboRPCM)
-	ld d,(ix + Drivers.opn2OnSFGTurboRPCM + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPN2 on OPNA + turboR PCM driver
-; ix <- OPN2 on OPNA + turboR PCM driver
-; f <- z: not set
-Drivers_GetOPN2OnOPNATurboRPCM:
-	ld e,(ix + Drivers.opn2OnOPNATurboRPCM)
-	ld d,(ix + Drivers.opn2OnOPNATurboRPCM + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	ret
-
-; ix = this
-; de <- OPN2 on turboR PCM driver
-; ix <- OPN2 on turboR PCM driver
-; f <- z: not set
-Drivers_GetOPN2OnTurboRPCM:
-	ld e,(ix + Drivers.opn2OnTurboRPCM)
-	ld d,(ix + Drivers.opn2OnTurboRPCM + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
 	ret
