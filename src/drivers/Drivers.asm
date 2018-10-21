@@ -200,7 +200,7 @@ Drivers_GetDriver:
 	or d
 	ret
 
-; ix = this
+; iy = this
 ; de <- PSG driver
 ; f <- c: succeeded
 Drivers_TryCreatePSG_IY:
@@ -220,7 +220,7 @@ Drivers_TryCreatePSG_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- MegaFlashROM SCC+ SD PSG driver
 ; f <- c: succeeded
 Drivers_TryCreateMFRPSG_IY:
@@ -240,7 +240,7 @@ Drivers_TryCreateMFRPSG_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateSFG_IY:
@@ -260,7 +260,7 @@ Drivers_TryCreateSFG_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- MSX-MUSIC driver
 ; f <- c: succeeded
 Drivers_TryCreateMSXMusic_IY:
@@ -280,7 +280,7 @@ Drivers_TryCreateMSXMusic_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- MSX-AUDIO driver
 ; f <- c: succeeded
 Drivers_TryCreateMSXAudio_IY:
@@ -300,7 +300,7 @@ Drivers_TryCreateMSXAudio_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- MoonSound driver
 ; f <- c: succeeded
 Drivers_TryCreateMoonSound_IY:
@@ -320,7 +320,7 @@ Drivers_TryCreateMoonSound_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- MoonSound at C0 driver
 ; f <- c: succeeded
 Drivers_TryCreateMoonSoundC0_IY:
@@ -340,7 +340,7 @@ Drivers_TryCreateMoonSoundC0_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- SCC driver
 ; f <- c: succeeded
 Drivers_TryCreateSCC_IY:
@@ -360,7 +360,7 @@ Drivers_TryCreateSCC_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- SCC+ driver
 ; f <- c: succeeded
 Drivers_TryCreateSCCPlus_IY:
@@ -380,7 +380,7 @@ Drivers_TryCreateSCCPlus_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- Franky driver
 ; f <- c: succeeded
 Drivers_TryCreateFranky_IY:
@@ -400,7 +400,7 @@ Drivers_TryCreateFranky_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- PlaySoniq driver
 ; f <- c: succeeded
 Drivers_TryCreatePlaySoniq_IY:
@@ -420,7 +420,7 @@ Drivers_TryCreatePlaySoniq_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- Musical Memory Mapper driver
 ; f <- c: succeeded
 Drivers_TryCreateMMM_IY:
@@ -440,7 +440,7 @@ Drivers_TryCreateMMM_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateTurboRPCM_IY:
@@ -460,7 +460,7 @@ Drivers_TryCreateTurboRPCM_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- OPN driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN_IY:
@@ -480,7 +480,7 @@ Drivers_TryCreateOPN_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- OPNA driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNA_IY:
@@ -500,7 +500,7 @@ Drivers_TryCreateOPNA_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- Neotron driver
 ; f <- c: succeeded
 Drivers_TryCreateNeotron_IY:
@@ -520,7 +520,7 @@ Drivers_TryCreateNeotron_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- OPN FM on SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNFMOnSFG_IY:
@@ -540,7 +540,7 @@ Drivers_TryCreateOPNFMOnSFG_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- OPN on SFG + PSG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNOnSFGPSG_IY:
@@ -564,7 +564,7 @@ Drivers_TryCreateOPNOnSFGPSG_IY:
 	scf
 	ret
 
-; ix = this
+; iy = this
 ; de <- OPN2 on SFG + turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnSFGTurboRPCM_IY: PROC
@@ -591,7 +591,7 @@ FoundTurboRPCM:
 	ret
 	ENDP
 
-; ix = this
+; iy = this
 ; de <- OPN2 on OPNA + turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnOPNATurboRPCM_IY: PROC
@@ -618,7 +618,7 @@ FoundTurboRPCM:
 	ret
 	ENDP
 
-; ix = this
+; iy = this
 ; de <- OPN2 on turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnTurboRPCM_IY:
