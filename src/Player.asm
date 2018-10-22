@@ -167,20 +167,22 @@ LSBExtractionLoop:
 	ENDP
 
 ; ix = this
+; iy = reader
 ; f <- z: yes
 Player_HasDataBlocks:
 	call Player_GetReader_IY
 	call Player_ResetPosition
-	call Reader_Read_IY
+	call Player_ReadNonChipCommand
 	cp 67H
 	ret
 
 ; ix = this
+; iy = reader
 Player_LoadDataBlocks: PROC
 	call Player_GetReader_IY
 	call Player_ResetPosition
 Loop:
-	call Reader_Read_IY
+	call Player_ReadNonChipCommand
 	cp 67H
 	ret nz
 	call Reader_Read_IY
@@ -190,6 +192,36 @@ Loop:
 	push ix
 	call Player_LoadDataBlockByType
 	pop ix
+	jr Loop
+	ENDP
+
+; ix = this
+; iy = reader
+Player_ReadNonChipCommand: PROC
+Loop:
+	call Reader_Read_IY
+	cp 30H
+	jr c,Loop
+	cp 40H
+	jr c,Skip2
+	cp 50H
+	jr z,Skip2
+	cp 60H
+	jr c,Skip3
+	cp 0A0H
+	ret c
+	cp 0C0H
+	jr c,Skip3
+	cp 0E0H
+	jr c,Skip4
+Skip5:
+	call Reader_Read_IY
+Skip4:
+	call Reader_Read_IY
+Skip3:
+	call Reader_Read_IY
+Skip2:
+	call Reader_Read_IY
 	jr Loop
 	ENDP
 
