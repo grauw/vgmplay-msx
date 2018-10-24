@@ -43,6 +43,7 @@ COM_Main:
 	INCLUDE "Utils.asm"
 	INCLUDE "Application.asm"
 	INCLUDE "Math.asm"
+	INCLUDE "StaticFactory.asm"
 	INCLUDE "MappedBuffer.asm"
 	INCLUDE "MappedBufferLoader.asm"
 	INCLUDE "MappedReader.asm"

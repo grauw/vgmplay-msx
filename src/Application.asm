@@ -4,10 +4,6 @@
 Application_VGMREADER_BASE_ADDRESS: equ 8000H
 
 Application: MACRO
-	vgmReference:
-		dw 0
-	playerReference:
-		dw 0
 	cli:
 		CLI
 	fileInfoBlock:
@@ -20,8 +16,12 @@ Application: MACRO
 		Drivers
 	vgm:
 		VGM
+	vgmFactory:
+		StaticFactory vgm, VGM_Construct, VGM_Destruct
 	player:
 		Player
+	playerFactory:
+		StaticFactory player, Player_Construct, Player_Destruct
 	size:
 	ENDM
 
@@ -106,16 +106,12 @@ Application_Construct:
 ; ix <- this
 Application_Destruct:
 	push ix
-	call Application_GetPlayerReference
-	ld a,ixl
-	or ixh
-	call nz,Player_Destruct
+	call Application_GetPlayerFactory
+	call StaticFactory_Destroy
 	pop ix
 	push ix
-	call Application_GetVGMReference
-	ld a,ixl
-	or ixh
-	call nz,VGM_Destruct
+	call Application_GetVGMFactory
+	call StaticFactory_Destroy
 	pop ix
 	push ix
 	call Application_GetCLI
@@ -170,12 +166,10 @@ Application_GetVGM:
 	ret
 
 ; ix = this
-; ix <- VGM
-Application_GetVGMReference:
-	ld e,(ix + Application.vgmReference)
-	ld d,(ix + Application.vgmReference + 1)
-	ld ixl,e
-	ld ixh,d
+; ix <- VGM factory
+Application_GetVGMFactory:
+	ld de,Application.vgmFactory
+	add ix,de
 	ret
 
 ; ix = this
@@ -186,12 +180,10 @@ Application_GetPlayer:
 	ret
 
 ; ix = this
-; ix <- player
-Application_GetPlayerReference:
-	ld e,(ix + Application.playerReference)
-	ld d,(ix + Application.playerReference + 1)
-	ld ixl,e
-	ld ixh,d
+; ix <- player factory
+Application_GetPlayerFactory:
+	ld de,Application.playerFactory
+	add ix,de
 	ret
 
 ; ix = this
@@ -361,16 +353,12 @@ Application_ConstructVGM:
 	ld hl,Application_VGMREADER_BASE_ADDRESS
 	call MappedReader_Construct
 	ex (sp),ix
-	call Application_GetVGM
+	call Application_GetVGMFactory
 	pop de
 	pop hl
-	call VGM_Construct
+	call StaticFactory_Create
 	call VGM_PrintInfo
-	ld e,ixl
-	ld d,ixh
 	pop ix
-	ld (ix + Application.vgmReference),e
-	ld (ix + Application.vgmReference + 1),d
 	ret
 
 ; ix = this
@@ -380,26 +368,19 @@ Application_ConstructPlayer:
 	ld a,(ix + CLI.loops)
 	pop ix
 	push ix
-	ld e,(ix + Application.vgmReference)
-	ld d,(ix + Application.vgmReference + 1)
-	push de
-	call Application_GetPlayer
-	pop de
-	call Player_Construct
-	ld e,ixl
-	ld d,ixh
-	pop ix
-	ld (ix + Application.playerReference),e
-	ld (ix + Application.playerReference + 1),d
 	push ix
-	call Application_GetPlayerReference
+	call Application_GetVGM
+	ex (sp),ix
+	call Application_GetPlayerFactory
+	pop de
+	call StaticFactory_Create
 	call Player_HasDataBlocks
 	pop ix
 	ret nz
 	ld hl,Application_loadingSamples
 	call System_Print
 	push ix
-	call Application_GetPlayerReference
+	call Application_GetPlayer
 	call Player_LoadDataBlocks
 	pop ix
 	ret
@@ -409,7 +390,7 @@ Application_Play:
 	ld hl,Application_playing
 	call System_Print
 	push ix
-	call Application_GetPlayerReference
+	call Application_GetPlayer
 	call Player_Play
 	pop ix
 	ret

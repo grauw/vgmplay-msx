@@ -28,103 +28,52 @@
 Drivers: MACRO
 	drivers:
 	psg:
-		DriverFactory PSG_instance, PSG_Construct, PSG_Destruct
+		StaticFactory PSG_instance, PSG_Construct, PSG_Destruct
 	mfrPSG:
-		DriverFactory MFRPSG_instance, MFRPSG_Construct, MFRPSG_Destruct
+		StaticFactory MFRPSG_instance, MFRPSG_Construct, MFRPSG_Destruct
 	sfg:
-		DriverFactory SFG_instance, SFG_Construct, SFG_Destruct
+		StaticFactory SFG_instance, SFG_Construct, SFG_Destruct
 	msxMusic:
-		DriverFactory MSXMusic_instance, MSXMusic_Construct, MSXMusic_Destruct
+		StaticFactory MSXMusic_instance, MSXMusic_Construct, MSXMusic_Destruct
 	msxAudio:
-		DriverFactory MSXAudio_instance, MSXAudio_Construct, MSXAudio_Destruct
+		StaticFactory MSXAudio_instance, MSXAudio_Construct, MSXAudio_Destruct
 	moonSound:
-		DriverFactory MoonSound_instance, MoonSound_Construct, MoonSound_Destruct
+		StaticFactory MoonSound_instance, MoonSound_Construct, MoonSound_Destruct
 	moonSoundC0:
-		DriverFactory MoonSoundC0_instance, MoonSoundC0_Construct, MoonSoundC0_Destruct
+		StaticFactory MoonSoundC0_instance, MoonSoundC0_Construct, MoonSoundC0_Destruct
 	scc:
-		DriverFactory SCC_instance, SCC_Construct, SCC_Destruct
+		StaticFactory SCC_instance, SCC_Construct, SCC_Destruct
 	sccPlus:
-		DriverFactory SCCPlus_instance, SCCPlus_Construct, SCCPlus_Destruct
+		StaticFactory SCCPlus_instance, SCCPlus_Construct, SCCPlus_Destruct
 	franky:
-		DriverFactory Franky_instance, Franky_Construct, Franky_Destruct
+		StaticFactory Franky_instance, Franky_Construct, Franky_Destruct
 	playSoniq:
-		DriverFactory PlaySoniq_instance, PlaySoniq_Construct, PlaySoniq_Destruct
+		StaticFactory PlaySoniq_instance, PlaySoniq_Construct, PlaySoniq_Destruct
 	mmm:
-		DriverFactory MMM_instance, MMM_Construct, MMM_Destruct
+		StaticFactory MMM_instance, MMM_Construct, MMM_Destruct
 	turboRPCM:
-		DriverFactory TurboRPCM_instance, TurboRPCM_Construct, TurboRPCM_Destruct
+		StaticFactory TurboRPCM_instance, TurboRPCM_Construct, TurboRPCM_Destruct
 	opn:
-		DriverFactory OPN_instance, OPN_Construct, OPN_Destruct
+		StaticFactory OPN_instance, OPN_Construct, OPN_Destruct
 	opna:
-		DriverFactory OPNA_instance, OPNA_Construct, OPNA_Destruct
+		StaticFactory OPNA_instance, OPNA_Construct, OPNA_Destruct
 	neotron:
-		DriverFactory Neotron_instance, Neotron_Construct, Neotron_Destruct
+		StaticFactory Neotron_instance, Neotron_Construct, Neotron_Destruct
 	opnFMOnSFG:
-		DriverFactory OPNFMOnSFG_instance, OPNFMOnSFG_Construct, OPNFMOnSFG_Destruct
+		StaticFactory OPNFMOnSFG_instance, OPNFMOnSFG_Construct, OPNFMOnSFG_Destruct
 	opnOnSFGPSG:
-		DriverFactory OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct, OPNOnSFGPSG_Destruct
+		StaticFactory OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct, OPNOnSFGPSG_Destruct
 	opnaOnSFGPSGMSXAudio:
-		DriverFactory OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct, OPNAOnSFGPSGMSXAudio_Destruct
+		StaticFactory OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct, OPNAOnSFGPSGMSXAudio_Destruct
 	opn2OnSFGTurboRPCM:
-		DriverFactory OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct, OPN2OnSFGTurboRPCM_Destruct
+		StaticFactory OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct, OPN2OnSFGTurboRPCM_Destruct
 	opn2OnOPNATurboRPCM:
-		DriverFactory OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct, OPN2OnOPNATurboRPCM_Destruct
+		StaticFactory OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct, OPN2OnOPNATurboRPCM_Destruct
 	opn2OnTurboRPCM:
-		DriverFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct, OPN2OnTurboRPCM_Destruct
-	COUNT: equ ($ - drivers) / DriverFactory._size
+		StaticFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct, OPN2OnTurboRPCM_Destruct
+	COUNT: equ ($ - drivers) / StaticFactory._size
 	size:
 	ENDM
-
-DriverFactory: MACRO ?instance, ?constructor, ?destructor
-	instance:
-		dw ?instance
-	constructor:
-		dw ?constructor
-	destructor:
-		dw ?destructor
-	constructed:
-		db 0
-	_size:
-	ENDM
-
-; ix = this
-; iy = drivers
-; ix <- driver
-; de <- driver
-; f <- c: succeeded
-DriverFactory_Create:
-	ld a,(ix + DriverFactory.constructed)
-	and a
-	ret nz
-	ld (ix + DriverFactory.constructed),1
-	ld e,(ix + DriverFactory.instance)
-	ld d,(ix + DriverFactory.instance + 1)
-	ld l,(ix + DriverFactory.constructor)
-	ld h,(ix + DriverFactory.constructor + 1)
-	ld ixl,e
-	ld ixh,d
-	push de
-	call System_JumpHL
-	pop de
-	scf
-	ret
-
-; ix = this
-; f <- c: succeeded
-DriverFactory_Destroy:
-	ld a,(ix + DriverFactory.constructed)
-	and a
-	ret z
-	ld (ix + DriverFactory.constructed),0
-	ld e,(ix + DriverFactory.instance)
-	ld d,(ix + DriverFactory.instance + 1)
-	ld l,(ix + DriverFactory.destructor)
-	ld h,(ix + DriverFactory.destructor + 1)
-	ld ixl,e
-	ld ixh,d
-	call System_JumpHL
-	scf
-	ret
 
 ; ix = this
 ; ix <- this
@@ -141,9 +90,9 @@ Drivers_Destruct: PROC
 Loop:
 	push bc
 	push ix
-	call DriverFactory_Destroy
+	call StaticFactory_Destroy
 	pop ix
-	ld bc,DriverFactory._size
+	ld bc,StaticFactory._size
 	add ix,bc
 	pop bc
 	djnz Loop
@@ -314,7 +263,9 @@ Drivers_TryCreate_IY:
 	push iy
 	pop ix
 	add ix,de
-	call DriverFactory_Create
+	call StaticFactory_Create
 	call c,Driver_IsFound
+	ld e,ixl
+	ld d,ixh
 	pop ix
 	ret
