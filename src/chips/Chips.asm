@@ -97,10 +97,9 @@ Loop:
 	ld ixh,d
 	call System_JumpHL
 	pop ix
+	ld bc,ChipInstance._size
+	add ix,bc
 	pop bc
-	REPT 4  ; ChipInstance._size
-	inc ix
-	ENDM
 	djnz Loop
 	pop ix
 	ret
@@ -123,10 +122,9 @@ Loop:
 	call nz,System_JumpHL
 	pop hl
 	pop ix
+	ld bc,ChipInstance._size
+	add ix,bc
 	pop bc
-	REPT 4  ; ChipInstance._size
-	inc ix
-	ENDM
 	djnz Loop
 	pop ix
 	ret
