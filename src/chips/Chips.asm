@@ -36,45 +36,45 @@
 	INCLUDE "QSound.asm"
 
 Chips: MACRO
-	COUNT: equ (chipsEnd - chips) / ChipInstance._size
+	COUNT: equ (chipsEnd - chips) / ChipFactory._size
 	chips:
-		ChipInstance SN76489_instance, SN76489_Construct
-		ChipInstance YM2413_instance, YM2413_Construct
-		ChipInstance YM2151_instance, YM2151_Construct
-		ChipInstance SegaPCM_instance, SegaPCM_Construct
-		ChipInstance RF5C68_instance, RF5C68_Construct
-		ChipInstance YM2203_instance, YM2203_Construct
-		ChipInstance YM2608_instance, YM2608_Construct
-		ChipInstance YM2610_instance, YM2610_Construct
+		ChipFactory SN76489_instance, SN76489_Construct
+		ChipFactory YM2413_instance, YM2413_Construct
+		ChipFactory YM2151_instance, YM2151_Construct
+		ChipFactory SegaPCM_instance, SegaPCM_Construct
+		ChipFactory RF5C68_instance, RF5C68_Construct
+		ChipFactory YM2203_instance, YM2203_Construct
+		ChipFactory YM2608_instance, YM2608_Construct
+		ChipFactory YM2610_instance, YM2610_Construct
 	ym2612:
-		ChipInstance YM2612_instance, YM2612_Construct
-		ChipInstance YM3812_instance, YM3812_Construct
-		ChipInstance Y8950_instance, Y8950_Construct
-		ChipInstance YM3526_instance, YM3526_Construct
-		ChipInstance YMF262_instance, YMF262_Construct
-		ChipInstance YMF278B_instance, YMF278B_Construct
-		ChipInstance YMF271_instance, YMF271_Construct
-		ChipInstance YMZ280B_instance, YMZ280B_Construct
-		ChipInstance RF5C164_instance, RF5C164_Construct
-		ChipInstance PWM_instance, PWM_Construct
-		ChipInstance AY8910_instance, AY8910_Construct
-		ChipInstance GameBoyDMG_instance, GameBoyDMG_Construct
-		ChipInstance NESAPU_instance, NESAPU_Construct
-		ChipInstance MultiPCM_instance, MultiPCM_Construct
-		ChipInstance UPD7759_instance, UPD7759_Construct
-		ChipInstance OKIM6258_instance, OKIM6258_Construct
-		ChipInstance OKIM6295_instance, OKIM6295_Construct
-		ChipInstance K051649_instance, K051649_Construct
-		ChipInstance K054539_instance, K054539_Construct
-		ChipInstance HuC6280_instance, HuC6280_Construct
-		ChipInstance C140_instance, C140_Construct
-		ChipInstance K053260_instance, K053260_Construct
-		ChipInstance Pokey_instance, Pokey_Construct
-		ChipInstance QSound_instance, QSound_Construct
+		ChipFactory YM2612_instance, YM2612_Construct
+		ChipFactory YM3812_instance, YM3812_Construct
+		ChipFactory Y8950_instance, Y8950_Construct
+		ChipFactory YM3526_instance, YM3526_Construct
+		ChipFactory YMF262_instance, YMF262_Construct
+		ChipFactory YMF278B_instance, YMF278B_Construct
+		ChipFactory YMF271_instance, YMF271_Construct
+		ChipFactory YMZ280B_instance, YMZ280B_Construct
+		ChipFactory RF5C164_instance, RF5C164_Construct
+		ChipFactory PWM_instance, PWM_Construct
+		ChipFactory AY8910_instance, AY8910_Construct
+		ChipFactory GameBoyDMG_instance, GameBoyDMG_Construct
+		ChipFactory NESAPU_instance, NESAPU_Construct
+		ChipFactory MultiPCM_instance, MultiPCM_Construct
+		ChipFactory UPD7759_instance, UPD7759_Construct
+		ChipFactory OKIM6258_instance, OKIM6258_Construct
+		ChipFactory OKIM6295_instance, OKIM6295_Construct
+		ChipFactory K051649_instance, K051649_Construct
+		ChipFactory K054539_instance, K054539_Construct
+		ChipFactory HuC6280_instance, HuC6280_Construct
+		ChipFactory C140_instance, C140_Construct
+		ChipFactory K053260_instance, K053260_Construct
+		ChipFactory Pokey_instance, Pokey_Construct
+		ChipFactory QSound_instance, QSound_Construct
 	chipsEnd:
 	ENDM
 
-ChipInstance: MACRO ?instance, ?constructor
+ChipFactory: MACRO ?instance, ?constructor
 	instance:
 		dw ?instance
 	constructor:
@@ -89,16 +89,16 @@ Chips_Construct: PROC
 	push ix
 Loop:
 	push bc
-	ld e,(ix + Chips.chips + ChipInstance.instance)
-	ld d,(ix + Chips.chips + ChipInstance.instance + 1)
-	ld l,(ix + Chips.chips + ChipInstance.constructor)
-	ld h,(ix + Chips.chips + ChipInstance.constructor + 1)
+	ld e,(ix + Chips.chips + ChipFactory.instance)
+	ld d,(ix + Chips.chips + ChipFactory.instance + 1)
+	ld l,(ix + Chips.chips + ChipFactory.constructor)
+	ld h,(ix + Chips.chips + ChipFactory.constructor + 1)
 	push ix
 	ld ixl,e
 	ld ixh,d
 	call System_JumpHL
 	pop ix
-	ld bc,ChipInstance._size
+	ld bc,ChipFactory._size
 	add ix,bc
 	pop bc
 	djnz Loop
@@ -109,8 +109,8 @@ Loop:
 ; ix = this
 Chips_Destruct:
 	push ix
-	ld e,(ix + Chips.ym2612 + ChipInstance.instance)
-	ld d,(ix + Chips.ym2612 + ChipInstance.instance + 1)
+	ld e,(ix + Chips.ym2612 + ChipFactory.instance)
+	ld d,(ix + Chips.ym2612 + ChipFactory.instance + 1)
 	ld ixl,e
 	ld ixh,d
 	call YM2612_Destruct
@@ -124,8 +124,8 @@ Chips_ForEachActiveChip: PROC
 	push ix
 Loop:
 	push bc
-	ld c,(ix + Chips.chips + ChipInstance.instance)
-	ld b,(ix + Chips.chips + ChipInstance.instance + 1)
+	ld c,(ix + Chips.chips + ChipFactory.instance)
+	ld b,(ix + Chips.chips + ChipFactory.instance + 1)
 	push ix
 	ld ixl,c
 	ld ixh,b
@@ -134,7 +134,7 @@ Loop:
 	call nz,System_JumpHL
 	pop hl
 	pop ix
-	ld bc,ChipInstance._size
+	ld bc,ChipFactory._size
 	add ix,bc
 	pop bc
 	djnz Loop

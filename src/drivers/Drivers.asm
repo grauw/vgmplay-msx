@@ -27,53 +27,53 @@
 
 Drivers: MACRO
 	psg:
-		DriverInstance PSG_instance, PSG_Construct
+		DriverFactory PSG_instance, PSG_Construct
 	mfrPSG:
-		DriverInstance MFRPSG_instance, MFRPSG_Construct
+		DriverFactory MFRPSG_instance, MFRPSG_Construct
 	sfg:
-		DriverInstance SFG_instance, SFG_Construct
+		DriverFactory SFG_instance, SFG_Construct
 	msxMusic:
-		DriverInstance MSXMusic_instance, MSXMusic_Construct
+		DriverFactory MSXMusic_instance, MSXMusic_Construct
 	msxAudio:
-		DriverInstance MSXAudio_instance, MSXAudio_Construct
+		DriverFactory MSXAudio_instance, MSXAudio_Construct
 	moonSound:
-		DriverInstance MoonSound_instance, MoonSound_Construct
+		DriverFactory MoonSound_instance, MoonSound_Construct
 	moonSoundC0:
-		DriverInstance MoonSoundC0_instance, MoonSoundC0_Construct
+		DriverFactory MoonSoundC0_instance, MoonSoundC0_Construct
 	scc:
-		DriverInstance SCC_instance, SCC_Construct
+		DriverFactory SCC_instance, SCC_Construct
 	sccPlus:
-		DriverInstance SCCPlus_instance, SCCPlus_Construct
+		DriverFactory SCCPlus_instance, SCCPlus_Construct
 	franky:
-		DriverInstance Franky_instance, Franky_Construct
+		DriverFactory Franky_instance, Franky_Construct
 	playSoniq:
-		DriverInstance PlaySoniq_instance, PlaySoniq_Construct
+		DriverFactory PlaySoniq_instance, PlaySoniq_Construct
 	mmm:
-		DriverInstance MMM_instance, MMM_Construct
+		DriverFactory MMM_instance, MMM_Construct
 	turboRPCM:
-		DriverInstance TurboRPCM_instance, TurboRPCM_Construct
+		DriverFactory TurboRPCM_instance, TurboRPCM_Construct
 	opn:
-		DriverInstance OPN_instance, OPN_Construct
+		DriverFactory OPN_instance, OPN_Construct
 	opna:
-		DriverInstance OPNA_instance, OPNA_Construct
+		DriverFactory OPNA_instance, OPNA_Construct
 	neotron:
-		DriverInstance Neotron_instance, Neotron_Construct
+		DriverFactory Neotron_instance, Neotron_Construct
 	opnFMOnSFG:
-		DriverInstance OPNFMOnSFG_instance, OPNFMOnSFG_Construct
+		DriverFactory OPNFMOnSFG_instance, OPNFMOnSFG_Construct
 	opnOnSFGPSG:
-		DriverInstance OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct
+		DriverFactory OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct
 	opnaOnSFGPSGMSXAudio:
-		DriverInstance OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct
+		DriverFactory OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct
 	opn2OnSFGTurboRPCM:
-		DriverInstance OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct
+		DriverFactory OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct
 	opn2OnOPNATurboRPCM:
-		DriverInstance OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct
+		DriverFactory OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct
 	opn2OnTurboRPCM:
-		DriverInstance OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct
+		DriverFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct
 	size:
 	ENDM
 
-DriverInstance: MACRO ?instance, ?constructor
+DriverFactory: MACRO ?instance, ?constructor
 	instance:
 		dw ?instance
 	constructor:
@@ -203,16 +203,16 @@ Drivers_Destruct:
 	pop ix
 	ret
 
-; de = driver instance offset
+; de = driver factory offset
 ; ix = this
 ; de <- driver
 ; ix <- driver
 ; f <- z: not set
 Drivers_GetDriver:
 	add ix,de
-	ld e,(ix + DriverInstance.instance)
-	ld d,(ix + DriverInstance.instance + 1)
-	bit 0,(ix + DriverInstance.constructed)
+	ld e,(ix + DriverFactory.instance)
+	ld d,(ix + DriverFactory.instance + 1)
+	bit 0,(ix + DriverFactory.constructed)
 	ld ixl,e
 	ld ixh,d
 	ret
@@ -371,19 +371,19 @@ Drivers_TryCreateOPN2OnTurboRPCM_IY:
 	ld de,Drivers.opn2OnTurboRPCM
 	jr Drivers_TryCreate_IY
 
-; de = driver instance offset
+; de = driver factory offset
 ; iy = this
 ; de <- PSG driver
 ; f <- c: succeeded
 Drivers_TryCreate_IY:
 	push iy
 	add iy,de
-	ld e,(iy + DriverInstance.instance)
-	ld d,(iy + DriverInstance.instance + 1)
-	ld l,(iy + DriverInstance.constructor)
-	ld h,(iy + DriverInstance.constructor + 1)
-	ld a,(iy + DriverInstance.constructed)
-	ld (iy + DriverInstance.constructed),1
+	ld e,(iy + DriverFactory.instance)
+	ld d,(iy + DriverFactory.instance + 1)
+	ld l,(iy + DriverFactory.constructor)
+	ld h,(iy + DriverFactory.constructor + 1)
+	ld a,(iy + DriverFactory.constructed)
+	ld (iy + DriverFactory.constructed),1
 	pop iy
 	and a
 	ret nz
