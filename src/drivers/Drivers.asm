@@ -27,57 +27,59 @@
 
 Drivers: MACRO
 	psg:
-		DriverFactory PSG_instance, PSG_Construct
+		DriverFactory PSG_instance, PSG_Construct, PSG_Destruct
 	mfrPSG:
-		DriverFactory MFRPSG_instance, MFRPSG_Construct
+		DriverFactory MFRPSG_instance, MFRPSG_Construct, MFRPSG_Destruct
 	sfg:
-		DriverFactory SFG_instance, SFG_Construct
+		DriverFactory SFG_instance, SFG_Construct, SFG_Destruct
 	msxMusic:
-		DriverFactory MSXMusic_instance, MSXMusic_Construct
+		DriverFactory MSXMusic_instance, MSXMusic_Construct, MSXMusic_Destruct
 	msxAudio:
-		DriverFactory MSXAudio_instance, MSXAudio_Construct
+		DriverFactory MSXAudio_instance, MSXAudio_Construct, MSXAudio_Destruct
 	moonSound:
-		DriverFactory MoonSound_instance, MoonSound_Construct
+		DriverFactory MoonSound_instance, MoonSound_Construct, MoonSound_Destruct
 	moonSoundC0:
-		DriverFactory MoonSoundC0_instance, MoonSoundC0_Construct
+		DriverFactory MoonSoundC0_instance, MoonSoundC0_Construct, MoonSoundC0_Destruct
 	scc:
-		DriverFactory SCC_instance, SCC_Construct
+		DriverFactory SCC_instance, SCC_Construct, SCC_Destruct
 	sccPlus:
-		DriverFactory SCCPlus_instance, SCCPlus_Construct
+		DriverFactory SCCPlus_instance, SCCPlus_Construct, SCCPlus_Destruct
 	franky:
-		DriverFactory Franky_instance, Franky_Construct
+		DriverFactory Franky_instance, Franky_Construct, Franky_Destruct
 	playSoniq:
-		DriverFactory PlaySoniq_instance, PlaySoniq_Construct
+		DriverFactory PlaySoniq_instance, PlaySoniq_Construct, PlaySoniq_Destruct
 	mmm:
-		DriverFactory MMM_instance, MMM_Construct
+		DriverFactory MMM_instance, MMM_Construct, MMM_Destruct
 	turboRPCM:
-		DriverFactory TurboRPCM_instance, TurboRPCM_Construct
+		DriverFactory TurboRPCM_instance, TurboRPCM_Construct, TurboRPCM_Destruct
 	opn:
-		DriverFactory OPN_instance, OPN_Construct
+		DriverFactory OPN_instance, OPN_Construct, OPN_Destruct
 	opna:
-		DriverFactory OPNA_instance, OPNA_Construct
+		DriverFactory OPNA_instance, OPNA_Construct, OPNA_Destruct
 	neotron:
-		DriverFactory Neotron_instance, Neotron_Construct
+		DriverFactory Neotron_instance, Neotron_Construct, Neotron_Destruct
 	opnFMOnSFG:
-		DriverFactory OPNFMOnSFG_instance, OPNFMOnSFG_Construct
+		DriverFactory OPNFMOnSFG_instance, OPNFMOnSFG_Construct, OPNFMOnSFG_Destruct
 	opnOnSFGPSG:
-		DriverFactory OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct
+		DriverFactory OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct, OPNOnSFGPSG_Destruct
 	opnaOnSFGPSGMSXAudio:
-		DriverFactory OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct
+		DriverFactory OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct, OPNAOnSFGPSGMSXAudio_Destruct
 	opn2OnSFGTurboRPCM:
-		DriverFactory OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct
+		DriverFactory OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct, OPN2OnSFGTurboRPCM_Destruct
 	opn2OnOPNATurboRPCM:
-		DriverFactory OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct
+		DriverFactory OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct, OPN2OnOPNATurboRPCM_Destruct
 	opn2OnTurboRPCM:
-		DriverFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct
+		DriverFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct, OPN2OnTurboRPCM_Destruct
 	size:
 	ENDM
 
-DriverFactory: MACRO ?instance, ?constructor
+DriverFactory: MACRO ?instance, ?constructor, ?destructor
 	instance:
 		dw ?instance
 	constructor:
 		dw ?constructor
+	destructor:
+		dw ?destructor
 	constructed:
 		db 0
 	_size:
@@ -106,6 +108,23 @@ DriverFactory_Create:
 	ret
 
 ; ix = this
+; f <- c: succeeded
+DriverFactory_Destroy:
+	ld a,(ix + DriverFactory.constructed)
+	and a
+	ret z
+	ld (ix + DriverFactory.constructed),0
+	ld e,(ix + DriverFactory.instance)
+	ld d,(ix + DriverFactory.instance + 1)
+	ld l,(ix + DriverFactory.destructor)
+	ld h,(ix + DriverFactory.destructor + 1)
+	ld ixl,e
+	ld ixh,d
+	call System_JumpHL
+	scf
+	ret
+
+; ix = this
 ; ix <- this
 Drivers_Construct:
 	ret
@@ -113,130 +132,60 @@ Drivers_Construct:
 ; ix = this
 ; ix <- this
 Drivers_Destruct:
-	push ix
 	ld de,Drivers.psg
-	call Drivers_GetDriver
-	call nz,PSG_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.mfrPSG
-	call Drivers_GetDriver
-	call nz,MFRPSG_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.sfg
-	call Drivers_GetDriver
-	call nz,SFG_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.msxMusic
-	call Drivers_GetDriver
-	call nz,MSXMusic_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.msxAudio
-	call Drivers_GetDriver
-	call nz,MSXAudio_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.moonSound
-	call Drivers_GetDriver
-	call nz,MoonSound_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.moonSoundC0
-	call Drivers_GetDriver
-	call nz,MoonSoundC0_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.scc
-	call Drivers_GetDriver
-	call nz,SCC_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.sccPlus
-	call Drivers_GetDriver
-	call nz,SCCPlus_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.franky
-	call Drivers_GetDriver
-	call nz,Franky_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.playSoniq
-	call Drivers_GetDriver
-	call nz,PlaySoniq_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.mmm
-	call Drivers_GetDriver
-	call nz,MMM_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.turboRPCM
-	call Drivers_GetDriver
-	call nz,TurboRPCM_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opn
-	call Drivers_GetDriver
-	call nz,OPN_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opna
-	call Drivers_GetDriver
-	call nz,OPNA_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.neotron
-	call Drivers_GetDriver
-	call nz,Neotron_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opnFMOnSFG
-	call Drivers_GetDriver
-	call nz,OPNFMOnSFG_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opnOnSFGPSG
-	call Drivers_GetDriver
-	call nz,OPNOnSFGPSG_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opnaOnSFGPSGMSXAudio
-	call Drivers_GetDriver
-	call nz,OPNAOnSFGPSGMSXAudio_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opn2OnSFGTurboRPCM
-	call Drivers_GetDriver
-	call nz,OPN2OnSFGTurboRPCM_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opn2OnOPNATurboRPCM
-	call Drivers_GetDriver
-	call nz,OPN2OnOPNATurboRPCM_Destruct
-	pop ix
-	push ix
+	call Drivers_TryDestroy
 	ld de,Drivers.opn2OnTurboRPCM
-	call Drivers_GetDriver
-	call nz,OPN2OnTurboRPCM_Destruct
-	pop ix
+	call Drivers_TryDestroy
 	ret
 
 ; de = driver factory offset
 ; ix = this
-; de <- driver
-; ix <- driver
-; f <- z: not set
-Drivers_GetDriver:
+; f <- c: succeeded
+Drivers_TryDestroy:
+	push ix
 	add ix,de
-	ld e,(ix + DriverFactory.instance)
-	ld d,(ix + DriverFactory.instance + 1)
-	bit 0,(ix + DriverFactory.constructed)
-	ld ixl,e
-	ld ixh,d
+	call DriverFactory_Destroy
+	pop ix
 	ret
 
 ; iy = this
