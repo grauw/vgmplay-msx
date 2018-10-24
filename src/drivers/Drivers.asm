@@ -26,6 +26,7 @@
 	INCLUDE "emulations/OPN2OnTurboRPCM.asm"
 
 Drivers: MACRO
+	drivers:
 	psg:
 		DriverFactory PSG_instance, PSG_Construct, PSG_Destruct
 	mfrPSG:
@@ -70,6 +71,7 @@ Drivers: MACRO
 		DriverFactory OPN2OnOPNATurboRPCM_instance, OPN2OnOPNATurboRPCM_Construct, OPN2OnOPNATurboRPCM_Destruct
 	opn2OnTurboRPCM:
 		DriverFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct, OPN2OnTurboRPCM_Destruct
+	COUNT: equ ($ - drivers) / DriverFactory._size
 	size:
 	ENDM
 
@@ -131,62 +133,23 @@ Drivers_Construct:
 
 ; ix = this
 ; ix <- this
-Drivers_Destruct:
-	ld de,Drivers.psg
-	call Drivers_TryDestroy
-	ld de,Drivers.mfrPSG
-	call Drivers_TryDestroy
-	ld de,Drivers.sfg
-	call Drivers_TryDestroy
-	ld de,Drivers.msxMusic
-	call Drivers_TryDestroy
-	ld de,Drivers.msxAudio
-	call Drivers_TryDestroy
-	ld de,Drivers.moonSound
-	call Drivers_TryDestroy
-	ld de,Drivers.moonSoundC0
-	call Drivers_TryDestroy
-	ld de,Drivers.scc
-	call Drivers_TryDestroy
-	ld de,Drivers.sccPlus
-	call Drivers_TryDestroy
-	ld de,Drivers.franky
-	call Drivers_TryDestroy
-	ld de,Drivers.playSoniq
-	call Drivers_TryDestroy
-	ld de,Drivers.mmm
-	call Drivers_TryDestroy
-	ld de,Drivers.turboRPCM
-	call Drivers_TryDestroy
-	ld de,Drivers.opn
-	call Drivers_TryDestroy
-	ld de,Drivers.opna
-	call Drivers_TryDestroy
-	ld de,Drivers.neotron
-	call Drivers_TryDestroy
-	ld de,Drivers.opnFMOnSFG
-	call Drivers_TryDestroy
-	ld de,Drivers.opnOnSFGPSG
-	call Drivers_TryDestroy
-	ld de,Drivers.opnaOnSFGPSGMSXAudio
-	call Drivers_TryDestroy
-	ld de,Drivers.opn2OnSFGTurboRPCM
-	call Drivers_TryDestroy
-	ld de,Drivers.opn2OnOPNATurboRPCM
-	call Drivers_TryDestroy
-	ld de,Drivers.opn2OnTurboRPCM
-	call Drivers_TryDestroy
-	ret
-
-; de = driver factory offset
-; ix = this
-; f <- c: succeeded
-Drivers_TryDestroy:
+Drivers_Destruct: PROC
 	push ix
-	add ix,de
+	ld bc,Drivers.drivers
+	add ix,bc
+	ld b,Drivers.COUNT
+Loop:
+	push bc
+	push ix
 	call DriverFactory_Destroy
 	pop ix
+	ld bc,DriverFactory._size
+	add ix,bc
+	pop bc
+	djnz Loop
+	pop ix
 	ret
+	ENDP
 
 ; iy = this
 ; de <- PSG driver
