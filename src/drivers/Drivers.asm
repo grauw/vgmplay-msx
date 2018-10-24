@@ -84,6 +84,28 @@ DriverFactory: MACRO ?instance, ?constructor
 	ENDM
 
 ; ix = this
+; iy = drivers
+; ix <- driver
+; de <- driver
+; f <- c: succeeded
+DriverFactory_Create:
+	ld a,(ix + DriverFactory.constructed)
+	and a
+	ret nz
+	ld (ix + DriverFactory.constructed),1
+	ld e,(ix + DriverFactory.instance)
+	ld d,(ix + DriverFactory.instance + 1)
+	ld l,(ix + DriverFactory.constructor)
+	ld h,(ix + DriverFactory.constructor + 1)
+	ld ixl,e
+	ld ixh,d
+	push de
+	call System_JumpHL
+	pop de
+	scf
+	ret
+
+; ix = this
 ; ix <- this
 Drivers_Construct:
 	ret
@@ -373,26 +395,14 @@ Drivers_TryCreateOPN2OnTurboRPCM_IY:
 
 ; de = driver factory offset
 ; iy = this
-; de <- PSG driver
+; de <- driver
 ; f <- c: succeeded
 Drivers_TryCreate_IY:
-	push iy
-	add iy,de
-	ld e,(iy + DriverFactory.instance)
-	ld d,(iy + DriverFactory.instance + 1)
-	ld l,(iy + DriverFactory.constructor)
-	ld h,(iy + DriverFactory.constructor + 1)
-	ld a,(iy + DriverFactory.constructed)
-	ld (iy + DriverFactory.constructed),1
-	pop iy
-	and a
-	ret nz
 	push ix
-	ld ixl,e
-	ld ixh,d
-	call System_JumpHL
-	call Driver_IsFound
-	ld e,ixl
-	ld d,ixh
+	push iy
+	pop ix
+	add ix,de
+	call DriverFactory_Create
+	call c,Driver_IsFound
 	pop ix
 	ret
