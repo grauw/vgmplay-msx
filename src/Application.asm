@@ -10,6 +10,8 @@ Application: MACRO
 		dw 0
 	cli:
 		CLI
+	fileInfoBlock:
+		FileInfoBlock
 	loader:
 		MappedBufferLoader
 	reader:
@@ -118,6 +120,13 @@ Application_GetCLI:
 	ret
 
 ; ix = this
+; ix <- File info block
+Application_GetFileInfoBlock:
+	ld de,Application.fileInfoBlock
+	add ix,de
+	ret
+
+; ix = this
 ; ix <- loader
 Application_GetLoader:
 	ld de,Application.loader
@@ -174,6 +183,7 @@ Application_GetPlayerReference:
 Application_EnterMainLoop:
 	call Application_ParseCLI
 	call Application_CheckOCM
+	call Application_FindFirstFile
 	call Application_LoadFile
 	call Application_ConstructVGM
 	call Application_ConstructPlayer
@@ -195,14 +205,31 @@ Application_ParseCLI:
 	ret
 
 ; ix = this
+Application_FindFirstFile:
+	push ix
+	call Application_GetCLI
+	call CLI_GetPath
+	pop ix
+	push ix
+	call Application_GetFileInfoBlock
+	ex de,hl
+	ld b,0
+	call DOS_FindFirstEntry
+	pop ix
+	and a
+	ld hl,Application_fileNotFound
+	jp nz,System_TerminateWithError
+	ret
+
+; ix = this
 Application_LoadFile:
 	call Application_PrintLoading
 	call Application_ConstructMappedBuffer
 	call Application_IsVGZ
 	jp z,Application_InflateFile
 	push ix
-	call Application_GetCLI
-	call CLI_GetPath
+	call Application_GetFileInfoBlock
+	call FileInfoBlock_GetName
 	pop ix
 	push ix
 	call Application_GetLoader
@@ -230,8 +257,8 @@ Application_ConstructMappedBuffer:
 ; f <- z: is vgz
 Application_IsVGZ:
 	push ix
-	call Application_GetCLI
-	call CLI_GetPath
+	call Application_GetFileInfoBlock
+	call FileInfoBlock_GetName
 	pop ix
 	ld a,0
 	ld bc,256
@@ -260,8 +287,8 @@ Application_IsVGZ:
 ; ix = this
 Application_InflateFile:
 	push ix
-	call Application_GetCLI
-	call CLI_GetPath
+	call Application_GetFileInfoBlock
+	call FileInfoBlock_GetName
 	pop ix
 	ex de,hl
 	ld hl,READBUFFER
@@ -298,8 +325,8 @@ Application_PrintLoading:
 	ld hl,Application_loadingFile
 	call System_Print
 	push ix
-	call Application_GetCLI
-	call CLI_GetPath
+	call Application_GetFileInfoBlock
+	call FileInfoBlock_GetName
 	pop ix
 	call System_Print
 	ld hl,Application_dotDotDot
@@ -497,6 +524,9 @@ Application_explainBuffer:
 
 Application_welcome:
 	db "VGMPlay 1.2 by Grauw",13,10,10,0
+
+Application_fileNotFound:
+	db "File not found.",13,10,0
 
 Application_loadingFile:
 	db "Loading ",0
