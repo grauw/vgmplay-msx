@@ -229,8 +229,8 @@ Application_LoadFile:
 	jp z,Application_InflateFile
 	push ix
 	call Application_GetFileInfoBlock
-	call FileInfoBlock_GetName
-	pop ix
+	ex (sp),ix
+	pop hl
 	push ix
 	call Application_GetLoader
 	ld de,MappedBuffer_instance
@@ -288,9 +288,9 @@ Application_IsVGZ:
 Application_InflateFile:
 	push ix
 	call Application_GetFileInfoBlock
-	call FileInfoBlock_GetName
+	ld e,ixl
+	ld d,ixh
 	pop ix
-	ex de,hl
 	ld hl,READBUFFER
 	ld bc,READBUFFER_SIZE
 	push ix
