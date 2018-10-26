@@ -21,11 +21,7 @@ VGM_Construct:
 	ld (ix + VGM.reader + 1),d
 	ld (ix + VGM.drivers),l
 	ld (ix + VGM.drivers + 1),h
-	ld bc,256
-	call VGM_GetHeader_HL
 	call VGM_GetReader_IY
-	ex de,hl
-	call MappedReader_ReadBlock_IY
 	push ix
 	call VGM_GetHeader
 	call Header_Construct
@@ -72,15 +68,6 @@ VGM_GetDrivers:
 VGM_GetHeader:
 	ld de,VGM.header
 	add ix,de
-	ret
-
-; ix = this
-; hl <- header
-VGM_GetHeader_HL:
-	ld e,ixl
-	ld d,ixh
-	ld hl,VGM.header
-	add hl,de
 	ret
 
 ; ix = this

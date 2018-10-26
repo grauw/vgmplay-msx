@@ -126,8 +126,13 @@ Header: MACRO
 	ENDM
 
 ; ix = this
+; iy = reader
 ; ix <- this
 Header_Construct:
+	ld e,ixl
+	ld d,ixh
+	ld bc,256
+	call MappedReader_ReadBlock_IY
 	call Header_CheckGZIP
 	ld hl,Header_gzippedFileError
 	jp z,System_TerminateWithError
