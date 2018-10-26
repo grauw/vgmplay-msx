@@ -101,6 +101,11 @@ LineTimer_Construct:
 	ret
 
 ; ix = this
+LineTimer_Destruct:
+	call Timer_Destruct
+	ret
+
+; ix = this
 LineTimer_Start: PROC
 	call LineTimer_Reset
 	ld a,0

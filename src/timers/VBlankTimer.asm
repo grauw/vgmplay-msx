@@ -41,6 +41,11 @@ VBlankTimer_Construct:
 	ret
 
 ; ix = this
+VBlankTimer_Destruct:
+	call Timer_Destruct
+	ret
+
+; ix = this
 VBlankTimer_Start:
 	call VBlankTimer_Reset
 	ret

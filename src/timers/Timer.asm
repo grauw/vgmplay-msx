@@ -38,6 +38,12 @@ Timer_Construct:
 	ret
 
 ; ix = this
+Timer_Destruct:
+	call Timer_IsActive
+	call nz,Timer_Stop
+	ret
+
+; ix = this
 Timer_Start:
 	call Timer_IsActive
 	call nz,System_ThrowException

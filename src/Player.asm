@@ -96,7 +96,7 @@ Player_Construct:
 	ld hl,DEBUG ? Player.UpdateDebug : Player.Update
 	add hl,de
 	call Player_GetTimerFactory
-	call TimerFactory_CreateTimer
+	call TimerFactory_Create
 	call nc,System_ThrowException
 	ld e,ixl
 	ld d,ixh
@@ -107,9 +107,10 @@ Player_Construct:
 
 ; ix = this
 Player_Destruct:
-	call Player_GetTimer
-	call Timer_IsActive
-	call nz,Timer_Stop
+	push ix
+	call Player_GetTimerFactory
+	call TimerFactory_Destroy
+	pop ix
 	ret
 
 ; ix = this

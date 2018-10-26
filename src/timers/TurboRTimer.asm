@@ -43,6 +43,11 @@ TurboRTimer_Construct:
 	ret
 
 ; ix = this
+TurboRTimer_Destruct:
+	call Timer_Destruct
+	ret
+
+; ix = this
 TurboRTimer_Start:
 	call TurboRTimer_Reset
 	ret
