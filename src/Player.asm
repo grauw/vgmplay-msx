@@ -27,10 +27,8 @@ Player: MACRO
 		dw 0
 	timer:
 		dw 0
-	loopCount:
+	loops:
 		db 0
-	maxLoops:
-		db 2  ; 0: loop infinitely
 	lastJiffy:
 		db 0
 	ended:
@@ -81,14 +79,14 @@ Player: MACRO
 	size:
 	ENDM
 
-; a = max loops
+; a = loops (0: loop infinitely)
 ; de = vgm
 ; ix = this
 ; ix <- this
 Player_Construct:
 	ld (ix + Player.vgm),e
 	ld (ix + Player.vgm + 1),d
-	ld (ix + Player.maxLoops),a
+	ld (ix + Player.loops),a
 	ld (ix + Player.commandsJumpTable),Player_commandsJumpTable >> 8
 	push ix
 	ld e,ixl
@@ -341,11 +339,10 @@ Player_EndOfSoundData: PROC
 	pop ix
 	jr z,NoLoop
 	call MappedReader_SetPosition_IY
-	inc (ix + Player.loopCount)
-	ld a,(ix + Player.maxLoops)
+	ld a,(ix + Player.loops)
 	and a
 	ret z
-	cp (ix + Player.loopCount)
+	dec (ix + Player.loops)
 	ret nz
 NoLoop:
 	pop af  ; break out of ProcessNext
