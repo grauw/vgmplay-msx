@@ -5,7 +5,6 @@
 ;
 
 ; hl = callback
-; de <- timer
 ; ix <- timer
 TimerFactory_CreateTimer:
 	push hl
@@ -19,7 +18,6 @@ TimerFactory_CreateTimer:
 	jp TimerFactory_CreateVBlankTimer
 
 ; hl = callback
-; de <- timer
 ; ix <- timer
 TimerFactory_CreateVBlankTimer:
 	ld ix,TimerFactory_vBlankTimer
@@ -27,22 +25,16 @@ TimerFactory_CreateVBlankTimer:
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException
 	call VBlankTimer_Construct
-	ld e,ixl
-	ld d,ixh
 	ret
 
 ; hl = callback
-; de <- timer
 ; ix <- timer
 TimerFactory_CreateLineTimer:
 	call LineTimer_class.New
 	call LineTimer_Construct
-	ld e,ixl
-	ld d,ixh
 	ret
 
 ; hl = callback
-; de <- timer
 ; ix <- timer
 TimerFactory_CreateTurboRTimer:
 	ld ix,TimerFactory_turboRTimer
@@ -50,8 +42,6 @@ TimerFactory_CreateTurboRTimer:
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException
 	call TurboRTimer_Construct
-	ld e,ixl
-	ld d,ixh
 	ret
 
 ;

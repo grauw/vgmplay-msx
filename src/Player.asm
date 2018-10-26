@@ -94,6 +94,8 @@ Player_Construct:
 	ld hl,DEBUG ? Player.UpdateDebug : Player.Update
 	add hl,de
 	call TimerFactory_CreateTimer
+	ld e,ixl
+	ld d,ixh
 	pop ix
 	ld (ix + Player.timer),e
 	ld (ix + Player.timer + 1),d
