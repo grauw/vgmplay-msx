@@ -25,6 +25,8 @@ Neotron_DELTA_N_H: equ 1AH
 Neotron_ENVELOPE_CONTROL: equ 1BH
 Neotron_FLAG_CONTROL: equ 1CH
 
+Neotron_HEAPBUFFER_SIZE: equ 100H + NeotronMemory._size * 2
+
 ; SIOS API
 SIOS_SMEM_A: equ 1
 SIOS_SMEM_B: equ 2
@@ -38,7 +40,7 @@ Neotron: MACRO
 	super: Driver Neotron_name, Driver_PrintInfoImpl
 	slot:
 		db 0
-	buffer:
+	heapBuffer:
 		dw 0
 	memoryA:
 		dw 0
@@ -142,12 +144,12 @@ Neotron_Construct:
 	call Neotron_Select
 	call Neotron_Reset
 	push ix
-	ld bc,100H + NeotronMemory._size * 2
+	ld bc,Neotron_HEAPBUFFER_SIZE
 	ld ix,Heap_main
 	call Heap_Allocate
 	pop ix
-	ld (ix + Neotron.buffer + 0),e
-	ld (ix + Neotron.buffer + 1),d
+	ld (ix + Neotron.heapBuffer + 0),e
+	ld (ix + Neotron.heapBuffer + 1),d
 	ld hl,100H
 	add hl,de
 	ld (ix + Neotron.memoryA + 0),l
@@ -179,9 +181,9 @@ Neotron_Destruct:
 	call Driver_IsFound
 	ret nc
 	push ix
-	ld e,(ix + Neotron.buffer + 0)
-	ld d,(ix + Neotron.buffer + 1)
-	ld bc,180H
+	ld e,(ix + Neotron.heapBuffer + 0)
+	ld d,(ix + Neotron.heapBuffer + 1)
+	ld bc,Neotron_HEAPBUFFER_SIZE
 	ld ix,Heap_main
 	call Heap_Free
 	pop ix
