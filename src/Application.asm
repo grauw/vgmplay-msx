@@ -63,13 +63,13 @@ Application_Main:
 Application_Abort:
 	push af
 	push bc
+	call Application_ExitBlackout
 	ld ix,Mapper_instance
 	call Mapper_RestoreInitialState
 	ld ix,Application_instance
 	call Application_Destruct
 	ld ix,Mapper_instance
 	call Mapper_Destruct
-	call Application_ExitBlackout
 	pop bc
 	pop af
 	ret
@@ -189,6 +189,7 @@ Application_EnterMainLoop:
 	call Application_ConstructPlayer
 	call Application_EnterBlackout
 	call Application_Play
+	call Application_ExitBlackout
 	ret
 
 ; ix = this
