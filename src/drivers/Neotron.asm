@@ -148,11 +148,11 @@ Neotron_Construct:
 	ld ix,Heap_main
 	call Heap_Allocate
 	pop ix
-	ld (ix + Neotron.heapBuffer + 0),e
+	ld (ix + Neotron.heapBuffer),e
 	ld (ix + Neotron.heapBuffer + 1),d
 	ld hl,100H
 	add hl,de
-	ld (ix + Neotron.memoryA + 0),l
+	ld (ix + Neotron.memoryA),l
 	ld (ix + Neotron.memoryA + 1),h
 	push de
 	push hl
@@ -164,7 +164,7 @@ Neotron_Construct:
 	pop de
 	ld hl,100H + NeotronMemory._size
 	add hl,de
-	ld (ix + Neotron.memoryB + 0),l
+	ld (ix + Neotron.memoryB),l
 	ld (ix + Neotron.memoryB + 1),h
 	push hl
 	ld a,(ix + Neotron.slot)
@@ -181,7 +181,7 @@ Neotron_Destruct:
 	call Driver_IsFound
 	ret nc
 	push ix
-	ld e,(ix + Neotron.heapBuffer + 0)
+	ld e,(ix + Neotron.heapBuffer)
 	ld d,(ix + Neotron.heapBuffer + 1)
 	ld bc,Neotron_HEAPBUFFER_SIZE
 	ld ix,Heap_main

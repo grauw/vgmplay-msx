@@ -129,7 +129,7 @@ Loop:
 	jr z,Finish
 	push de
 	push hl
-	ld e,(ix + NeotronMemory.buffer + 0)
+	ld e,(ix + NeotronMemory.buffer)
 	ld d,(ix + NeotronMemory.buffer + 1)
 	push de
 	ld bc,100H
