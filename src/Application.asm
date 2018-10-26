@@ -57,6 +57,7 @@ Application_Main:
 	call DOS_DefineAbortExitRoutine
 	call Application_EnterMainLoop
 	call Application_Abort
+	call Application_CheckMemoryLeak
 	ret
 
 ; DOS error or abort handler
@@ -74,6 +75,18 @@ Application_Abort:
 	call Mapper_Destruct
 	pop bc
 	pop af
+	ret
+
+Application_CheckMemoryLeak:
+	ld ix,Heap_main
+	ld l,(ix + Heap.capacity)
+	ld h,(ix + Heap.capacity + 1)
+	push hl
+	call Heap_GetFreeSpace
+	pop hl
+	and a
+	sbc hl,bc
+	call nz,System_ThrowException
 	ret
 
 ; ix = this
