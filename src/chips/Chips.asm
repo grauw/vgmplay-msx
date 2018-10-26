@@ -37,39 +37,38 @@
 
 Chips: MACRO
 	chips:
-		StaticFactory SN76489_instance, SN76489_Construct, System_Return
-		StaticFactory YM2413_instance, YM2413_Construct, System_Return
-		StaticFactory YM2151_instance, YM2151_Construct, System_Return
-		StaticFactory SegaPCM_instance, SegaPCM_Construct, System_Return
-		StaticFactory RF5C68_instance, RF5C68_Construct, System_Return
-		StaticFactory YM2203_instance, YM2203_Construct, System_Return
-		StaticFactory YM2608_instance, YM2608_Construct, System_Return
-		StaticFactory YM2610_instance, YM2610_Construct, System_Return
-	ym2612:
-		StaticFactory YM2612_instance, YM2612_Construct, System_Return
-		StaticFactory YM3812_instance, YM3812_Construct, System_Return
-		StaticFactory Y8950_instance, Y8950_Construct, System_Return
-		StaticFactory YM3526_instance, YM3526_Construct, System_Return
-		StaticFactory YMF262_instance, YMF262_Construct, System_Return
-		StaticFactory YMF278B_instance, YMF278B_Construct, System_Return
-		StaticFactory YMF271_instance, YMF271_Construct, System_Return
-		StaticFactory YMZ280B_instance, YMZ280B_Construct, System_Return
-		StaticFactory RF5C164_instance, RF5C164_Construct, System_Return
-		StaticFactory PWM_instance, PWM_Construct, System_Return
-		StaticFactory AY8910_instance, AY8910_Construct, System_Return
-		StaticFactory GameBoyDMG_instance, GameBoyDMG_Construct, System_Return
-		StaticFactory NESAPU_instance, NESAPU_Construct, System_Return
-		StaticFactory MultiPCM_instance, MultiPCM_Construct, System_Return
-		StaticFactory UPD7759_instance, UPD7759_Construct, System_Return
-		StaticFactory OKIM6258_instance, OKIM6258_Construct, System_Return
-		StaticFactory OKIM6295_instance, OKIM6295_Construct, System_Return
-		StaticFactory K051649_instance, K051649_Construct, System_Return
-		StaticFactory K054539_instance, K054539_Construct, System_Return
-		StaticFactory HuC6280_instance, HuC6280_Construct, System_Return
-		StaticFactory C140_instance, C140_Construct, System_Return
-		StaticFactory K053260_instance, K053260_Construct, System_Return
-		StaticFactory Pokey_instance, Pokey_Construct, System_Return
-		StaticFactory QSound_instance, QSound_Construct, System_Return
+		StaticFactory SN76489_instance, SN76489_Construct, Chip_Destruct
+		StaticFactory YM2413_instance, YM2413_Construct, Chip_Destruct
+		StaticFactory YM2151_instance, YM2151_Construct, Chip_Destruct
+		StaticFactory SegaPCM_instance, SegaPCM_Construct, Chip_Destruct
+		StaticFactory RF5C68_instance, RF5C68_Construct, Chip_Destruct
+		StaticFactory YM2203_instance, YM2203_Construct, Chip_Destruct
+		StaticFactory YM2608_instance, YM2608_Construct, Chip_Destruct
+		StaticFactory YM2610_instance, YM2610_Construct, Chip_Destruct
+		StaticFactory YM2612_instance, YM2612_Construct, YM2612_Destruct
+		StaticFactory YM3812_instance, YM3812_Construct, Chip_Destruct
+		StaticFactory Y8950_instance, Y8950_Construct, Chip_Destruct
+		StaticFactory YM3526_instance, YM3526_Construct, Chip_Destruct
+		StaticFactory YMF262_instance, YMF262_Construct, Chip_Destruct
+		StaticFactory YMF278B_instance, YMF278B_Construct, Chip_Destruct
+		StaticFactory YMF271_instance, YMF271_Construct, Chip_Destruct
+		StaticFactory YMZ280B_instance, YMZ280B_Construct, Chip_Destruct
+		StaticFactory RF5C164_instance, RF5C164_Construct, Chip_Destruct
+		StaticFactory PWM_instance, PWM_Construct, Chip_Destruct
+		StaticFactory AY8910_instance, AY8910_Construct, Chip_Destruct
+		StaticFactory GameBoyDMG_instance, GameBoyDMG_Construct, Chip_Destruct
+		StaticFactory NESAPU_instance, NESAPU_Construct, Chip_Destruct
+		StaticFactory MultiPCM_instance, MultiPCM_Construct, Chip_Destruct
+		StaticFactory UPD7759_instance, UPD7759_Construct, Chip_Destruct
+		StaticFactory OKIM6258_instance, OKIM6258_Construct, Chip_Destruct
+		StaticFactory OKIM6295_instance, OKIM6295_Construct, Chip_Destruct
+		StaticFactory K051649_instance, K051649_Construct, Chip_Destruct
+		StaticFactory K054539_instance, K054539_Construct, Chip_Destruct
+		StaticFactory HuC6280_instance, HuC6280_Construct, Chip_Destruct
+		StaticFactory C140_instance, C140_Construct, Chip_Destruct
+		StaticFactory K053260_instance, K053260_Construct, Chip_Destruct
+		StaticFactory Pokey_instance, Pokey_Construct, Chip_Destruct
+		StaticFactory QSound_instance, QSound_Construct, Chip_Destruct
 	COUNT: equ ($ - chips) / StaticFactory._size
 	ENDM
 
@@ -81,13 +80,8 @@ Chips_Construct:
 
 ; ix = this
 Chips_Destruct:
-	push ix
-	ld de,Chips.ym2612
-	add ix,de
-	call StaticFactory_GetInstance
-	call YM2612_Destruct
-	pop ix
-	ret
+	ld hl,StaticFactory_Destroy
+	jr Chips_ForEachChipFactory
 
 ; hl = callback (ix = chip factory)
 ; ix = this

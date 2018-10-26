@@ -144,6 +144,10 @@ Header_Construct:
 	ret
 
 ; ix = this
+Header_Destruct:
+	ret
+
+; ix = this
 Header_ClearPastDataOffset:
 	call Header_GetDataOffset
 	ld a,d

@@ -32,6 +32,10 @@ Chip_Construct:
 	ret
 
 ; ix = this
+Chip_Destruct:
+	ret
+
+; ix = this
 ; f <- z: not active
 ; Modifies: a
 Chip_IsActive:

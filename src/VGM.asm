@@ -47,6 +47,10 @@ VGM_Destruct:
 	call VGM_GetChips
 	call Chips_Destruct
 	pop ix
+	push ix
+	call VGM_GetHeader
+	call Header_Destruct
+	pop ix
 	ret
 
 ; ix = this
