@@ -16,6 +16,7 @@ MoonSound_WAVE_MEMORY_ADDRESS_H: equ 04H
 MoonSound_WAVE_MEMORY_ADDRESS_L: equ 05H
 MoonSound_WAVE_MEMORY_DATA: equ 06H
 MoonSound_FREQUENCY: equ 33868800
+MoonSound_WAVENUMBERMAP_SIZE: equ 512
 
 MoonSound: MACRO ?base, ?name = MoonSound_name
 	this:
@@ -174,6 +175,16 @@ MoonSound_Destruct:
 	call Driver_IsFound
 	ret nc
 	call MoonSound_Mute
+	ld e,(ix + MoonSound.waveNumberMap)
+	ld d,(ix + MoonSound.waveNumberMap + 1)
+	ld a,e
+	or d
+	ret z
+	push ix
+	ld bc,MoonSound_WAVENUMBERMAP_SIZE
+	ld ix,Heap_main
+	call Heap_Free
+	pop ix
 	ret
 
 ; e = register
@@ -367,7 +378,7 @@ Loop:
 	ret
 Allocate:
 	push ix
-	ld bc,512
+	ld bc,MoonSound_WAVENUMBERMAP_SIZE
 	ld ix,Heap_main
 	call Heap_Allocate
 	pop ix
