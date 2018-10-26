@@ -3,8 +3,15 @@
 ;
 ; Creates the highest-resolution timer suitable for the system.
 ;
+TimerFactory: MACRO
+	vBlankTimer:
+		VBlankTimer
+	turboRTimer:
+		TurboRTimer
+	ENDM
 
 ; hl = callback
+; ix = this
 ; ix <- timer
 ; f <- c: succeeded
 TimerFactory_CreateTimer:
@@ -14,10 +21,12 @@ TimerFactory_CreateTimer:
 	ret
 
 ; hl = callback
+; ix = this
 ; ix <- timer
 ; f <- c: succeeded
 TimerFactory_CreateVBlankTimer:
-	ld ix,TimerFactory_vBlankTimer
+	ld de,TimerFactory.vBlankTimer
+	add ix,de
 	ld a,(ix + Timer.callback)
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException
@@ -26,6 +35,7 @@ TimerFactory_CreateVBlankTimer:
 	ret
 
 ; hl = callback
+; ix = this
 ; ix <- timer
 ; f <- c: succeeded
 TimerFactory_CreateLineTimer:
@@ -39,6 +49,7 @@ TimerFactory_CreateLineTimer:
 	ret
 
 ; hl = callback
+; ix = this
 ; ix <- timer
 ; f <- c: succeeded
 TimerFactory_CreateTurboRTimer:
@@ -46,7 +57,8 @@ TimerFactory_CreateTurboRTimer:
 	call TurboRTimer_Detect
 	pop hl
 	ret nc
-	ld ix,TimerFactory_turboRTimer
+	ld de,TimerFactory.turboRTimer
+	add ix,de
 	ld a,(ix + Timer.callback)
 	or (ix + Timer.callback + 1)
 	call nz,System_ThrowException

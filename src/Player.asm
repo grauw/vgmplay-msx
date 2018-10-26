@@ -76,6 +76,8 @@ Player: MACRO
 		ret
 		ENDIF
 
+	timerFactory:
+		TimerFactory
 	size:
 	ENDM
 
@@ -93,6 +95,7 @@ Player_Construct:
 	ld d,ixh
 	ld hl,DEBUG ? Player.UpdateDebug : Player.Update
 	add hl,de
+	call Player_GetTimerFactory
 	call TimerFactory_CreateTimer
 	call nc,System_ThrowException
 	ld e,ixl
@@ -141,6 +144,13 @@ Player_GetTimer:
 	ld d,(ix + Player.timer + 1)
 	ld ixl,e
 	ld ixh,d
+	ret
+
+; ix = this
+; ix <- timer factory
+Player_GetTimerFactory:
+	ld de,Player.timerFactory
+	add ix,de
 	ret
 
 ; Shuffles the commands jump table so that the LSB and MSB are separated.
