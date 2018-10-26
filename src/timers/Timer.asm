@@ -15,7 +15,7 @@
 Timer: MACRO ?start, ?stop, ?reset, ?update
 	Update_:
 		jr ?update
-	isActive:
+	active:
 		db 0
 	start:
 		dw ?start
@@ -41,7 +41,7 @@ Timer_Construct:
 Timer_Start:
 	call Timer_IsActive
 	call nz,System_ThrowException
-	ld (ix + Timer.isActive),-1
+	ld (ix + Timer.active),-1
 	ld l,(ix + Timer.start)
 	ld h,(ix + Timer.start + 1)
 	jp hl
@@ -50,7 +50,7 @@ Timer_Start:
 Timer_Stop:
 	call Timer_IsActive
 	call z,System_ThrowException
-	ld (ix + Timer.isActive),0
+	ld (ix + Timer.active),0
 	ld l,(ix + Timer.stop)
 	ld h,(ix + Timer.stop + 1)
 	jp hl
@@ -58,7 +58,7 @@ Timer_Stop:
 ; ix = this
 ; f <- nz: active
 Timer_IsActive:
-	bit 0,(ix + Timer.isActive)
+	bit 0,(ix + Timer.active)
 	ret
 
 ; ix = this
