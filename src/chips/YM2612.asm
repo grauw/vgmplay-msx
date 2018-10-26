@@ -2,6 +2,7 @@
 ; VGM YM2612 chip
 ;
 YM2612_PCM_REGISTER: equ 2AH
+YM2612_PCMBUFFER_SIZE: equ 100H
 
 YM2612: MACRO
 	super: Chip YM2612_ym2612Name, YM2612_Connect
@@ -200,7 +201,7 @@ YM2612_Construct:
 	ld de,Header.ym2612Clock
 	call Chip_Construct
 	push ix
-	ld bc,100H
+	ld bc,YM2612_PCMBUFFER_SIZE
 	ld ix,Heap_main
 	call Heap_AllocateAligned
 	pop ix
@@ -216,7 +217,7 @@ YM2612_Destruct:
 	push ix
 	ld e,(ix + YM2612.pcmBuffer)
 	ld d,(ix + YM2612.pcmBuffer + 1)
-	ld bc,100H
+	ld bc,YM2612_PCMBUFFER_SIZE
 	ld ix,Heap_main
 	call Heap_Free
 	pop ix

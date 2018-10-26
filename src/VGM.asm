@@ -43,6 +43,10 @@ VGM_Construct:
 
 ; ix = this
 VGM_Destruct:
+	push ix
+	call VGM_GetChips
+	call Chips_Destruct
+	pop ix
 	ret
 
 ; ix = this

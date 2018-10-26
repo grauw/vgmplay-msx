@@ -46,6 +46,7 @@ Chips: MACRO
 		ChipInstance YM2203_instance, YM2203_Construct
 		ChipInstance YM2608_instance, YM2608_Construct
 		ChipInstance YM2610_instance, YM2610_Construct
+	ym2612:
 		ChipInstance YM2612_instance, YM2612_Construct
 		ChipInstance YM3812_instance, YM3812_Construct
 		ChipInstance Y8950_instance, Y8950_Construct
@@ -104,6 +105,17 @@ Loop:
 	pop ix
 	ret
 	ENDP
+
+; ix = this
+Chips_Destruct:
+	push ix
+	ld e,(ix + Chips.ym2612 + ChipInstance.instance)
+	ld d,(ix + Chips.ym2612 + ChipInstance.instance + 1)
+	ld ixl,e
+	ld ixh,d
+	call YM2612_Destruct
+	pop ix
+	ret
 
 ; hl = callback (ix = chip)
 ; ix = this
