@@ -94,6 +94,7 @@ Player_Construct:
 	ld hl,DEBUG ? Player.UpdateDebug : Player.Update
 	add hl,de
 	call TimerFactory_CreateTimer
+	call nc,System_ThrowException
 	ld e,ixl
 	ld d,ixh
 	pop ix
