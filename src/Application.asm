@@ -63,6 +63,8 @@ Application_Main:
 Application_Abort:
 	push af
 	push bc
+	ld de,0
+	call DOS_DefineAbortExitRoutine
 	call Application_ExitBlackout
 	ld ix,Mapper_instance
 	call Mapper_RestoreInitialState
