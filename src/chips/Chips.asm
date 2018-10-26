@@ -75,23 +75,9 @@ Chips: MACRO
 
 ; ix = this
 ; iy = header
-Chips_Construct: PROC
-	push ix
-	ld bc,Chips.chips
-	add ix,bc
-	ld b,Chips.COUNT
-Loop:
-	push bc
-	push ix
-	call StaticFactory_Create
-	pop ix
-	ld bc,StaticFactory._size
-	add ix,bc
-	pop bc
-	djnz Loop
-	pop ix
-	ret
-	ENDP
+Chips_Construct:
+	ld hl,StaticFactory_Create
+	jr Chips_ForEachChipFactory
 
 ; ix = this
 Chips_Destruct:
@@ -103,9 +89,9 @@ Chips_Destruct:
 	pop ix
 	ret
 
-; hl = callback (ix = chip)
+; hl = callback (ix = chip factory)
 ; ix = this
-Chips_ForEachActiveChip: PROC
+Chips_ForEachChipFactory: PROC
 	push ix
 	ld bc,Chips.chips
 	add ix,bc
@@ -114,9 +100,7 @@ Loop:
 	push bc
 	push ix
 	push hl
-	call StaticFactory_GetInstance
-	call Chip_IsActive
-	call nz,System_JumpHL
+	call System_JumpHL
 	pop hl
 	pop ix
 	ld bc,StaticFactory._size
@@ -128,14 +112,24 @@ Loop:
 	ENDP
 
 ; ix = this
-Chips_PrintInfo:
-	ld hl,Chip_PrintInfo
-	call Chips_ForEachActiveChip
+Chips_PrintInfo: PROC
+	ld hl,Callback
+	jr Chips_ForEachChipFactory
+Callback:
+	call StaticFactory_GetInstance
+	call Chip_IsActive
+	call nz,Chip_PrintInfo
 	ret
+	ENDP
 
 ; iy = drivers
 ; ix = this
-Chips_Connect:
-	ld hl,Chip_Connect
-	call Chips_ForEachActiveChip
+Chips_Connect: PROC
+	ld hl,Callback
+	jr Chips_ForEachChipFactory
+Callback:
+	call StaticFactory_GetInstance
+	call Chip_IsActive
+	call nz,Chip_Connect
 	ret
+	ENDP
