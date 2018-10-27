@@ -8,6 +8,8 @@ Application: MACRO
 		CLI
 	fileInfoBlock:
 		FileInfoBlock
+	mappedBufferFactory:
+		StaticFactory MappedBuffer_instance, MappedBuffer_Construct, MappedBuffer_Destruct
 	loader:
 		MappedBufferLoader
 	reader:
@@ -114,6 +116,10 @@ Application_Destruct:
 	call StaticFactory_Destroy
 	pop ix
 	push ix
+	call Application_GetMappedBufferFactory
+	call StaticFactory_Destroy
+	pop ix
+	push ix
 	call Application_GetCLI
 	call CLI_Destruct
 	pop ix
@@ -134,6 +140,13 @@ Application_GetCLI:
 ; ix <- File info block
 Application_GetFileInfoBlock:
 	ld de,Application.fileInfoBlock
+	add ix,de
+	ret
+
+; ix = this
+; ix <- mapped buffer factory
+Application_GetMappedBufferFactory:
+	ld de,Application.mappedBufferFactory
 	add ix,de
 	ret
 
@@ -251,8 +264,8 @@ Application_LoadFile:
 ; ix = this
 Application_ConstructMappedBuffer:
 	push ix
-	ld ix,MappedBuffer_instance
-	call MappedBuffer_Construct
+	call Application_GetMappedBufferFactory
+	call StaticFactory_Create
 	ld h,80H
 	call Memory_GetSlot
 	ld b,a

@@ -22,8 +22,36 @@ MappedBuffer_Construct:
 	ret
 
 ; ix = this
-MappedBuffer_Destruct:
+MappedBuffer_Destruct: PROC
+	ld c,(ix + MappedBuffer.segmentCount)
+	ld b,(ix + MappedBuffer.segmentCount + 1)
+	ld a,c
+	or b
+	ret z
+	ld l,(ix + MappedBuffer.freebie + MapperSegment.segment)
+	ld h,(ix + MappedBuffer.freebie + MapperSegment.slot)
+	push ix
+Loop:
+	push bc
+	push hl
+	ld c,(ix + MappedBuffer.segments + MapperSegment.segment)
+	ld b,(ix + MappedBuffer.segments + MapperSegment.slot)
+	and a
+	sbc hl,bc
+	ld a,c
+	call nz,Mapper_instance.Free
+	call c,System_ThrowException
+	ld bc,MapperSegment._size
+	add ix,bc
+	pop hl
+	pop bc
+	dec bc
+	ld a,b
+	or c
+	jr nz,Loop
+	pop ix
 	ret
+	ENDP
 
 ; a = segment number
 ; b = slot id
