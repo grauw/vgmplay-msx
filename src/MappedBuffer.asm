@@ -17,8 +17,12 @@ MappedBuffer: MACRO
 	_size:
 	ENDM
 
+; a = freebie segment number (0: none)
+; b = freebie slot id (0: none)
 ; ix = this
 MappedBuffer_Construct:
+	ld (ix + MappedBuffer.freebie + MapperSegment.segment),a
+	ld (ix + MappedBuffer.freebie + MapperSegment.slot),b
 	ret
 
 ; ix = this
@@ -52,14 +56,6 @@ Loop:
 	pop ix
 	ret
 	ENDP
-
-; a = segment number
-; b = slot id
-; ix = this
-MappedBuffer_SetFreebie:
-	ld (ix + MappedBuffer.freebie + MapperSegment.segment),a
-	ld (ix + MappedBuffer.freebie + MapperSegment.slot),b
-	ret
 
 ; ix = this
 ; de <- nr of segments

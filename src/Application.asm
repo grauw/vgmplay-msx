@@ -4,6 +4,8 @@
 Application_VGMREADER_BASE_ADDRESS: equ 8000H
 
 Application: MACRO
+	freebieSegment:
+		MapperSegment
 	cli:
 		CLI
 	fileInfoBlock:
@@ -94,6 +96,11 @@ Application_CheckMemoryLeak:
 ; ix = this
 ; ix <- this
 Application_Construct:
+	ld h,80H
+	call Mapper_instance.GetPH
+	ld (ix + Application.freebieSegment + MapperSegment.segment),a
+	call Memory_GetSlot
+	ld (ix + Application.freebieSegment + MapperSegment.slot),a
 	push ix
 	call Application_GetCLI
 	call CLI_Construct
@@ -264,13 +271,10 @@ Application_LoadFile:
 ; ix = this
 Application_ConstructMappedBuffer:
 	push ix
+	ld a,(ix + Application.freebieSegment + MapperSegment.segment)
+	ld b,(ix + Application.freebieSegment + MapperSegment.slot)
 	call Application_GetMappedBufferFactory
 	call StaticFactory_Create
-	ld h,80H
-	call Memory_GetSlot
-	ld b,a
-	call Mapper_instance.GetP2
-	call MappedBuffer_SetFreebie
 	pop ix
 	ret
 
