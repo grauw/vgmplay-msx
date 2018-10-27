@@ -312,7 +312,7 @@ MSXAudio_SetADPCMWriteAddress:
 	ld d,0FFH
 	ld e,MSXAudio_STOP_ADDRESS_L
 	call MSXAudio_WriteRegister
-	ld d,07FH
+	ld d,0FFH
 	ld e,MSXAudio_STOP_ADDRESS_H
 	call MSXAudio_WriteRegister
 	ld d,01H
