@@ -208,11 +208,8 @@ YM2612_Construct:
 	ld (ix + YM2612.pcmBuffer + 1),d
 	ld (ix + YM2612.ProcessPCMWrite.position),e
 	ld (ix + YM2612.ProcessPCMWrite.position + 1),d
-	call YM2612_IsYM3438
-	ret z
-	ld hl,YM2612_ym3438Name
-	call Chip_SetName
-	ret
+	call YM2612_GetName
+	jp Chip_SetName
 
 ; ix = this
 YM2612_Destruct:
@@ -279,6 +276,15 @@ YM2612_TryCreate:
 	call Drivers_TryCreateOPN2OnTurboRPCM_IY
 	ld hl,OPN2OnTurboRPCM.SafeWriteRegister
 	ld bc,OPN2OnTurboRPCM.SafeWriteRegister2
+	ret
+
+; ix = this
+; hl <- name
+YM2612_GetName:
+	call YM2612_IsYM3438
+	ld hl,YM2612_ym2612Name
+	ret z
+	ld hl,YM2612_ym3438Name
 	ret
 
 ;

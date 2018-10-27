@@ -40,11 +40,8 @@ YM2610: MACRO
 YM2610_Construct:
 	ld de,Header.ym2610BClock
 	call Chip_Construct
-	call YM2610_IsYM2610B
-	ret z
-	ld hl,YM2610_ym2610bName
-	call Chip_SetName
-	ret
+	call YM2610_GetName
+	jp Chip_SetName
 
 ; ix = this
 ; f <- nz: YM2610B
@@ -102,6 +99,15 @@ TryOPNOnSFGPSG:
 	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
 	ret
 	ENDP
+
+; ix = this
+; hl <- name
+YM2610_GetName:
+	call YM2610_IsYM2610B
+	ld hl,YM2610_ym2610Name
+	ret z
+	ld hl,YM2610_ym2610bName
+	ret
 
 ;
 	SECTION RAM

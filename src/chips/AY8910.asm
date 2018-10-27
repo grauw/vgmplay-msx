@@ -28,28 +28,8 @@ AY8910_Construct:
 	call Chip_Construct
 	ld a,(iy + Header.ay8910ChipType)
 	ld (ix + AY8910.chipType),a
-	cp 10H
-	ld hl,AY8910_ym2149Name
-	jp z,Chip_SetName
-	cp 11H
-	ld hl,AY8910_ym3439Name
-	jp z,Chip_SetName
-	cp 12H
-	ld hl,AY8910_ymz284Name
-	jp z,Chip_SetName
-	cp 13H
-	ld hl,AY8910_ymz294Name
-	jp z,Chip_SetName
-	cp 1H
-	ld hl,AY8910_ay8912Name
-	jp z,Chip_SetName
-	cp 2H
-	ld hl,AY8910_ay8913Name
-	jp z,Chip_SetName
-	cp 3H
-	ld hl,AY8910_ay8930Name
-	jp z,Chip_SetName
-	ret
+	call AY8910_GetName
+	jp Chip_SetName
 
 ; iy = drivers
 ; ix = this
@@ -90,6 +70,34 @@ AY8910_TryCreate:
 	ret c
 	call Drivers_TryCreateNeotron_IY
 	ld hl,Neotron.SafeWriteRegister
+	ret
+
+; ix = this
+; hl <- name
+AY8910_GetName:
+	ld a,(ix + AY8910.chipType)
+	cp 10H
+	ld hl,AY8910_ym2149Name
+	ret z
+	cp 11H
+	ld hl,AY8910_ym3439Name
+	ret z
+	cp 12H
+	ld hl,AY8910_ymz284Name
+	ret z
+	cp 13H
+	ld hl,AY8910_ymz294Name
+	ret z
+	cp 1H
+	ld hl,AY8910_ay8912Name
+	ret z
+	cp 2H
+	ld hl,AY8910_ay8913Name
+	ret z
+	cp 3H
+	ld hl,AY8910_ay8930Name
+	ret z
+	ld hl,AY8910_ay8910Name
 	ret
 
 ;

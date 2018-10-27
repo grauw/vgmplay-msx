@@ -56,11 +56,8 @@ K051649: MACRO
 K051649_Construct:
 	ld de,Header.k051649Clock
 	call Chip_Construct
-	call K051649_IsSCCPlus
-	ret z
-	ld hl,K051649_k052539Name
-	call Chip_SetName
-	ret
+	call K051649_GetName
+	jp Chip_SetName
 
 ; ix = this
 ; f <- nz: SCC+
@@ -129,6 +126,15 @@ SCC:
 	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
 	ret
 	ENDP
+
+; ix = this
+; hl <- name
+K051649_GetName:
+	call K051649_IsSCCPlus
+	ld hl,K051649_k051649Name
+	ret z
+	ld hl,K051649_k052539Name
+	ret
 
 ;
 	SECTION RAM
