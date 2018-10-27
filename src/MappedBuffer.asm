@@ -7,11 +7,13 @@ MappedBuffer: MACRO
 	size:
 		dd 0
 	freebie:
-		dw 0
+		MapperSegment
 	segmentCount:
 		dw 0
 	segments:
-		ds MappedBuffer_MAX_SEGMENTS * 2
+		REPT MappedBuffer_MAX_SEGMENTS
+		MapperSegment
+		ENDM
 	_size:
 	ENDM
 
@@ -27,8 +29,8 @@ MappedBuffer_Destruct:
 ; b = slot id
 ; ix = this
 MappedBuffer_SetFreebie:
-	ld (ix + MappedBuffer.freebie),a
-	ld (ix + MappedBuffer.freebie + 1),b
+	ld (ix + MappedBuffer.freebie + MapperSegment.segment),a
+	ld (ix + MappedBuffer.freebie + MapperSegment.slot),b
 	ret
 
 ; ix = this
@@ -57,11 +59,11 @@ Ok:
 	push ix
 	add ix,de
 	add ix,de
-	ld a,(ix + MappedBuffer.segments + 1)
+	ld a,(ix + MappedBuffer.segments + MapperSegment.slot)
 	push hl
 	call Memory_SetSlot
 	pop hl
-	ld a,(ix + MappedBuffer.segments)
+	ld a,(ix + MappedBuffer.segments + MapperSegment.segment)
 	call Mapper_instance.PutPH
 	pop ix
 	pop hl
@@ -76,15 +78,15 @@ MappedBuffer_AllocateAndAddSegment: PROC
 	ld a,(ix + MappedBuffer.segmentCount)
 	or (ix + MappedBuffer.segmentCount + 1)
 	jr nz,Continue
-	or (ix + MappedBuffer.freebie + 1)
+	or (ix + MappedBuffer.freebie + MapperSegment.slot)
 	jr nz,Freebie
 Continue:
 	call MappedBuffer_AllocateSegment
 	call MappedBuffer_AddSegment
 	ret
 Freebie:
-	ld a,(ix + MappedBuffer.freebie)
-	ld b,(ix + MappedBuffer.freebie + 1)
+	ld a,(ix + MappedBuffer.freebie + MapperSegment.segment)
+	ld b,(ix + MappedBuffer.freebie + MapperSegment.slot)
 	call MappedBuffer_AddSegment
 	ret
 	ENDP
@@ -121,8 +123,8 @@ MappedBuffer_AddSegment:
 	push ix
 	add ix,de
 	add ix,de
-	ld (ix + MappedBuffer.segments),a
-	ld (ix + MappedBuffer.segments + 1),b
+	ld (ix + MappedBuffer.segments + MapperSegment.segment),a
+	ld (ix + MappedBuffer.segments + MapperSegment.slot),b
 	pop ix
 	ret
 
