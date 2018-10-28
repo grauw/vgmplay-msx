@@ -182,6 +182,11 @@ Drivers_Destruct:
 	call nz,OPNOnSFGPSG_Destruct
 	pop ix
 	push ix
+	ld de,Drivers.opnaOnSFGPSGMSXAudio
+	call Drivers_GetDriver
+	call nz,OPNAOnSFGPSGMSXAudio_Destruct
+	pop ix
+	push ix
 	ld de,Drivers.opn2OnSFGTurboRPCM
 	call Drivers_GetDriver
 	call nz,OPN2OnSFGTurboRPCM_Destruct
