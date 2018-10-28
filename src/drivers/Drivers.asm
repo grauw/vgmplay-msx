@@ -20,6 +20,7 @@
 	INCLUDE "Neotron.asm"
 	INCLUDE "emulations/OPNFMOnSFG.asm"
 	INCLUDE "emulations/OPNOnSFGPSG.asm"
+	INCLUDE "emulations/OPNAOnSFGPSGMSXAudio.asm"
 	INCLUDE "emulations/OPN2OnSFGTurboRPCM.asm"
 	INCLUDE "emulations/OPN2OnOPNATurboRPCM.asm"
 	INCLUDE "emulations/OPN2OnTurboRPCM.asm"
@@ -61,6 +62,8 @@ Drivers: MACRO
 		DriverInstance OPNFMOnSFG_instance, OPNFMOnSFG_Construct
 	opnOnSFGPSG:
 		DriverInstance OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct
+	opnaOnSFGPSGMSXAudio:
+		DriverInstance OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct
 	opn2OnSFGTurboRPCM:
 		DriverInstance OPN2OnSFGTurboRPCM_instance, OPN2OnSFGTurboRPCM_Construct
 	opn2OnOPNATurboRPCM:
@@ -333,6 +336,13 @@ Drivers_TryCreateOPNFMOnSFG_IY:
 ; f <- c: succeeded
 Drivers_TryCreateOPNOnSFGPSG_IY:
 	ld de,Drivers.opnOnSFGPSG
+	jr Drivers_TryCreate_IY
+
+; iy = this
+; de <- OPNA on SFG + PSG + MSX-AUDIO driver
+; f <- c: succeeded
+Drivers_TryCreateOPNAOnSFGPSGMSXAudio_IY:
+	ld de,Drivers.opnaOnSFGPSGMSXAudio
 	jr Drivers_TryCreate_IY
 
 ; iy = this
