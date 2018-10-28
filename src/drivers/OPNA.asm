@@ -134,10 +134,10 @@ OPNA: MACRO
 	WriteStartAddress:
 		ld hl,safeControlMirror + OPNA_MISC_CONTROL
 		bit 0,(hl)
-		jr nz,ConvStart
+		jr nz,ConvertStartROMOrRAM8
 		bit 1,(hl)
 		jr z,WriteRegister2
-	ConvStart:
+	ConvertStartROMOrRAM8:
 		ld hl,(safeControlMirror + OPNA_START_ADDRESS_L)
 		add hl,hl
 		add hl,hl
@@ -151,10 +151,10 @@ OPNA: MACRO
 	WriteStopAddress:
 		ld hl,safeControlMirror + OPNA_MISC_CONTROL
 		bit 0,(hl)
-		jr nz,ConvStop
+		jr nz,ConvertStopROMOrRAM8
 		bit 1,(hl)
 		jr z,WriteRegister2
-	ConvStop:
+	ConvertStopROMOrRAM8:
 		ld hl,(safeControlMirror + OPNA_STOP_ADDRESS_L)
 		add hl,hl
 		add hl,hl
