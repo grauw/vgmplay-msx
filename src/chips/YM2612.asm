@@ -128,8 +128,7 @@ YM2612: MACRO
 		call MappedReader_ReadBlock_IY
 		pop hl
 		pop de
-		call MappedReader_SetPosition_IY
-		ret
+		jp MappedReader_SetPosition_IY
 
 	; ix = player
 	; iy = reader

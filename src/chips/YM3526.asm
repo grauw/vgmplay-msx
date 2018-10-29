@@ -25,8 +25,7 @@ YM3526: MACRO
 ; iy = header
 YM3526_Construct:
 	ld de,Header.ym3526Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this

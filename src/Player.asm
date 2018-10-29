@@ -278,8 +278,7 @@ Player_ResetPosition:
 	call Player_GetHeader
 	call Header_GetDataOffset
 	pop ix
-	call MappedReader_SetPosition_IY
-	ret
+	jp MappedReader_SetPosition_IY
 
 ; f <- nz: exit condition occurred
 Player_CheckExitCondition:
@@ -341,8 +340,7 @@ Player_LoadDataBlockByType:
 ; iy = reader
 Player_SkipDataBlock:
 	call Reader_ReadDoubleWord_IY
-	call MappedReader_Skip_IY
-	ret
+	jp MappedReader_Skip_IY
 
 ; ix = this
 ; iy = reader

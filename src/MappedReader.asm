@@ -27,8 +27,7 @@ MappedReader_Construct:
 	ld (ix + MappedReader.buffer + 1),d
 	ld bc,MappedReader_SEGMENT_SIZE
 	ld de,MappedReader_Fill_IY
-	call Reader_Construct
-	ret
+	jp Reader_Construct
 
 ; iy = this
 ; de <- buffer

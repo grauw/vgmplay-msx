@@ -9,8 +9,7 @@ OKIM6258: MACRO
 ; iy = header
 OKIM6258_Construct:
 	ld de,Header.okiM6258Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

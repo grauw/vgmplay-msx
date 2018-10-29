@@ -151,8 +151,7 @@ SFG_IsSFG01:
 ; a <- slot
 SFG_Detect:
 	ld hl,SFG_MatchID
-	call Memory_SearchSlots
-	ret
+	jp Memory_SearchSlots
 
 ; a = slot id
 ; f <- c: found
@@ -160,8 +159,7 @@ SFG_MatchID:
 	ld de,SFG_id
 	ld hl,SFG_ID_ADDRESS
 	ld bc,6
-	call Memory_MatchSlotString
-	ret
+	jp Memory_MatchSlotString
 
 SFG_id:
 	db "MCHFM0"

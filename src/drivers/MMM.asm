@@ -107,8 +107,7 @@ MMM_Reset:
 ; a <- slot
 MMM_Detect:
 	ld hl,MMM_MatchSlot
-	call Memory_SearchSlots
-	ret
+	jp Memory_SearchSlots
 
 	SECTION TPA_PAGE0
 

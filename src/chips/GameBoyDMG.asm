@@ -9,8 +9,7 @@ GameBoyDMG: MACRO
 ; iy = header
 GameBoyDMG_Construct:
 	ld de,Header.gameBoyDMGClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

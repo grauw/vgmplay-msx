@@ -9,8 +9,7 @@ UPD7759: MACRO
 ; iy = header
 UPD7759_Construct:
 	ld de,Header.uPD7759Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

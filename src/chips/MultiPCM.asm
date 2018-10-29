@@ -9,8 +9,7 @@ MultiPCM: MACRO
 ; iy = header
 MultiPCM_Construct:
 	ld de,Header.multiPCMClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

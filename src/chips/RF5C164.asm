@@ -9,8 +9,7 @@ RF5C164: MACRO
 ; iy = header
 RF5C164_Construct:
 	ld de,Header.rf5c164Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

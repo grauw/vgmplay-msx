@@ -111,8 +111,7 @@ MoonSound: MACRO ?base, ?name = MoonSound_name
 		jr nz,Loop
 		ld d,00010000B
 		ld a,MoonSound_WAVE_MEMORY_CONTROL
-		call WriteRegisterWave
-		ret
+		jp WriteRegisterWave
 		ENDP
 
 	; iy = reader

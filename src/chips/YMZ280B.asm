@@ -9,8 +9,7 @@ YMZ280B: MACRO
 ; iy = header
 YMZ280B_Construct:
 	ld de,Header.ymz280bClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

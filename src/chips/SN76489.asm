@@ -25,8 +25,7 @@ SN76489: MACRO
 ; iy = header
 SN76489_Construct:
 	ld de,Header.sn76489Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this

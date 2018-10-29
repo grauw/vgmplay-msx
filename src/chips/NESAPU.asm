@@ -9,8 +9,7 @@ NESAPU: MACRO
 ; iy = header
 NESAPU_Construct:
 	ld de,Header.nesAPUClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

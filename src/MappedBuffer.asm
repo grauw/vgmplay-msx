@@ -106,13 +106,11 @@ MappedBuffer_AllocateAndAddSegment: PROC
 	jr nz,Freebie
 Continue:
 	call MappedBuffer_AllocateSegment
-	call MappedBuffer_AddSegment
-	ret
+	jr MappedBuffer_AddSegment
 Freebie:
 	ld a,(ix + MappedBuffer.freebie + MapperSegment.segment)
 	ld b,(ix + MappedBuffer.freebie + MapperSegment.slot)
-	call MappedBuffer_AddSegment
-	ret
+	jr MappedBuffer_AddSegment
 	ENDP
 
 ; ix = this

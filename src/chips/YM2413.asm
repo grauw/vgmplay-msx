@@ -17,8 +17,7 @@ YM2413: MACRO
 ; iy = header
 YM2413_Construct:
 	ld de,Header.ym2413Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this

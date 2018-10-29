@@ -37,18 +37,15 @@ VBlankTimer: MACRO
 ; hl = callback
 ; ix = this
 VBlankTimer_Construct:
-	call Timer_Construct
-	ret
+	jp Timer_Construct
 
 ; ix = this
 VBlankTimer_Destruct:
-	call Timer_Destruct
-	ret
+	jp Timer_Destruct
 
 ; ix = this
 VBlankTimer_Start:
-	call VBlankTimer_Reset
-	ret
+	jp VBlankTimer_Reset
 
 ; ix = this
 VBlankTimer_Stop:

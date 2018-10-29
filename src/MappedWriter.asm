@@ -30,8 +30,7 @@ MappedWriter_Construct:
 
 ; ix = this
 MappedWriter_Destruct:
-	call Writer_Destruct
-	ret
+	jp Writer_Destruct
 
 ; ix = this
 ; de <- buffer

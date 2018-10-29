@@ -9,8 +9,7 @@ PWM: MACRO
 ; iy = header
 PWM_Construct:
 	ld de,Header.pwmClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

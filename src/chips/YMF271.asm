@@ -9,8 +9,7 @@ YMF271: MACRO
 ; iy = header
 YMF271_Construct:
 	ld de,Header.ymf271Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

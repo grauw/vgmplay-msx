@@ -39,18 +39,15 @@ TurboRTimer: MACRO
 ; hl = callback
 ; ix = this
 TurboRTimer_Construct:
-	call Timer_Construct
-	ret
+	jp Timer_Construct
 
 ; ix = this
 TurboRTimer_Destruct:
-	call Timer_Destruct
-	ret
+	jp Timer_Destruct
 
 ; ix = this
 TurboRTimer_Start:
-	call TurboRTimer_Reset
-	ret
+	jp TurboRTimer_Reset
 
 ; ix = this
 TurboRTimer_Stop:

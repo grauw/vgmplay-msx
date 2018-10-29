@@ -153,8 +153,7 @@ SCC_Mute:
 ; a <- slot
 SCC_Detect:
 	ld hl,SCC_MatchSlot
-	call Memory_SearchSlots
-	ret
+	jp Memory_SearchSlots
 
 ; a = slot id
 ; f <- c: found

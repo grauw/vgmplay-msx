@@ -41,8 +41,7 @@ YMF262: MACRO
 ; iy = header
 YMF262_Construct:
 	ld de,Header.ymf262Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this

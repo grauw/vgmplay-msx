@@ -25,8 +25,7 @@ Y8950: MACRO
 ; iy = header
 Y8950_Construct:
 	ld de,Header.y8950Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this

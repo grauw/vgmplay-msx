@@ -9,8 +9,7 @@ C140: MACRO
 ; iy = header
 C140_Construct:
 	ld de,Header.c140Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

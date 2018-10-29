@@ -263,8 +263,7 @@ OPNFMOnSFG: MACRO
 		ld de,31941
 	offset: equ $ - 2
 		call OPNFMOnSFG_OffsetOPNToOPM
-		call OPNFMOnSFG_ToKeyCodeFraction
-		ret
+		jp OPNFMOnSFG_ToKeyCodeFraction
 		ENDP
 	ENDM
 

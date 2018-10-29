@@ -338,8 +338,7 @@ Neotron_Reset:
 ; a <- slot
 Neotron_Detect:
 	ld hl,Neotron_MatchID
-	call Memory_SearchSlots
-	ret
+	jp Memory_SearchSlots
 
 ; a = slot id
 ; f <- c: found
@@ -347,8 +346,7 @@ Neotron_MatchID:
 	ld de,Neotron_id
 	ld hl,Neotron_ID_ADDRESS
 	ld bc,12
-	call Memory_MatchSlotString
-	ret
+	jp Memory_MatchSlotString
 
 ;
 Neotron_name:

@@ -148,8 +148,7 @@ MSXMusic_MatchInternalID:
 	ld de,MSXMusic_internalId
 	ld hl,MSXMusic_ID_ADDRESS
 	ld bc,8
-	call Memory_MatchSlotString
-	ret
+	jp Memory_MatchSlotString
 
 ; a = slot id
 ; ix = this
@@ -158,8 +157,7 @@ MSXMusic_MatchExternalID:
 	ld de,MSXMusic_externalId
 	ld hl,MSXMusic_ID_ADDRESS + 4
 	ld bc,4
-	call Memory_MatchSlotString
-	ret
+	jp Memory_MatchSlotString
 
 MSXMusic_internalId:
 	db "APRLOPLL"

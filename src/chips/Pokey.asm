@@ -9,8 +9,7 @@ Pokey: MACRO
 ; iy = header
 Pokey_Construct:
 	ld de,Header.pokeyClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

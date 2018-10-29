@@ -25,8 +25,7 @@ YM3812: MACRO
 ; iy = header
 YM3812_Construct:
 	ld de,Header.ym3812Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this

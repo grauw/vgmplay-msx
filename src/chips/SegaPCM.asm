@@ -9,8 +9,7 @@ SegaPCM: MACRO
 ; iy = header
 SegaPCM_Construct:
 	ld de,Header.segaPCMClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

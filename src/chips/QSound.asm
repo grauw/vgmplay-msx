@@ -9,8 +9,7 @@ QSound: MACRO
 ; iy = header
 QSound_Construct:
 	ld de,Header.qSoundClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

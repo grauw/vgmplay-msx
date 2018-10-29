@@ -9,8 +9,7 @@ HuC6280: MACRO
 ; iy = header
 HuC6280_Construct:
 	ld de,Header.huC6280Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

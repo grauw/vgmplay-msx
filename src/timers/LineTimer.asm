@@ -102,8 +102,7 @@ LineTimer_Construct:
 
 ; ix = this
 LineTimer_Destruct:
-	call Timer_Destruct
-	ret
+	jp Timer_Destruct
 
 ; ix = this
 LineTimer_Start: PROC

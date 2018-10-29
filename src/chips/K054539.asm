@@ -9,8 +9,7 @@ K054539: MACRO
 ; iy = header
 K054539_Construct:
 	ld de,Header.k054539Clock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ;
 	SECTION RAM

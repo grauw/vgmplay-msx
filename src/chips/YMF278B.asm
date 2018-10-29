@@ -48,8 +48,7 @@ YMF278B: MACRO
 ; iy = header
 YMF278B_Construct:
 	ld de,Header.ymf278bClock
-	call Chip_Construct
-	ret
+	jp Chip_Construct
 
 ; iy = drivers
 ; ix = this
