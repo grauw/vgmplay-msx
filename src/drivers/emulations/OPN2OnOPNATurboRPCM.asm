@@ -176,8 +176,8 @@ NoTurboRPCM:
 	ENDP
 
 ; ix = this
-OPN2OnOPNATurboRPCM_Destruct:
-	ret
+OPN2OnOPNATurboRPCM_Destruct: equ System_Return
+;	ret
 
 ; bc = multiplier
 ; hl = old block + fnum

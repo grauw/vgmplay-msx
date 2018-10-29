@@ -11,8 +11,8 @@ Driver: MACRO ?name, ?printInfo
 	ENDM
 
 ; ix = this
-Driver_Construct:
-	ret
+Driver_Construct: equ System_Return
+;	ret
 
 ; ix = this
 ; dehl <- clock (MHz)

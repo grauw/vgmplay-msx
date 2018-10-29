@@ -36,20 +36,20 @@ VBlankTimer: MACRO
 
 ; hl = callback
 ; ix = this
-VBlankTimer_Construct:
-	jp Timer_Construct
+VBlankTimer_Construct: equ Timer_Construct
+;	jp Timer_Construct
 
 ; ix = this
-VBlankTimer_Destruct:
-	jp Timer_Destruct
+VBlankTimer_Destruct: equ Timer_Destruct
+;	jp Timer_Destruct
 
 ; ix = this
-VBlankTimer_Start:
-	jp VBlankTimer_Reset
+VBlankTimer_Start: equ VBlankTimer_Reset
+;	jp VBlankTimer_Reset
 
 ; ix = this
-VBlankTimer_Stop:
-	ret
+VBlankTimer_Stop: equ System_Return
+;	ret
 
 ; ix = this
 VBlankTimer_Reset:

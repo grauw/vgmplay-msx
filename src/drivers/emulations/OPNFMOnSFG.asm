@@ -291,8 +291,8 @@ OPNFMOnSFG_Construct:
 	jp Driver_SetClock
 
 ; ix = this
-OPNFMOnSFG_Destruct:
-	ret
+OPNFMOnSFG_Destruct: equ System_Return
+;	ret
 
 ; e = register
 ; d = value

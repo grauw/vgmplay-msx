@@ -65,8 +65,8 @@ OPNOnSFGPSG_Construct:
 	jp Driver_SetClock
 
 ; ix = this
-OPNOnSFGPSG_Destruct:
-	ret
+OPNOnSFGPSG_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 OPNOnSFGPSG_PrintInfoImpl:

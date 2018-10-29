@@ -144,8 +144,8 @@ Header_Construct:
 	ret
 
 ; ix = this
-Header_Destruct:
-	ret
+Header_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 Header_ClearPastDataOffset:

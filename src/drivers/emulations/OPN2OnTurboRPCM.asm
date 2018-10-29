@@ -20,8 +20,8 @@ OPN2OnTurboRPCM: MACRO
 
 	; e = register
 	; d = value
-	SafeWriteRegister2:
-		ret
+	SafeWriteRegister2: equ System_Return
+	;	ret
 	ENDM
 
 ; ix = this
@@ -41,8 +41,8 @@ OPN2OnTurboRPCM_Construct:
 	jp Driver_SetClock
 
 ; ix = this
-OPN2OnTurboRPCM_Destruct:
-	ret
+OPN2OnTurboRPCM_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 OPN2OnTurboRPCM_PrintInfoImpl:

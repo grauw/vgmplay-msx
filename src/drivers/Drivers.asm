@@ -77,8 +77,8 @@ Drivers: MACRO
 
 ; ix = this
 ; ix <- this
-Drivers_Construct:
-	ret
+Drivers_Construct: equ System_Return
+;	ret
 
 ; ix = this
 ; ix <- this

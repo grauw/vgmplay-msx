@@ -32,8 +32,8 @@ Chip_Construct:
 	ret
 
 ; ix = this
-Chip_Destruct:
-	ret
+Chip_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 ; f <- z: not active

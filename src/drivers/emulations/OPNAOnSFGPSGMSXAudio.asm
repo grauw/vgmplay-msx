@@ -89,8 +89,8 @@ NoMSXAudio:
 	ENDP
 
 ; ix = this
-OPNAOnSFGPSGMSXAudio_Destruct:
-	ret
+OPNAOnSFGPSGMSXAudio_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 OPNAOnSFGPSGMSXAudio_PrintInfoImpl:

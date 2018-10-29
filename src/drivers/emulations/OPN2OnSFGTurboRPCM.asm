@@ -67,8 +67,8 @@ NoTurboRPCM:
 	ENDP
 
 ; ix = this
-OPN2OnSFGTurboRPCM_Destruct:
-	ret
+OPN2OnSFGTurboRPCM_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 OPN2OnSFGTurboRPCM_PrintInfoImpl:

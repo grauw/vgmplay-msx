@@ -26,8 +26,8 @@ CLI_Construct:
 
 ; ix = this
 ; ix <- this
-CLI_Destruct:
-	ret
+CLI_Destruct: equ System_Return
+;	ret
 
 ; ix = this
 ; de <- buffer

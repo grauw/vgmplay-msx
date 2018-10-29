@@ -38,20 +38,20 @@ TurboRTimer: MACRO
 
 ; hl = callback
 ; ix = this
-TurboRTimer_Construct:
-	jp Timer_Construct
+TurboRTimer_Construct: equ Timer_Construct
+;	jp Timer_Construct
 
 ; ix = this
-TurboRTimer_Destruct:
-	jp Timer_Destruct
+TurboRTimer_Destruct: equ Timer_Destruct
+;	jp Timer_Destruct
 
 ; ix = this
-TurboRTimer_Start:
-	jp TurboRTimer_Reset
+TurboRTimer_Start: equ TurboRTimer_Reset
+;	jp TurboRTimer_Reset
 
 ; ix = this
-TurboRTimer_Stop:
-	ret
+TurboRTimer_Stop: equ System_Return
+;	ret
 
 ; ix = this
 TurboRTimer_Reset:

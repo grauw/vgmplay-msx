@@ -29,8 +29,8 @@ MappedWriter_Construct:
 	ret
 
 ; ix = this
-MappedWriter_Destruct:
-	jp Writer_Destruct
+MappedWriter_Destruct: equ Writer_Destruct
+;	jp Writer_Destruct
 
 ; ix = this
 ; de <- buffer
