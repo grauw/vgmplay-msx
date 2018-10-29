@@ -20,28 +20,20 @@ CLI: MACRO
 ; ix = this
 ; ix <- this
 CLI_Construct:
-	call CLI_GetBuffer
+	ld e,ixl
+	ld d,ixh
+	ld hl,CLI.buffer
+	add hl,de
+	ex de,hl
 	ld hl,CLI_parametersEnvName
 	ld b,CLI_BUFFER_SIZE
 	call DOS_GetEnvironmentItem
-	ret
+	jp CLI_Parse
 
 ; ix = this
 ; ix <- this
 CLI_Destruct: equ System_Return
 ;	ret
-
-; ix = this
-; de <- buffer
-; Modifies: bc
-CLI_GetBuffer:
-	push ix
-	pop de
-	ld bc,CLI.buffer
-	ex de,hl
-	add hl,bc
-	ex de,hl
-	ret
 
 ; ix = this
 ; hl <- path
@@ -51,8 +43,8 @@ CLI_GetPath:
 	ret
 
 ; ix = this
+; de = buffer
 CLI_Parse: PROC
-	call CLI_GetBuffer
 Loop:
 	ld a,(de)
 	and a

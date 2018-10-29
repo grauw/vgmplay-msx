@@ -208,7 +208,7 @@ Application_GetPlayerFactory:
 
 ; ix = this
 Application_EnterMainLoop:
-	call Application_ParseCLI
+	call Application_CheckUsageInstructions
 	call Application_CheckOCM
 	call Application_FindFirstFile
 	call Application_LoadFile
@@ -220,10 +220,9 @@ Application_EnterMainLoop:
 	ret
 
 ; ix = this
-Application_ParseCLI:
+Application_CheckUsageInstructions:
 	push ix
 	call Application_GetCLI
-	call CLI_Parse
 	call CLI_GetPath
 	ld a,l
 	or h
