@@ -1,6 +1,8 @@
 ;
 ; Command-line interface parser
 ;
+CLI_BUFFER_SIZE: equ 255
+
 CLI: MACRO
 	path:
 		dw 0
@@ -11,7 +13,7 @@ CLI: MACRO
 	ocmWorkaround:
 		db 0
 	buffer:
-		ds 255
+		ds CLI_BUFFER_SIZE
 	_size:
 	ENDM
 
@@ -20,7 +22,7 @@ CLI: MACRO
 CLI_Construct:
 	call CLI_GetBuffer
 	ld hl,CLI_parametersEnvName
-	ld b,255
+	ld b,CLI_BUFFER_SIZE
 	call DOS_GetEnvironmentItem
 	ret
 
