@@ -4,10 +4,10 @@
 VGM: MACRO
 	reader:
 		dw 0
+	header:
+		dw 0
 	drivers:
 		dw 0
-	header:
-		Header
 	chips:
 		Chips
 	_size:
@@ -23,7 +23,15 @@ VGM_Construct:
 	ld (ix + VGM.drivers + 1),h
 	call VGM_GetReader_IY
 	push ix
-	call VGM_GetHeader
+	ld bc,Header._size
+	ld ix,Heap_main
+	call Heap_Allocate
+	pop ix
+	push ix
+	ld (ix + VGM.header),e
+	ld (ix + VGM.header + 1),d
+	ld ixl,e
+	ld ixh,d
 	call Header_Construct
 	ex (sp),ix
 	pop iy
@@ -50,6 +58,11 @@ VGM_Destruct:
 	push ix
 	call VGM_GetHeader
 	call Header_Destruct
+	ld e,ixl
+	ld d,ixh
+	ld bc,Header._size
+	ld ix,Heap_main
+	call Heap_Free
 	pop ix
 	ret
 
@@ -74,8 +87,10 @@ VGM_GetDrivers:
 ; ix = this
 ; ix <- header
 VGM_GetHeader:
-	ld de,VGM.header
-	add ix,de
+	ld e,(ix + VGM.header)
+	ld d,(ix + VGM.header + 1)
+	ld ixl,e
+	ld ixh,d
 	ret
 
 ; ix = this
