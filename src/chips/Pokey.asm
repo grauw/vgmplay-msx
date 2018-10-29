@@ -11,6 +11,10 @@ Pokey_Construct:
 	ld de,Header.pokeyClock
 	jp Chip_Construct
 
+; ix = this
+Pokey_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

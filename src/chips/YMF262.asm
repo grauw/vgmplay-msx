@@ -43,6 +43,10 @@ YMF262_Construct:
 	ld de,Header.ymf262Clock
 	jp Chip_Construct
 
+; ix = this
+YMF262_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 YMF262_Connect:

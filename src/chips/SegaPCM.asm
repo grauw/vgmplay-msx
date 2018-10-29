@@ -11,6 +11,10 @@ SegaPCM_Construct:
 	ld de,Header.segaPCMClock
 	jp Chip_Construct
 
+; ix = this
+SegaPCM_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

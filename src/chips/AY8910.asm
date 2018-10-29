@@ -31,6 +31,10 @@ AY8910_Construct:
 	call AY8910_GetName
 	jp Chip_SetName
 
+; ix = this
+AY8910_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 AY8910_Connect:

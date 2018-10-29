@@ -11,6 +11,10 @@ C140_Construct:
 	ld de,Header.c140Clock
 	jp Chip_Construct
 
+; ix = this
+C140_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

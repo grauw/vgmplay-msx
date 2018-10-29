@@ -11,6 +11,10 @@ PWM_Construct:
 	ld de,Header.pwmClock
 	jp Chip_Construct
 
+; ix = this
+PWM_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

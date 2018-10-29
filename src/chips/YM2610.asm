@@ -44,6 +44,10 @@ YM2610_Construct:
 	jp Chip_SetName
 
 ; ix = this
+YM2610_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
+; ix = this
 ; f <- nz: YM2610B
 YM2610_IsYM2610B:
 	bit 7,(ix + YM2610.super.clock + 3)

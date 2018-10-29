@@ -19,6 +19,10 @@ YM2413_Construct:
 	ld de,Header.ym2413Clock
 	jp Chip_Construct
 
+; ix = this
+YM2413_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 YM2413_Connect:

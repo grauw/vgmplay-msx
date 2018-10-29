@@ -27,6 +27,10 @@ YM3526_Construct:
 	ld de,Header.ym3526Clock
 	jp Chip_Construct
 
+; ix = this
+YM3526_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 YM3526_Connect:

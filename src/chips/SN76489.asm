@@ -27,6 +27,10 @@ SN76489_Construct:
 	ld de,Header.sn76489Clock
 	jp Chip_Construct
 
+; ix = this
+SN76489_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 SN76489_Connect:

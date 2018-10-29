@@ -11,6 +11,10 @@ OKIM6295_Construct:
 	ld de,Header.okiM6295Clock
 	jp Chip_Construct
 
+; ix = this
+OKIM6295_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

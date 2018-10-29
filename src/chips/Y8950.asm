@@ -27,6 +27,10 @@ Y8950_Construct:
 	ld de,Header.y8950Clock
 	jp Chip_Construct
 
+; ix = this
+Y8950_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 Y8950_Connect: PROC

@@ -11,6 +11,10 @@ RF5C68_Construct:
 	ld de,Header.rf5c68Clock
 	jp Chip_Construct
 
+; ix = this
+RF5C68_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

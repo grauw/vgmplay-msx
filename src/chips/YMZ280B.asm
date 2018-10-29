@@ -11,6 +11,10 @@ YMZ280B_Construct:
 	ld de,Header.ymz280bClock
 	jp Chip_Construct
 
+; ix = this
+YMZ280B_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

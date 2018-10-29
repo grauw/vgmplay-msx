@@ -19,6 +19,10 @@ YM2151_Construct:
 	ld de,Header.ym2151Clock
 	jp Chip_Construct
 
+; ix = this
+YM2151_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 YM2151_Connect:

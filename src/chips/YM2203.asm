@@ -27,6 +27,10 @@ YM2203_Construct:
 	ld de,Header.ym2203Clock
 	jp Chip_Construct
 
+; ix = this
+YM2203_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 YM2203_Connect:

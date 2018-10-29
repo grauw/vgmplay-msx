@@ -50,6 +50,10 @@ YMF278B_Construct:
 	ld de,Header.ymf278bClock
 	jp Chip_Construct
 
+; ix = this
+YMF278B_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ; iy = drivers
 ; ix = this
 YMF278B_Connect:

@@ -11,6 +11,10 @@ QSound_Construct:
 	ld de,Header.qSoundClock
 	jp Chip_Construct
 
+; ix = this
+QSound_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

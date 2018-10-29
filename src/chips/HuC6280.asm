@@ -11,6 +11,10 @@ HuC6280_Construct:
 	ld de,Header.huC6280Clock
 	jp Chip_Construct
 
+; ix = this
+HuC6280_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

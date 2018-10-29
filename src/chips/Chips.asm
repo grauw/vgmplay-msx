@@ -37,38 +37,38 @@
 
 Chips: MACRO
 	chips:
-		StaticFactory SN76489_instance, SN76489_Construct, Chip_Destruct
-		StaticFactory YM2413_instance, YM2413_Construct, Chip_Destruct
-		StaticFactory YM2151_instance, YM2151_Construct, Chip_Destruct
-		StaticFactory SegaPCM_instance, SegaPCM_Construct, Chip_Destruct
-		StaticFactory RF5C68_instance, RF5C68_Construct, Chip_Destruct
-		StaticFactory YM2203_instance, YM2203_Construct, Chip_Destruct
-		StaticFactory YM2608_instance, YM2608_Construct, Chip_Destruct
-		StaticFactory YM2610_instance, YM2610_Construct, Chip_Destruct
+		StaticFactory SN76489_instance, SN76489_Construct, SN76489_Destruct
+		StaticFactory YM2413_instance, YM2413_Construct, YM2413_Destruct
+		StaticFactory YM2151_instance, YM2151_Construct, YM2151_Destruct
+		StaticFactory SegaPCM_instance, SegaPCM_Construct, SegaPCM_Destruct
+		StaticFactory RF5C68_instance, RF5C68_Construct, RF5C68_Destruct
+		StaticFactory YM2203_instance, YM2203_Construct, YM2203_Destruct
+		StaticFactory YM2608_instance, YM2608_Construct, YM2608_Destruct
+		StaticFactory YM2610_instance, YM2610_Construct, YM2610_Destruct
 		StaticFactory YM2612_instance, YM2612_Construct, YM2612_Destruct
-		StaticFactory YM3812_instance, YM3812_Construct, Chip_Destruct
-		StaticFactory Y8950_instance, Y8950_Construct, Chip_Destruct
-		StaticFactory YM3526_instance, YM3526_Construct, Chip_Destruct
-		StaticFactory YMF262_instance, YMF262_Construct, Chip_Destruct
-		StaticFactory YMF278B_instance, YMF278B_Construct, Chip_Destruct
-		StaticFactory YMF271_instance, YMF271_Construct, Chip_Destruct
-		StaticFactory YMZ280B_instance, YMZ280B_Construct, Chip_Destruct
-		StaticFactory RF5C164_instance, RF5C164_Construct, Chip_Destruct
-		StaticFactory PWM_instance, PWM_Construct, Chip_Destruct
-		StaticFactory AY8910_instance, AY8910_Construct, Chip_Destruct
-		StaticFactory GameBoyDMG_instance, GameBoyDMG_Construct, Chip_Destruct
-		StaticFactory NESAPU_instance, NESAPU_Construct, Chip_Destruct
-		StaticFactory MultiPCM_instance, MultiPCM_Construct, Chip_Destruct
-		StaticFactory UPD7759_instance, UPD7759_Construct, Chip_Destruct
-		StaticFactory OKIM6258_instance, OKIM6258_Construct, Chip_Destruct
-		StaticFactory OKIM6295_instance, OKIM6295_Construct, Chip_Destruct
-		StaticFactory K051649_instance, K051649_Construct, Chip_Destruct
-		StaticFactory K054539_instance, K054539_Construct, Chip_Destruct
-		StaticFactory HuC6280_instance, HuC6280_Construct, Chip_Destruct
-		StaticFactory C140_instance, C140_Construct, Chip_Destruct
-		StaticFactory K053260_instance, K053260_Construct, Chip_Destruct
-		StaticFactory Pokey_instance, Pokey_Construct, Chip_Destruct
-		StaticFactory QSound_instance, QSound_Construct, Chip_Destruct
+		StaticFactory YM3812_instance, YM3812_Construct, YM3812_Destruct
+		StaticFactory Y8950_instance, Y8950_Construct, Y8950_Destruct
+		StaticFactory YM3526_instance, YM3526_Construct, YM3526_Destruct
+		StaticFactory YMF262_instance, YMF262_Construct, YMF262_Destruct
+		StaticFactory YMF278B_instance, YMF278B_Construct, YMF278B_Destruct
+		StaticFactory YMF271_instance, YMF271_Construct, YMF271_Destruct
+		StaticFactory YMZ280B_instance, YMZ280B_Construct, YMZ280B_Destruct
+		StaticFactory RF5C164_instance, RF5C164_Construct, RF5C164_Destruct
+		StaticFactory PWM_instance, PWM_Construct, PWM_Destruct
+		StaticFactory AY8910_instance, AY8910_Construct, AY8910_Destruct
+		StaticFactory GameBoyDMG_instance, GameBoyDMG_Construct, GameBoyDMG_Destruct
+		StaticFactory NESAPU_instance, NESAPU_Construct, NESAPU_Destruct
+		StaticFactory MultiPCM_instance, MultiPCM_Construct, MultiPCM_Destruct
+		StaticFactory UPD7759_instance, UPD7759_Construct, UPD7759_Destruct
+		StaticFactory OKIM6258_instance, OKIM6258_Construct, OKIM6258_Destruct
+		StaticFactory OKIM6295_instance, OKIM6295_Construct, OKIM6295_Destruct
+		StaticFactory K051649_instance, K051649_Construct, K051649_Destruct
+		StaticFactory K054539_instance, K054539_Construct, K054539_Destruct
+		StaticFactory HuC6280_instance, HuC6280_Construct, HuC6280_Destruct
+		StaticFactory C140_instance, C140_Construct, C140_Destruct
+		StaticFactory K053260_instance, K053260_Construct, K053260_Destruct
+		StaticFactory Pokey_instance, Pokey_Construct, Pokey_Destruct
+		StaticFactory QSound_instance, QSound_Construct, QSound_Destruct
 	COUNT: equ ($ - chips) / StaticFactory._size
 	ENDM
 

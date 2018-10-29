@@ -11,6 +11,10 @@ MultiPCM_Construct:
 	ld de,Header.multiPCMClock
 	jp Chip_Construct
 
+; ix = this
+MultiPCM_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

@@ -11,6 +11,10 @@ YMF271_Construct:
 	ld de,Header.ymf271Clock
 	jp Chip_Construct
 
+; ix = this
+YMF271_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

@@ -60,6 +60,10 @@ K051649_Construct:
 	jp Chip_SetName
 
 ; ix = this
+K051649_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
+; ix = this
 ; f <- nz: SCC+
 K051649_IsSCCPlus:
 	bit 7,(ix + K051649.super.clock + 3)

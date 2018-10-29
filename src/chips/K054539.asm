@@ -11,6 +11,10 @@ K054539_Construct:
 	ld de,Header.k054539Clock
 	jp Chip_Construct
 
+; ix = this
+K054539_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 

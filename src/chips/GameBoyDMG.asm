@@ -11,6 +11,10 @@ GameBoyDMG_Construct:
 	ld de,Header.gameBoyDMGClock
 	jp Chip_Construct
 
+; ix = this
+GameBoyDMG_Destruct: equ Chip_Destruct
+;	jp Chip_Destruct
+
 ;
 	SECTION RAM
 
