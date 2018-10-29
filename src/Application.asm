@@ -244,7 +244,6 @@ Application_FindFirstFile:
 	ld b,0
 	call DOS_FindFirstEntry
 	pop ix
-	and a
 	ld hl,Application_fileNotFound
 	jp nz,System_TerminateWithError
 	ret
