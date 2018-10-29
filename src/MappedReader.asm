@@ -50,7 +50,7 @@ MappedReader_SetPosition_IY:
 	ld e,c
 	ld d,b
 	call MappedBuffer_IsValidPosition
-	jp nc,MappedReader_ThrowAddressOutOfBounds
+	call nc,MappedReader_ThrowAddressOutOfBounds
 	ld a,h
 	and 3FH
 	or 80H
@@ -61,11 +61,11 @@ MappedReader_SetPosition_IY:
 	rla
 	rl e
 	rl d
-	jp c,MappedReader_ThrowAddressOutOfBounds
+	call c,MappedReader_ThrowAddressOutOfBounds
 	rla
 	rl e
 	rl d
-	jp c,MappedReader_ThrowAddressOutOfBounds
+	call c,MappedReader_ThrowAddressOutOfBounds
 	ld (iy + MappedReader.positionSegmentIndex),e
 	ld (iy + MappedReader.positionSegmentIndex + 1),d
 	ld h,(iy + MappedReader.super.bufferStart + 1)
@@ -110,7 +110,7 @@ MappedReader_Skip_IY:
 	ex de,hl
 	adc hl,bc
 	ex de,hl
-	jp c,MappedReader_ThrowAddressOutOfBounds
+	call c,MappedReader_ThrowAddressOutOfBounds
 	call MappedReader_SetPosition_IY
 	ret
 
@@ -168,8 +168,7 @@ MappedReader_SelectNextSegment_IY:
 
 MappedReader_ThrowAddressOutOfBounds:
 	ld hl,MappedReader_addressOutOfBoundsError
-	call System_ThrowExceptionWithMessage
-	ret
+	jp System_ThrowExceptionWithMessage
 
 ;
 MappedReader_addressOutOfBoundsError:
