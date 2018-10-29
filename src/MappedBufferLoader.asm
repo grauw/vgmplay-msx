@@ -9,7 +9,7 @@ MappedBufferLoader: MACRO
 		db 0
 	writer:
 		MappedWriter
-	size:
+	_size:
 	ENDM
 
 ; hl = file path

@@ -10,7 +10,7 @@ VGM: MACRO
 		Header
 	chips:
 		Chips
-	size:
+	_size:
 	ENDM
 
 ; de = mapped reader

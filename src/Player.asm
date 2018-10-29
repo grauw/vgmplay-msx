@@ -78,7 +78,7 @@ Player: MACRO
 
 	timerFactory:
 		TimerFactory
-	size:
+	_size:
 	ENDM
 
 ; a = loops (0: loop infinitely)

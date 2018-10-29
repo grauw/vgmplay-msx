@@ -26,7 +26,7 @@ Application: MACRO
 		Player
 	playerFactory:
 		StaticFactory player, Player_Construct, Player_Destruct
-	size:
+	_size:
 	ENDM
 
 ;

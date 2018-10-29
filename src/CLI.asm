@@ -12,7 +12,7 @@ CLI: MACRO
 		db 0
 	buffer:
 		ds 255
-	size:
+	_size:
 	ENDM
 
 ; ix = this

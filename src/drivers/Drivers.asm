@@ -72,7 +72,7 @@ Drivers: MACRO
 	opn2OnTurboRPCM:
 		StaticFactory OPN2OnTurboRPCM_instance, OPN2OnTurboRPCM_Construct, OPN2OnTurboRPCM_Destruct
 	COUNT: equ ($ - drivers) / StaticFactory._size
-	size:
+	_size:
 	ENDM
 
 ; ix = this

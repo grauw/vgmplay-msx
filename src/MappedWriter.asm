@@ -7,7 +7,7 @@ MappedWriter: MACRO
 	super: Writer
 	buffer:
 		dw 0
-	size:
+	_size:
 	ENDM
 
 ; de = mapped buffer

@@ -122,7 +122,7 @@ Header: MACRO
 		dd 0
 	reserved:
 		dd 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	size:
+	_size:
 	ENDM
 
 ; ix = this

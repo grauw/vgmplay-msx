@@ -9,7 +9,7 @@ MappedReader: MACRO
 		dw 0
 	positionSegmentIndex:
 		dw -1
-	size:
+	_size:
 	ENDM
 
 ; de = mapped buffer
