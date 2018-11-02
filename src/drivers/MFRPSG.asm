@@ -1,8 +1,7 @@
 ;
 ; MegaFlashROM SCC+ AY-3-8910 PSG driver
 ;
-MFRPSG_ADDRESS: equ 010H
-MFRPSG_DATA: equ 011H
+MFRPSG_BASE_PORT: equ 010H
 
 MFRPSG: equ PSG
 MFRPSG_Construct: equ PSG_Construct
@@ -14,6 +13,6 @@ MFRPSG_name:
 
 	SECTION RAM
 
-MFRPSG_instance: PSG MFRPSG_ADDRESS, MFRPSG_DATA, MFRPSG_name
+MFRPSG_instance: PSG MFRPSG_BASE_PORT, MFRPSG_name
 
 	ENDS

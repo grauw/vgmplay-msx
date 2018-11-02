@@ -1,11 +1,12 @@
 ;
 ; AY-3-8910 PSG / YM2149 SSG driver
 ;
-PSG_ADDRESS: equ 0A0H
-PSG_DATA: equ 0A1H
+PSG_BASE_PORT: equ 0A0H
+PSG_ADDRESS: equ 00H
+PSG_DATA: equ 01H
 PSG_FREQUENCY: equ 1789773
 
-PSG: MACRO ?address, ?data, ?name = PSG_name
+PSG: MACRO ?base, ?name = PSG_name
 	super: Driver ?name, Driver_PrintInfoImpl
 
 	; e = register
@@ -20,10 +21,10 @@ PSG: MACRO ?address, ?data, ?name = PSG_name
 	; d = value
 	WriteRegister:
 		di
-		out (?address),a
+		out (?base + PSG_ADDRESS),a
 		ld a,d
 		ei
-		out (?data),a
+		out (?base + PSG_DATA),a
 		ret
 	MaskMixer:
 		ld a,d
@@ -103,6 +104,6 @@ PSG_name:
 
 	SECTION RAM
 
-PSG_instance: PSG PSG_ADDRESS, PSG_DATA
+PSG_instance: PSG PSG_BASE_PORT
 
 	ENDS
