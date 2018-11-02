@@ -7,9 +7,6 @@ MFRPSG_DATA: equ 011H
 MFRPSG: equ PSG
 MFRPSG_Construct: equ PSG_Construct
 MFRPSG_Destruct: equ PSG_Destruct
-MFRPSG_WriteRegister: equ PSG_WriteRegister
-MFRPSG_SafeWriteRegister: equ PSG_SafeWriteRegister
-MFRPSG_Reset: equ PSG_Reset
 
 ;
 MFRPSG_name:
