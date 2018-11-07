@@ -4,7 +4,7 @@
 CLI_BUFFER_SIZE: equ 255
 
 CLI: MACRO
-	path:
+	fileInfoBlockReference:
 		dw 0
 	loops:
 		db 2
@@ -12,6 +12,8 @@ CLI: MACRO
 		db 0
 	ocmWorkaround:
 		db 0
+	fileInfoBlock:
+		FileInfoBlock
 	buffer:
 		ds CLI_BUFFER_SIZE
 	_size:
@@ -36,10 +38,14 @@ CLI_Destruct: equ System_Return
 ;	ret
 
 ; ix = this
-; hl <- path
-CLI_GetPath:
-	ld l,(ix + CLI.path)
-	ld h,(ix + CLI.path + 1)
+; ix <- file info block
+CLI_GetFileInfoBlock:
+	ld e,(ix + CLI.fileInfoBlockReference)
+	ld d,(ix + CLI.fileInfoBlockReference + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
 	ret
 
 ; ix = this
@@ -102,21 +108,38 @@ Next:
 
 ; de = buffer position
 ; ix = this
-CLI_ParsePath:
-	ld a,(ix + CLI.path)
-	or (ix + CLI.path + 1)
+CLI_ParsePath: PROC
+	ld a,(ix + CLI.fileInfoBlockReference)
+	or (ix + CLI.fileInfoBlockReference + 1)
 	ld hl,CLI_multiplePathsError
 	jp nz,System_TerminateWithError
-	ld (ix + CLI.path),e
-	ld (ix + CLI.path + 1),d
+	push de
 	call DOS_ParsePathname
 	ld a,(de)
 	and a
-	ret z
+	jr z,FindFile
 	ld a,0
 	ld (de),a
 	inc de
+FindFile:
+	pop hl
+	push de
+	ex de,hl
+	push ix
+	ld bc,CLI.fileInfoBlock
+	add ix,bc
+	ld b,0
+	call DOS_FindFirstEntry
+	ld e,ixl
+	ld d,ixh
+	pop ix
+	ld hl,CLI_fileNotFound
+	jp nz,System_TerminateWithError
+	ld (ix + CLI.fileInfoBlockReference),e
+	ld (ix + CLI.fileInfoBlockReference + 1),d
+	pop de
 	ret
+	ENDP
 
 ; de = buffer position
 ; ix = this
@@ -165,3 +188,6 @@ CLI_unknownOptionError:
 
 CLI_multiplePathsError:
 	db "Can not specify more than one file path.",13,10,0
+
+CLI_fileNotFound:
+	db "File not found.",13,10,0

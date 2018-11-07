@@ -8,8 +8,6 @@ Application: MACRO
 		MapperSegment
 	cli:
 		CLI
-	fileInfoBlock:
-		FileInfoBlock
 	mappedBufferFactory:
 		StaticFactory MappedBuffer_instance, MappedBuffer_Construct, MappedBuffer_Destruct
 	loader:
@@ -144,13 +142,6 @@ Application_GetCLI:
 	ret
 
 ; ix = this
-; ix <- File info block
-Application_GetFileInfoBlock:
-	ld de,Application.fileInfoBlock
-	add ix,de
-	ret
-
-; ix = this
 ; ix <- mapped buffer factory
 Application_GetMappedBufferFactory:
 	ld de,Application.mappedBufferFactory
@@ -210,7 +201,6 @@ Application_GetPlayerFactory:
 Application_EnterMainLoop:
 	call Application_CheckUsageInstructions
 	call Application_CheckOCM
-	call Application_FindFirstFile
 	call Application_LoadFile
 	call Application_ConstructVGM
 	call Application_ConstructPlayer
@@ -223,28 +213,10 @@ Application_EnterMainLoop:
 Application_CheckUsageInstructions:
 	push ix
 	call Application_GetCLI
-	call CLI_GetPath
-	ld a,l
-	or h
+	call CLI_GetFileInfoBlock
 	ld hl,Application_usageInstructions
 	jp z,System_TerminateWithError
 	pop ix
-	ret
-
-; ix = this
-Application_FindFirstFile:
-	push ix
-	call Application_GetCLI
-	call CLI_GetPath
-	pop ix
-	push ix
-	call Application_GetFileInfoBlock
-	ex de,hl
-	ld b,0
-	call DOS_FindFirstEntry
-	pop ix
-	ld hl,Application_fileNotFound
-	jp nz,System_TerminateWithError
 	ret
 
 ; ix = this
@@ -254,7 +226,8 @@ Application_LoadFile:
 	call Application_IsVGZ
 	jp z,Application_InflateFile
 	push ix
-	call Application_GetFileInfoBlock
+	call Application_GetCLI
+	call CLI_GetFileInfoBlock
 	ex (sp),ix
 	pop hl
 	push ix
@@ -280,7 +253,8 @@ Application_ConstructMappedBuffer:
 ; f <- z: is vgz
 Application_IsVGZ:
 	push ix
-	call Application_GetFileInfoBlock
+	call Application_GetCLI
+	call CLI_GetFileInfoBlock
 	call FileInfoBlock_GetName
 	pop ix
 	ld a,0
@@ -310,7 +284,8 @@ Application_IsVGZ:
 ; ix = this
 Application_InflateFile:
 	push ix
-	call Application_GetFileInfoBlock
+	call Application_GetCLI
+	call CLI_GetFileInfoBlock
 	ld e,ixl
 	ld d,ixh
 	pop ix
@@ -348,7 +323,8 @@ Application_PrintLoading:
 	ld hl,Application_loadingFile
 	call System_Print
 	push ix
-	call Application_GetFileInfoBlock
+	call Application_GetCLI
+	call CLI_GetFileInfoBlock
 	call FileInfoBlock_GetName
 	pop ix
 	call System_Print
@@ -536,9 +512,6 @@ Application_explainBuffer:
 
 Application_welcome:
 	db "VGMPlay 1.2 by Grauw",13,10,10,0
-
-Application_fileNotFound:
-	db "File not found.",13,10,0
 
 Application_loadingFile:
 	db "Loading ",0
