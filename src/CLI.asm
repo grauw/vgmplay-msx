@@ -22,14 +22,6 @@ CLI: MACRO
 ; ix = this
 ; ix <- this
 CLI_Construct:
-	ld e,ixl
-	ld d,ixh
-	ld hl,CLI.buffer
-	add hl,de
-	ex de,hl
-	ld hl,CLI_parametersEnvName
-	ld b,CLI_BUFFER_SIZE
-	call DOS_GetEnvironmentItem
 	jp CLI_Parse
 
 ; ix = this
@@ -49,8 +41,25 @@ CLI_GetFileInfoBlock:
 	ret
 
 ; ix = this
-; de = buffer
 CLI_Parse: PROC
+	push ix
+	ld ix,Heap_main
+	ld bc,CLI_BUFFER_SIZE
+	call Heap_Allocate
+	pop ix
+	push bc
+	push de
+	ld hl,CLI_parametersEnvName
+	ld b,CLI_BUFFER_SIZE
+	call DOS_GetEnvironmentItem
+	call Loop
+	pop de
+	pop bc
+	push ix
+	ld ix,Heap_main
+	call Heap_Free
+	pop ix
+	ret
 Loop:
 	ld a,(de)
 	and a
