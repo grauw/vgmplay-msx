@@ -92,14 +92,14 @@ SkipFirst:
 	cp 10
 	jr z,Newline
 	call System_PrintChar
-	jp Loop
+	jr Loop
 Unknown:
 	ld a,"?"
 	call System_PrintChar
-	jp Loop
+	jr Loop
 Newline:
 	call System_PrintCrLf
-	jp Loop
+	jr Loop
 	ENDP
 
 ; hl = field name

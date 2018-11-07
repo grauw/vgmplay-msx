@@ -142,7 +142,7 @@ Loop:
 	pop bc
 	pop hl
 	pop de
-	jp Loop
+	jr Loop
 Finish:
 	call NeotronMemory_Reset
 	ret

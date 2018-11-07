@@ -385,7 +385,7 @@ LessThan64K:
 	pop bc
 	pop hl
 	pop de
-	jp Loop
+	jr Loop
 Finish:
 	ld d,01H
 	ld e,OPNA_ADPCM_CONTROL

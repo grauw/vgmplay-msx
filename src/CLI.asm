@@ -54,13 +54,13 @@ Loop:
 	cp " "
 	jr nz,Path
 	inc de
-	jp Loop
+	jr Loop
 Option:
 	call CLI_ParseOption
-	jp Loop
+	jr Loop
 Path:
 	call CLI_ParsePath
-	jp Loop
+	jr Loop
 	ENDP
 
 ; de = buffer position
@@ -81,15 +81,15 @@ OptionLoops:
 	inc de
 	call CLI_ParseNumber
 	ld (ix + CLI.loops),c
-	jp Next
+	jr Next
 OptionBlackout:
 	ld (ix + CLI.blackout),-1
 	inc de
-	jp Next
+	jr Next
 OptionOCMWorkaround:
 	ld (ix + CLI.ocmWorkaround),-1
 	inc de
-	jp Next
+	jr Next
 Next:
 	ld a,(de)
 	and a
@@ -136,7 +136,7 @@ Loop:
 	jp nc,System_TerminateWithError
 	call Multiply10AndAdd
 	inc de
-	jp Loop
+	jr Loop
 Multiply10AndAdd:
 	ld b,a
 	ld a,c
