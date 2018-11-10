@@ -94,7 +94,7 @@ Options:
     
   * `/o` Activate 1chipMSX timing workaround.
     
-    Fue to a 1chipMSX bug, the timing is incorrect. If music plays too slowly,
+    Due to a 1chipMSX bug, the timing is incorrect. If music plays too slowly,
     use this option to activate the workaround.
 
 To configure Multi Mente to play VGM files, add the following lines to
