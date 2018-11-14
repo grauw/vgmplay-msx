@@ -56,6 +56,29 @@ YM2610_IsYM2610B:
 ; iy = drivers
 ; ix = this
 YM2610_Connect: PROC
+	call YM2610_IsYM2610B
+	jr z,TryNeotron
+	call Drivers_TryCreateOPNBBOnNeotronOPNA_IY
+	jr nc,TryNeotron
+	call Chip_SetDriver
+	ld hl,OPNBBOnNeotronOPNA.SafeWriteRegister
+	add hl,de
+	ld (ix + YM2610.ProcessPort0Command.writeRegister),l
+	ld (ix + YM2610.ProcessPort0Command.writeRegister + 1),h
+	ld hl,OPNBBOnNeotronOPNA.SafeWriteRegister2
+	add hl,de
+	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
+	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
+	ld hl,OPNBBOnNeotronOPNA.ProcessDataBlockA
+	add hl,de
+	ld (ix + YM2610.ProcessDataBlockA.process),l
+	ld (ix + YM2610.ProcessDataBlockA.process + 1),h
+	ld hl,OPNBBOnNeotronOPNA.ProcessDataBlockB
+	add hl,de
+	ld (ix + YM2610.ProcessDataBlockB.process),l
+	ld (ix + YM2610.ProcessDataBlockB.process + 1),h
+	ret
+TryNeotron:
 	call Drivers_TryCreateNeotron_IY
 	jr nc,TryOPNA
 	call Chip_SetDriver
