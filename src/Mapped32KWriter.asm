@@ -9,14 +9,8 @@ Mapped32KWriter: MACRO
 	super: Writer
 	buffer:
 		dw 0
-	originalSlot1:
-		db 0
-	originalMapperBank1:
-		db 0
-	originalSlot2:
-		db 0
-	originalMapperBank2:
-		db 0
+	originalPage1: MapperSegment
+	originalPage2: MapperSegment
 	_size:
 	ENDM
 
@@ -35,15 +29,15 @@ Mapped32KWriter_Construct:
 	call Writer_Construct
 
 	ld h,40H
+	call Mapper_instance.GetPH
+	ld (ix + Mapped32KWriter.originalPage1.segment),a
 	call Memory_GetSlot
-	ld (ix + Mapped32KWriter.originalSlot1),a
-	call Mapper_instance.GetP1
-	ld (ix + Mapped32KWriter.originalMapperBank1),a
+	ld (ix + Mapped32KWriter.originalPage1.slot),a
 	ld h,80H
+	call Mapper_instance.GetPH
+	ld (ix + Mapped32KWriter.originalPage2.segment),a
 	call Memory_GetSlot
-	ld (ix + Mapped32KWriter.originalSlot2),a
-	call Mapper_instance.GetP2
-	ld (ix + Mapped32KWriter.originalMapperBank2),a
+	ld (ix + Mapped32KWriter.originalPage2.slot),a
 
 	push ix
 	call Mapped32KWriter_GetBuffer
@@ -58,16 +52,16 @@ Mapped32KWriter_Construct:
 
 ; ix = this
 Mapped32KWriter_Destruct:
-	ld a,(ix + Mapped32KWriter.originalSlot1)
 	ld h,40H
+	ld a,(ix + Mapped32KWriter.originalPage1.segment)
+	call Mapper_instance.PutPH
+	ld a,(ix + Mapped32KWriter.originalPage1.slot)
 	call Memory_SetSlot
-	ld a,(ix + Mapped32KWriter.originalMapperBank1)
-	call Mapper_instance.PutP1
-	ld a,(ix + Mapped32KWriter.originalSlot2)
 	ld h,80H
+	ld a,(ix + Mapped32KWriter.originalPage2.segment)
+	call Mapper_instance.PutPH
+	ld a,(ix + Mapped32KWriter.originalPage2.slot)
 	call Memory_SetSlot
-	ld a,(ix + Mapped32KWriter.originalMapperBank2)
-	call Mapper_instance.PutP2
 	ret
 
 ; ix = this
