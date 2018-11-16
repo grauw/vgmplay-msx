@@ -447,10 +447,8 @@ Player_Skip1: equ System_Return
 
 ; ix = this
 Player_UnsupportedCommand:
-	in a,(2EH)
 	ld hl,Player_unsupportedCommandError
-	call System_Print
-	jp DOS_Terminate
+	call System_TerminateWithError
 
 ;
 	SECTION RAM_PAGE1_ALIGNED
