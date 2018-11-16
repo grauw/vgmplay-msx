@@ -487,26 +487,10 @@ Application_CheckStack:
 	jp nc,System_TerminateWithError
 	ret
 
-; a = DOS error code
-Application_CheckDOSError:
-	and a
-	ret z
-Application_TerminateWithDOSError:
-	ld b,a
-	ld de,Application_explainBuffer
-	call DOS_ExplainErrorCode
-	ld hl,Application_explainBuffer
-	call System_Print
-	call System_PrintCrLf
-	jp System_TerminateWithError
-
 ;
 	SECTION RAM
 
 Application_instance: Application
-
-Application_explainBuffer:
-	ds 64,0
 
 	ENDS
 

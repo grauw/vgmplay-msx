@@ -139,11 +139,10 @@ FindFile:
 	add ix,bc
 	ld b,0
 	call DOS_FindFirstEntry
+	call DOS_TerminateIfError
 	ld e,ixl
 	ld d,ixh
 	pop ix
-	ld hl,CLI_fileNotFound
-	jp nz,System_TerminateWithError
 	ld (ix + CLI.fileInfoBlockReference),e
 	ld (ix + CLI.fileInfoBlockReference + 1),d
 	pop de
@@ -197,6 +196,3 @@ CLI_unknownOptionError:
 
 CLI_multiplePathsError:
 	db "Can not specify more than one file path.",13,10,0
-
-CLI_fileNotFound:
-	db "File not found.",13,10,0
