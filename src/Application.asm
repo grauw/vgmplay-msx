@@ -29,6 +29,17 @@ Application: MACRO
 
 ;
 Application_Main:
+	ld ix,Mapper_instance
+	call Mapper_Construct
+
+	ld hl,Application_MainContinue
+	call System_TryCall
+
+	ld ix,Mapper_instance
+	call Mapper_Destruct
+	ret
+
+Application_MainContinue:
 	call Application_CheckStack
 
 	call VDP_InitMirrorsOnVDPUpgrades
@@ -36,8 +47,6 @@ Application_Main:
 	ld hl,Application_welcome
 	call System_Print
 
-	ld ix,Mapper_instance
-	call Mapper_Construct
 	ld ix,Heap_main
 	call Heap_Construct
 
@@ -48,28 +57,21 @@ Application_Main:
 
 	ld ix,Application_instance
 	call Application_Construct
-	ld de,Application_Abort
-	call DOS_DefineAbortExitRoutine
-	call Application_EnterMainLoop
-	call Application_Abort
-	call Application_CheckMemoryLeak
-	ret
 
-; DOS error or abort handler
-Application_Abort:
-	push af
-	push bc
-	ld de,0
-	call DOS_DefineAbortExitRoutine
-	call Application_ExitBlackout
+	push ix
+	ld hl,Application_EnterMainLoop
+	call System_TryCall
+	pop ix
+
+	call System_HasException
+	push ix
 	ld ix,Mapper_instance
-	call Mapper_RestoreInitialState
-	ld ix,Application_instance
+	call nz,Mapper_RestoreInitialState
+	pop ix
 	call Application_Destruct
-	ld ix,Mapper_instance
-	call Mapper_Destruct
-	pop bc
-	pop af
+
+	call System_HasException
+	call z,Application_CheckMemoryLeak
 	ret
 
 Application_CheckMemoryLeak:
@@ -198,7 +200,10 @@ Application_EnterMainLoop:
 	call Application_ConstructVGM
 	call Application_ConstructPlayer
 	call Application_EnterBlackout
-	call Application_Play
+	push ix
+	ld hl,Application_Play
+	call System_TryCall
+	pop ix
 	call Application_ExitBlackout
 	ret
 
