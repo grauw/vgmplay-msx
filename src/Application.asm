@@ -69,18 +69,6 @@ Application_MainContinue:
 	call z,Application_CheckMemoryLeak
 	ret
 
-Application_CheckMemoryLeak:
-	ld ix,Heap_main
-	ld l,(ix + Heap.capacity)
-	ld h,(ix + Heap.capacity + 1)
-	push hl
-	call Heap_GetFreeSpace
-	pop hl
-	and a
-	sbc hl,bc
-	call nz,System_ThrowException
-	ret
-
 ; ix = this
 ; ix <- this
 Application_Construct:
@@ -486,6 +474,19 @@ Application_CheckStack:
 	add hl,sp
 	ld hl,Application_insufficientTPAError
 	jp nc,System_TerminateWithError
+	ret
+
+; Check if the heap capacity matches the free space
+Application_CheckMemoryLeak:
+	ld ix,Heap_main
+	ld l,(ix + Heap.capacity)
+	ld h,(ix + Heap.capacity + 1)
+	push hl
+	call Heap_GetFreeSpace
+	pop hl
+	and a
+	sbc hl,bc
+	call nz,System_ThrowException
 	ret
 
 ;
