@@ -29,13 +29,6 @@ Application: MACRO
 
 ;
 Application_Main:
-	ld hl,DOS_Terminate
-	call System_SetTerminateHandler
-
-	call DOS_IsDOS2
-	ld hl,Application_dos2RequiredError
-	jp c,System_TerminateWithError
-
 	call Application_CheckStack
 
 	call VDP_InitMirrorsOnVDPUpgrades
@@ -508,9 +501,6 @@ Application_loadingSamples:
 
 Application_playing:
 	db 13,10,"Playing...",13,10,0
-
-Application_dos2RequiredError:
-	db "MSX-DOS 2 is required.",13,10,0
 
 Application_insufficientTPAError:
 	db "Insufficient TPA space.",13,10,0

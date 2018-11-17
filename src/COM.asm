@@ -27,11 +27,7 @@ RAM: equ RAM_PAGE1
 
 	SECTION TPA
 
-;
-; Program entry point
-;
-COM_Main:
-	jp Application_Main
+	DOS2Runtime Application_Main
 
 	INCLUDE "DOS.asm"
 	INCLUDE "BIOS.asm"
@@ -41,6 +37,7 @@ COM_Main:
 	INCLUDE "Mapper.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Utils.asm"
+	INCLUDE "DOS2Runtime.asm"
 	INCLUDE "Application.asm"
 	INCLUDE "Math.asm"
 	INCLUDE "StaticFactory.asm"
