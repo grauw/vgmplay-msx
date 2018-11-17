@@ -52,13 +52,15 @@ CLI_Parse: PROC
 	ld hl,CLI_parametersEnvName
 	ld b,CLI_BUFFER_SIZE
 	call DOS_GetEnvironmentItem
-	call Loop
+	ld hl,Loop
+	call System_TryCall
 	pop de
 	pop bc
 	push ix
 	ld ix,Heap_main
 	call Heap_Free
 	pop ix
+	call System_Rethrow
 	ret
 Loop:
 	ld a,(de)
