@@ -63,11 +63,6 @@ Application_MainContinue:
 	call System_TryCall
 	pop ix
 
-	call System_HasException
-	push ix
-	ld ix,Mapper_instance
-	call nz,Mapper_RestoreInitialState
-	pop ix
 	call Application_Destruct
 
 	call System_HasException
@@ -232,9 +227,13 @@ Application_LoadFile:
 	call Application_GetLoader
 	ld de,MappedBuffer_instance
 	call MappedBufferLoader_Construct
-	call MappedBufferLoader_Load
+	push ix
+	ld hl,MappedBufferLoader_Load
+	call System_TryCall
+	pop ix
 	call MappedBufferLoader_Destruct
 	pop ix
+	call System_Rethrow
 	ret
 
 ; ix = this
@@ -303,7 +302,10 @@ Application_InflateFile:
 	ld e,ixl
 	ld d,ixh
 	ex (sp),ix
-	call GzipArchive_Extract
+	push ix
+	ld hl,GzipArchive_Extract
+	call System_TryCall
+	pop ix
 	ex (sp),ix
 	call Mapped32KWriter_Destruct
 	call Mapped32KWriter_class.Delete
@@ -314,6 +316,7 @@ Application_InflateFile:
 	call FileReader_Destruct
 	call FileReader_class.Delete
 	pop ix
+	call System_Rethrow
 	ret
 
 ; ix = this
