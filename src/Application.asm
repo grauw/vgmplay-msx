@@ -196,7 +196,7 @@ Application_CheckUsageInstructions:
 	call Application_GetCLI
 	call CLI_GetFileInfoBlock
 	ld hl,Application_usageInstructions
-	jp z,System_TerminateWithError
+	jp z,System_ThrowExceptionWithMessage
 	pop ix
 	ret
 
@@ -473,7 +473,7 @@ Application_CheckStack:
 	ld hl,-(HEAP + HEAP_SIZE + STACK_SIZE)
 	add hl,sp
 	ld hl,Application_insufficientTPAError
-	jp nc,System_TerminateWithError
+	jp nc,System_ThrowExceptionWithMessage
 	ret
 
 ; Check if the heap capacity matches the free space

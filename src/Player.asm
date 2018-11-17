@@ -448,7 +448,7 @@ Player_Skip1: equ System_Return
 ; ix = this
 Player_UnsupportedCommand:
 	ld hl,Player_unsupportedCommandError
-	call System_TerminateWithError
+	call System_ThrowExceptionWithMessage
 
 ;
 	SECTION RAM_PAGE1_ALIGNED

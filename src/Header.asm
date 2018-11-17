@@ -135,10 +135,10 @@ Header_Construct:
 	call MappedReader_ReadBlock_IY
 	call Header_CheckGZIP
 	ld hl,Header_gzippedFileError
-	jp z,System_TerminateWithError
+	jp z,System_ThrowExceptionWithMessage
 	call Header_CheckID
 	ld hl,Header_noVGMFileError
-	jp nz,System_TerminateWithError
+	jp nz,System_ThrowExceptionWithMessage
 	call Header_ClearPastDataOffset
 	call Header_FixPre102Clocks
 	ret
