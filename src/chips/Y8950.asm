@@ -48,9 +48,18 @@ Y8950_Connect: PROC
 	ret
 TryMoonSound:
 	call Drivers_TryCreateMoonSound_IY
-	ret nc
+	jr nc,TryOPL3
 	call Chip_SetDriver
 	ld hl,MoonSound.SafeWriteRegister
+	add hl,de
+	ld (ix + Y8950.ProcessCommand.writeRegister),l
+	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
+	ret
+TryOPL3:
+	call Drivers_TryCreateOPL3_IY
+	ret nc
+	call Chip_SetDriver
+	ld hl,OPL3.SafeWriteRegister
 	add hl,de
 	ld (ix + Y8950.ProcessCommand.writeRegister),l
 	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
