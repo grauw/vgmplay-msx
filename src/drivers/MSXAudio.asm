@@ -339,20 +339,20 @@ MSXAudio_Detect: PROC
 	di
 	ld de,10000000B << 8 | MSXAudio_FLAG_CONTROL
 	call WriteRegister
-	ld de,0FFH << 8 | MSXAudio_TIMER_1
+	ld de,00100000B << 8 | MSXAudio_ADPCM_CONTROL
 	call WriteRegister
-	ld de,00111001B << 8 | MSXAudio_FLAG_CONTROL
+	ld de,01110000B << 8 | MSXAudio_FLAG_CONTROL
 	call WriteRegister
-	ld b,0  ; wait >80 µs
-	djnz $
 	in a,(MSXAudio_STATUS_PORT)
 	and 11111001B
 	push af
 	ld de,01111000B << 8 | MSXAudio_FLAG_CONTROL
 	call WriteRegister
 	ei
+	ld de,00000000B << 8 | MSXAudio_ADPCM_CONTROL
+	call WriteRegister
 	pop af
-	xor 11000000B
+	xor 10001000B
 	ret nz
 	scf
 	ret

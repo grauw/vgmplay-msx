@@ -461,23 +461,24 @@ OPNA_DetectOPN: PROC
 	di
 	ld de,10000000B << 8 | 29H  ; 6ch mode, disable all interrupts
 	call WriteRegister
-	ld de,0FFH << 8 | 24H  ; set minimum timer period (9 µs @ 8 MHz)
-	call WriteRegister
-	ld de,03H << 8 | 25H
-	call WriteRegister
-	ld de,00110101B << 8 | 27H  ; reset, enable & start timer a
-	call WriteRegister
-	ld b,48  ; wait 144 cycles for timer to lapse
-	djnz $
+	ld de,10000000B << 8 | OPNA_FLAG_CONTROL
+	call WriteRegister2
+	ld de,00100000B << 8 | OPNA_ADPCM_CONTROL
+	call WriteRegister2
+	ld de,00010111B << 8 | OPNA_FLAG_CONTROL
+	call WriteRegister2
 	in a,(OPNA_STATUS1)
 	push af
-	ld de,00110000B << 8 | 27H  ; reset, disable & stop timer a
-	call WriteRegister
+	ld de,00011111B << 8 | OPNA_FLAG_CONTROL
+	call WriteRegister2
+	ei
+	ld de,00000000B << 8 | OPNA_ADPCM_CONTROL
+	call WriteRegister2
 	ld de,00000000B << 8 | 29H  ; 3ch mode
 	call WriteRegister
 	ei
 	pop af
-	xor 00000001B
+	xor 00001000B
 	ret nz
 	scf
 	ret
@@ -488,6 +489,16 @@ WriteRegister:
 	djnz $
 	ld a,d
 	out (OPNA_FM1_DATA),a
+	ld b,28  ; wait 83 cycles
+	djnz $
+	ret
+WriteRegister2:
+	ld a,e
+	out (OPNA_FM2_ADDRESS),a
+	ld b,5  ; wait 17 cycles
+	djnz $
+	ld a,d
+	out (OPNA_FM2_DATA),a
 	ld b,28  ; wait 83 cycles
 	djnz $
 	ret
