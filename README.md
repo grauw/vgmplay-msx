@@ -33,7 +33,7 @@ on machines with a V9938 or V9958 VDP, and 4000 Hz on MSX turboR.
 For more information on the VGM format see:  
 <http://www.smspower.org/Music/VGMFileFormat>
 
-For a collection of VGM music see:  
+For collections of VGM music see:  
 <http://vgmrips.net/>  
 <http://www.smspower.org/Music/VGMs>  
 <http://opl.wafflenet.com/>
@@ -51,19 +51,36 @@ System Requirements
 Supported sound chips
 ---------------------
 
-The sound expansion required for playback is mentioned between parentheses.
-
-  * AY-3-8910 PSG / YM2149 SSG x2 (built-in, MegaFlashROM SCC+)
-  * YM2151 OPM (SFG-01/05)
-  * YM2413 OPLL (MSX-MUSIC, FM-PAC)
-  * YM3526 OPL (MSX-AUDIO, Music Module, MoonSound)
-  * YM3812 OPL2 (MoonSound)
-  * YMF262 OPL3 (MoonSound)
-  * YMF278B OPL4 (MoonSound)
-  * Y8950 MSX-AUDIO (Music Module, 256K sample RAM recommended)
+  * AY-3-8910 PSG / YM2149 SSG x2
+    * Internal PSG, MegaFlashROM SCC+
+  * YM2151 OPM
+    * Yamaha SFG
+  * YM2413 OPLL
+    * MSX-MUSIC, FM-PAC
+  * YM3526 OPL x2
+    * MSX-AUDIO, Music Module, MoonSound, OPL3
+  * YM3812 OPL2 x2
+    * MoonSound, OPL3
+  * YMF262 OPL3 x2
+    * MoonSound, OPL3
+  * YMF278B OPL4
+    * MoonSound
+  * Y8950 MSX-AUDIO
+    * MSX-AUDIO, Music Module, MoonSound (no ADPCM), OPL3 (no ADPCM)
   * K051649 Konami SCC
+    * Konami SCC, Konami Sound Cartridge
   * K052539 Konami SCC+
-  * SN76489 DCSG x2 (Franky, Playsoniq, Musical Memory Mapper)
+    * Konami Sound Cartridge
+  * SN76489 DCSG x2
+    * Musical Memory Mapper, Playsoniq, Franky
+  * YM2203 OPN x2
+    * OPNA, Neotron, Yamaha SFG + PSG
+  * YM2608 OPNA
+    * OPNA, Yamaha SFG + PSG + MSX-AUDIO (no drums)
+  * YM2610 OPNB
+    * Neotron, Yamaha SFG + PSG (no ADPCM)
+  * YM2612 OPN2 x2
+    * OPNA + turboR PCM, Yamaha SFG + turboR PCM
 
 
 Usage instructions
