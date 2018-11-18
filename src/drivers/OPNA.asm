@@ -458,27 +458,19 @@ OPNA_DetectOPN: PROC
 	in a,(OPNA_STATUS1)
 	and a
 	ret nz
-	di
 	ld de,10000000B << 8 | 29H  ; 6ch mode, disable all interrupts
 	call WriteRegister
-	ld de,10000000B << 8 | OPNA_FLAG_CONTROL
-	call WriteRegister2
-	ld de,00100000B << 8 | OPNA_ADPCM_CONTROL
-	call WriteRegister2
-	ld de,00010111B << 8 | OPNA_FLAG_CONTROL
+	ld de,10000000B << 8 | OPNA_ADPCM_CONTROL
 	call WriteRegister2
 	in a,(OPNA_STATUS1)
 	push af
-	ld de,00011111B << 8 | OPNA_FLAG_CONTROL
-	call WriteRegister2
-	ei
 	ld de,00000000B << 8 | OPNA_ADPCM_CONTROL
 	call WriteRegister2
 	ld de,00000000B << 8 | 29H  ; 3ch mode
 	call WriteRegister
 	ei
 	pop af
-	xor 00001000B
+	xor 00100000B
 	ret nz
 	scf
 	ret
