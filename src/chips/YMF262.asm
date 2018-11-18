@@ -83,13 +83,13 @@ YMF262_Connect:
 ; hl <- safe write register offset
 ; f <- c: succeeded
 YMF262_TryCreate:
-	call Drivers_TryCreateMoonSound_IY
-	ld hl,MoonSound.SafeWriteRegister
-	ld bc,MoonSound.SafeWriteRegister2
-	ret c
 	call Drivers_TryCreateOPL3_IY
 	ld hl,OPL3.SafeWriteRegister
 	ld bc,OPL3.SafeWriteRegister2
+	ret c
+	call Drivers_TryCreateMoonSound_IY
+	ld hl,MoonSound.SafeWriteRegister
+	ld bc,MoonSound.SafeWriteRegister2
 	ret
 
 ;

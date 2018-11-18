@@ -35,7 +35,7 @@ Y8950_Destruct: equ Chip_Destruct
 ; ix = this
 Y8950_Connect: PROC
 	call Drivers_TryCreateMSXAudio_IY
-	jr nc,TryMoonSound
+	jr nc,TryOPL3
 	call Chip_SetDriver
 	ld hl,MSXAudio.SafeWriteRegister
 	add hl,de
@@ -46,20 +46,20 @@ Y8950_Connect: PROC
 	ld (ix + Y8950.ProcessDataBlock.process),l
 	ld (ix + Y8950.ProcessDataBlock.process + 1),h
 	ret
-TryMoonSound:
-	call Drivers_TryCreateMoonSound_IY
-	jr nc,TryOPL3
+TryOPL3:
+	call Drivers_TryCreateOPL3_IY
+	jr nc,TryMoonSound
 	call Chip_SetDriver
-	ld hl,MoonSound.SafeWriteRegister
+	ld hl,OPL3.SafeWriteRegister
 	add hl,de
 	ld (ix + Y8950.ProcessCommand.writeRegister),l
 	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
 	ret
-TryOPL3:
-	call Drivers_TryCreateOPL3_IY
+TryMoonSound:
+	call Drivers_TryCreateMoonSound_IY
 	ret nc
 	call Chip_SetDriver
-	ld hl,OPL3.SafeWriteRegister
+	ld hl,MoonSound.SafeWriteRegister
 	add hl,de
 	ld (ix + Y8950.ProcessCommand.writeRegister),l
 	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h

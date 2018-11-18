@@ -56,11 +56,11 @@ YM3812_Connect:
 ; hl <- safe write register offset
 ; f <- c: succeeded
 YM3812_TryCreate:
-	call Drivers_TryCreateMoonSound_IY
-	ld hl,MoonSound.SafeWriteRegister
-	ret c
 	call Drivers_TryCreateOPL3_IY
 	ld hl,OPL3.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateMoonSound_IY
+	ld hl,MoonSound.SafeWriteRegister
 	ret
 
 ;
