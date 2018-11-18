@@ -352,8 +352,7 @@ MSXAudio_Detect: PROC
 	call WriteRegister
 	ei
 	pop af
-	sub 11000000B
-	and a
+	xor 11000000B
 	ret nz
 	scf
 	ret

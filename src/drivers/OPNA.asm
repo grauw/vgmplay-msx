@@ -477,8 +477,7 @@ OPNA_DetectOPN: PROC
 	call WriteRegister
 	ei
 	pop af
-	sub 1
-	and a
+	xor 00000001B
 	ret nz
 	scf
 	ret
