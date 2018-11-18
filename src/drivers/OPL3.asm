@@ -148,6 +148,15 @@ OPL3_Detect:
 	call OPL3_ReadRegisterStatus
 	and 11111101B  ; sometimes LD is set
 	ret nz
+	ld de,10000000B << 8 | MSXAudio_ADPCM_CONTROL
+	call OPL3_WriteRegister
+	call OPL3_ReadRegisterStatus
+	and 11111101B  ; sometimes LD is set
+	push af
+	ld de,00000000B << 8 | MSXAudio_ADPCM_CONTROL
+	call OPL3_WriteRegister
+	pop af
+	ret nz
 	scf
 	ret
 
