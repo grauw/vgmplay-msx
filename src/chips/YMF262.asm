@@ -87,9 +87,9 @@ YMF262_TryCreate:
 	ld hl,MoonSound.SafeWriteRegister
 	ld bc,MoonSound.SafeWriteRegister2
 	ret c
-	call Drivers_TryCreateMoonSoundC0_IY
-	ld hl,MoonSoundC0.SafeWriteRegister
-	ld bc,MoonSoundC0.SafeWriteRegister2
+	call Drivers_TryCreateOPL3_IY
+	ld hl,OPL3.SafeWriteRegister
+	ld bc,OPL3.SafeWriteRegister2
 	ret
 
 ;

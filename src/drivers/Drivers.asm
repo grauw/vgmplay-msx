@@ -7,8 +7,8 @@
 	INCLUDE "SFG.asm"
 	INCLUDE "MSXMusic.asm"
 	INCLUDE "MSXAudio.asm"
+	INCLUDE "OPL3.asm"
 	INCLUDE "MoonSound.asm"
-	INCLUDE "MoonSoundC0.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCPlus.asm"
 	INCLUDE "Franky.asm"
@@ -38,10 +38,10 @@ Drivers: MACRO
 		StaticFactory MSXMusic_instance, MSXMusic_Construct, MSXMusic_Destruct
 	msxAudio:
 		StaticFactory MSXAudio_instance, MSXAudio_Construct, MSXAudio_Destruct
+	opl3:
+		StaticFactory OPL3_instance, OPL3_Construct, OPL3_Destruct
 	moonSound:
 		StaticFactory MoonSound_instance, MoonSound_Construct, MoonSound_Destruct
-	moonSoundC0:
-		StaticFactory MoonSoundC0_instance, MoonSoundC0_Construct, MoonSoundC0_Destruct
 	scc:
 		StaticFactory SCC_instance, SCC_Construct, SCC_Destruct
 	sccPlus:
@@ -139,17 +139,17 @@ Drivers_TryCreateMSXAudio_IY:
 	jr Drivers_TryCreate_IY
 
 ; iy = this
+; de <- OPL3 driver
+; f <- c: succeeded
+Drivers_TryCreateOPL3_IY:
+	ld de,Drivers.opl3
+	jr Drivers_TryCreate_IY
+
+; iy = this
 ; de <- MoonSound driver
 ; f <- c: succeeded
 Drivers_TryCreateMoonSound_IY:
 	ld de,Drivers.moonSound
-	jr Drivers_TryCreate_IY
-
-; iy = this
-; de <- MoonSound at C0 driver
-; f <- c: succeeded
-Drivers_TryCreateMoonSoundC0_IY:
-	ld de,Drivers.moonSoundC0
 	jr Drivers_TryCreate_IY
 
 ; iy = this

@@ -62,8 +62,8 @@ YM3526_TryCreate:
 	call Drivers_TryCreateMoonSound_IY
 	ld hl,MoonSound.SafeWriteRegister
 	ret c
-	call Drivers_TryCreateMoonSoundC0_IY
-	ld hl,MoonSoundC0.SafeWriteRegister
+	call Drivers_TryCreateOPL3_IY
+	ld hl,OPL3.SafeWriteRegister
 	ret
 
 ;

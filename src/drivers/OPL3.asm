@@ -1,0 +1,164 @@
+;
+; YMF262 OPL3
+;
+OPL3_BASE_PORT: equ 0C0H
+OPL3_STATUS: equ 00H
+OPL3_FM_ADDRESS: equ 00H
+OPL3_FM_DATA: equ 01H
+OPL3_FM2_ADDRESS: equ 02H
+OPL3_FM2_DATA: equ 03H
+OPL3_FM2_NEW: equ 05H
+OPL3_FREQUENCY: equ 14318181
+
+OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
+	this:
+	super: Driver ?name, Driver_PrintInfoImpl
+
+	; e = register
+	; d = value
+	SafeWriteRegister:
+		ld a,e
+		cp 20H
+		jr c,MaskControl
+	; a = register
+	; d = value
+	WriteRegister:
+		out (?base + OPL3_FM_ADDRESS),a
+		jp $ + 3     ; wait 32 cycles (8 bus cycles)
+		ld a,d
+		out (?base + OPL3_FM_DATA),a
+		ret
+	MaskControl:
+		cp 8H
+		jr z,WriteRegister
+		ret
+
+	; e = register
+	; d = value
+	SafeWriteRegister2:
+		ld a,e
+	; a = register
+	; d = value
+	WriteRegister2:
+		out (?base + OPL3_FM2_ADDRESS),a
+		jp $ + 3     ; wait 32 cycles (8 bus cycles)
+		ld a,d
+		out (?base + OPL3_FM2_DATA),a
+		ret
+
+	; a <- value
+	ReadRegisterStatus:
+		in a,(?base + OPL3_STATUS)
+		ret
+	ENDM
+
+; ix = this
+; iy = drivers
+OPL3_Construct:
+	call Driver_Construct
+	call OPL3_Detect
+	ret nc
+	call OPL3_Reset
+	ld de,OPL3_FREQUENCY >> 16
+	ld hl,OPL3_FREQUENCY
+	jp Driver_SetClock
+
+; ix = this
+OPL3_Destruct:
+	call Driver_IsFound
+	ret nc
+	call OPL3_Mute
+	ret
+
+; e = register
+; d = value
+; ix = this
+OPL3_WriteRegister:
+	ld a,e
+	ld bc,OPL3.WriteRegister
+	jp Utils_JumpIXOffsetBC
+
+; e = register
+; d = value
+; ix = this
+OPL3_WriteRegister2:
+	ld a,e
+	ld bc,OPL3.WriteRegister2
+	jp Utils_JumpIXOffsetBC
+
+; ix = this
+; a <- value
+OPL3_ReadRegisterStatus:
+	ld bc,OPL3.ReadRegisterStatus
+	jp Utils_JumpIXOffsetBC
+
+; b = count
+; e = register base
+; d = value
+; ix = this
+OPL3_FillRegisterPairs:
+	push bc
+	push de
+	call OPL3_WriteRegister
+	pop de
+	push de
+	call OPL3_WriteRegister2
+	pop de
+	pop bc
+	inc e
+	djnz OPL3_FillRegisterPairs
+	ret
+
+; ix = this
+OPL3_Mute:
+	ld de,00BDH
+	call OPL3_WriteRegister  ; rhythm off
+	ld b,16H
+	ld de,0F80H
+	call OPL3_FillRegisterPairs  ; max release rate
+	ld b,16H
+	ld de,3F40H
+	call OPL3_FillRegisterPairs  ; min total level
+	ld b,09H
+	ld de,00A0H
+	call OPL3_FillRegisterPairs  ; frequency 0
+	ld b,09H
+	ld de,00B0H
+	call OPL3_FillRegisterPairs  ; key off
+	ret
+
+; ix = this
+OPL3_Reset:
+	ld de,00000001B << 8 | OPL3_FM2_NEW
+	call OPL3_WriteRegister2
+	ld b,0D6H
+	ld de,0020H
+	call OPL3_FillRegisterPairs
+	ld de,0008H
+	call OPL3_WriteRegister
+	ld de,0004H
+	call OPL3_WriteRegister2
+	ld de,00000000B << 8 | OPL3_FM2_NEW
+	call OPL3_WriteRegister2
+	ret
+
+; ix = this
+; f <- c: Found
+OPL3_Detect:
+	call OPL3_ReadRegisterStatus
+	and 11111101B  ; sometimes LD is set
+	sub 00H
+	and a
+	ret nz
+	scf
+	ret
+
+;
+OPL3_name:
+	db "OPL3",0
+
+	SECTION RAM
+
+OPL3_instance: OPL3
+
+	ENDS
