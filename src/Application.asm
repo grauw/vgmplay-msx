@@ -37,6 +37,7 @@ Application_Main:
 
 	ld ix,Mapper_instance
 	call Mapper_Destruct
+	call System_Rethrow
 	ret
 
 Application_MainContinue:
@@ -65,8 +66,9 @@ Application_MainContinue:
 
 	call Application_Destruct
 
-	call System_HasException
-	call z,Application_CheckMemoryLeak
+	call System_Rethrow
+
+	call Application_CheckMemoryLeak
 	ret
 
 ; ix = this
