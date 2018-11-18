@@ -18,7 +18,7 @@ MoonSound_WAVE_MEMORY_DATA: equ 06H
 MoonSound_FREQUENCY: equ 33868800
 MoonSound_WAVENUMBERMAP_SIZE: equ 512
 
-MoonSound: MACRO ?base, ?name = MoonSound_name
+MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 	this:
 	super: Driver ?name, Driver_PrintInfoImpl
 	waveNumberMap:
@@ -544,6 +544,6 @@ MoonSound_name:
 
 	SECTION RAM
 
-MoonSound_instance: MoonSound MoonSound_BASE_PORT
+MoonSound_instance: MoonSound
 
 	ENDS
