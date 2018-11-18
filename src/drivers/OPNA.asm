@@ -448,8 +448,7 @@ OPNA_Detect:
 	ld b,6  ; wait 17 cycles
 	djnz $
 	in a,(OPNA_FM1_DATA)
-	sub 01H
-	and a
+	xor 01H
 	ret nz
 	scf
 

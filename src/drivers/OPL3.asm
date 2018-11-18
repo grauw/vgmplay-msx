@@ -147,8 +147,6 @@ OPL3_Reset:
 OPL3_Detect:
 	call OPL3_ReadRegisterStatus
 	and 11111101B  ; sometimes LD is set
-	sub 00H
-	and a
 	ret nz
 	scf
 	ret
