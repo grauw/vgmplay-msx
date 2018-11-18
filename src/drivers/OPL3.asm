@@ -9,6 +9,8 @@ OPL3_FM2_ADDRESS: equ 02H
 OPL3_FM2_DATA: equ 03H
 OPL3_FM2_NEW: equ 05H
 OPL3_FREQUENCY: equ 14318181
+OPL3_TIMER_1: equ 02H
+OPL3_FLAG_CONTROL: equ 04H
 
 OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	this:
@@ -146,16 +148,29 @@ OPL3_Reset:
 ; f <- c: Found
 OPL3_Detect:
 	call OPL3_ReadRegisterStatus
-	and 11111101B  ; sometimes LD is set
+	and 11111101B  ; if OPL4 bit 1 can be set
 	ret nz
-	ld de,10000000B << 8 | MSXAudio_ADPCM_CONTROL
+	di
+	ld de,10000000B << 8 | OPL3_FLAG_CONTROL
 	call OPL3_WriteRegister
+	ld de,0FFH << 8 | OPL3_TIMER_1  ; detect with timer
+	call OPL3_WriteRegister
+	ld de,00111001B << 8 | OPL3_FLAG_CONTROL
+	call OPL3_WriteRegister
+	ld de,10000000B << 8 | MSXAudio_ADPCM_CONTROL  ; ensure it’s no MSX-AUDIO
+	call OPL3_WriteRegister
+	ld b,0  ; wait >80 µs
+	djnz $
 	call OPL3_ReadRegisterStatus
-	and 11111101B  ; sometimes LD is set
 	push af
+	ld de,01111000B << 8 | OPL3_FLAG_CONTROL
+	call OPL3_WriteRegister
+	ei
 	ld de,00000000B << 8 | MSXAudio_ADPCM_CONTROL
 	call OPL3_WriteRegister
 	pop af
+	and 11111101B  ; if OPL4 bit 1 can be set
+	xor 11000000B
 	ret nz
 	scf
 	ret
