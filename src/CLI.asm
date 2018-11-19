@@ -14,8 +14,6 @@ CLI: MACRO
 		db 0
 	fileInfoBlock:
 		FileInfoBlock
-	buffer:
-		ds CLI_BUFFER_SIZE
 	_size:
 	ENDM
 
