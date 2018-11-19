@@ -293,14 +293,14 @@ MSXAudio_SetADPCMWriteAddress:
 	srl e
 	rr h
 	rr l
-	jp c,System_ThrowException
+	call c,System_ThrowException
 	srl e
 	rr h
 	rr l
-	jp c,System_ThrowException
+	call c,System_ThrowException
 	ld a,e
 	or d
-	jp nz,System_ThrowException
+	call nz,System_ThrowException
 	push hl
 	ld d,l
 	ld e,MSXAudio_START_ADDRESS_L

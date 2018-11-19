@@ -91,7 +91,7 @@ CLI_ParseOption: PROC
 	cp "O"
 	jr z,OptionOCMWorkaround
 	ld hl,CLI_unknownOptionError
-	jp System_ThrowExceptionWithMessage
+	call System_ThrowExceptionWithMessage
 OptionLoops:
 	inc de
 	call CLI_ParseNumber
@@ -112,7 +112,7 @@ Next:
 	cp " "
 	ret z
 	ld hl,CLI_unknownOptionError
-	jp System_ThrowExceptionWithMessage
+	call System_ThrowExceptionWithMessage
 	ENDP
 
 ; de = buffer position
@@ -121,7 +121,7 @@ CLI_ParsePath: PROC
 	ld a,(ix + CLI.fileInfoBlockReference)
 	or (ix + CLI.fileInfoBlockReference + 1)
 	ld hl,CLI_multiplePathsError
-	jp nz,System_ThrowExceptionWithMessage
+	call nz,System_ThrowExceptionWithMessage
 	push de
 	call DOS_ParsePathname
 	ld a,(de)
@@ -162,9 +162,9 @@ Loop:
 	cp " "
 	ret z
 	sub "0"
-	jp c,System_ThrowExceptionWithMessage
+	call c,System_ThrowExceptionWithMessage
 	cp 10
-	jp nc,System_ThrowExceptionWithMessage
+	call nc,System_ThrowExceptionWithMessage
 	call Multiply10AndAdd
 	inc de
 	jr Loop
@@ -173,16 +173,16 @@ Multiply10AndAdd:
 	ld a,c
 	ld c,b
 	add a,a
-	jp c,System_ThrowExceptionWithMessage
+	call c,System_ThrowExceptionWithMessage
 	ld b,a
 	add a,a
-	jp c,System_ThrowExceptionWithMessage
+	call c,System_ThrowExceptionWithMessage
 	add a,a
-	jp c,System_ThrowExceptionWithMessage
+	call c,System_ThrowExceptionWithMessage
 	add a,b
-	jp c,System_ThrowExceptionWithMessage
+	call c,System_ThrowExceptionWithMessage
 	add a,c
-	jp c,System_ThrowExceptionWithMessage
+	call c,System_ThrowExceptionWithMessage
 	ld c,a
 	ret
 	ENDP

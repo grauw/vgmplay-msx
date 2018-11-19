@@ -436,10 +436,10 @@ MoonSound_WriteMemoryByte:
 MoonSound_SetMemoryAddress:
 	ld a,e
 	and 0C0H
-	jp nz,System_ThrowException
+	call nz,System_ThrowException
 	ld a,d
 	and a
-	jp nz,System_ThrowException
+	call nz,System_ThrowException
 	push hl
 	ld d,e
 	ld e,MoonSound_WAVE_MEMORY_ADDRESS_E
