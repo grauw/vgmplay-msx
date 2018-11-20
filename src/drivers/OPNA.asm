@@ -28,7 +28,6 @@ OPNA_DAC_DATA: equ 0EH
 OPNA_PCM_DATA: equ 0FH
 OPNA_FLAG_CONTROL: equ 10H
 OPNA_ADPCM_END: equ 11H
-OPNA_SCH_IRQ: equ 29H
 
 OPNA: MACRO
 	this:
@@ -442,40 +441,24 @@ OPNA_Detect: PROC
 	in a,(OPNA_STATUS1)
 	and a
 	ret nz
-	ld de,10000000B << 8 | OPNA_SCH_IRQ  ; 6ch mode
-	call WriteRegister
 	ld de,10000000B << 8 | OPNA_ADPCM_CONTROL
-	call WriteRegister2
+	call WriteADPCMRegister
+	ld b,100
+	djnz $
 	in a,(OPNA_STATUS1)
 	push af
 	ld de,00000000B << 8 | OPNA_ADPCM_CONTROL
-	call WriteRegister2
-	ld de,00000000B << 8 | OPNA_SCH_IRQ  ; 3ch mode
-	call WriteRegister
+	call WriteADPCMRegister
 	pop af
 	xor 00100000B
 	ret nz
 	scf
 	ret
-WriteRegister:
-	ld a,e
-	out (OPNA_FM1_ADDRESS),a
-	ld b,5  ; wait 17 cycles
-	djnz $
-	ld a,d
-	out (OPNA_FM1_DATA),a
-	ld b,28  ; wait 83 cycles
-	djnz $
-	ret
-WriteRegister2:
+WriteADPCMRegister:
 	ld a,e
 	out (OPNA_FM2_ADDRESS),a
-	ld b,5  ; wait 17 cycles
-	djnz $
 	ld a,d
 	out (OPNA_FM2_DATA),a
-	ld b,28  ; wait 83 cycles
-	djnz $
 	ret
 	ENDP
 
