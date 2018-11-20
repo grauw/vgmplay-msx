@@ -452,7 +452,6 @@ OPNA_Detect: PROC
 	call WriteRegister2
 	ld de,00000000B << 8 | OPNA_SCH_IRQ  ; 3ch mode
 	call WriteRegister
-	ei
 	pop af
 	xor 00100000B
 	ret nz
