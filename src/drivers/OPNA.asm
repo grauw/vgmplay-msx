@@ -10,7 +10,6 @@ OPNA_FM2_ADDRESS: equ OPNA_BASE + 2
 OPNA_FM2_DATA: equ OPNA_BASE + 3
 OPNA_FREQUENCY: equ 8000000
 
-; ADPCM registers
 OPNA_ADPCM_CONTROL: equ 00H
 OPNA_MISC_CONTROL: equ 01H
 OPNA_START_ADDRESS_L: equ 02H
@@ -29,6 +28,7 @@ OPNA_DAC_DATA: equ 0EH
 OPNA_PCM_DATA: equ 0FH
 OPNA_FLAG_CONTROL: equ 10H
 OPNA_ADPCM_END: equ 11H
+OPNA_SCH_IRQ: equ 29H
 
 OPNA: MACRO
 	this:
@@ -457,7 +457,7 @@ OPNA_DetectOPN: PROC
 	in a,(OPNA_STATUS1)
 	and a
 	ret nz
-	ld de,10000000B << 8 | 29H  ; 6ch mode, disable all interrupts
+	ld de,10000000B << 8 | OPNA_SCH_IRQ  ; 6ch mode
 	call WriteRegister
 	ld de,10000000B << 8 | OPNA_ADPCM_CONTROL
 	call WriteRegister2
@@ -465,7 +465,7 @@ OPNA_DetectOPN: PROC
 	push af
 	ld de,00000000B << 8 | OPNA_ADPCM_CONTROL
 	call WriteRegister2
-	ld de,00000000B << 8 | 29H  ; 3ch mode
+	ld de,00000000B << 8 | OPNA_SCH_IRQ  ; 3ch mode
 	call WriteRegister
 	ei
 	pop af
