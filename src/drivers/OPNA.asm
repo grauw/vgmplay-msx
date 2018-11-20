@@ -451,6 +451,7 @@ OPNA_Detect:
 	xor 01H
 	ret nz
 	scf
+	ret
 
 ; ix = this
 ; f <- c: found
