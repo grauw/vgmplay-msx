@@ -438,24 +438,7 @@ OPNA_WriteADPCMData:
 
 ; ix = this
 ; f <- c: found
-OPNA_Detect:
-	call OPNA_DetectByADPCMStatus
-	ret nc
-	call MSXAudio_Detect  ; if MSX-Audio is present as well, just return found
-	ret c
-	ld a,0FFH  ; otherwise also check the ID register
-	out (OPNA_FM1_ADDRESS),a
-	ld b,6  ; wait 17 cycles
-	djnz $
-	in a,(OPNA_FM1_DATA)
-	xor 01H
-	ret nz
-	scf
-	ret
-
-; ix = this
-; f <- c: found
-OPNA_DetectByADPCMStatus: PROC
+OPNA_Detect: PROC
 	in a,(OPNA_STATUS1)
 	and a
 	ret nz
