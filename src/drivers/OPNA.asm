@@ -437,9 +437,9 @@ OPNA_WriteADPCMData:
 	jp Utils_JumpIXOffsetDE
 
 ; ix = this
-; f <- c: Found
+; f <- c: found
 OPNA_Detect:
-	call OPNA_DetectOPN
+	call OPNA_DetectByADPCMStatus
 	ret nc
 	call MSXAudio_Detect  ; if MSX-Audio is present as well, just return found
 	ret c
@@ -452,8 +452,9 @@ OPNA_Detect:
 	ret nz
 	scf
 
-; f <- c: Found
-OPNA_DetectOPN: PROC
+; ix = this
+; f <- c: found
+OPNA_DetectByADPCMStatus: PROC
 	in a,(OPNA_STATUS1)
 	and a
 	ret nz
