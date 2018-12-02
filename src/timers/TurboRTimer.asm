@@ -63,11 +63,9 @@ TurboRTimer_Reset:
 ; a <- 3995 Hz timer value
 TurboRTimer_GetTimerValue:
 	call System_GetHighResTimerValue
+	add hl,hl
+	add hl,hl
 	ld a,h
-	rl l
-	rla
-	rl l
-	rla
 	ret
 
 ; f <- c: found
