@@ -3,8 +3,6 @@
 ;
 ; Time and wait codes are in units of 44100 Hz samples
 ;
-Player_SAMPLES_CAP: equ 1 << 10  ; 1024
-
 Player: MACRO
 	this:
 
@@ -56,10 +54,6 @@ Player: MACRO
 		ld (time),hl
 		ret nc
 		ld ix,this
-		ld a,h
-		and ~((Player_SAMPLES_CAP - 1) >> 8)
-		jr z,ProcessNext
-		ld hl,Player_SAMPLES_CAP
 		jr ProcessNext
 
 	; de = time passed
