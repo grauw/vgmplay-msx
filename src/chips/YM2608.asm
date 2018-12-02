@@ -5,6 +5,7 @@ YM2608: MACRO
 	this:
 	super: Chip YM2608_name, YM2608_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort0Command: PROC
@@ -13,6 +14,7 @@ YM2608: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort1Command: PROC

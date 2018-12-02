@@ -4,6 +4,7 @@
 SN76489: MACRO
 	super: Chip SN76489_name, SN76489_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC
@@ -12,6 +13,7 @@ SN76489: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommandDual: PROC

@@ -4,6 +4,7 @@
 YM2203: MACRO
 	super: Chip YM2203_name, YM2203_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC
@@ -12,6 +13,7 @@ YM2203: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommandDual: PROC

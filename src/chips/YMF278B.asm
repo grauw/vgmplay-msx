@@ -5,6 +5,7 @@ YMF278B: MACRO
 	this:
 	super: Chip YMF278B_name, YMF278B_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC

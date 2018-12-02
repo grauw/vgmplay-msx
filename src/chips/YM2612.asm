@@ -13,6 +13,7 @@ YM2612: MACRO
 	pcmBuffer:
 		dw 0
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort0Command: PROC
@@ -21,6 +22,7 @@ YM2612: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort1Command: PROC
@@ -29,6 +31,7 @@ YM2612: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort0CommandDual: PROC
@@ -37,6 +40,7 @@ YM2612: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort1CommandDual: PROC
@@ -45,6 +49,7 @@ YM2612: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPCMWrite: PROC
@@ -87,6 +92,7 @@ YM2612: MACRO
 		call MappedReader_Skip_IY
 		jr BufferPCMData
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPCMDataSeek: PROC
@@ -130,68 +136,54 @@ YM2612: MACRO
 		pop de
 		jp MappedReader_SetPosition_IY
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPCMWriteWait1:
 		call ProcessPCMWrite
-		ld de,1
-		Player_WAIT
+		Player_Wait_M 1
 	ProcessPCMWriteWait2:
 		call ProcessPCMWrite
-		ld de,2
-		Player_WAIT
+		Player_Wait_M 2
 	ProcessPCMWriteWait3:
 		call ProcessPCMWrite
-		ld de,3
-		Player_WAIT
+		Player_Wait_M 3
 	ProcessPCMWriteWait4:
 		call ProcessPCMWrite
-		ld de,4
-		Player_WAIT
+		Player_Wait_M 4
 	ProcessPCMWriteWait5:
 		call ProcessPCMWrite
-		ld de,5
-		Player_WAIT
+		Player_Wait_M 5
 	ProcessPCMWriteWait6:
 		call ProcessPCMWrite
-		ld de,6
-		Player_WAIT
+		Player_Wait_M 6
 	ProcessPCMWriteWait7:
 		call ProcessPCMWrite
-		ld de,7
-		Player_WAIT
+		Player_Wait_M 7
 	ProcessPCMWriteWait8:
 		call ProcessPCMWrite
-		ld de,8
-		Player_WAIT
+		Player_Wait_M 8
 	ProcessPCMWriteWait9:
 		call ProcessPCMWrite
-		ld de,9
-		Player_WAIT
+		Player_Wait_M 9
 	ProcessPCMWriteWait10:
 		call ProcessPCMWrite
-		ld de,10
-		Player_WAIT
+		Player_Wait_M 10
 	ProcessPCMWriteWait11:
 		call ProcessPCMWrite
-		ld de,11
-		Player_WAIT
+		Player_Wait_M 11
 	ProcessPCMWriteWait12:
 		call ProcessPCMWrite
-		ld de,12
-		Player_WAIT
+		Player_Wait_M 12
 	ProcessPCMWriteWait13:
 		call ProcessPCMWrite
-		ld de,13
-		Player_WAIT
+		Player_Wait_M 13
 	ProcessPCMWriteWait14:
 		call ProcessPCMWrite
-		ld de,14
-		Player_WAIT
+		Player_Wait_M 14
 	ProcessPCMWriteWait15:
 		call ProcessPCMWrite
-		ld de,15
-		Player_WAIT
+		Player_Wait_M 15
 	ENDM
 
 ; ix = this

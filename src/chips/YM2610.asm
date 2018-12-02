@@ -4,6 +4,7 @@
 YM2610: MACRO
 	super: Chip YM2610_ym2610Name, YM2610_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort0Command: PROC
@@ -12,6 +13,7 @@ YM2610: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort1Command: PROC

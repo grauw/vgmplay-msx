@@ -4,6 +4,7 @@
 YM2151: MACRO
 	super: Chip YM2151_name, YM2151_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC

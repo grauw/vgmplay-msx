@@ -4,6 +4,7 @@
 YMF262: MACRO
 	super: Chip YMF262_name, YMF262_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort0Command: PROC
@@ -12,6 +13,7 @@ YMF262: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort1Command: PROC
@@ -20,6 +22,7 @@ YMF262: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort0CommandDual: PROC
@@ -28,6 +31,7 @@ YMF262: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessPort1CommandDual: PROC

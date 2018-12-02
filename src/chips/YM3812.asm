@@ -4,6 +4,7 @@
 YM3812: MACRO
 	super: Chip YM3812_name, YM3812_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC
@@ -12,6 +13,7 @@ YM3812: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommandDual: PROC

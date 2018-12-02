@@ -6,6 +6,7 @@ AY8910: MACRO
 	chipType:
 		db 0
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC

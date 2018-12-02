@@ -5,6 +5,7 @@ Y8950: MACRO
 	this:
 	super: Chip Y8950_name, Y8950_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC
@@ -13,6 +14,7 @@ Y8950: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC

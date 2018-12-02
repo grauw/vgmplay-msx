@@ -4,6 +4,7 @@
 YM2413: MACRO
 	super: Chip YM2413_name, YM2413_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC

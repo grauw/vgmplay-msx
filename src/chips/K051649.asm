@@ -4,6 +4,7 @@
 K051649: MACRO
 	super: Chip K051649_k051649Name, K051649_Connect
 
+	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC

@@ -6,16 +6,12 @@
 Player: MACRO
 	this:
 
-	; de = wait period
+	; hl' = time remaining
 	; ix = this
 	; iy = reader
-	Wait:
-		ld hl,0
-	time: equ $ - 2
-		add hl,de
-		ld (time),hl
-		ret nc
 	Yield:
+		exx
+		ld (time),hl
 		pop af  ; break out of ProcessNext
 		ret
 
@@ -30,6 +26,7 @@ Player: MACRO
 	ended:
 		db 0
 
+	; hl' = time remaining
 	; ix = this
 	; iy = reader
 	ProcessNext:
@@ -48,11 +45,13 @@ Player: MACRO
 	; de = time passed
 	; ix = this
 	Update:
-		ld hl,(time)
+		ld hl,0
+	time: equ $ - 2
 		and a
 		sbc hl,de
 		ld (time),hl
 		ret nc
+		exx
 		ld ix,this
 		jr ProcessNext
 
@@ -256,10 +255,22 @@ Loop:
 	ret
 	ENDP
 
-; de = wait period
+; hl' = time remaining
 ; ix = this
 ; iy = reader
-Player_WAIT: MACRO
+Player_Wait_M: MACRO ?time
+	exx
+	ld de,?time
+	add hl,de
+	exx
+	ret nc
+	Player_Yield_M
+	ENDM
+
+; hl' = time remaining
+; ix = this
+; iy = reader
+Player_Yield_M: MACRO
 	jp ix
 	ENDM
 
@@ -290,6 +301,7 @@ Player_CheckExitCondition:
 	or -1
 	ret
 
+; hl' = time remaining
 ; ix = this
 ; iy = reader
 Player_ProcessDataBlock:
@@ -303,6 +315,7 @@ Player_ProcessDataBlock:
 	ret
 
 ; a = data type
+; hl' = time remaining
 ; ix = this
 ; iy = reader
 Player_ProcessDataBlockByType:
@@ -334,6 +347,7 @@ Player_SkipDataBlock:
 	call Reader_ReadDoubleWord_IY
 	jp MappedReader_Skip_IY
 
+; hl' = time remaining
 ; ix = this
 ; iy = reader
 Player_EndOfSoundData: PROC
@@ -349,71 +363,58 @@ Player_EndOfSoundData: PROC
 	dec (ix + Player.loops)
 	ret nz
 NoLoop:
-	pop af  ; break out of ProcessNext
 	ld (ix + Player.ended),-1
-	ret
+	Player_Yield_M
 	ENDP
 
+; hl' = time remaining
 ; ix = this
 ; iy = reader
 Player_Wait1Samples:
-	ld de,1
-	Player_WAIT
+	Player_Wait_M 1
 Player_Wait2Samples:
-	ld de,2
-	Player_WAIT
+	Player_Wait_M 2
 Player_Wait3Samples:
-	ld de,3
-	Player_WAIT
+	Player_Wait_M 3
 Player_Wait4Samples:
-	ld de,4
-	Player_WAIT
+	Player_Wait_M 4
 Player_Wait5Samples:
-	ld de,5
-	Player_WAIT
+	Player_Wait_M 5
 Player_Wait6Samples:
-	ld de,6
-	Player_WAIT
+	Player_Wait_M 6
 Player_Wait7Samples:
-	ld de,7
-	Player_WAIT
+	Player_Wait_M 7
 Player_Wait8Samples:
-	ld de,8
-	Player_WAIT
+	Player_Wait_M 8
 Player_Wait9Samples:
-	ld de,9
-	Player_WAIT
+	Player_Wait_M 9
 Player_Wait10Samples:
-	ld de,10
-	Player_WAIT
+	Player_Wait_M 10
 Player_Wait11Samples:
-	ld de,11
-	Player_WAIT
+	Player_Wait_M 11
 Player_Wait12Samples:
-	ld de,12
-	Player_WAIT
+	Player_Wait_M 12
 Player_Wait13Samples:
-	ld de,13
-	Player_WAIT
+	Player_Wait_M 13
 Player_Wait14Samples:
-	ld de,14
-	Player_WAIT
+	Player_Wait_M 14
 Player_Wait15Samples:
-	ld de,15
-	Player_WAIT
+	Player_Wait_M 15
 Player_Wait16Samples:
-	ld de,16
-	Player_WAIT
+	Player_Wait_M 16
 Player_Wait735Samples:
-	ld de,735
-	Player_WAIT
+	Player_Wait_M 735
 Player_Wait882Samples:
-	ld de,882
-	Player_WAIT
+	Player_Wait_M 882
 Player_WaitNSamples:
+	exx
 	call Reader_ReadWord_IY
-	Player_WAIT
+	add hl,de
+	exx
+	ret nc
+	Player_Yield_M
 
+; hl' = time remaining
 ; ix = this
 ; iy = reader
 Player_Skip12:
