@@ -5,21 +5,7 @@
 ;
 Player: MACRO
 	this:
-	; hl' = time remaining
-	; ix = this
-	; iy = reader
-	ProcessNext:
-		push ix  ; return to ProcessNext
-		call Reader_Read_IY
-		ld l,a
-		ld h,0
-	commandsJumpTable: equ $ - 1
-		ld a,(hl)
-		inc h
-		ld h,(hl)
-		ld l,a
-		jp hl
-
+	scanner: Scanner
 	vgm:
 		dw 0
 	timer:
@@ -40,7 +26,7 @@ Player: MACRO
 		sbc hl,de
 		exx
 		ld ix,this
-		call c,ProcessNext
+		call c,scanner.Process
 		exx
 		ld (time),hl
 		ret
@@ -70,7 +56,8 @@ Player_Construct:
 	ld (ix + Player.vgm),e
 	ld (ix + Player.vgm + 1),d
 	ld (ix + Player.loops),a
-	ld (ix + Player.commandsJumpTable),Player_commandsJumpTable >> 8
+	ld hl,Player_commandsJumpTable
+	call Scanner_Construct
 	push ix
 	ld e,ixl
 	ld d,ixh
@@ -254,15 +241,7 @@ Player_Wait_M: MACRO ?time
 	add hl,de
 	exx
 	ret nc
-	Player_Yield_M
-	ENDM
-
-; hl' = time remaining
-; ix = this
-; iy = reader
-Player_Yield_M: MACRO
-	pop af  ; break out of ProcessNext
-	ret
+	Scanner_Yield_M
 	ENDM
 
 ; ix = this
@@ -355,7 +334,7 @@ Player_EndOfSoundData: PROC
 	ret nz
 NoLoop:
 	ld (ix + Player.ended),-1
-	Player_Yield_M
+	Scanner_Yield_M
 	ENDP
 
 ; hl' = time remaining
@@ -403,7 +382,7 @@ Player_WaitNSamples:
 	add hl,de
 	exx
 	ret nc
-	Player_Yield_M
+	Scanner_Yield_M
 
 ; hl' = time remaining
 ; ix = this
