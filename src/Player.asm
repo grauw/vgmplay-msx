@@ -3,8 +3,6 @@
 ;
 ; Time and wait codes are in units of 44100 Hz samples
 ;
-Player_SAMPLES_60TH: equ 735
-Player_SAMPLES_50TH: equ 882
 Player_SAMPLES_CAP: equ 1 << 10  ; 1024
 
 Player: MACRO
@@ -413,10 +411,10 @@ Player_Wait16Samples:
 	ld de,16
 	Player_WAIT
 Player_Wait735Samples:
-	ld de,Player_SAMPLES_60TH
+	ld de,735
 	Player_WAIT
 Player_Wait882Samples:
-	ld de,Player_SAMPLES_50TH
+	ld de,882
 	Player_WAIT
 Player_WaitNSamples:
 	call Reader_ReadWord_IY
