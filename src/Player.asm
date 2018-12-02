@@ -16,6 +16,8 @@ Player: MACRO
 		db 0
 	ended:
 		db 0
+	timerFactory:
+		TimerFactory
 
 	; de = time passed
 	; ix = this
@@ -42,9 +44,6 @@ Player: MACRO
 		out (VDP_PORT_3),a
 		ret
 		ENDIF
-
-	timerFactory:
-		TimerFactory
 	_size:
 	ENDM
 
