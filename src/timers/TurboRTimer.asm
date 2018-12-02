@@ -16,7 +16,7 @@ TurboRTimer: MACRO
 	Update: PROC
 		ld b,(ix + TurboRTimer.lastTimer)
 	Wait:
-		call TurboRTimer_GetTimerValue
+		TurboRTimer_GetTimerValue_M
 		cp b
 		jr z,Wait
 		ld (ix + TurboRTimer.lastTimer),a
@@ -55,18 +55,29 @@ TurboRTimer_Stop: equ System_Return
 
 ; ix = this
 TurboRTimer_Reset:
-	call TurboRTimer_GetTimerValue
+	TurboRTimer_GetTimerValue_M
 	ld (ix + TurboRTimer.lastTimer),a
 	ret
 
 ; ix = this
 ; a <- 3995 Hz timer value
-TurboRTimer_GetTimerValue:
-	call System_GetHighResTimerValue
+TurboRTimer_GetTimerValue_M: MACRO
+	in a,(0E7H)
+	ld h,a
+	in a,(0E6H)
+	ld l,a
+	in a,(0E7H)
+	cp h
+	jr z,NoLapse
+	add a,a
+	add a,a
+	jr Continue
+NoLapse:
 	add hl,hl
 	add hl,hl
 	ld a,h
-	ret
+Continue:
+	ENDM
 
 ; f <- c: found
 TurboRTimer_Detect:
