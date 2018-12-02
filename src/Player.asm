@@ -5,6 +5,21 @@
 ;
 Player: MACRO
 	this:
+	; hl' = time remaining
+	; ix = this
+	; iy = reader
+	ProcessNext:
+		push ix  ; return to ProcessNext
+		call Reader_Read_IY
+		ld l,a
+		ld h,0
+	commandsJumpTable: equ $ - 1
+		ld a,(hl)
+		inc h
+		ld h,(hl)
+		ld l,a
+		jp hl
+
 	vgm:
 		dw 0
 	timer:
@@ -15,22 +30,6 @@ Player: MACRO
 		db 0
 	ended:
 		db 0
-
-	; hl' = time remaining
-	; ix = this
-	; iy = reader
-	ProcessNext:
-		ld hl,ProcessNext  ; return to ProcessNext
-		push hl
-		call Reader_Read_IY
-		ld l,a
-		ld h,0
-	commandsJumpTable: equ $ - 1
-		ld a,(hl)
-		inc h
-		ld h,(hl)
-		ld l,a
-		jp hl
 
 	; de = time passed
 	; ix = this
