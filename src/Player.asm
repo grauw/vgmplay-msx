@@ -5,16 +5,6 @@
 ;
 Player: MACRO
 	this:
-
-	; hl' = time remaining
-	; ix = this
-	; iy = reader
-	Yield:
-		exx
-		ld (time),hl
-		pop af  ; break out of ProcessNext
-		ret
-
 	vgm:
 		dw 0
 	timer:
@@ -49,11 +39,12 @@ Player: MACRO
 	time: equ $ - 2
 		and a
 		sbc hl,de
-		ld (time),hl
-		ret nc
 		exx
 		ld ix,this
-		jr ProcessNext
+		call c,ProcessNext
+		exx
+		ld (time),hl
+		ret
 
 	; de = time passed
 	; ix = this
@@ -271,7 +262,8 @@ Player_Wait_M: MACRO ?time
 ; ix = this
 ; iy = reader
 Player_Yield_M: MACRO
-	jp ix
+	pop af  ; break out of ProcessNext
+	ret
 	ENDM
 
 ; ix = this
