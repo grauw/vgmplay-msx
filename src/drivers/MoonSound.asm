@@ -531,19 +531,7 @@ MoonSound_Reset:
 ; f <- c: Found
 MoonSound_Detect:
 	call MoonSound_ReadRegisterStatus
-	and 11111101B  ; LD could be set if NEW2 is on
-	ret nz
-	ld de,00000011B << 8 | MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
-	call MoonSound_ReadRegisterStatus
-	push af
-	ld de,00000000B << 8 | MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
-	pop af
-	xor 00000010B
-	ret nz
-	call MoonSound_ReadRegisterStatus
-	and a
+	and 11111101B  ; sometimes LD is set
 	ret nz
 	scf
 	ret
