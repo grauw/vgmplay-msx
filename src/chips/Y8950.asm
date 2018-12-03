@@ -14,12 +14,16 @@ Y8950: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; b = bit 7: dual chip number
 	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC
-		jp Player_SkipDataBlock
+		bit 7,b
+		jp z,Player_SkipDataBlock
 	process: equ $ - 2
+		jp Player_SkipDataBlock
+	processDual: equ $ - 2
 		ENDP
 	ENDM
 

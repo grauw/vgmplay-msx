@@ -73,10 +73,13 @@ YM2612: MACRO
 		jr BufferPCMData
 		ENDP
 
+	; b = bit 7: dual chip number
 	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessPCMDataBlock:
+		bit 7,b
+		jp nz,Player_SkipDataBlock
 		push de
 		push hl
 		call MappedReader_GetPosition_IY

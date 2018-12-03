@@ -310,6 +310,7 @@ SelectType:
 ; ix = this
 ; iy = reader
 ; a <- data type
+; b <- bit 7: dual chip number
 ; dehl <- size
 Player_ReadDataBlockHeader:
 	call Reader_Read_IY
@@ -318,6 +319,8 @@ Player_ReadDataBlockHeader:
 	call Reader_Read_IY
 	push af
 	call Reader_ReadDoubleWord_IY
+	ld b,d
+	res 7,d
 	pop af
 	ret
 
