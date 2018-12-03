@@ -2,13 +2,21 @@
 ; VGM Y8950 chip
 ;
 Y8950: MACRO
-	this:
 	super: Chip Y8950_name, Y8950_Connect
 
 	; hl' = time remaining
 	; ix = player
 	; iy = reader
 	ProcessCommand: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
+
+	; hl' = time remaining
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
 		call Reader_ReadWord_IY
 		jp System_Return
 	writeRegister: equ $ - 2
@@ -39,7 +47,7 @@ Y8950_Destruct: equ Chip_Destruct
 
 ; iy = drivers
 ; ix = this
-Y8950_Connect:
+Y8950_Connect: PROC
 	call Y8950_TryCreate
 	ret nc
 	call Chip_SetDriver
@@ -49,10 +57,26 @@ Y8950_Connect:
 	ld l,c
 	ld h,b
 	add hl,de
-	ret c
+	jr c,TryDualChip
 	ld (ix + Y8950.ProcessDataBlock.process),l
 	ld (ix + Y8950.ProcessDataBlock.process + 1),h
+TryDualChip:
+	call Chip_IsDualChip
+	ret z
+	call Y8950_TryCreate
+	ret nc
+	call Chip_SetDriver2
+	add hl,de
+	ld (ix + Y8950.ProcessCommandDual.writeRegister),l
+	ld (ix + Y8950.ProcessCommandDual.writeRegister + 1),h
+	ld l,c
+	ld h,b
+	add hl,de
+	ret c
+	ld (ix + Y8950.ProcessDataBlock.processDual),l
+	ld (ix + Y8950.ProcessDataBlock.processDual + 1),h
 	ret
+	ENDP
 
 ; iy = drivers
 ; ix = this
