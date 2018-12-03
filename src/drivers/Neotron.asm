@@ -119,17 +119,27 @@ Neotron: MACRO
 		jr SafeWriteRegister
 		ENDP
 
+	; dehl = size
 	; iy = reader
 	ProcessDataBlockA:
+		push de
+		push hl
 		ld de,0BFH << 8 | 0
 		call SafeWriteRegister2  ; stop ADPCM-A
+		pop hl
+		pop de
 		ld ix,(memoryA)
 		jp NeotronMemory_ProcessDataBlock
 
+	; dehl = size
 	; iy = reader
 	ProcessDataBlockB:
+		push de
+		push hl
 		ld de,01H << 8 | Neotron_ADPCM_CONTROL
 		call SafeWriteRegister  ; stop ADPCM-B
+		pop hl
+		pop de
 		ld ix,(memoryB)
 		jp NeotronMemory_ProcessDataBlock
 	ENDM

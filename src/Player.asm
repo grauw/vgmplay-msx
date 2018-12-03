@@ -164,13 +164,7 @@ Loop:
 	call Player_ReadNonChipCommand
 	cp 67H
 	ret nz
-	call Reader_Read_IY
-	cp 66H
-	jp nz,Player_UnsupportedCommand
-	call Reader_Read_IY
-	push ix
-	call Player_LoadDataBlockByType
-	pop ix
+	call Player_LoadDataBlock
 	jr Loop
 	ENDP
 
@@ -273,29 +267,31 @@ Player_CheckExitCondition:
 ; hl' = time remaining
 ; ix = this
 ; iy = reader
-Player_ProcessDataBlock:
-	call Reader_Read_IY
-	cp 66H
-	jp nz,Player_UnsupportedCommand
-	call Reader_Read_IY
+Player_ProcessDataBlock: PROC
+	exx
+	push hl
 	push ix
-	call Player_ProcessDataBlockByType
+	call Player_ReadDataBlockHeader
+	call SelectType
 	pop ix
+	pop hl
+	exx
 	ret
-
-; a = data type
-; hl' = time remaining
-; ix = this
-; iy = reader
-Player_ProcessDataBlockByType:
+SelectType:
 	cp 00H
 	jp z,YM2612_instance.ProcessPCMDataBlock
 	jp Player_SkipDataBlock
+	ENDP
 
-; a = data type
 ; ix = this
 ; iy = reader
-Player_LoadDataBlockByType:
+Player_LoadDataBlock: PROC
+	push ix
+	call Player_ReadDataBlockHeader
+	call SelectType
+	pop ix
+	ret
+SelectType:
 	cp 81H
 	jp z,YM2608_instance.ProcessDataBlock
 	cp 82H
@@ -309,12 +305,27 @@ Player_LoadDataBlockByType:
 	cp 88H
 	jp z,Y8950_instance.ProcessDataBlock
 	jp Player_SkipDataBlock
+	ENDP
 
 ; ix = this
 ; iy = reader
-Player_SkipDataBlock:
+; a <- data type
+; dehl <- size
+Player_ReadDataBlockHeader:
+	call Reader_Read_IY
+	cp 66H
+	jp nz,Player_UnsupportedCommand
+	call Reader_Read_IY
+	push af
 	call Reader_ReadDoubleWord_IY
-	jp MappedReader_Skip_IY
+	pop af
+	ret
+
+; dehl = size
+; ix = this
+; iy = reader
+Player_SkipDataBlock: equ MappedReader_Skip_IY
+;	jp MappedReader_Skip_IY
 
 ; hl' = time remaining
 ; ix = this

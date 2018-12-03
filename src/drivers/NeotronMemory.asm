@@ -91,10 +91,10 @@ NeotronMemory_Reset:
 	pop ix
 	ret
 
+; dehl = size
 ; ix = this
 ; iy = reader
 NeotronMemory_ProcessDataBlock: PROC
-	call Reader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
 	ld d,e                         ; block size [23:16]

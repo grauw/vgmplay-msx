@@ -210,6 +210,7 @@ OPNA: MACRO
 		ret
 		ENDP
 
+	; dehl = size
 	; iy = reader
 	ProcessDataBlock:
 		ld ix,this
@@ -344,10 +345,10 @@ OPNA_Reset:
 	call OPNA_FillRegisterPairs  ; FM panpots
 	ret
 
+; dehl = size
 ; ix = this
 ; iy = reader
 OPNA_ProcessDataBlock: PROC
-	call Reader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
 	call Reader_ReadDoubleWord_IY  ; total rom size

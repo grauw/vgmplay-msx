@@ -114,11 +114,13 @@ MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 		jp WriteRegisterWave
 		ENDP
 
+	; dehl = size
 	; iy = reader
 	ProcessROMDataBlock:
 		ld ix,this
 		jp MoonSound_ProcessROMDataBlock
 
+	; dehl = size
 	; iy = reader
 	ProcessRAMDataBlock:
 		ld ix,this
@@ -223,10 +225,10 @@ MoonSound_ReadRegisterStatus:
 	ld bc,MoonSound.ReadRegisterStatus
 	jp Utils_JumpIXOffsetBC
 
+; dehl = size
 ; ix = this
 ; iy = reader
 MoonSound_ProcessROMDataBlock:
-	call Reader_ReadDoubleWord_IY  ; block size
 	ld a,d
 	and a
 	call nz,System_ThrowException
@@ -248,10 +250,10 @@ MoonSound_ProcessROMDataBlock:
 	call MoonSound_FixUpWaveHeaders
 	ret
 
+; dehl = size
 ; ix = this
 ; iy = reader
 MoonSound_ProcessRAMDataBlock:
-	call Reader_ReadDoubleWord_IY  ; block size
 	ld a,d
 	and a
 	call nz,System_ThrowException

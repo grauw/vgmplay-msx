@@ -73,10 +73,10 @@ YM2612: MACRO
 		jr BufferPCMData
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessPCMDataBlock:
-		call Reader_ReadDoubleWord_IY
 		push de
 		push hl
 		call MappedReader_GetPosition_IY

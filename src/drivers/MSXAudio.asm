@@ -158,6 +158,7 @@ MSXAudio: MACRO
 		ret
 		ENDP
 
+	; dehl = size
 	; iy = reader
 	ProcessDataBlock:
 		ld ix,this
@@ -239,10 +240,10 @@ MSXAudio_Reset:
 	call MSXAudio_FillRegisters
 	ret
 
+; dehl = size
 ; ix = this
 ; iy = reader
 MSXAudio_ProcessDataBlock: PROC
-	call Reader_ReadDoubleWord_IY  ; block size
 	push de
 	push hl
 	call Reader_ReadDoubleWord_IY  ; total rom size

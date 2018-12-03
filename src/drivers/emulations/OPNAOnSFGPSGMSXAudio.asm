@@ -46,6 +46,7 @@ OPNAOnSFGPSGMSXAudio: MACRO
 		ret
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC

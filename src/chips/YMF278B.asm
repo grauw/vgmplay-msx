@@ -30,6 +30,7 @@ YMF278B: MACRO
 		ENDP
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessROMDataBlock: PROC
@@ -37,6 +38,7 @@ YMF278B: MACRO
 	process: equ $ - 2
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessRAMDataBlock: PROC

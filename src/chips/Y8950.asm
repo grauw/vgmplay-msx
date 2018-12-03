@@ -14,7 +14,7 @@ Y8950: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
-	; hl' = time remaining
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC

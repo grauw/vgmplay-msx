@@ -23,6 +23,7 @@ YM2608: MACRO
 	writeRegister: equ $ - 2
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessDataBlock: PROC

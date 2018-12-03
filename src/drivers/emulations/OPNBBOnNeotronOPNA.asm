@@ -33,6 +33,7 @@ OPNBBOnNeotronOPNA: MACRO
 	safeWriteFMRegister: equ $ - 2
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessDataBlockA: PROC
@@ -40,6 +41,7 @@ OPNBBOnNeotronOPNA: MACRO
 	process: equ $ - 2
 		ENDP
 
+	; dehl = size
 	; ix = player
 	; iy = reader
 	ProcessDataBlockB: PROC
