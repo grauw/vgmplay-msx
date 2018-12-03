@@ -39,38 +39,40 @@ Y8950_Destruct: equ Chip_Destruct
 
 ; iy = drivers
 ; ix = this
-Y8950_Connect: PROC
-	call Drivers_TryCreateMSXAudio_IY
-	jr nc,TryOPL3
+Y8950_Connect:
+	call Y8950_TryCreate
+	ret nc
 	call Chip_SetDriver
-	ld hl,MSXAudio.SafeWriteRegister
 	add hl,de
 	ld (ix + Y8950.ProcessCommand.writeRegister),l
 	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
-	ld hl,MSXAudio.ProcessDataBlock
+	ld l,c
+	ld h,b
 	add hl,de
+	ret c
 	ld (ix + Y8950.ProcessDataBlock.process),l
 	ld (ix + Y8950.ProcessDataBlock.process + 1),h
 	ret
-TryOPL3:
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- safe write register offset
+; bc <- process data block offset or -1
+; f <- c: succeeded
+Y8950_TryCreate:
+	call Drivers_TryCreateMSXAudio_IY
+	ld hl,MSXAudio.SafeWriteRegister
+	ld bc,MSXAudio.ProcessDataBlock
+	ret c
 	call Drivers_TryCreateOPL3_IY
-	jr nc,TryMoonSound
-	call Chip_SetDriver
 	ld hl,OPL3.SafeWriteRegister
-	add hl,de
-	ld (ix + Y8950.ProcessCommand.writeRegister),l
-	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
-	ret
-TryMoonSound:
+	ld bc,-1
+	ret c
 	call Drivers_TryCreateMoonSound_IY
-	ret nc
-	call Chip_SetDriver
 	ld hl,MoonSound.SafeWriteRegister
-	add hl,de
-	ld (ix + Y8950.ProcessCommand.writeRegister),l
-	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
+	ld bc,-1
 	ret
-	ENDP
 
 ;
 	SECTION RAM
