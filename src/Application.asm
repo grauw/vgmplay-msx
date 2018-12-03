@@ -180,7 +180,6 @@ Application_GetPlayerFactory:
 ; ix = this
 Application_EnterMainLoop:
 	call Application_CheckUsageInstructions
-	call Application_CheckOCM
 	call Application_LoadFile
 	call Application_ConstructVGM
 	call Application_ConstructPlayer
@@ -398,64 +397,6 @@ Application_ExitBlackout:
 	call VDP_DisableBlank
 	ret
 
-; ix = this
-Application_CheckOCM: PROC
-	push ix
-	call Application_GetCLI
-	ld a,(ix + CLI.ocmWorkaround)
-	pop ix
-	and a
-	ret z
-ActivateWorkaround:
-	call ClearBottomLines
-	ld a,(VDP_MIRROR_8 + 9)
-	and 11111101B
-	or 10000000B
-	ld (VDP_MIRROR_8 + 9),a
-	ld b,9
-	call VDP_SetRegister
-	ret
-ClearBottomLines:
-	call VDP_GetModeFlags
-	cp VDP_MODE_GRAPHIC1
-	jr z,Graphic1
-	cp VDP_MODE_TEXT1
-	jr z,Text1
-	cp VDP_MODE_TEXT2
-	jr z,Text2
-	ret
-Graphic1:
-	ld a,0
-	ld hl,(T32NAM)
-	ld de,24 * 32
-	add hl,de
-	call VDP_SetWriteAddress
-	ld a,0
-	ld bc,3 * 32
-	call VDP_Fill
-	ret
-Text1:
-	ld a,0
-	ld hl,(TXTNAM)
-	ld de,24 * 40
-	add hl,de
-	call VDP_SetWriteAddress
-	ld a,0
-	ld bc,1024 - (24 * 40)  ; table address wraps at offset 1024
-	call VDP_Fill
-	ret
-Text2:
-	ld a,0
-	ld hl,(TXTNAM)
-	ld de,24 * 80
-	add hl,de
-	call VDP_SetWriteAddress
-	ld a,0
-	ld bc,3 * 80
-	call VDP_Fill
-	ret
-	ENDP
-
 ; Check if the stack is well above the heap
 Application_CheckStack:
 	ld hl,-(HEAP + HEAP_SIZE + STACK_SIZE)
@@ -507,5 +448,4 @@ Application_usageInstructions:
 	db 13,10
 	db "Options:",13,10
 	db "  /l  Number of playback loops. Default: 2.",13,10
-	db "  /b  Enter blackout mode during playback.",13,10
-	db "  /o  Activate 1chipMSX timing workaround.",13,10,0
+	db "  /b  Enter blackout mode during playback.",13,10,0

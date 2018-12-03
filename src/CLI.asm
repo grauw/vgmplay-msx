@@ -10,8 +10,6 @@ CLI: MACRO
 		db 2
 	blackout:
 		db 0
-	ocmWorkaround:
-		db 0
 	fileInfoBlock:
 		FileInfoBlock
 	_size:
@@ -88,8 +86,6 @@ CLI_ParseOption: PROC
 	jr z,OptionLoops
 	cp "B"
 	jr z,OptionBlackout
-	cp "O"
-	jr z,OptionOCMWorkaround
 	ld hl,CLI_unknownOptionError
 	call System_ThrowExceptionWithMessage
 OptionLoops:
@@ -99,10 +95,6 @@ OptionLoops:
 	jr Next
 OptionBlackout:
 	ld (ix + CLI.blackout),-1
-	inc de
-	jr Next
-OptionOCMWorkaround:
-	ld (ix + CLI.ocmWorkaround),-1
 	inc de
 	jr Next
 Next:

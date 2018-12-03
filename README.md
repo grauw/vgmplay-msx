@@ -108,11 +108,6 @@ Options:
     This setting makes the screen go black during playback. For machines with a
     lot of VDP interference on the audio output, this may reduce the amount of
     interference.
-    
-  * `/o` Activate 1chipMSX timing workaround.
-    
-    Due to a 1chipMSX bug, the timing is incorrect. If music plays too slowly,
-    use this option to activate the workaround.
 
 To configure Multi Mente to play VGM files, add the following lines to
 MMRET.DAT:
