@@ -405,21 +405,7 @@ Application_CheckOCM: PROC
 	ld a,(ix + CLI.ocmWorkaround)
 	pop ix
 	and a
-	jr nz,ActivateWorkaround
-	in a,(40H)
-	push af
-	ld a,0D4H
-	out (40H),a
-	in a,(40H)
-	cp ~0D4H
-	jr nz,Return
-	ld hl,Application_ocmWarning
-	call System_Print
-Return:
-	pop af
-	cpl
-	out (40H),a
-	ret
+	ret z
 ActivateWorkaround:
 	call ClearBottomLines
 	ld a,(VDP_MIRROR_8 + 9)
@@ -515,11 +501,6 @@ Application_playing:
 
 Application_insufficientTPAError:
 	db "Insufficient TPA space.",13,10,0
-
-Application_ocmWarning:
-	db "Note: due to a 1chipMSX bug, the timing is incorrect. If music plays "
-	db "too slowly, use the /o command line option to activate the "
-	db "workaround.",13,10,10,0
 
 Application_usageInstructions:
 	db "Usage: vgmplay [options] <file.vgm>",13,10
