@@ -21,7 +21,7 @@ Franky_Construct:
 	call Driver_Construct
 	call Franky_Detect
 	ret nc
-	ld a,0FFH
+	ld a,0
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset
 	ld de,Franky_FREQUENCY >> 16
