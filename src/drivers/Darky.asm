@@ -1,8 +1,11 @@
 ;
 ; Supersoniqs Darky AY8930 EPSG x2
 ;
-Darky_BASE_PORT_1: equ 44H
-Darky_BASE_PORT_2: equ 4CH
+Darky_SWITCHED_IO_PORT: equ 40H
+Darky_CPLD_CONTROL_PORT: equ 41H
+Darky_MICROCONTROLLER_PORT: equ 42H
+Darky_EPSG_BASE_PORT_1: equ 44H
+Darky_EPSG_BASE_PORT_2: equ 4CH
 Darky_ADDRESS: equ 00H
 Darky_DATA: equ 01H
 Darky_DEVICE_ID: equ 0AAH
@@ -18,7 +21,7 @@ Darky: MACRO ?base, ?name = Darky_name
 	; a = register
 	; d = value
 	WriteRegister:
-		ld bc,Darky_DEVICE_ID << 8 | 40H
+		ld bc,Darky_DEVICE_ID << 8 | Darky_SWITCHED_IO_PORT
 		in e,(c)
 		out (c),b
 		out (?base + Darky_ADDRESS),a
@@ -52,7 +55,7 @@ Darky_Destruct:
 
 ; ix = this
 Darky_Enable:
-	ld bc,Darky_DEVICE_ID << 8 | 40H
+	ld bc,Darky_DEVICE_ID << 8 | Darky_SWITCHED_IO_PORT
 	in e,(c)
 	out (c),b
 	ld a,40H | 80H
@@ -66,7 +69,7 @@ Darky_Enable:
 
 ; ix = this
 Darky_Disable:
-	ld bc,Darky_DEVICE_ID << 8 | 40H
+	ld bc,Darky_DEVICE_ID << 8 | Darky_SWITCHED_IO_PORT
 	in e,(c)
 	out (c),b
 	ld a,40H | 80H
@@ -81,7 +84,7 @@ Darky_Disable:
 ; a = value
 ; ix = this
 Darky_WriteMicrocontrollerRegister:
-	out (42H),a
+	out (Darky_MICROCONTROLLER_PORT),a
 	ex (sp),ix  ; wait 7 µs
 	ex (sp),ix
 	ex (sp),ix
@@ -122,22 +125,22 @@ Darky_Reset:
 ; ix = this
 ; f <- c: found
 Darky_Detect: PROC
-	in a,(40H)
+	in a,(Darky_SWITCHED_IO_PORT)
 	cpl
 	push af
 	ld a,Darky_DEVICE_ID
-	out (40H),a
-	in a,(40H)
+	out (Darky_SWITCHED_IO_PORT),a
+	in a,(Darky_SWITCHED_IO_PORT)
 	cpl
 	cp Darky_DEVICE_ID
 	jr z,Found
 	pop af
-	out (40H),a
+	out (Darky_SWITCHED_IO_PORT),a
 	and a
 	ret
 Found:
 	pop af
-	out (40H),a
+	out (Darky_SWITCHED_IO_PORT),a
 	scf
 	ret
 	ENDP
@@ -148,7 +151,7 @@ Darky_name:
 
 	SECTION RAM
 
-Darky_instance: Darky Darky_BASE_PORT_1
-Darky_instance2: Darky Darky_BASE_PORT_2
+Darky_instance: Darky Darky_EPSG_BASE_PORT_1
+Darky_instance2: Darky Darky_EPSG_BASE_PORT_2
 
 	ENDS
