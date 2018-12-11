@@ -61,6 +61,12 @@ AY8910_Connect:
 ; hl <- safe write register offset
 ; f <- c: succeeded
 AY8910_TryCreate:
+	call Drivers_TryCreateDarky_IY
+	ld hl,Darky.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateDarky2_IY
+	ld hl,Darky.SafeWriteRegister
+	ret c
 	call Drivers_TryCreatePSG_IY
 	ld hl,PSG.SafeWriteRegister
 	ret c

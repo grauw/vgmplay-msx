@@ -4,6 +4,7 @@
 	INCLUDE "Driver.asm"
 	INCLUDE "PSG.asm"
 	INCLUDE "MFRPSG.asm"
+	INCLUDE "Darky.asm"
 	INCLUDE "SFG.asm"
 	INCLUDE "MSXMusic.asm"
 	INCLUDE "MSXAudio.asm"
@@ -32,6 +33,10 @@ Drivers: MACRO
 		StaticFactory PSG_instance, PSG_Construct, PSG_Destruct
 	mfrPSG:
 		StaticFactory MFRPSG_instance, MFRPSG_Construct, MFRPSG_Destruct
+	darky:
+		StaticFactory Darky_instance, Darky_Construct, Darky_Destruct
+	darky2:
+		StaticFactory Darky_instance2, Darky_Construct, Darky_Destruct
 	sfg:
 		StaticFactory SFG_instance, SFG_Construct, SFG_Destruct
 	msxMusic:
@@ -115,6 +120,20 @@ Drivers_TryCreatePSG_IY:
 ; f <- c: succeeded
 Drivers_TryCreateMFRPSG_IY:
 	ld de,Drivers.mfrPSG
+	jr Drivers_TryCreate_IY
+
+; iy = this
+; de <- Darky driver
+; f <- c: succeeded
+Drivers_TryCreateDarky_IY:
+	ld de,Drivers.darky
+	jr Drivers_TryCreate_IY
+
+; iy = this
+; de <- Darky driver 2
+; f <- c: succeeded
+Drivers_TryCreateDarky2_IY:
+	ld de,Drivers.darky2
 	jr Drivers_TryCreate_IY
 
 ; iy = this
