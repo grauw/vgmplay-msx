@@ -22,6 +22,7 @@ Darky: MACRO ?base, ?name = Darky_name
 	; d = value
 	WriteRegister:
 		ld bc,Darky_DEVICE_ID << 8 | Darky_SWITCHED_IO_PORT
+	deviceID: equ $ - 1
 		in e,(c)
 		out (c),b
 		out (?base + Darky_ADDRESS),a
@@ -39,6 +40,7 @@ Darky_Construct:
 	call Driver_Construct
 	call Darky_Detect
 	ret nc
+	ld (ix + Darky.deviceID),a
 	call Darky_Enable
 	call Darky_Reset
 	ld de,Darky_FREQUENCY >> 16
@@ -123,20 +125,21 @@ Darky_Reset:
 	ret
 
 ; ix = this
+; a <- device ID
 ; f <- c: found
 Darky_Detect:
 	ld bc,Darky_DEVICE_ID << 8 | Darky_SWITCHED_IO_PORT
-	in e,(c)
+	in a,(c)
+	cpl
+	ld e,a
 	out (c),b
 	in a,(c)
 	cpl
 	cp Darky_DEVICE_ID
-	ld a,e
-	cpl
-	out (c),a
+	out (c),e
 	scf
 	ret nz
-	and a
+	xor a
 	ret
 
 ;
