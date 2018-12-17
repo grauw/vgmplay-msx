@@ -124,26 +124,20 @@ Darky_Reset:
 
 ; ix = this
 ; f <- c: found
-Darky_Detect: PROC
-	in a,(Darky_SWITCHED_IO_PORT)
-	cpl
-	push af
-	ld a,Darky_DEVICE_ID
-	out (Darky_SWITCHED_IO_PORT),a
-	in a,(Darky_SWITCHED_IO_PORT)
+Darky_Detect:
+	ld bc,Darky_DEVICE_ID << 8 | Darky_SWITCHED_IO_PORT
+	in e,(c)
+	out (c),b
+	in a,(c)
 	cpl
 	cp Darky_DEVICE_ID
-	jr z,Found
-	pop af
-	out (Darky_SWITCHED_IO_PORT),a
+	ld a,e
+	cpl
+	out (c),a
+	scf
+	ret nz
 	and a
 	ret
-Found:
-	pop af
-	out (Darky_SWITCHED_IO_PORT),a
-	scf
-	ret
-	ENDP
 
 ;
 Darky_name:
