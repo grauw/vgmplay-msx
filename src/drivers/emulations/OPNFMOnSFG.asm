@@ -442,6 +442,9 @@ OPNFMOnSFG_PrintInfoImpl:
 OPNFMOnSFG_TryCreateSFG:
 	call Drivers_TryCreateSFG_IY
 	ld hl,SFG.WriteRegister
+	ret c
+	call Drivers_TryCreateSFG2_IY
+	ld hl,SFG.WriteRegister
 	ret
 
 ;

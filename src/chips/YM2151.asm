@@ -12,6 +12,15 @@ YM2151: MACRO
 		jp System_Return
 	writeRegister: equ $ - 2
 		ENDP
+
+	; hl' = time remaining
+	; ix = player
+	; iy = reader
+	ProcessCommandDual: PROC
+		call Reader_ReadWord_IY
+		jp System_Return
+	writeRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -33,6 +42,14 @@ YM2151_Connect:
 	add hl,de
 	ld (ix + YM2151.ProcessCommand.writeRegister),l
 	ld (ix + YM2151.ProcessCommand.writeRegister + 1),h
+	call Chip_IsDualChip
+	ret z
+	call YM2151_TryCreate
+	ret nc
+	call Chip_SetDriver2
+	add hl,de
+	ld (ix + YM2151.ProcessCommandDual.writeRegister),l
+	ld (ix + YM2151.ProcessCommandDual.writeRegister + 1),h
 	ret
 
 ; iy = drivers
@@ -42,6 +59,9 @@ YM2151_Connect:
 ; f <- c: succeeded
 YM2151_TryCreate:
 	call Drivers_TryCreateSFG_IY
+	ld hl,SFG.SafeWriteRegister
+	ret c
+	call Drivers_TryCreateSFG2_IY
 	ld hl,SFG.SafeWriteRegister
 	ret
 

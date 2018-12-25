@@ -39,6 +39,8 @@ Drivers: MACRO
 		StaticFactory Darky_instance2, Darky_Construct, Darky_Destruct
 	sfg:
 		StaticFactory SFG_instance, SFG_Construct, SFG_Destruct
+	sfg2:
+		StaticFactory SFG_instance2, SFG_Construct, SFG_Destruct
 	msxMusic:
 		StaticFactory MSXMusic_instance, MSXMusic_Construct, MSXMusic_Destruct
 	msxAudio:
@@ -110,6 +112,21 @@ Loop:
 
 ; de = driver factory offset
 ; iy = this
+; ix <- driver
+; f <- c: succeeded
+Drivers_TryGet_IY:
+	push iy
+	pop ix
+	add ix,de
+	call StaticFactory_IsConstructed
+	scf
+	ccf
+	ret z
+	call StaticFactory_GetInstance
+	jp Driver_IsFound
+
+; de = driver factory offset
+; iy = this
 ; de <- driver
 ; f <- c: succeeded
 Drivers_TryCreate_IY:
@@ -156,7 +173,21 @@ Drivers_TryCreateDarky2_IY:
 ; de <- SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateSFG_IY:
+	ld a,-1
 	ld de,Drivers.sfg
+	jr Drivers_TryCreate_IY_Trampoline
+
+; iy = this
+; de <- SFG driver 2
+; f <- c: succeeded
+Drivers_TryCreateSFG2_IY:
+	ld de,Drivers.sfg
+	push ix
+	call Drivers_TryGet_IY
+	ld a,(ix + SFG.slot)
+	pop ix
+	ret nc
+	ld de,Drivers.sfg2
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this

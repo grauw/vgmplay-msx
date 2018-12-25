@@ -53,7 +53,7 @@ Supported sound chips
 
   * AY-3-8910 PSG / YM2149 SSG x2
     * Internal PSG, MegaFlashROM SCC+
-  * YM2151 OPM
+  * YM2151 OPM x2
     * Yamaha SFG
   * YM2413 OPLL
     * MSX-MUSIC, FM-PAC
