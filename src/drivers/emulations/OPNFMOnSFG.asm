@@ -271,11 +271,10 @@ OPNFMOnSFG: MACRO
 ; iy = drivers
 OPNFMOnSFG_Construct:
 	call Driver_Construct
-	call Drivers_TryCreateSFG_IY
+	call OPNFMOnSFG_TryCreateSFG
 	ret nc
 	ld (ix + OPNFMOnSFG.sfgDriver),e
 	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
-	ld hl,SFG.WriteRegister
 	add hl,de
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister),l
 	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister + 1),h
@@ -433,6 +432,16 @@ OPNFMOnSFG_PrintInfoImpl:
 	ld ixh,d
 	call Driver_PrintInfo
 	pop ix
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- write register offset
+; f <- c: succeeded
+OPNFMOnSFG_TryCreateSFG:
+	call Drivers_TryCreateSFG_IY
+	ld hl,SFG.WriteRegister
 	ret
 
 ;
