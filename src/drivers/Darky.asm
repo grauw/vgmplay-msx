@@ -138,7 +138,7 @@ Darky_Detect:
 	cp Darky_DEVICE_ID
 	out (c),e
 	scf
-	ret nz
+	ret z
 	xor a
 	ret
 
