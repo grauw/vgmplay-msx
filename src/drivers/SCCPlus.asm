@@ -182,52 +182,32 @@ SCCPlus_Detect:
 ; f <- c: found
 SCCPlus_MatchSlot: PROC
 	ex af,af'
-	ld h,80H
+	ld h,SCCPlus_BANK_SELECT >> 8
 	call Memory_GetSlot
-	push af
 	ex af,af'
-	ld h,80H
+	ld h,SCCPlus_BANK_SELECT >> 8
 	call Memory_SetSlot
-	ld a,(SCC_BANK_SELECT)
-	ld d,a
-	ld a,SCC_BANK
-	ld (SCC_BANK_SELECT),a
-	ld hl,SCC_REGISTER_BASE
-	ld e,(hl)
-	xor a
-	ld (hl),a
-	ld a,(hl)
-	or a
-	jr nz,NoSCC
-	dec a
-	ld (hl),a
-	ld a,(hl)
-	inc a
-	jr nz,NoSCC
-	ld a,(SCC_BANK_SELECT)
-	cp SCC_BANK
-	jr z,NoSCC
-CheckSCCPlus:
-	ld a,00H
-	ld (SCC_WAVEFORM + 3 * 20H),a
-	ld a,(SCC_PLUS_WAVEFORM5)
-	cp 00H
-	jr z,Found
-NoSCC:
-	ld (hl),e
-	ld a,d
-	ld (SCC_BANK_SELECT),a
-	pop af
-	ld h,80H
+	call Test
+	ex af,af'
+	ld h,SCCPlus_BANK_SELECT >> 8
 	call Memory_SetSlot
-	and a
+	ex af,af'
 	ret
-Found:
-	ld a,SCC_BANK_DEFAULT
-	ld (SCC_BANK_SELECT),a
-	pop af
-	ld h,80H
-	call Memory_SetSlot
+Test:
+	ld hl,SCCPlus_BANK_SELECT & 0E000H
+	call SCC_TestReadback
+	ret z   ; is RAM
+	ld a,SCCPlus_MODE_SCCPLUS
+	ld (SCCPlus_MODE),a
+	ld a,SCCPlus_BANK
+	ld (SCCPlus_BANK_SELECT),a
+	ld hl,SCCPlus_REGISTER_BASE
+	call SCC_TestReadback
+	ld a,SCCPlus_BANK_DEFAULT
+	ld (SCCPlus_BANK_SELECT),a
+	ld a,SCCPlus_MODE_SCC
+	ld (SCCPlus_MODE),a
+	ret nz  ; is not SCC+
 	scf
 	ret
 	ENDP
