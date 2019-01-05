@@ -20,8 +20,8 @@ OPN2OnTurboRPCM: MACRO
 
 	; e = register
 	; d = value
-	SafeWriteRegister2: equ System_Return
-	;	ret
+	SafeWriteRegister2:
+		ret
 	ENDM
 
 ; ix = this
