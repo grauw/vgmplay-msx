@@ -55,10 +55,7 @@ GD3_CheckVersion:
 	call Reader_Read_IY
 	cp 0
 	ret nz
-	call Reader_Read_IY
-	call Reader_Read_IY
-	call Reader_Read_IY
-	call Reader_Read_IY
+	call Reader_ReadDoubleWord_IY
 	xor a
 	ret
 
@@ -66,12 +63,8 @@ GD3_CheckVersion:
 ; iy = reader
 ; Modifies: af, de, hl
 GD3_PrintTag: PROC
-	push hl
-	call Reader_Read_IY
-	ld e,a
-	call Reader_Read_IY
-	ld d,a
-	pop hl
+	call Reader_ReadWord_IY
+	ld a,d
 	or e
 	ret z
 	call System_Print
@@ -79,10 +72,8 @@ GD3_PrintTag: PROC
 	call System_PrintCrLf
 	ret
 Loop:
-	call Reader_Read_IY
-	ld e,a
-	call Reader_Read_IY
-	ld d,a
+	call Reader_ReadWord_IY
+	ld a,d
 	or e
 	ret z
 SkipFirst:
