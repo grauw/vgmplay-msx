@@ -54,6 +54,7 @@ GD3_CheckVersion:
 	ret nz
 	call Reader_Read_IY
 	cp 0
+	ret nz
 	call Reader_Read_IY
 	call Reader_Read_IY
 	call Reader_Read_IY
