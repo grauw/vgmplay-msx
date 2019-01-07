@@ -245,6 +245,10 @@ Header_GetGD3Offset:
 
 ; ix = this
 Header_PrintInfo:
+	ld hl,Header_lengthLabel
+	call System_Print
+	call Header_PrintLength
+	call System_PrintCrLf
 	ld hl,Header_versionLabel
 	call System_Print
 	ld a,(ix + Header.version + 1)
@@ -255,6 +259,57 @@ Header_PrintInfo:
 	call System_PrintHexA
 	call System_PrintCrLf
 	ret
+
+; ix = this
+Header_PrintLength:
+	ld de,Header.totalSamples
+	call Utils_GetDoubleWordIXOffset
+	call Header_PrintTime
+	ld de,Header.loopSamples
+	call Utils_GetDoubleWordIXOffset
+	ret z
+	push hl
+	ld hl,Header_loopLabel
+	call System_Print
+	pop hl
+	call Header_PrintTime
+	ret
+
+; dehl = samples
+Header_PrintTime: PROC
+	ld bc,441
+	call Math_Divide32x16
+	ld c,100
+	call Math_Divide32x7
+	push af
+	ld c,60
+	call Math_Divide32x7
+	push af
+	call Math_Divide16x7
+	ld b,a
+	ld a,l
+	or h
+	call nz,System_PrintDecHL
+	ld a,":"
+	call nz,System_PrintChar
+	ld a,b
+	call nz,PrintDecAPad
+	call z,System_PrintDecA
+	ld a,":"
+	call System_PrintChar
+	pop af
+	call PrintDecAPad
+	ld a,"."
+	call System_PrintChar
+	pop af
+PrintDecAPad:
+	push af
+	cp 10
+	ld a,"0"
+	call c,System_PrintChar
+	pop af
+	jp System_PrintDecA
+	ENDP
 
 ; ix = this
 ; f <- nz: invalid identification
@@ -282,6 +337,12 @@ Header_CheckGZIP:
 ;
 Header_versionLabel:
 	db "VGM version: ",0
+
+Header_lengthLabel:
+	db "Length: ",0
+
+Header_loopLabel:
+	db " + ",0
 
 Header_noVGMFileError:
 	db "Not a VGM file.",13,10,0

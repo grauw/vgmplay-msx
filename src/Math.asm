@@ -75,6 +75,124 @@ NoAdd:
 	ret
 	ENDP
 
+; c = divisor (<= 128)
+; hl = dividend
+; a <- remainder
+; c <- divisor
+; hl <- quotient
+Math_Divide16x7: PROC
+	xor a
+Continue:
+	ld b,16
+Loop:
+	add hl,hl
+	rla
+	;jr c,Overflow  ; for Divide32x8
+	cp c
+	jr c,ZeroDigit
+Overflow:
+	inc l
+	sub c
+ZeroDigit:
+	djnz Loop
+	ret
+	ENDP
+
+; c = divisor (<= 128)
+; dehl = dividend
+; a <- remainder
+; c <- divisor
+; dehl <- quotient
+Math_Divide32x7:
+	push hl
+	ex de,hl
+	call Math_Divide16x7
+	ex (sp),hl
+	call Math_Divide16x7.Continue
+	pop de
+	ret
+
+; a = dividend
+; de = divisor
+; a <- quotient
+; de <- divisor
+; hl <- remainder
+Math_Divide8x16: PROC
+	ld hl,0
+Continue:
+	ld b,8
+Loop:
+	add a,a
+	adc hl,hl
+	jr c,Overflow  ; remove for Divide8x15
+	sbc hl,de
+	jr nc,OneDigit
+	add hl,de
+	djnz Loop
+	ret
+Overflow:
+	and a
+	sbc hl,de
+OneDigit:
+	inc a
+	djnz Loop
+	ret
+	ENDP
+
+; bc = divisor
+; dehl = dividend
+; bc <- remainder
+; dehl <- quotient
+; Modifies: af, bc', de', hl'
+Math_Divide16x16:
+	push bc
+	ld a,h
+	exx
+	pop de
+	call Math_Divide8x16
+	exx
+	ld h,a
+	ld a,l
+	exx
+	call Math_Divide8x16.Continue
+	push hl
+	exx
+	ld l,a
+	pop bc
+	ret
+
+; bc = divisor
+; dehl = dividend
+; bc <- remainder
+; dehl <- quotient
+; Modifies: af, bc', de', hl'
+Math_Divide32x16:
+	push bc
+	ld a,d
+	exx
+	pop de
+	call Math_Divide8x16
+	exx
+	ld d,a
+	ld a,e
+	exx
+	call Math_Divide8x16.Continue
+	exx
+	ld e,a
+	ld a,h
+	exx
+	call Math_Divide8x16.Continue
+	exx
+	ld h,a
+	ld a,l
+	exx
+	call Math_Divide8x16.Continue
+	push hl
+	exx
+	ld l,a
+	pop bc
+	ret
+
 	SECTION RAM_PAGE0_ALIGNED
 
 ; Log mantissa table in 128 steps
