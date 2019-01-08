@@ -140,9 +140,9 @@ OneDigit:
 	ENDP
 
 ; bc = divisor
-; dehl = dividend
+; hl = dividend
 ; bc <- remainder
-; dehl <- quotient
+; hl <- quotient
 ; Modifies: af, bc', de', hl'
 Math_Divide16x16:
 	push bc
