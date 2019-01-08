@@ -202,10 +202,8 @@ Header_GetDataOffset: PROC
 	ld bc,-150H
 	add hl,bc
 	jp nc,Pre1_50
-	ld l,(ix + Header.vgmDataOffset)
-	ld h,(ix + Header.vgmDataOffset + 1)
-	ld e,(ix + Header.vgmDataOffset + 2)
-	ld d,(ix + Header.vgmDataOffset + 3)
+	ld de,Header.vgmDataOffset
+	call Utils_GetDoubleWordIXOffset
 	ld bc,34H
 	add hl,bc
 	ret nc
@@ -221,14 +219,8 @@ Pre1_50:
 ; dehl <- loop offset
 ; f <- z: no loop
 Header_GetLoopOffset:
-	ld l,(ix + Header.loopOffset)
-	ld h,(ix + Header.loopOffset + 1)
-	ld e,(ix + Header.loopOffset + 2)
-	ld d,(ix + Header.loopOffset + 3)
-	ld a,d
-	or e
-	or h
-	or l
+	ld de,Header.loopOffset
+	call Utils_GetDoubleWordIXOffset
 	ret z
 	ld bc,1CH
 	add hl,bc
@@ -241,14 +233,8 @@ Header_GetLoopOffset:
 ; dehl <- loop offset
 ; f <- z: no loop
 Header_GetGD3Offset:
-	ld l,(ix + Header.gd3Offset)
-	ld h,(ix + Header.gd3Offset + 1)
-	ld e,(ix + Header.gd3Offset + 2)
-	ld d,(ix + Header.gd3Offset + 3)
-	ld a,d
-	or e
-	or h
-	or l
+	ld de,Header.gd3Offset
+	call Utils_GetDoubleWordIXOffset
 	ret z
 	ld bc,14H
 	add hl,bc
@@ -273,17 +259,14 @@ Header_PrintInfo:
 ; ix = this
 ; f <- nz: invalid identification
 Header_CheckID:
-	ld a,(ix + Header.identification)
-	cp "V"
+	ld de,Header.identification
+	call Utils_GetDoubleWordIXOffset
+	ld bc,"V" | "g" << 8
+	sbc hl,bc
 	ret nz
-	ld a,(ix + Header.identification + 1)
-	cp "g"
-	ret nz
-	ld a,(ix + Header.identification + 2)
-	cp "m"
-	ret nz
-	ld a,(ix + Header.identification + 3)
-	cp " "
+	ld bc,"m" | " " << 8
+	ex de,hl
+	sbc hl,bc
 	ret
 
 ; ix = this

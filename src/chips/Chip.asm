@@ -18,13 +18,7 @@ Chip: MACRO ?name, ?connecter
 ; ix = this
 ; iy = header
 Chip_Construct:
-	push iy
-	add iy,de
-	ld l,(iy)
-	ld h,(iy + 1)
-	ld e,(iy + 2)
-	ld d,(iy + 3)
-	pop iy
+	call Utils_GetDoubleWordIYOffset
 	ld (ix + Chip.clock),l
 	ld (ix + Chip.clock + 1),h
 	ld (ix + Chip.clock + 2),e
@@ -37,21 +31,15 @@ Chip_Destruct: equ System_Return
 
 ; ix = this
 ; f <- z: not active
-; Modifies: a
-Chip_IsActive:
-	ld a,(ix + Chip.clock)
-	or (ix + Chip.clock + 1)
-	or (ix + Chip.clock + 2)
-	or (ix + Chip.clock + 3)
-	ret
+; Modifies: af, de, hl
+Chip_IsActive: equ Chip_GetClock
 
 ; ix = this
 ; dehl <- clock (MHz)
+; f <- z: not active
 Chip_GetClock:
-	ld l,(ix + Chip.clock)
-	ld h,(ix + Chip.clock + 1)
-	ld e,(ix + Chip.clock + 2)
-	ld d,(ix + Chip.clock + 3)
+	ld de,Chip.clock
+	call Utils_GetDoubleWordIXOffset
 	res 7,d  ; clear flag bits
 	res 6,d
 	ret

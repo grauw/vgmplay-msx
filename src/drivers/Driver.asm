@@ -17,11 +17,8 @@ Driver_Construct: equ System_Return
 ; ix = this
 ; dehl <- clock (MHz)
 Driver_GetClock:
-	ld l,(ix + Driver.clock)
-	ld h,(ix + Driver.clock + 1)
-	ld e,(ix + Driver.clock + 2)
-	ld d,(ix + Driver.clock + 3)
-	ret
+	ld de,Driver.clock
+	jp Utils_GetDoubleWordIXOffset
 
 ; ix = this
 ; dehl <- clock (MHz)
@@ -34,11 +31,9 @@ Driver_SetClock:
 
 ; ix = this
 ; f <- c: found
+; Modifies: a, de, hl
 Driver_IsFound:
-	ld a,(ix + Driver.clock)
-	or (ix + Driver.clock + 1)
-	or (ix + Driver.clock + 2)
-	or (ix + Driver.clock + 3)
+	call Driver_GetClock
 	neg
 	ret
 
