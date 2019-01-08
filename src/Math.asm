@@ -75,19 +75,19 @@ NoAdd:
 	ret
 	ENDP
 
-; c = divisor (<= 128)
+; c = divisor
 ; hl = dividend
 ; a <- remainder
 ; c <- divisor
 ; hl <- quotient
-Math_Divide16x7: PROC
+Math_Divide16x8: PROC
 	xor a
 Continue:
 	ld b,16
 Loop:
 	add hl,hl
 	rla
-	;jr c,Overflow  ; for Divide32x8
+	jr c,Overflow  ; can remove for Divide16x7
 	cp c
 	jr c,ZeroDigit
 Overflow:
@@ -98,17 +98,17 @@ ZeroDigit:
 	ret
 	ENDP
 
-; c = divisor (<= 128)
+; c = divisor
 ; dehl = dividend
 ; a <- remainder
 ; c <- divisor
 ; dehl <- quotient
-Math_Divide32x7:
+Math_Divide32x8:
 	push hl
 	ex de,hl
-	call Math_Divide16x7
+	call Math_Divide16x8
 	ex (sp),hl
-	call Math_Divide16x7.Continue
+	call Math_Divide16x8.Continue
 	pop de
 	ret
 
@@ -124,7 +124,7 @@ Continue:
 Loop:
 	add a,a
 	adc hl,hl
-	jr c,Overflow  ; remove for Divide8x15
+	jr c,Overflow  ; can remove for Divide16x16 and Divide32x15
 	sbc hl,de
 	jr nc,OneDigit
 	add hl,de

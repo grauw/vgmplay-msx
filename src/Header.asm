@@ -280,12 +280,12 @@ Header_PrintTime: PROC
 	ld bc,441
 	call Math_Divide32x16
 	ld c,100
-	call Math_Divide32x7
+	call Math_Divide32x8
 	push af
 	ld c,60
-	call Math_Divide32x7
+	call Math_Divide32x8
 	push af
-	call Math_Divide16x7
+	call Math_Divide16x8
 	ld b,a
 	ld a,l
 	or h
