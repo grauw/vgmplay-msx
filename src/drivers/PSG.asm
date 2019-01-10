@@ -3,7 +3,8 @@
 ;
 PSG_BASE_PORT: equ 0A0H
 PSG_ADDRESS: equ 00H
-PSG_DATA: equ 01H
+PSG_WRITE: equ 01H
+PSG_READ: equ 02H
 PSG_FREQUENCY: equ 1789773
 
 PSG: MACRO ?base, ?name = PSG_name
@@ -24,7 +25,7 @@ PSG: MACRO ?base, ?name = PSG_name
 		out (?base + PSG_ADDRESS),a
 		ld a,d
 		ei
-		out (?base + PSG_DATA),a
+		out (?base + PSG_WRITE),a
 		ret
 	MaskMixer:
 		ld a,d
@@ -33,6 +34,16 @@ PSG: MACRO ?base, ?name = PSG_name
 		ld d,a
 		ld a,e
 		jr WriteRegister
+
+	; a = register
+	; a <- value
+	ReadRegister:
+		di
+		out (?base + PSG_ADDRESS),a
+		ld a,d
+		ei
+		in a,(?base + PSG_READ)
+		ret
 	ENDM
 
 ; ix = this
@@ -59,6 +70,13 @@ PSG_Destruct:
 PSG_WriteRegister:
 	ld a,e
 	ld bc,PSG.WriteRegister
+	jp Utils_JumpIXOffsetBC
+
+; a = register
+; a = value
+; ix = this
+PSG_ReadRegister:
+	ld bc,PSG.ReadRegister
 	jp Utils_JumpIXOffsetBC
 
 ; e = register
@@ -95,6 +113,18 @@ PSG_Reset:
 ; ix = this
 ; f <- c: found
 PSG_Detect:
+	ld de,1200H
+	call PSG_WriteRegister
+	ld de,3402H
+	call PSG_WriteRegister
+	ld a,0
+	call PSG_ReadRegister
+	xor 12H
+	ret nz
+	ld a,2
+	call PSG_ReadRegister
+	xor 34H
+	ret nz
 	scf
 	ret
 
