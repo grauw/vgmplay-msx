@@ -135,11 +135,10 @@ Darky_Detect:
 	out (c),b
 	in a,(c)
 	cpl
-	cp Darky_DEVICE_ID
+	xor Darky_DEVICE_ID
 	out (c),e
+	ret nz
 	scf
-	ret z
-	xor a
 	ret
 
 ;

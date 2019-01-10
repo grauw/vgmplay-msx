@@ -145,10 +145,9 @@ TestValue:
 	ei
 	ld a,e
 	and 00111111B
-	cp b
+	xor b
+	ret nz
 	scf
-	ret z
-	ccf
 	ret
 	ENDP
 
