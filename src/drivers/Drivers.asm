@@ -3,7 +3,7 @@
 ;
 	INCLUDE "Driver.asm"
 	INCLUDE "PSG.asm"
-	INCLUDE "MFRPSG.asm"
+	INCLUDE "ExternalPSG.asm"
 	INCLUDE "Darky.asm"
 	INCLUDE "SFG.asm"
 	INCLUDE "MSXMusic.asm"
@@ -31,8 +31,8 @@ Drivers: MACRO
 	drivers:
 	psg:
 		StaticFactory PSG_instance, PSG_Construct, PSG_Destruct
-	mfrPSG:
-		StaticFactory MFRPSG_instance, MFRPSG_Construct, MFRPSG_Destruct
+	externalPSG:
+		StaticFactory ExternalPSG_instance, ExternalPSG_Construct, ExternalPSG_Destruct
 	darky:
 		StaticFactory Darky_instance, Darky_Construct, Darky_Destruct
 	darky2:
@@ -149,10 +149,10 @@ Drivers_TryCreatePSG_IY:
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
-; de <- MegaFlashROM SCC+ SD PSG driver
+; de <- External PSG driver
 ; f <- c: succeeded
-Drivers_TryCreateMFRPSG_IY:
-	ld de,Drivers.mfrPSG
+Drivers_TryCreateExternalPSG_IY:
+	ld de,Drivers.externalPSG
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this

@@ -70,8 +70,8 @@ AY8910_TryCreate:
 	call Drivers_TryCreatePSG_IY
 	ld hl,PSG.SafeWriteRegister
 	ret c
-	call Drivers_TryCreateMFRPSG_IY
-	ld hl,MFRPSG.SafeWriteRegister
+	call Drivers_TryCreateExternalPSG_IY
+	ld hl,ExternalPSG.SafeWriteRegister
 	ret c
 	call Drivers_TryCreateOPN_IY
 	ld hl,OPN.SafeWriteRegister
