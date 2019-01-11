@@ -166,14 +166,15 @@ SFG_MatchID:
 	ld bc,6
 	jp Memory_MatchSlotString
 
-SFG_id:
-	db "MCHFM0"
-
 ;
 SFG_sfg01Name:
 	db "Yamaha SFG-01",0
+
 SFG_sfg05Name:
 	db "Yamaha SFG-05",0
+
+SFG_id:
+	db "MCHFM0"
 
 	SECTION RAM_PAGE1
 

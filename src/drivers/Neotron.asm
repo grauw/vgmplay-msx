@@ -361,6 +361,7 @@ Neotron_MatchID:
 ;
 Neotron_name:
 	db "Neotron",0
+
 Neotron_id:
 	db "OSC YM  OPNB"
 
