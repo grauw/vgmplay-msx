@@ -306,6 +306,8 @@ OPNA_Mute: PROC
 	call OPNA_FillRegisters
 	ld de,01H << 8 | OPNA_ADPCM_CONTROL
 	call OPNA_WriteRegister2  ; stop ADPCM
+	ld de,00H << 8 | OPNA_MISC_CONTROL
+	call OPNA_WriteRegister2  ; mute ADPCM
 	ld de,0BF10H
 	call OPNA_WriteRegister  ; stop rhythm
 	ld b,10H
