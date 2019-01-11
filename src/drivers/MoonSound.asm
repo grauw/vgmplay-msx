@@ -3,96 +3,57 @@
 ;
 MoonSound_FM_BASE_PORT: equ 0C4H
 MoonSound_WAVE_BASE_PORT: equ 07EH
-MoonSound_STATUS: equ 00H
-MoonSound_FM_ADDRESS: equ 00H
-MoonSound_FM_DATA: equ 01H
-MoonSound_FM2_ADDRESS: equ 02H
-MoonSound_FM2_DATA: equ 03H
-MoonSound_WAVE_ADDRESS: equ 00H
-MoonSound_WAVE_DATA: equ 01H
-MoonSound_FM2_NEW: equ 05H
-MoonSound_WAVE_MEMORY_CONTROL: equ 02H
-MoonSound_WAVE_MEMORY_ADDRESS_E: equ 03H
-MoonSound_WAVE_MEMORY_ADDRESS_H: equ 04H
-MoonSound_WAVE_MEMORY_ADDRESS_L: equ 05H
-MoonSound_WAVE_MEMORY_DATA: equ 06H
-MoonSound_FREQUENCY: equ 33868800
 MoonSound_WAVENUMBERMAP_SIZE: equ 512
 
-MoonSound: MACRO ?fmbase = MoonSound_FM_BASE_PORT, ?wavebase = MoonSound_WAVE_BASE_PORT, ?name = MoonSound_name
+MoonSound: MACRO ?fmbase = MoonSound_FM_BASE_PORT
 	this:
-	super: Driver ?name, Driver_PrintInfoImpl
-	romSize:
-		dd 200000H
+	super: OPL4 ?fmbase, MoonSound_WAVE_BASE_PORT, MoonSound_name
 	waveNumberMap:
 		dw 0
 	waveNumberMSB:
 		ds 24
 
-	; e = register
-	; d = value
-	SafeWriteRegister:
-		ld a,e
-		cp 20H
-		jr c,MaskControl
-	; a = register
-	; d = value
-	WriteRegister:
-		out (?fmbase + MoonSound_FM_ADDRESS),a
-		nop     ; wait 56 cycles (5.9 bus cycles)
-		ld a,d
-		out (?fmbase + MoonSound_FM_DATA),a
-		ret
-	MaskControl:
-		cp 8H
-		jr z,WriteRegister
-		ret
-
-	; e = register
-	; d = value
-	SafeWriteRegister2:
-		ld a,e
-	; a = register
-	; d = value
-	WriteRegister2:
-		out (?fmbase + MoonSound_FM2_ADDRESS),a
-		nop     ; wait 56 cycles (5.9 bus cycles)
-		ld a,d
-		out (?fmbase + MoonSound_FM2_DATA),a
-		ret
+	SafeWriteRegister: equ super.SafeWriteRegister
+	SafeWriteRegister2: equ super.SafeWriteRegister2
 
 	; e = register
 	; d = value
 	SafeWriteRegisterWave:
-		call System_Return
+		jp super.SafeWriteRegisterWave
 	mapWaveNumber: equ $ - 2
-		ld a,e
-		cp 8H
-		ret c
-	; a = register
+
+	; e = register
 	; d = value
-	WriteRegisterWave:
-		out (?wavebase + MoonSound_WAVE_ADDRESS),a
-	waveAddressPort: equ $ - 1
-		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
-		ld a,d
-		out (?wavebase + MoonSound_WAVE_DATA),a
-	waveDataPort: equ $ - 1
-		ret
-
-	; a = register
-	; a <- value
-	ReadRegisterWave:
-		out (?wavebase + MoonSound_WAVE_ADDRESS),a
-		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
-		nop
-		in a,(?wavebase + MoonSound_WAVE_DATA)
-		ret
-
-	; a <- value
-	ReadRegisterStatus:
-		in a,(?fmbase + MoonSound_STATUS)
-		ret
+	MapWaveNumber: PROC
+		ld a,e
+		cp 38H
+		jr nc,super.SafeWriteRegisterWave
+		cp 20H
+		jr c,LSB
+	MSB:
+		ld c,a
+		ld b,0
+		ld hl,waveNumberMSB - 20H
+		add hl,bc
+		ld (hl),d
+		set 0,d
+		jr super.SafeWriteRegisterWave
+	LSB:
+		cp 8H
+		jr c,super.SafeWriteRegisterWave
+		ld c,a
+		ld b,0
+		ld hl,waveNumberMSB - 8H
+		add hl,bc
+		ld a,(hl)
+		and 1
+		ld c,d
+		ld b,a
+		ld hl,(waveNumberMap)
+		add hl,bc
+		ld d,(hl)
+		jr super.SafeWriteRegisterWave
+		ENDP
 
 	; dehl = size
 	; iy = reader
@@ -105,57 +66,16 @@ MoonSound: MACRO ?fmbase = MoonSound_FM_BASE_PORT, ?wavebase = MoonSound_WAVE_BA
 	ProcessRAMDataBlock:
 		ld ix,this
 		jp MoonSound_ProcessRAMDataBlock
-
-	; e = register
-	; d = value
-	MapWaveNumber: PROC
-		ld a,e
-		cp 38H
-		ret nc
-		cp 20H
-		jr c,LSB
-	MSB:
-		ld c,a
-		ld b,0
-		ld hl,waveNumberMSB - 20H
-		add hl,bc
-		ld (hl),d
-		set 0,d
-		ret
-	LSB:
-		cp 8H
-		ret c
-		ld c,a
-		ld b,0
-		ld hl,waveNumberMSB - 8H
-		add hl,bc
-		ld a,(hl)
-		and 1
-		ld c,d
-		ld b,a
-		ld hl,(waveNumberMap)
-		add hl,bc
-		ld d,(hl)
-		ret
-		ENDP
 	ENDM
 
 ; ix = this
 ; iy = drivers
-MoonSound_Construct:
-	call Driver_Construct
-	call MoonSound_Detect
-	ret nc
-	call MoonSound_Reset
-	ld de,MoonSound_FREQUENCY >> 16
-	ld hl,MoonSound_FREQUENCY
-	jp Driver_SetClock
+MoonSound_Construct: equ OPL4_Construct
+;	jp OPL4_Construct
 
 ; ix = this
 MoonSound_Destruct:
-	call Driver_IsFound
-	ret nc
-	call MoonSound_Mute
+	call OPL4_Destruct
 	ld e,(ix + MoonSound.waveNumberMap)
 	ld d,(ix + MoonSound.waveNumberMap + 1)
 	ld a,e
@@ -168,68 +88,15 @@ MoonSound_Destruct:
 	pop ix
 	ret
 
-; e = register
-; d = value
-; ix = this
-MoonSound_WriteRegister:
-	ld a,e
-	ld bc,MoonSound.WriteRegister
-	jp Utils_JumpIXOffsetBC
-
-; e = register
-; d = value
-; ix = this
-MoonSound_WriteRegister2:
-	ld a,e
-	ld bc,MoonSound.WriteRegister2
-	jp Utils_JumpIXOffsetBC
-
-; e = register
-; d = value
-; ix = this
-MoonSound_WriteRegisterWave:
-	ld a,e
-	ld bc,MoonSound.WriteRegisterWave
-	jp Utils_JumpIXOffsetBC
-
-; a = register
-; ix = this
-; a <- value
-MoonSound_ReadRegisterWave:
-	ld bc,MoonSound.ReadRegisterWave
-	jp Utils_JumpIXOffsetBC
-
-; ix = this
-; a <- value
-MoonSound_ReadRegisterStatus:
-	ld bc,MoonSound.ReadRegisterStatus
-	jp Utils_JumpIXOffsetBC
-
 ; dehl = size
 ; ix = this
 ; iy = reader
 MoonSound_ProcessROMDataBlock:
-	ld a,d
-	and a
-	call nz,System_ThrowException
-	exx
-	call Reader_ReadDoubleWord_IY  ; total rom size
-	ld (ix + MoonSound.romSize),l
-	ld (ix + MoonSound.romSize + 1),h
-	ld (ix + MoonSound.romSize + 2),e
-	ld (ix + MoonSound.romSize + 3),d
-	call Reader_ReadDoubleWord_IY  ; start address
-	ld a,d
-	and a
-	call nz,System_ThrowException
-	set 5,e
-	exx
-	ld bc,8  ; subtract header from block size
-	call Math_Sub24x16
-	call c,System_ThrowException
+	call OPL4_ProcessROMDataBlockHeader
 	ret z
 	exx
-	call MoonSound_LoadSampleFromReader
+	set 5,e
+	call OPL4_LoadSampleFromReader
 	exx
 	call MoonSound_FixUpWaveHeaders
 	ret
@@ -237,68 +104,8 @@ MoonSound_ProcessROMDataBlock:
 ; dehl = size
 ; ix = this
 ; iy = reader
-MoonSound_ProcessRAMDataBlock:
-	ld a,d
-	and a
-	call nz,System_ThrowException
-	exx
-	call Reader_ReadDoubleWord_IY  ; total ram size
-	call Reader_ReadDoubleWord_IY  ; start address
-	ld c,(ix + MoonSound.romSize)
-	ld b,(ix + MoonSound.romSize + 1)
-	add hl,bc
-	ex de,hl
-	ld c,(ix + MoonSound.romSize + 2)
-	ld b,(ix + MoonSound.romSize + 3)
-	adc hl,bc
-	ex de,hl
-	ld a,d
-	and a
-	call nz,System_ThrowException
-	exx
-	ld bc,8  ; subtract header from block size
-	call Math_Sub24x16
-	call c,System_ThrowException
-	ret z
-	exx
-	call MoonSound_LoadSampleFromReader
-	exx
-	ret
-
-; ehl = sample start address
-; ehl' = sample size
-; ix = this
-; iy = reader
-MoonSound_LoadSampleFromReader: PROC
-	push de
-	push hl
-	ld de,00000011B << 8 | MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
-	pop hl
-	pop de
-	call MoonSound_SetMemoryAddress
-	exx
-Loop:
-	push de
-	push hl
-	ld a,d
-	or e
-	jr z,LessThan64K
-	ld hl,0FFFFH
-LessThan64K:
-	ld c,l
-	ld b,h
-	call Reader_ReadBlockDirect_IY
-	push bc
-	call MoonSound_WriteMemory
-	pop bc
-	pop hl
-	pop de
-	call Math_Sub24x16
-	call c,System_ThrowException
-	jr nz,Loop
-	ret
-	ENDP
+MoonSound_ProcessRAMDataBlock: equ OPL4_ProcessRAMDataBlock
+;	jp OPL4_ProcessRAMDataBlock
 
 ; ix = this
 MoonSound_FixUpWaveHeaders: PROC
@@ -307,9 +114,9 @@ MoonSound_FixUpWaveHeaders: PROC
 	ld hl,0000H
 Loop:
 	push bc
-	call MoonSound_ReadMemoryByte
+	call OPL4_ReadMemoryByte
 	or 20H
-	call MoonSound_WriteMemoryByte
+	call OPL4_WriteMemoryByte
 	ld bc,000CH
 	add hl,bc
 	pop bc
@@ -357,175 +164,6 @@ Allocate:
 	ld (ix + MoonSound.waveNumberMap + 1),d
 	ret
 	ENDP
-
-; bc = count
-; hl = source
-; ix = this
-MoonSound_WriteMemory: PROC
-	push bc
-	ld de,00010001B << 8 | MoonSound_WAVE_MEMORY_CONTROL
-	call MoonSound_WriteRegisterWave
-	pop bc
-	dec bc
-	inc b
-	inc c
-	ld e,b
-	ld b,c
-	ld a,MoonSound_WAVE_MEMORY_DATA
-	ld c,(ix + MoonSound.waveAddressPort)
-	out (c),a
-	nop  ; wait 88 cycles (9.3 bus cycles, but 9 works)
-	ld c,(ix + MoonSound.waveDataPort)
-Loop:
-	otir
-	dec e
-	jr nz,Loop
-	ld de,00010000B << 8 | MoonSound_WAVE_MEMORY_CONTROL
-	jp MoonSound_WriteRegisterWave
-	ENDP
-
-; ehl = memory address
-; ix = this
-; a <- value
-MoonSound_ReadMemoryByte:
-	push de
-	push hl
-	call MoonSound_SetMemoryAddress
-	ld de,00010001B << 8 | MoonSound_WAVE_MEMORY_CONTROL
-	call MoonSound_WriteRegisterWave
-	ld a,MoonSound_WAVE_MEMORY_DATA
-	call MoonSound_ReadRegisterWave
-	push af
-	ld de,00010000B << 8 | MoonSound_WAVE_MEMORY_CONTROL
-	call MoonSound_WriteRegisterWave
-	pop af
-	pop hl
-	pop de
-	ret
-
-; a = value
-; ehl = memory address
-; ix = this
-MoonSound_WriteMemoryByte:
-	push de
-	push hl
-	push af
-	call MoonSound_SetMemoryAddress
-	ld de,00010001B << 8 | MoonSound_WAVE_MEMORY_CONTROL
-	call MoonSound_WriteRegisterWave
-	pop de
-	ld e,MoonSound_WAVE_MEMORY_DATA
-	call MoonSound_WriteRegisterWave
-	ld de,00010000B << 8 | MoonSound_WAVE_MEMORY_CONTROL
-	call MoonSound_WriteRegisterWave
-	pop hl
-	pop de
-	ret
-
-; ehl = memory address
-; ix = this
-MoonSound_SetMemoryAddress:
-	ld a,e
-	and 0C0H
-	call nz,System_ThrowException
-	ld a,d
-	and a
-	call nz,System_ThrowException
-	push hl
-	ld d,e
-	ld e,MoonSound_WAVE_MEMORY_ADDRESS_E
-	call MoonSound_WriteRegisterWave
-	pop hl
-	push hl
-	ld d,h
-	ld e,MoonSound_WAVE_MEMORY_ADDRESS_H
-	call MoonSound_WriteRegisterWave
-	pop hl
-	ld d,l
-	ld e,MoonSound_WAVE_MEMORY_ADDRESS_L
-	call MoonSound_WriteRegisterWave
-	ret
-
-; b = count
-; e = register base
-; d = value
-; ix = this
-MoonSound_FillRegisterPairs:
-	push bc
-	push de
-	call MoonSound_WriteRegister
-	pop de
-	push de
-	call MoonSound_WriteRegister2
-	pop de
-	pop bc
-	inc e
-	djnz MoonSound_FillRegisterPairs
-	ret
-
-; b = count
-; e = register base
-; d = value
-; ix = this
-MoonSound_FillRegistersWave:
-	push bc
-	push de
-	call MoonSound_WriteRegisterWave
-	pop de
-	pop bc
-	inc e
-	djnz MoonSound_FillRegistersWave
-	ret
-
-; ix = this
-MoonSound_Mute:
-	ld de,00BDH
-	call MoonSound_WriteRegister  ; rhythm off
-	ld b,16H
-	ld de,0F80H
-	call MoonSound_FillRegisterPairs  ; max release rate
-	ld b,16H
-	ld de,3F40H
-	call MoonSound_FillRegisterPairs  ; min total level
-	ld b,09H
-	ld de,00A0H
-	call MoonSound_FillRegisterPairs  ; frequency 0
-	ld b,09H
-	ld de,00B0H
-	call MoonSound_FillRegisterPairs  ; key off
-	ld b,18H
-	ld de,4068H
-	call MoonSound_FillRegistersWave  ; key off, damp
-	ret
-
-; ix = this
-MoonSound_Reset:
-	ld de,00000011B << 8 | MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
-	ld b,0DAH
-	ld de,0020H
-	call MoonSound_FillRegistersWave
-	ld de,1BF8H
-	call MoonSound_WriteRegisterWave
-	ld b,0D6H
-	ld de,0020H
-	call MoonSound_FillRegisterPairs
-	ld de,0008H
-	call MoonSound_WriteRegister
-	ld de,0004H
-	call MoonSound_WriteRegister2
-	ld de,00000000B << 8 | MoonSound_FM2_NEW
-	call MoonSound_WriteRegister2
-	ret
-
-; ix = this
-; f <- c: Found
-MoonSound_Detect:
-	call MoonSound_ReadRegisterStatus
-	and 11111101B  ; sometimes LD is set
-	ret nz
-	scf
-	ret
 
 ;
 MoonSound_name:

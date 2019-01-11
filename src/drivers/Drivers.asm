@@ -9,6 +9,7 @@
 	INCLUDE "MSXMusic.asm"
 	INCLUDE "MSXAudio.asm"
 	INCLUDE "OPL3.asm"
+	INCLUDE "OPL4.asm"
 	INCLUDE "MoonSound.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCPlus.asm"
