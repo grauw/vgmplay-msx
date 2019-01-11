@@ -1,14 +1,15 @@
 ;
 ; MoonSound YMF278B OPL4
 ;
-MoonSound_BASE_PORT: equ 0C4H
+MoonSound_FM_BASE_PORT: equ 0C4H
+MoonSound_WAVE_BASE_PORT: equ 07EH
 MoonSound_STATUS: equ 00H
 MoonSound_FM_ADDRESS: equ 00H
 MoonSound_FM_DATA: equ 01H
 MoonSound_FM2_ADDRESS: equ 02H
 MoonSound_FM2_DATA: equ 03H
-MoonSound_WAVE_ADDRESS: equ 07EH
-MoonSound_WAVE_DATA: equ 07FH
+MoonSound_WAVE_ADDRESS: equ 00H
+MoonSound_WAVE_DATA: equ 01H
 MoonSound_FM2_NEW: equ 05H
 MoonSound_WAVE_MEMORY_CONTROL: equ 02H
 MoonSound_WAVE_MEMORY_ADDRESS_E: equ 03H
@@ -18,7 +19,7 @@ MoonSound_WAVE_MEMORY_DATA: equ 06H
 MoonSound_FREQUENCY: equ 33868800
 MoonSound_WAVENUMBERMAP_SIZE: equ 512
 
-MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
+MoonSound: MACRO ?fmbase = MoonSound_FM_BASE_PORT, ?wavebase = MoonSound_WAVE_BASE_PORT, ?name = MoonSound_name
 	this:
 	super: Driver ?name, Driver_PrintInfoImpl
 	waveNumberMap:
@@ -35,10 +36,10 @@ MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 	; a = register
 	; d = value
 	WriteRegister:
-		out (?base + MoonSound_FM_ADDRESS),a
+		out (?fmbase + MoonSound_FM_ADDRESS),a
 		nop     ; wait 56 cycles (5.9 bus cycles)
 		ld a,d
-		out (?base + MoonSound_FM_DATA),a
+		out (?fmbase + MoonSound_FM_DATA),a
 		ret
 	MaskControl:
 		cp 8H
@@ -52,10 +53,10 @@ MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 	; a = register
 	; d = value
 	WriteRegister2:
-		out (?base + MoonSound_FM2_ADDRESS),a
+		out (?fmbase + MoonSound_FM2_ADDRESS),a
 		nop     ; wait 56 cycles (5.9 bus cycles)
 		ld a,d
-		out (?base + MoonSound_FM2_DATA),a
+		out (?fmbase + MoonSound_FM2_DATA),a
 		ret
 
 	; e = register
@@ -69,26 +70,26 @@ MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 	; a = register
 	; d = value
 	WriteRegisterWave:
-		out (MoonSound_WAVE_ADDRESS),a
+		out (?wavebase + MoonSound_WAVE_ADDRESS),a
 	waveAddressPort: equ $ - 1
 		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
 		ld a,d
-		out (MoonSound_WAVE_DATA),a
+		out (?wavebase + MoonSound_WAVE_DATA),a
 	waveDataPort: equ $ - 1
 		ret
 
 	; a = register
 	; a <- value
 	ReadRegisterWave:
-		out (MoonSound_WAVE_ADDRESS),a
+		out (?wavebase + MoonSound_WAVE_ADDRESS),a
 		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
 		nop
-		in a,(MoonSound_WAVE_DATA)
+		in a,(?wavebase + MoonSound_WAVE_DATA)
 		ret
 
 	; a <- value
 	ReadRegisterStatus:
-		in a,(?base + MoonSound_STATUS)
+		in a,(?fmbase + MoonSound_STATUS)
 		ret
 
 	; dehl = size
