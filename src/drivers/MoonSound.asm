@@ -70,9 +70,11 @@ MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 	; d = value
 	WriteRegisterWave:
 		out (MoonSound_WAVE_ADDRESS),a
+	waveAddressPort: equ $ - 1
 		cp (ix)  ; wait 88 cycles (9.3 bus cycles, but 9 works)
 		ld a,d
 		out (MoonSound_WAVE_DATA),a
+	waveDataPort: equ $ - 1
 		ret
 
 	; a = register
@@ -88,31 +90,6 @@ MoonSound: MACRO ?base = MoonSound_BASE_PORT, ?name = MoonSound_name
 	ReadRegisterStatus:
 		in a,(?base + MoonSound_STATUS)
 		ret
-
-	; bc = count
-	; hl = source
-	WriteMemory: PROC
-		ld d,00010001B
-		ld a,MoonSound_WAVE_MEMORY_CONTROL
-		call WriteRegisterWave
-		or 0  ; wait 88 cycles (9.3 bus cycles)
-		ld a,MoonSound_WAVE_MEMORY_DATA
-		out (MoonSound_WAVE_ADDRESS),a
-		nop  ; wait 88 cycles (9.3 bus cycles)
-		dec bc
-		inc b
-		inc c
-		ld e,b
-		ld b,c
-		ld c,MoonSound_WAVE_DATA
-	Loop:
-		otir
-		dec e
-		jr nz,Loop
-		ld d,00010000B
-		ld a,MoonSound_WAVE_MEMORY_CONTROL
-		jp WriteRegisterWave
-		ENDP
 
 	; dehl = size
 	; iy = reader
@@ -391,9 +368,28 @@ Allocate:
 ; bc = count
 ; hl = source
 ; ix = this
-MoonSound_WriteMemory:
-	ld de,MoonSound.WriteMemory
-	jp Utils_JumpIXOffsetDE
+MoonSound_WriteMemory: PROC
+	push bc
+	ld de,00010001B << 8 | MoonSound_WAVE_MEMORY_CONTROL
+	call MoonSound_WriteRegisterWave
+	pop bc
+	dec bc
+	inc b
+	inc c
+	ld e,b
+	ld b,c
+	ld a,MoonSound_WAVE_MEMORY_DATA
+	ld c,(ix + MoonSound.waveAddressPort)
+	out (c),a
+	nop  ; wait 88 cycles (9.3 bus cycles, but 9 works)
+	ld c,(ix + MoonSound.waveDataPort)
+Loop:
+	otir
+	dec e
+	jr nz,Loop
+	ld de,00010000B << 8 | MoonSound_WAVE_MEMORY_CONTROL
+	jp MoonSound_WriteRegisterWave
+	ENDP
 
 ; ehl = memory address
 ; ix = this
