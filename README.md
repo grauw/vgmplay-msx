@@ -64,7 +64,7 @@ Supported sound chips
   * YMF262 OPL3 x2
     * MoonSound, OPL3
   * YMF278B OPL4
-    * MoonSound
+    * MoonSound, DalSoRi R2 (4MB mode)
   * Y8950 MSX-AUDIO x2
     * MSX-AUDIO, Music Module, MoonSound (no ADPCM), OPL3 (no ADPCM)
   * K051649 Konami SCC

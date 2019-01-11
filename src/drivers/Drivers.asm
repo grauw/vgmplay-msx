@@ -11,6 +11,7 @@
 	INCLUDE "OPL3.asm"
 	INCLUDE "OPL4.asm"
 	INCLUDE "MoonSound.asm"
+	INCLUDE "DalSoRiR2.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCPlus.asm"
 	INCLUDE "Franky.asm"
@@ -50,6 +51,8 @@ Drivers: MACRO
 		StaticFactory OPL3_instance, OPL3_Construct, OPL3_Destruct
 	moonSound:
 		StaticFactory MoonSound_instance, MoonSound_Construct, MoonSound_Destruct
+	dalSoRiR2:
+		StaticFactory DalSoRiR2_instance, DalSoRiR2_Construct, DalSoRiR2_Destruct
 	scc:
 		StaticFactory SCC_instance, SCC_Construct, SCC_Destruct
 	sccPlus:
@@ -217,6 +220,13 @@ Drivers_TryCreateOPL3_IY:
 ; f <- c: succeeded
 Drivers_TryCreateMoonSound_IY:
 	ld de,Drivers.moonSound
+	jr Drivers_TryCreate_IY_Trampoline
+
+; iy = this
+; de <- DalSoRi R2 driver
+; f <- c: succeeded
+Drivers_TryCreateDalSoRiR2_IY:
+	ld de,Drivers.dalSoRiR2
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this

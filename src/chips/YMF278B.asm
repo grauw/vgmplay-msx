@@ -67,7 +67,32 @@ YMF278B_Destruct: equ Chip_Destruct
 
 ; iy = drivers
 ; ix = this
-YMF278B_Connect:
+YMF278B_Connect: PROC
+	call Drivers_TryCreateDalSoRiR2_IY
+	jr nc,TryMoonSound
+	call Chip_SetDriver
+	ld hl,DalSoRiR2.SafeWriteRegister
+	add hl,de
+	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister),l
+	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister + 1),h
+	ld hl,DalSoRiR2.SafeWriteRegister2
+	add hl,de
+	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister),l
+	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister + 1),h
+	ld hl,DalSoRiR2.SafeWriteRegisterWave
+	add hl,de
+	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister),l
+	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister + 1),h
+	ld hl,DalSoRiR2.ProcessROMDataBlock
+	add hl,de
+	ld (ix + YMF278B.ProcessROMDataBlock.process),l
+	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),h
+	ld hl,DalSoRiR2.ProcessRAMDataBlock
+	add hl,de
+	ld (ix + YMF278B.ProcessRAMDataBlock.process),l
+	ld (ix + YMF278B.ProcessRAMDataBlock.process + 1),h
+	ret
+TryMoonSound:
 	call Drivers_TryCreateMoonSound_IY
 	ret nc
 	call Chip_SetDriver
@@ -92,6 +117,8 @@ YMF278B_Connect:
 	ld (ix + YMF278B.ProcessRAMDataBlock.process),l
 	ld (ix + YMF278B.ProcessRAMDataBlock.process + 1),h
 	ret
+	ENDP
+
 
 ;
 	SECTION RAM
