@@ -1,3 +1,24 @@
+; ehl = minuend
+; bc = subtrahend
+; f <- c: carry (negative result), z: zero
+Math_Sub24x16: PROC
+	and a
+	sbc hl,bc
+	jr c,Carry
+	ret nz
+	ld a,e
+	and a
+	ret
+Carry:
+	ld a,e
+	sbc a,0
+	ld e,a
+	ret nz
+	ld a,l
+	or h
+	ret
+	ENDP
+
 ; Binary logarithm
 ; b = antilogarithm exponent
 ; hl = antilogarithm significand (precision: 11 bits)

@@ -219,7 +219,7 @@ MoonSound_ProcessROMDataBlock:
 	set 5,e
 	exx
 	ld bc,8  ; subtract header from block size
-	call MoonSound_SubEHL_BC
+	call Math_Sub24x16
 	call c,System_ThrowException
 	ret z
 	exx
@@ -244,7 +244,7 @@ MoonSound_ProcessRAMDataBlock:
 	set 5,e
 	exx
 	ld bc,8  ; subtract header from block size
-	call MoonSound_SubEHL_BC
+	call Math_Sub24x16
 	call c,System_ThrowException
 	ret z
 	exx
@@ -281,30 +281,9 @@ LessThan64K:
 	pop bc
 	pop hl
 	pop de
-	call MoonSound_SubEHL_BC
+	call Math_Sub24x16
 	call c,System_ThrowException
 	jr nz,Loop
-	ret
-	ENDP
-
-; ehl = minuend
-; bc = subtrahend
-; f <- c: carry (negative result), z: zero
-MoonSound_SubEHL_BC: PROC
-	and a
-	sbc hl,bc
-	jr c,Carry
-	ret nz
-	ld a,e
-	and a
-	ret
-Carry:
-	ld a,e
-	sbc a,0
-	ld e,a
-	ret nz
-	ld a,l
-	or h
 	ret
 	ENDP
 
