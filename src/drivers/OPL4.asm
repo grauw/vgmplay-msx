@@ -399,6 +399,8 @@ OPL4_Mute:
 	ld b,18H
 	ld de,4068H
 	call OPL4_FillRegistersWave  ; key off, damp
+	ld de,00000000B << 8 | OPL4_FM2_NEW
+	call OPL4_WriteRegister2
 	ret
 
 ; ix = this
