@@ -429,5 +429,16 @@ OPL4_Detect:
 	call OPL4_ReadRegisterStatus
 	and 11111101B  ; sometimes LD is set
 	ret nz
+	ld de,00000011B << 8 | OPL4_FM2_NEW
+	call OPL4_WriteRegister2
+	ld a,OPL4_WAVE_MEMORY_CONTROL
+	call OPL4_ReadRegisterWave
+	push af
+	ld de,00000000B << 8 | OPL4_FM2_NEW
+	call OPL4_WriteRegister2
+	pop af
+	and 11100000B
+	xor 00100000B
+	ret nz
 	scf
 	ret
