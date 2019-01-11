@@ -22,6 +22,8 @@ MoonSound_WAVENUMBERMAP_SIZE: equ 512
 MoonSound: MACRO ?fmbase = MoonSound_FM_BASE_PORT, ?wavebase = MoonSound_WAVE_BASE_PORT, ?name = MoonSound_name
 	this:
 	super: Driver ?name, Driver_PrintInfoImpl
+	romSize:
+		dd 200000H
 	waveNumberMap:
 		dw 0
 	waveNumberMSB:
@@ -212,6 +214,10 @@ MoonSound_ProcessROMDataBlock:
 	call nz,System_ThrowException
 	exx
 	call Reader_ReadDoubleWord_IY  ; total rom size
+	ld (ix + MoonSound.romSize),l
+	ld (ix + MoonSound.romSize + 1),h
+	ld (ix + MoonSound.romSize + 2),e
+	ld (ix + MoonSound.romSize + 3),d
 	call Reader_ReadDoubleWord_IY  ; start address
 	ld a,d
 	and a
@@ -238,10 +244,17 @@ MoonSound_ProcessRAMDataBlock:
 	exx
 	call Reader_ReadDoubleWord_IY  ; total ram size
 	call Reader_ReadDoubleWord_IY  ; start address
+	ld c,(ix + MoonSound.romSize)
+	ld b,(ix + MoonSound.romSize + 1)
+	add hl,bc
+	ex de,hl
+	ld c,(ix + MoonSound.romSize + 2)
+	ld b,(ix + MoonSound.romSize + 3)
+	adc hl,bc
+	ex de,hl
 	ld a,d
 	and a
 	call nz,System_ThrowException
-	set 5,e
 	exx
 	ld bc,8  ; subtract header from block size
 	call Math_Sub24x16
