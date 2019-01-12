@@ -41,8 +41,7 @@ MMM_Destruct:
 	call Driver_IsFound
 	ret nc
 	call MMM_Reset
-	call MMM_Disable
-	ret
+	jp MMM_Disable
 
 	SECTION TPA_PAGE0
 
@@ -99,8 +98,7 @@ MMM_Reset:
 	ld a,0DFH
 	call MMM_WriteRegister
 	ld a,0FFH
-	call MMM_WriteRegister
-	ret
+	jr MMM_WriteRegister
 
 ; ix = this
 ; f <- c: found

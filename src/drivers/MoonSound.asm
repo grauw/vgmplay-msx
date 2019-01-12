@@ -98,8 +98,7 @@ MoonSound_ProcessROMDataBlock:
 	set 5,e
 	call OPL4_LoadSampleFromReader
 	exx
-	call MoonSound_FixUpWaveHeaders
-	ret
+	jr MoonSound_FixUpWaveHeaders
 
 ; dehl = size
 ; ix = this
@@ -121,8 +120,7 @@ Loop:
 	add hl,bc
 	pop bc
 	djnz Loop
-	call MoonSound_EnableWaveNumberMapping
-	ret
+	jr MoonSound_EnableWaveNumberMapping
 	ENDP
 
 ; ix = this

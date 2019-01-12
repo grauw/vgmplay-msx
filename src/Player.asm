@@ -141,8 +141,7 @@ LSBExtractionLoop:
 	ld bc,256
 	ld hl,READBUFFER  ; scratch
 	ld de,Player_commandsJumpTable + 256
-	call System_FastLDIR
-	ret
+	jp System_FastLDIR
 	ENDP
 
 ; ix = this

@@ -53,8 +53,7 @@ OPN_Construct:
 OPN_Destruct:
 	call Driver_IsFound
 	ret nc
-	call OPN_Mute
-	ret
+	jr OPN_Mute
 
 ; e = register
 ; d = value
@@ -116,8 +115,7 @@ KeyOffLoop:
 OPN_Reset:
 	ld b,0B4H
 	ld de,0000H
-	call OPN_FillRegisters
-	ret
+	jr OPN_FillRegisters
 
 ; ix = this
 ; f <- c: Found

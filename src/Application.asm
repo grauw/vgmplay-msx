@@ -37,8 +37,7 @@ Application_Main:
 
 	ld ix,Mapper_instance
 	call Mapper_Destruct
-	call System_Rethrow
-	ret
+	jp System_Rethrow
 
 Application_MainContinue:
 	call Application_CheckStack
@@ -64,9 +63,7 @@ Application_MainContinue:
 	call Application_Destruct
 
 	call System_Rethrow
-
-	call Application_CheckMemoryLeak
-	ret
+	jp Application_CheckMemoryLeak
 
 ; ix = this
 ; ix <- this
@@ -185,8 +182,7 @@ Application_EnterMainLoop:
 	ld hl,Application_Play
 	call System_TryCall
 	pop ix
-	call Application_ExitBlackout
-	ret
+	jp Application_ExitBlackout
 
 ; ix = this
 Application_CheckUsageInstructions:
@@ -219,8 +215,7 @@ Application_LoadFile:
 	pop ix
 	call MappedBufferLoader_Destruct
 	pop ix
-	call System_Rethrow
-	ret
+	jp System_Rethrow
 
 ; ix = this
 Application_ConstructMappedBuffer:
@@ -302,8 +297,7 @@ Application_InflateFile:
 	call FileReader_Destruct
 	call FileReader_class.Delete
 	pop ix
-	call System_Rethrow
-	ret
+	jp System_Rethrow
 
 ; ix = this
 Application_PrintLoading:
@@ -316,8 +310,7 @@ Application_PrintLoading:
 	pop ix
 	call System_Print
 	ld hl,Application_dotDotDot
-	call System_Print
-	ret
+	jp System_Print
 
 ; ix = this
 Application_ConstructVGM:
@@ -384,15 +377,13 @@ Application_EnterBlackout:
 	ret z
 	ld a,00H
 	call VDP_SetColor
-	call VDP_EnableBlank
-	ret
+	jp VDP_EnableBlank
 
 ; ix = this
 Application_ExitBlackout:
 	ld a,(VDP_MIRROR_0 + 7)
 	call VDP_SetColor
-	call VDP_DisableBlank
-	ret
+	jp VDP_DisableBlank
 
 ; Check if the stack is well above the heap
 Application_CheckStack:

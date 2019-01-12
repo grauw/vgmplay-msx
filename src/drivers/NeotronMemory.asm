@@ -143,9 +143,8 @@ Loop:
 	pop hl
 	pop de
 	jr Loop
-Finish:
-	call NeotronMemory_Reset
-	ret
+Finish: equ NeotronMemory_Reset
+;	jp NeotronMemory_Reset
 	ENDP
 
 ; b = block write size in 64KB
@@ -174,8 +173,7 @@ Next:
 	djnz Loop
 	pop de
 SkipErase:
-	call NeotronMemory_SetAddress
-	ret
+	jp NeotronMemory_SetAddress
 	ENDP
 
 ; d = write address[23:16]

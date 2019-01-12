@@ -25,8 +25,7 @@ MappedWriter_Construct:
 	ld bc,MappedWriter_SEGMENT_SIZE
 	ld de,MappedWriter_Flush
 	call Writer_Construct
-	call MappedWriter_AllocateNextSegment
-	ret
+	jr MappedWriter_AllocateNextSegment
 
 ; ix = this
 MappedWriter_Destruct: equ Writer_Destruct
@@ -62,8 +61,7 @@ MappedWriter_Flush:
 	sbc hl,bc
 	call c,System_ThrowException
 	ret nz
-	call MappedWriter_AllocateNextSegment
-	ret
+	jr MappedWriter_AllocateNextSegment
 
 ; ix = this
 MappedWriter_AllocateNextSegment:

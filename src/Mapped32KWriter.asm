@@ -61,8 +61,7 @@ Mapped32KWriter_Destruct:
 	ld a,(ix + Mapped32KWriter.originalPage2.segment)
 	call Mapper_instance.PutPH
 	ld a,(ix + Mapped32KWriter.originalPage2.slot)
-	call Memory_SetSlot
-	ret
+	jp Memory_SetSlot
 
 ; ix = this
 ; de <- buffer

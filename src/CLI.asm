@@ -56,8 +56,7 @@ CLI_Parse: PROC
 	ld ix,Heap_main
 	call Heap_Free
 	pop ix
-	call System_Rethrow
-	ret
+	jp System_Rethrow
 Loop:
 	ld a,(de)
 	and a

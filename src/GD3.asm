@@ -25,8 +25,7 @@ GD3_PrintInfoEnglish:
 	ld hl,GD3_converter
 	call GD3_PrintTag
 	ld hl,GD3_notes
-	call GD3_PrintTag
-	ret
+	jp GD3_PrintTag
 
 ; iy = reader
 ; f <- z: tag recognised
@@ -69,8 +68,7 @@ GD3_PrintTag: PROC
 	ret z
 	call System_Print
 	call SkipFirst
-	call System_PrintCrLf
-	ret
+	jp System_PrintCrLf
 Loop:
 	call Reader_ReadWord_IY
 	ld a,d

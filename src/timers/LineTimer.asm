@@ -121,8 +121,7 @@ Is60Hz:
 	or LineTimer_IE1
 	ld (VDP_MIRROR_0),a
 	ld b,0
-	call VDP_SetRegister
-	ret
+	jp VDP_SetRegister
 	ENDP
 
 ; ix = this
@@ -132,8 +131,7 @@ LineTimer_Stop:
 	ld (VDP_MIRROR_0),a
 	ld b,0
 	call VDP_SetRegister
-	call LineTimer_UninstallInterruptHandler
-	ret
+	jr LineTimer_UninstallInterruptHandler
 
 ; ix = this
 LineTimer_InstallInterruptHandler:

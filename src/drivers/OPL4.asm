@@ -346,8 +346,7 @@ OPL4_SetMemoryAddress:
 	pop hl
 	ld d,l
 	ld e,OPL4_WAVE_MEMORY_ADDRESS_L
-	call OPL4_WriteRegisterWave
-	ret
+	jp OPL4_WriteRegisterWave
 
 ; b = count
 ; e = register base
@@ -400,8 +399,7 @@ OPL4_Mute:
 	ld de,4068H
 	call OPL4_FillRegistersWave  ; key off, damp
 	ld de,00000000B << 8 | OPL4_FM2_NEW
-	call OPL4_WriteRegister2
-	ret
+	jp OPL4_WriteRegister2
 
 ; ix = this
 OPL4_Reset:
@@ -422,8 +420,7 @@ OPL4_Reset:
 	ld de,0004H
 	call OPL4_WriteRegister2
 	ld de,00000000B << 8 | OPL4_FM2_NEW
-	call OPL4_WriteRegister2
-	ret
+	jp OPL4_WriteRegister2
 
 ; ix = this
 ; f <- c: Found

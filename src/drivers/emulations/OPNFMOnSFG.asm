@@ -314,8 +314,7 @@ OPNFMOnSFG_Initialize:
 	ld de,0A819H  ; PMD, rescales PMS, get level 5 somewhat right
 	call OPNFMOnSFG_WriteSFGRegister
 	ld de,021BH   ; W, triangle LFO waveform
-	call OPNFMOnSFG_WriteSFGRegister
-	ret
+	jr OPNFMOnSFG_WriteSFGRegister
 
 ; e = register
 ; d = value

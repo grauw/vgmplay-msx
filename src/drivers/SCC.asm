@@ -81,8 +81,7 @@ SCC_Destruct:
 	call Driver_IsFound
 	ret nc
 	call SCC_Reset
-	call SCC_Deselect
-	ret
+	jr SCC_Deselect
 
 ; a = slot
 ; ix = this
@@ -99,16 +98,14 @@ SCC_Select:
 	ld hl,SCC_BANK_SELECT
 	ld e,SCC_BANK
 	ld a,(ix + SCC.slot)
-	call Memory_WriteSlot
-	ret
+	jp Memory_WriteSlot
 
 ; ix = this
 SCC_Deselect:
 	ld hl,SCC_BANK_SELECT
 	ld e,SCC_BANK_DEFAULT
 	ld a,(ix + SCC.slot)
-	call Memory_WriteSlot
-	ret
+	jp Memory_WriteSlot
 
 ; e = register
 ; d = value
@@ -137,15 +134,13 @@ SCC_Reset:
 	call SCC_Mute
 	ld b,0
 	ld de,0000H
-	call SCC_FillRegisters
-	ret
+	jr SCC_FillRegisters
 
 ; ix = this
 SCC_Mute:
 	ld b,6
 	ld de,0 << 8 | (SCC_AMPLITUDE & 0FFH)
-	call SCC_FillRegisters
-	ret
+	jr SCC_FillRegisters
 
 ; ix = this
 ; f <- c: found

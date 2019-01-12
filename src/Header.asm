@@ -140,8 +140,7 @@ Header_Construct:
 	ld hl,Header_noVGMFileError
 	call nz,System_ThrowExceptionWithMessage
 	call Header_ClearPastDataOffset
-	call Header_FixPre102Clocks
-	ret
+	jr Header_FixPre102Clocks
 
 ; ix = this
 Header_Destruct: equ System_Return
@@ -257,8 +256,7 @@ Header_PrintInfo:
 	call System_PrintChar
 	ld a,(ix + Header.version)
 	call System_PrintHexA
-	call System_PrintCrLf
-	ret
+	jp System_PrintCrLf
 
 ; ix = this
 Header_PrintLength:
@@ -272,8 +270,7 @@ Header_PrintLength:
 	ld hl,Header_loopLabel
 	call System_Print
 	pop hl
-	call Header_PrintTime
-	ret
+	jr Header_PrintTime
 
 ; dehl = samples
 Header_PrintTime: PROC

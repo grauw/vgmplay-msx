@@ -32,8 +32,7 @@ Franky_Construct:
 Franky_Destruct:
 	call Driver_IsFound
 	ret nc
-	call Franky_Reset
-	ret
+	jr Franky_Reset
 
 ; a = value
 ; ix = this
@@ -50,8 +49,7 @@ Franky_Reset:
 	ld a,0DFH
 	call Franky_WriteRegister
 	ld a,0FFH
-	call Franky_WriteRegister
-	ret
+	jr Franky_WriteRegister
 
 ; ix = this
 ; f <- c: found

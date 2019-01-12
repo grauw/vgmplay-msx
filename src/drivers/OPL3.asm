@@ -69,8 +69,7 @@ OPL3_Construct:
 OPL3_Destruct:
 	call Driver_IsFound
 	ret nc
-	call OPL3_Mute
-	ret
+	jr OPL3_Mute
 
 ; e = register
 ; d = value
@@ -126,8 +125,7 @@ OPL3_Mute:
 	call OPL3_FillRegisterPairs  ; frequency 0
 	ld b,09H
 	ld de,00B0H
-	call OPL3_FillRegisterPairs  ; key off
-	ret
+	jr OPL3_FillRegisterPairs    ; key off
 
 ; ix = this
 OPL3_Reset:
@@ -141,8 +139,7 @@ OPL3_Reset:
 	ld de,0004H
 	call OPL3_WriteRegister2
 	ld de,00000000B << 8 | OPL3_FM2_NEW
-	call OPL3_WriteRegister2
-	ret
+	jr OPL3_WriteRegister2
 
 ; ix = this
 ; f <- c: Found

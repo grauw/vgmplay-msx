@@ -66,8 +66,7 @@ SFG_Construct:
 SFG_Destruct:
 	call Driver_IsFound
 	ret nc
-	call SFG_Mute
-	ret
+	jr SFG_Mute
 
 ; a = slot
 ; ix = this
@@ -105,8 +104,7 @@ SFG_FillRegisters:
 SFG_Reset:
 	ld b,100H
 	ld de,0000H
-	call SFG_FillRegisters
-	ret
+	jr SFG_FillRegisters
 
 ; ix = this
 SFG_Mute: PROC

@@ -50,8 +50,7 @@ MSXMusic_Destruct:
 	call Driver_IsFound
 	ret nc
 	call MSXMusic_Mute
-	call MSXMusic_Disable
-	ret
+	jr MSXMusic_Disable
 
 ; e = register
 ; d = value
@@ -72,8 +71,7 @@ MSXMusic_Enable:
 	ld e,a
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic_ENABLE_ADDRESS
-	call Memory_WriteSlot
-	ret
+	jp Memory_WriteSlot
 
 ; ix = this
 MSXMusic_Disable:
@@ -86,8 +84,7 @@ MSXMusic_Disable:
 	ld e,a
 	ld a,(ix + MSXMusic.slot)
 	ld hl,MSXMusic_ENABLE_ADDRESS
-	call Memory_WriteSlot
-	ret
+	jp Memory_WriteSlot
 
 ; b = count
 ; e = register base
@@ -118,15 +115,13 @@ MSXMusic_Mute:
 	call MSXMusic_FillRegisters  ; frequency 0
 	ld b,9
 	ld de,0020H
-	call MSXMusic_FillRegisters  ; key off
-	ret
+	jr MSXMusic_FillRegisters    ; key off
 
 ; ix = this
 MSXMusic_Reset:
 	ld b,39H
 	ld de,0000H
-	call MSXMusic_FillRegisters
-	ret
+	jr MSXMusic_FillRegisters
 
 ; ix = this
 ; f <- c: found

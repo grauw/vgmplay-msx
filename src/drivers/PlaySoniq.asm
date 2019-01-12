@@ -39,8 +39,7 @@ PlaySoniq_Destruct:
 	call Driver_IsFound
 	ret nc
 	call PlaySoniq_Reset
-	call PlaySoniq_Deselect
-	ret
+	jr PlaySoniq_Deselect
 
 ; ix = this
 PlaySoniq_Select:
@@ -75,8 +74,7 @@ PlaySoniq_Reset:
 	ld a,0DFH
 	call PlaySoniq_WriteRegister
 	ld a,0FFH
-	call PlaySoniq_WriteRegister
-	ret
+	jr PlaySoniq_WriteRegister
 
 ; ix = this
 ; f <- c: found

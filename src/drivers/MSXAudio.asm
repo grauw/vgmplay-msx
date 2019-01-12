@@ -180,8 +180,7 @@ MSXAudio_Construct:
 MSXAudio_Destruct:
 	call Driver_IsFound
 	ret nc
-	call MSXAudio_Mute
-	ret
+	jr MSXAudio_Mute
 
 ; e = register
 ; d = value
@@ -230,15 +229,13 @@ MSXAudio_Mute:
 	call MSXAudio_FillRegisters  ; frequency 0
 	ld b,09H
 	ld de,00A0H
-	call MSXAudio_FillRegisters  ; key off
-	ret
+	jr MSXAudio_FillRegisters    ; key off
 
 ; ix = this
 MSXAudio_Reset:
 	ld b,0C9H
 	ld de,0000H
-	call MSXAudio_FillRegisters
-	ret
+	jr MSXAudio_FillRegisters
 
 ; dehl = size
 ; ix = this
@@ -284,8 +281,7 @@ LessThan64K:
 Finish:
 	ld d,01H
 	ld e,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_WriteRegister
-	ret
+	jp MSXAudio_WriteRegister
 	ENDP
 
 ; ehl = write address
@@ -321,8 +317,7 @@ MSXAudio_SetADPCMWriteAddress:
 	call MSXAudio_WriteRegister
 	ld d,60H
 	ld e,MSXAudio_ADPCM_CONTROL
-	call MSXAudio_WriteRegister
-	ret
+	jp MSXAudio_WriteRegister
 
 ; bc = count
 ; hl = source

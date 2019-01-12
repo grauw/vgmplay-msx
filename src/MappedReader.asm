@@ -110,8 +110,7 @@ MappedReader_Skip_IY:
 	adc hl,bc
 	ex de,hl
 	call c,MappedReader_ThrowAddressOutOfBounds
-	call MappedReader_SetPosition_IY
-	ret
+	jr MappedReader_SetPosition_IY
 
 ; de = destination address
 ; bc = bytes count

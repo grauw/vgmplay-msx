@@ -61,8 +61,7 @@ PSG_Construct:
 PSG_Destruct:
 	call Driver_IsFound
 	ret nc
-	call PSG_Reset
-	ret
+	jr PSG_Reset
 
 ; e = register
 ; d = value
@@ -107,8 +106,7 @@ PSG_Reset:
 	call PSG_FillRegisters
 	ld b,14
 	ld de,0000H
-	call PSG_FillRegisters
-	ret
+	jr PSG_FillRegisters
 
 ; ix = this
 ; f <- c: found

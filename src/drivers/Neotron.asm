@@ -198,8 +198,7 @@ Neotron_Destruct:
 	call Heap_Free
 	pop ix
 	call Neotron_Mute
-	call Neotron_Deselect
-	ret
+	jr Neotron_Deselect
 
 ; a = slot
 ; ix = this
@@ -340,8 +339,7 @@ Neotron_Reset:
 	call Neotron_WriteRegister      ; ADPCM-B panpot
 	ld b,04H
 	ld de,0C0B4H
-	call Neotron_FillRegisterPairs  ; FM panpots
-	ret
+	jr Neotron_FillRegisterPairs    ; FM panpots
 
 ; ix = this
 ; f <- c: found

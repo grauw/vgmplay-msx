@@ -52,8 +52,7 @@ Darky_Destruct:
 	call Driver_IsFound
 	ret nc
 	call Darky_Reset
-	call Darky_Disable
-	ret
+	jr Darky_Disable
 
 ; ix = this
 Darky_Enable:
@@ -121,8 +120,7 @@ Darky_Reset:
 	call Darky_FillRegisters
 	ld b,14
 	ld de,0000H
-	call Darky_FillRegisters
-	ret
+	jr Darky_FillRegisters
 
 ; ix = this
 ; a <- device ID

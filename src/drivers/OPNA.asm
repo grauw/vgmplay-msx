@@ -232,8 +232,7 @@ OPNA_Construct:
 OPNA_Destruct:
 	call Driver_IsFound
 	ret nc
-	call OPNA_Mute
-	ret
+	jr OPNA_Mute
 
 ; e = register
 ; d = value
@@ -344,8 +343,7 @@ OPNA_Reset:
 	call OPNA_WriteRegister2  ; ADPCM 1bit / DRAM / panpot
 	ld b,04H
 	ld de,0C0B4H
-	call OPNA_FillRegisterPairs  ; FM panpots
-	ret
+	jr OPNA_FillRegisterPairs  ; FM panpots
 
 ; dehl = size
 ; ix = this
@@ -391,8 +389,7 @@ LessThan64K:
 Finish:
 	ld d,01H
 	ld e,OPNA_ADPCM_CONTROL
-	call OPNA_WriteRegister2
-	ret
+	jp OPNA_WriteRegister2
 	ENDP
 
 ; ehl = write address
@@ -428,8 +425,7 @@ OPNA_SetADPCMWriteAddress:
 	call OPNA_WriteRegister2
 	ld d,60H
 	ld e,OPNA_ADPCM_CONTROL
-	call OPNA_WriteRegister2
-	ret
+	jp OPNA_WriteRegister2
 
 ; bc = count
 ; hl = source

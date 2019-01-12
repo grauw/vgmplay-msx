@@ -32,8 +32,7 @@ TurboRPCM_Construct:
 TurboRPCM_Destruct:
 	call Driver_IsFound
 	ret nc
-	call TurboRPCM_Disable
-	ret
+	jr TurboRPCM_Disable
 
 ; d = value
 ; ix = this
