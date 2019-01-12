@@ -5,7 +5,7 @@ PSG_BASE_PORT: equ 0A0H
 PSG_ADDRESS: equ 00H
 PSG_WRITE: equ 01H
 PSG_READ: equ 02H
-PSG_FREQUENCY: equ 1789773
+PSG_CLOCK: equ 1789773
 
 PSG: MACRO ?base, ?name = PSG_name
 	super: Driver ?name, Driver_PrintInfoImpl
@@ -53,8 +53,8 @@ PSG_Construct:
 	call PSG_Detect
 	ret nc
 	call PSG_Reset
-	ld de,PSG_FREQUENCY >> 16
-	ld hl,PSG_FREQUENCY
+	ld de,PSG_CLOCK >> 16
+	ld hl,PSG_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

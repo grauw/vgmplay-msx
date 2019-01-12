@@ -8,7 +8,7 @@ OPNA_FM1_ADDRESS: equ OPNA_BASE
 OPNA_FM1_DATA: equ OPNA_BASE + 1
 OPNA_FM2_ADDRESS: equ OPNA_BASE + 2
 OPNA_FM2_DATA: equ OPNA_BASE + 3
-OPNA_FREQUENCY: equ 8000000
+OPNA_CLOCK: equ 8000000
 
 OPNA_ADPCM_CONTROL: equ 00H
 OPNA_MISC_CONTROL: equ 01H
@@ -224,8 +224,8 @@ OPNA_Construct:
 	call OPNA_Detect
 	ret nc
 	call OPNA_Reset
-	ld de,OPNA_FREQUENCY >> 16
-	ld hl,OPNA_FREQUENCY
+	ld de,OPNA_CLOCK >> 16
+	ld hl,OPNA_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

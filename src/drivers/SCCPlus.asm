@@ -13,7 +13,7 @@ SCCPlus_BANK_DEFAULT: equ 03H
 SCCPlus_MODE: equ 0BFFFH
 SCCPlus_MODE_SCC: equ 00H
 SCCPlus_MODE_SCCPLUS: equ 20H
-SCCPlus_FREQUENCY_: equ 1789773
+SCCPlus_CLOCK: equ 1789773
 
 SCCPlus: MACRO
 	super: Driver SCCPlus_name, Driver_PrintInfoImpl
@@ -88,8 +88,8 @@ SCCPlus_Construct:
 	call SCCPlus_SetSlot
 	call SCCPlus_Select
 	call SCCPlus_Reset
-	ld de,SCCPlus_FREQUENCY_ >> 16
-	ld hl,SCCPlus_FREQUENCY_
+	ld de,SCCPlus_CLOCK >> 16
+	ld hl,SCCPlus_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

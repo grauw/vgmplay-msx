@@ -5,7 +5,7 @@ MSXMusic_ADDRESS: equ 7CH
 MSXMusic_DATA: equ 7DH
 MSXMusic_ID_ADDRESS: equ 4018H
 MSXMusic_ENABLE_ADDRESS: equ 7FF6H
-MSXMusic_FREQUENCY: equ 3579545
+MSXMusic_CLOCK: equ 3579545
 
 MSXMusic: MACRO
 	super: Driver MSXMusic_name, Driver_PrintInfoImpl
@@ -41,8 +41,8 @@ MSXMusic_Construct:
 	ld (ix + MSXMusic.internal),b
 	call MSXMusic_Enable
 	call MSXMusic_Reset
-	ld de,MSXMusic_FREQUENCY >> 16
-	ld hl,MSXMusic_FREQUENCY
+	ld de,MSXMusic_CLOCK >> 16
+	ld hl,MSXMusic_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

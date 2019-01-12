@@ -3,7 +3,7 @@
 ;
 TurboRPCM_DATA: equ 0A4H
 TurboRPCM_CONTROL: equ 0A5H
-TurboRPCM_FREQUENCY: equ 3579545
+TurboRPCM_CLOCK: equ 3579545
 
 TurboRPCM: MACRO
 	super: Driver TurboRPCM_name, Driver_PrintInfoImpl
@@ -24,8 +24,8 @@ TurboRPCM_Construct:
 	call TurboRPCM_Detect
 	ret nc
 	call TurboRPCM_Enable
-	ld de,TurboRPCM_FREQUENCY >> 16
-	ld hl,TurboRPCM_FREQUENCY
+	ld de,TurboRPCM_CLOCK >> 16
+	ld hl,TurboRPCM_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

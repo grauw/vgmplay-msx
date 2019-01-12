@@ -8,7 +8,7 @@ OPL3_FM_DATA: equ 01H
 OPL3_FM2_ADDRESS: equ 02H
 OPL3_FM2_DATA: equ 03H
 OPL3_FM2_NEW: equ 05H
-OPL3_FREQUENCY: equ 14318181
+OPL3_CLOCK: equ 14318181
 OPL3_TIMER_1: equ 02H
 OPL3_FLAG_CONTROL: equ 04H
 
@@ -61,8 +61,8 @@ OPL3_Construct:
 	call OPL3_Detect
 	ret nc
 	call OPL3_Reset
-	ld de,OPL3_FREQUENCY >> 16
-	ld hl,OPL3_FREQUENCY
+	ld de,OPL3_CLOCK >> 16
+	ld hl,OPL3_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

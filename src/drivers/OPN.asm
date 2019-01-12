@@ -4,7 +4,7 @@
 OPN_BASE: equ 12H
 OPN_ADDRESS: equ OPN_BASE
 OPN_DATA: equ OPN_BASE + 1
-OPN_FREQUENCY: equ 3579545
+OPN_CLOCK: equ 3579545
 
 OPN: MACRO
 	super: Driver OPN_name, Driver_PrintInfoImpl
@@ -45,8 +45,8 @@ OPN_Construct:
 	call OPN_Detect
 	ret nc
 	call OPN_Reset
-	ld de,OPN_FREQUENCY >> 16
-	ld hl,OPN_FREQUENCY
+	ld de,OPN_CLOCK >> 16
+	ld hl,OPN_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

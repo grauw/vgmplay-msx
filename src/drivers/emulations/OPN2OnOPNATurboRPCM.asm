@@ -1,8 +1,8 @@
 ;
 ; OPN2 on OPNA + turboR PCM driver
 ;
-OPN2OnOPNATurboRPCM_FREQUENCY: equ 7670453
-OPN2OnOPNATurboRPCM_FREQUENCY_RATIO: equ (OPN2OnOPNATurboRPCM_FREQUENCY << 8) / (OPNA_FREQUENCY >> 7)
+OPN2OnOPNATurboRPCM_CLOCK: equ 7670453
+OPN2OnOPNATurboRPCM_CLOCK_RATIO: equ (OPN2OnOPNATurboRPCM_CLOCK << 8) / (OPNA_CLOCK >> 7)
 
 OPN2OnOPNATurboRPCM: MACRO
 	super: Driver OPN2OnOPNATurboRPCM_name, OPN2OnOPNATurboRPCM_PrintInfoImpl
@@ -48,7 +48,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
+		ld bc,OPN2OnOPNATurboRPCM_CLOCK_RATIO
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
 		ld h,e
@@ -76,7 +76,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
+		ld bc,OPN2OnOPNATurboRPCM_CLOCK_RATIO
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
 		ld h,e
@@ -117,7 +117,7 @@ OPN2OnOPNATurboRPCM: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		ld bc,OPN2OnOPNATurboRPCM_FREQUENCY_RATIO
+		ld bc,OPN2OnOPNATurboRPCM_CLOCK_RATIO
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
 		ld h,e
@@ -170,8 +170,8 @@ OPN2OnOPNATurboRPCM_Construct: PROC
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
 NoTurboRPCM:
-	ld de,OPN2OnOPNATurboRPCM_FREQUENCY >> 16
-	ld hl,OPN2OnOPNATurboRPCM_FREQUENCY
+	ld de,OPN2OnOPNATurboRPCM_CLOCK >> 16
+	ld hl,OPN2OnOPNATurboRPCM_CLOCK
 	jp Driver_SetClock
 	ENDP
 

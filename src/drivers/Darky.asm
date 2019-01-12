@@ -9,7 +9,7 @@ Darky_EPSG_BASE_PORT_2: equ 4CH
 Darky_ADDRESS: equ 00H
 Darky_DATA: equ 01H
 Darky_DEVICE_ID: equ 0AAH
-Darky_FREQUENCY: equ 1789773
+Darky_CLOCK: equ 1789773
 
 Darky: MACRO ?base, ?name = Darky_name
 	super: Driver ?name, Driver_PrintInfoImpl
@@ -43,8 +43,8 @@ Darky_Construct:
 	ld (ix + Darky.deviceID),a
 	call Darky_Enable
 	call Darky_Reset
-	ld de,Darky_FREQUENCY >> 16
-	ld hl,Darky_FREQUENCY
+	ld de,Darky_CLOCK >> 16
+	ld hl,Darky_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

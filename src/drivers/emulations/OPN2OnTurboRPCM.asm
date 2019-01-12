@@ -1,7 +1,7 @@
 ;
 ; OPN2 PCM on turboR PCM driver
 ;
-OPN2OnTurboRPCM_FREQUENCY: equ 7670453
+OPN2OnTurboRPCM_CLOCK: equ 7670453
 
 OPN2OnTurboRPCM: MACRO
 	super: Driver OPN2OnTurboRPCM_name, OPN2OnTurboRPCM_PrintInfoImpl
@@ -36,8 +36,8 @@ OPN2OnTurboRPCM_Construct:
 	add hl,de
 	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-	ld de,OPN2OnTurboRPCM_FREQUENCY >> 16
-	ld hl,OPN2OnTurboRPCM_FREQUENCY
+	ld de,OPN2OnTurboRPCM_CLOCK >> 16
+	ld hl,OPN2OnTurboRPCM_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

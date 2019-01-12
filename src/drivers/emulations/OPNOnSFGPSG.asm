@@ -1,7 +1,7 @@
 ;
 ; OPN(A/B) on SFG + PSG driver
 ;
-OPNOnSFGPSG_FREQUENCY: equ 3579545
+OPNOnSFGPSG_CLOCK: equ 3579545
 
 OPNOnSFGPSG: MACRO
 	super: Driver OPNOnSFGPSG_name, OPNOnSFGPSG_PrintInfoImpl
@@ -60,8 +60,8 @@ OPNOnSFGPSG_Construct:
 	add hl,de
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister),l
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister + 1),h
-	ld de,OPNOnSFGPSG_FREQUENCY >> 16
-	ld hl,OPNOnSFGPSG_FREQUENCY
+	ld de,OPNOnSFGPSG_CLOCK >> 16
+	ld hl,OPNOnSFGPSG_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

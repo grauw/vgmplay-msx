@@ -10,7 +10,7 @@ SCC_DEFORMATION: equ 98E0H
 SCC_BANK_SELECT: equ 9000H
 SCC_BANK: equ 3FH
 SCC_BANK_DEFAULT: equ 02H
-SCC_FREQUENCY_: equ 1789773
+SCC_CLOCK: equ 1789773
 
 SCC: MACRO
 	super: Driver SCC_name, Driver_PrintInfoImpl
@@ -72,8 +72,8 @@ SCC_Construct:
 	call SCC_SetSlot
 	call SCC_Select
 	call SCC_Reset
-	ld de,SCC_FREQUENCY_ >> 16
-	ld hl,SCC_FREQUENCY_
+	ld de,SCC_CLOCK >> 16
+	ld hl,SCC_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

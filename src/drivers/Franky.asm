@@ -2,7 +2,7 @@
 ; Franky SN76489 DCSG driver
 ;
 Franky_DATA: equ 049H
-Franky_FREQUENCY: equ 3579545
+Franky_CLOCK: equ 3579545
 
 Franky: MACRO
 	super: Driver Franky_name, Driver_PrintInfoImpl
@@ -24,8 +24,8 @@ Franky_Construct:
 	ld a,0
 	out (40H),a  ; make sure no known switched I/O device is listening
 	call Franky_Reset
-	ld de,Franky_FREQUENCY >> 16
-	ld hl,Franky_FREQUENCY
+	ld de,Franky_CLOCK >> 16
+	ld hl,Franky_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

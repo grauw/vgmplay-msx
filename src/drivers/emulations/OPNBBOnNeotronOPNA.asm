@@ -1,7 +1,7 @@
 ;
 ; OPNB-B on Neotron + OPNA driver
 ;
-OPNBBOnNeotronOPNA_FREQUENCY: equ 8000000
+OPNBBOnNeotronOPNA_CLOCK: equ 8000000
 
 OPNBBOnNeotronOPNA: MACRO
 	super: Driver OPNBBOnNeotronOPNA_name, OPNBBOnNeotronOPNA_PrintInfoImpl
@@ -91,8 +91,8 @@ OPNBBOnNeotronOPNA_Construct: PROC
 	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister),l
 	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister + 1),h
 NoOPNA:
-	ld de,OPNBBOnNeotronOPNA_FREQUENCY >> 16
-	ld hl,OPNBBOnNeotronOPNA_FREQUENCY
+	ld de,OPNBBOnNeotronOPNA_CLOCK >> 16
+	ld hl,OPNBBOnNeotronOPNA_CLOCK
 	jp Driver_SetClock
 	ENDP
 

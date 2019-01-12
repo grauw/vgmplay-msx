@@ -7,7 +7,7 @@ SFG_YM2151_STATUS: equ 3FF1H
 SFG_YM2151_ADDRESS: equ 3FF0H
 SFG_YM2151_DATA: equ 3FF1H
 SFG_ID_ADDRESS: equ 80H
-SFG_FREQUENCY: equ 3579545
+SFG_CLOCK: equ 3579545
 
 SFG: MACRO
 	super: Driver SFG_sfg01Name, Driver_PrintInfoImpl
@@ -58,8 +58,8 @@ SFG_Construct:
 	call SFG_GetName
 	call Driver_SetName
 	call SFG_Reset
-	ld de,SFG_FREQUENCY >> 16
-	ld hl,SFG_FREQUENCY
+	ld de,SFG_CLOCK >> 16
+	ld hl,SFG_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

@@ -11,7 +11,7 @@ Neotron_FM1_DATA: equ Neotron_BASE + 1
 Neotron_FM2_ADDRESS: equ Neotron_BASE + 2
 Neotron_FM2_DATA: equ Neotron_BASE + 3
 Neotron_ID_ADDRESS: equ 806CH
-Neotron_FREQUENCY: equ 8000000
+Neotron_CLOCK: equ 8000000
 
 ; ADPCM registers
 Neotron_ADPCM_CONTROL: equ 10H
@@ -182,8 +182,8 @@ Neotron_Construct:
 	ex (sp),ix
 	call NeotronMemory_Construct
 	pop ix
-	ld de,Neotron_FREQUENCY >> 16
-	ld hl,Neotron_FREQUENCY
+	ld de,Neotron_CLOCK >> 16
+	ld hl,Neotron_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

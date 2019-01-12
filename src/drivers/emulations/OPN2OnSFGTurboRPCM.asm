@@ -1,7 +1,7 @@
 ;
 ; OPN2 on SFG + turboR PCM driver
 ;
-OPN2OnSFGTurboRPCM_FREQUENCY: equ 7670453
+OPN2OnSFGTurboRPCM_CLOCK: equ 7670453
 
 OPN2OnSFGTurboRPCM: MACRO
 	super: Driver OPN2OnSFGTurboRPCM_name, OPN2OnSFGTurboRPCM_PrintInfoImpl
@@ -61,8 +61,8 @@ OPN2OnSFGTurboRPCM_Construct: PROC
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
 NoTurboRPCM:
-	ld de,OPN2OnSFGTurboRPCM_FREQUENCY >> 16
-	ld hl,OPN2OnSFGTurboRPCM_FREQUENCY
+	ld de,OPN2OnSFGTurboRPCM_CLOCK >> 16
+	ld hl,OPN2OnSFGTurboRPCM_CLOCK
 	jp Driver_SetClock
 	ENDP
 

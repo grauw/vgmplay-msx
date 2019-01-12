@@ -8,7 +8,7 @@ MMM_PAGE0: equ 0FCH
 MMM_PAGE1: equ 0FDH
 MMM_PAGE2: equ 0FEH
 MMM_PAGE3: equ 0FFH
-MMM_FREQUENCY: equ 3579545
+MMM_CLOCK: equ 3579545
 
 MMM: MACRO
 	super: Driver MMM_name, Driver_PrintInfoImpl
@@ -32,8 +32,8 @@ MMM_Construct:
 	call MMM_SetSlot
 	call MMM_Enable
 	call MMM_Reset
-	ld de,MMM_FREQUENCY >> 16
-	ld hl,MMM_FREQUENCY
+	ld de,MMM_CLOCK >> 16
+	ld hl,MMM_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

@@ -24,8 +24,8 @@ ExternalPSG_Construct:
 	call ExternalPSG_GetName
 	call Driver_SetName
 	call PSG_Reset
-	ld de,PSG_FREQUENCY >> 16
-	ld hl,PSG_FREQUENCY
+	ld de,PSG_CLOCK >> 16
+	ld hl,PSG_CLOCK
 	jp Driver_SetClock
 
 ExternalPSG_Destruct: equ PSG_Destruct

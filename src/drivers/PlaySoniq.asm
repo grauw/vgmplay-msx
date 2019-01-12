@@ -7,7 +7,7 @@ PlaySoniq_REGISTER_VDPBASE: equ 1DH
 PlaySoniq_REGISTER_PSGBASE: equ 1EH
 PlaySoniq_SN76489_DATA: equ 3BH
 PlaySoniq_SN76489_DATA_DEFAULT: equ 49H
-PlaySoniq_FREQUENCY: equ 3579545
+PlaySoniq_CLOCK: equ 3579545
 
 PlaySoniq: MACRO
 	super: Driver PlaySoniq_name, Driver_PrintInfoImpl
@@ -30,8 +30,8 @@ PlaySoniq_Construct:
 	ret nc
 	call PlaySoniq_Select
 	call PlaySoniq_Reset
-	ld de,PlaySoniq_FREQUENCY >> 16
-	ld hl,PlaySoniq_FREQUENCY
+	ld de,PlaySoniq_CLOCK >> 16
+	ld hl,PlaySoniq_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

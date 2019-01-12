@@ -6,7 +6,7 @@
 MSXAudio_STATUS_PORT: equ 0C0H
 MSXAudio_ADDRESS_PORT: equ 0C0H
 MSXAudio_DATA_PORT: equ 0C1H
-MSXAudio_FREQUENCY: equ 3579545
+MSXAudio_CLOCK: equ 3579545
 
 ; registers
 MSXAudio_TEST: equ 01H
@@ -172,8 +172,8 @@ MSXAudio_Construct:
 	call MSXAudio_Detect
 	ret nc
 	call MSXAudio_Reset
-	ld de,MSXAudio_FREQUENCY >> 16
-	ld hl,MSXAudio_FREQUENCY
+	ld de,MSXAudio_CLOCK >> 16
+	ld hl,MSXAudio_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

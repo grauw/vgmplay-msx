@@ -14,7 +14,7 @@ OPL4_WAVE_MEMORY_ADDRESS_E: equ 03H
 OPL4_WAVE_MEMORY_ADDRESS_H: equ 04H
 OPL4_WAVE_MEMORY_ADDRESS_L: equ 05H
 OPL4_WAVE_MEMORY_DATA: equ 06H
-OPL4_FREQUENCY: equ 33868800
+OPL4_CLOCK: equ 33868800
 
 OPL4: MACRO ?fmbase, ?wavebase, ?name
 	this:
@@ -105,8 +105,8 @@ OPL4_Construct:
 	call OPL4_Detect
 	ret nc
 	call OPL4_Reset
-	ld de,OPL4_FREQUENCY >> 16
-	ld hl,OPL4_FREQUENCY
+	ld de,OPL4_CLOCK >> 16
+	ld hl,OPL4_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

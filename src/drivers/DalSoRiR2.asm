@@ -34,8 +34,8 @@ DalSoRiR2_Construct:
 	call DalSoRiR2_Detect
 	ret nc
 	call OPL4_Reset
-	ld de,OPL4_FREQUENCY >> 16
-	ld hl,OPL4_FREQUENCY
+	ld de,OPL4_CLOCK >> 16
+	ld hl,OPL4_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

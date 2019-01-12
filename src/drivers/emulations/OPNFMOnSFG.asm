@@ -3,7 +3,7 @@
 ;
 ; The FM part is common to all chips in the OPN family.
 ;
-OPNFMOnSFG_FREQUENCY: equ 3579545
+OPNFMOnSFG_CLOCK: equ 3579545
 
 OPNFMOnSFG: MACRO
 	super: Driver OPNFMOnSFG_name, OPNFMOnSFG_PrintInfoImpl
@@ -285,8 +285,8 @@ OPNFMOnSFG_Construct:
 	ld bc,-OPNFMOnSFG.WriteRegister2.writeSFGRegister
 	add ix,bc
 	call OPNFMOnSFG_Initialize
-	ld de,OPNFMOnSFG_FREQUENCY >> 16
-	ld hl,OPNFMOnSFG_FREQUENCY
+	ld de,OPNFMOnSFG_CLOCK >> 16
+	ld hl,OPNFMOnSFG_CLOCK
 	jp Driver_SetClock
 
 ; ix = this

@@ -1,7 +1,7 @@
 ;
 ; OPNA on SFG + PSG + MSX-AUDIO driver
 ;
-OPNAOnSFGPSGMSXAudio_FREQUENCY: equ 3579545
+OPNAOnSFGPSGMSXAudio_CLOCK: equ 3579545
 
 OPNAOnSFGPSGMSXAudio: MACRO
 	super: Driver OPNAOnSFGPSGMSXAudio_name, OPNAOnSFGPSGMSXAudio_PrintInfoImpl
@@ -84,8 +84,8 @@ OPNAOnSFGPSGMSXAudio_Construct: PROC
 	ld (ix + OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process),l
 	ld (ix + OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process + 1),h
 NoMSXAudio:
-	ld de,OPNAOnSFGPSGMSXAudio_FREQUENCY >> 16
-	ld hl,OPNAOnSFGPSGMSXAudio_FREQUENCY
+	ld de,OPNAOnSFGPSGMSXAudio_CLOCK >> 16
+	ld hl,OPNAOnSFGPSGMSXAudio_CLOCK
 	jp Driver_SetClock
 	ENDP
 
