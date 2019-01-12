@@ -2,14 +2,13 @@
 ; VGM C140 chip
 ;
 C140: MACRO
-	super: Chip C140_name, System_Return
+	super: Chip C140_name, Header.c140Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-C140_Construct:
-	ld de,Header.c140Clock
-	jp Chip_Construct
+C140_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 C140_Destruct: equ Chip_Destruct

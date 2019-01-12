@@ -2,14 +2,13 @@
 ; VGM GameBoyDMG chip
 ;
 GameBoyDMG: MACRO
-	super: Chip GameBoyDMG_name, System_Return
+	super: Chip GameBoyDMG_name, Header.gameBoyDMGClock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-GameBoyDMG_Construct:
-	ld de,Header.gameBoyDMGClock
-	jp Chip_Construct
+GameBoyDMG_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 GameBoyDMG_Destruct: equ Chip_Destruct

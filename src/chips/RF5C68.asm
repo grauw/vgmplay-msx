@@ -2,14 +2,13 @@
 ; VGM RF5C68 chip
 ;
 RF5C68: MACRO
-	super: Chip RF5C68_name, System_Return
+	super: Chip RF5C68_name, Header.rf5c68Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-RF5C68_Construct:
-	ld de,Header.rf5c68Clock
-	jp Chip_Construct
+RF5C68_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 RF5C68_Destruct: equ Chip_Destruct

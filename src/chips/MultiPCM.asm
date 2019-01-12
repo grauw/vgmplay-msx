@@ -2,14 +2,13 @@
 ; VGM MultiPCM chip
 ;
 MultiPCM: MACRO
-	super: Chip MultiPCM_name, System_Return
+	super: Chip MultiPCM_name, Header.multiPCMClock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-MultiPCM_Construct:
-	ld de,Header.multiPCMClock
-	jp Chip_Construct
+MultiPCM_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 MultiPCM_Destruct: equ Chip_Destruct

@@ -2,7 +2,7 @@
 ; VGM YM3812 chip
 ;
 YM3812: MACRO
-	super: Chip YM3812_name, YM3812_Connect
+	super: Chip YM3812_name, Header.ym3812Clock, YM3812_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -25,9 +25,8 @@ YM3812: MACRO
 
 ; ix = this
 ; iy = header
-YM3812_Construct:
-	ld de,Header.ym3812Clock
-	jp Chip_Construct
+YM3812_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YM3812_Destruct: equ Chip_Destruct

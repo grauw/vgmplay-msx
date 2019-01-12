@@ -5,7 +5,7 @@ YM2612_PCM_REGISTER: equ 2AH
 YM2612_PCMBUFFER_SIZE: equ 100H
 
 YM2612: MACRO
-	super: Chip YM2612_ym2612Name, YM2612_Connect
+	super: Chip YM2612_ym2612Name, Header.ym2612Clock, YM2612_Connect
 	pcmDataStart:
 		dd 0
 	pcmDataPosition:
@@ -192,7 +192,6 @@ YM2612: MACRO
 ; ix = this
 ; iy = header
 YM2612_Construct:
-	ld de,Header.ym2612Clock
 	call Chip_Construct
 	push ix
 	ld bc,YM2612_PCMBUFFER_SIZE

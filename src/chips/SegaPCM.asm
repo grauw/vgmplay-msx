@@ -2,14 +2,13 @@
 ; VGM SegaPCM chip
 ;
 SegaPCM: MACRO
-	super: Chip SegaPCM_name, System_Return
+	super: Chip SegaPCM_name, Header.segaPCMClock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-SegaPCM_Construct:
-	ld de,Header.segaPCMClock
-	jp Chip_Construct
+SegaPCM_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 SegaPCM_Destruct: equ Chip_Destruct

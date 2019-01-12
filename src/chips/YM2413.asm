@@ -2,7 +2,7 @@
 ; VGM YM2413 chip
 ;
 YM2413: MACRO
-	super: Chip YM2413_name, YM2413_Connect
+	super: Chip YM2413_name, Header.ym2413Clock, YM2413_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -16,9 +16,8 @@ YM2413: MACRO
 
 ; ix = this
 ; iy = header
-YM2413_Construct:
-	ld de,Header.ym2413Clock
-	jp Chip_Construct
+YM2413_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YM2413_Destruct: equ Chip_Destruct

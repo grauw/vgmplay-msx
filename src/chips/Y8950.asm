@@ -2,7 +2,7 @@
 ; VGM Y8950 chip
 ;
 Y8950: MACRO
-	super: Chip Y8950_name, Y8950_Connect
+	super: Chip Y8950_name, Header.y8950Clock, Y8950_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -37,9 +37,8 @@ Y8950: MACRO
 
 ; ix = this
 ; iy = header
-Y8950_Construct:
-	ld de,Header.y8950Clock
-	jp Chip_Construct
+Y8950_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 Y8950_Destruct: equ Chip_Destruct

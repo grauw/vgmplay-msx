@@ -2,14 +2,13 @@
 ; VGM YMF271 chip
 ;
 YMF271: MACRO
-	super: Chip YMF271_name, System_Return
+	super: Chip YMF271_name, Header.ymf271Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-YMF271_Construct:
-	ld de,Header.ymf271Clock
-	jp Chip_Construct
+YMF271_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YMF271_Destruct: equ Chip_Destruct

@@ -2,7 +2,7 @@
 ; VGM YM3526 chip
 ;
 YM3526: MACRO
-	super: Chip YM3526_name, YM3526_Connect
+	super: Chip YM3526_name, Header.ym3526Clock, YM3526_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -25,9 +25,8 @@ YM3526: MACRO
 
 ; ix = this
 ; iy = header
-YM3526_Construct:
-	ld de,Header.ym3526Clock
-	jp Chip_Construct
+YM3526_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YM3526_Destruct: equ Chip_Destruct

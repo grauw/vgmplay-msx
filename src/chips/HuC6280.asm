@@ -2,14 +2,13 @@
 ; VGM HuC6280 chip
 ;
 HuC6280: MACRO
-	super: Chip HuC6280_name, System_Return
+	super: Chip HuC6280_name, Header.huC6280Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-HuC6280_Construct:
-	ld de,Header.huC6280Clock
-	jp Chip_Construct
+HuC6280_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 HuC6280_Destruct: equ Chip_Destruct

@@ -2,7 +2,7 @@
 ; VGM YM2610 chip
 ;
 YM2610: MACRO
-	super: Chip YM2610_ym2610Name, YM2610_Connect
+	super: Chip YM2610_ym2610Name, Header.ym2610BClock, YM2610_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -50,7 +50,6 @@ YM2610: MACRO
 ; ix = this
 ; iy = header
 YM2610_Construct:
-	ld de,Header.ym2610BClock
 	call Chip_Construct
 	call YM2610_GetName
 	jp Chip_SetName

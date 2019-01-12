@@ -2,7 +2,7 @@
 ; VGM K051649 chip
 ;
 K051649: MACRO
-	super: Chip K051649_k051649Name, K051649_Connect
+	super: Chip K051649_k051649Name, Header.k051649Clock, K051649_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -55,7 +55,6 @@ K051649: MACRO
 ; ix = this
 ; iy = header
 K051649_Construct:
-	ld de,Header.k051649Clock
 	call Chip_Construct
 	call K051649_GetName
 	jp Chip_SetName

@@ -2,14 +2,13 @@
 ; VGM UPD7759 chip
 ;
 UPD7759: MACRO
-	super: Chip UPD7759_name, System_Return
+	super: Chip UPD7759_name, Header.uPD7759Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-UPD7759_Construct:
-	ld de,Header.uPD7759Clock
-	jp Chip_Construct
+UPD7759_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 UPD7759_Destruct: equ Chip_Destruct

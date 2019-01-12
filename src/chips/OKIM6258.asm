@@ -2,14 +2,13 @@
 ; VGM OKIM6258 chip
 ;
 OKIM6258: MACRO
-	super: Chip OKIM6258_name, System_Return
+	super: Chip OKIM6258_name, Header.okiM6258Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-OKIM6258_Construct:
-	ld de,Header.okiM6258Clock
-	jp Chip_Construct
+OKIM6258_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 OKIM6258_Destruct: equ Chip_Destruct

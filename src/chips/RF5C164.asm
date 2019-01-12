@@ -2,14 +2,13 @@
 ; VGM RF5C164 chip
 ;
 RF5C164: MACRO
-	super: Chip RF5C164_name, System_Return
+	super: Chip RF5C164_name, Header.rf5c164Clock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-RF5C164_Construct:
-	ld de,Header.rf5c164Clock
-	jp Chip_Construct
+RF5C164_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 RF5C164_Destruct: equ Chip_Destruct

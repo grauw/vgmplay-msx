@@ -2,7 +2,7 @@
 ; VGM YMF262 chip
 ;
 YMF262: MACRO
-	super: Chip YMF262_name, YMF262_Connect
+	super: Chip YMF262_name, Header.ymf262Clock, YMF262_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -43,9 +43,8 @@ YMF262: MACRO
 
 ; ix = this
 ; iy = header
-YMF262_Construct:
-	ld de,Header.ymf262Clock
-	jp Chip_Construct
+YMF262_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YMF262_Destruct: equ Chip_Destruct

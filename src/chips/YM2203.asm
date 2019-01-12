@@ -2,7 +2,7 @@
 ; VGM YM2203 chip
 ;
 YM2203: MACRO
-	super: Chip YM2203_name, YM2203_Connect
+	super: Chip YM2203_name, Header.ym2203Clock, YM2203_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -25,9 +25,8 @@ YM2203: MACRO
 
 ; ix = this
 ; iy = header
-YM2203_Construct:
-	ld de,Header.ym2203Clock
-	jp Chip_Construct
+YM2203_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YM2203_Destruct: equ Chip_Destruct

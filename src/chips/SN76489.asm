@@ -2,7 +2,7 @@
 ; VGM SN76489 chip
 ;
 SN76489: MACRO
-	super: Chip SN76489_name, SN76489_Connect
+	super: Chip SN76489_name, Header.sn76489Clock, SN76489_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -25,9 +25,8 @@ SN76489: MACRO
 
 ; ix = this
 ; iy = header
-SN76489_Construct:
-	ld de,Header.sn76489Clock
-	jp Chip_Construct
+SN76489_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 SN76489_Destruct: equ Chip_Destruct

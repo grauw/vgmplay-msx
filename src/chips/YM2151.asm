@@ -2,7 +2,7 @@
 ; VGM YM2151 chip
 ;
 YM2151: MACRO
-	super: Chip YM2151_name, YM2151_Connect
+	super: Chip YM2151_name, Header.ym2151Clock, YM2151_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -25,9 +25,8 @@ YM2151: MACRO
 
 ; ix = this
 ; iy = header
-YM2151_Construct:
-	ld de,Header.ym2151Clock
-	jp Chip_Construct
+YM2151_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YM2151_Destruct: equ Chip_Destruct

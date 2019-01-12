@@ -2,14 +2,13 @@
 ; VGM NESAPU chip
 ;
 NESAPU: MACRO
-	super: Chip NESAPU_name, System_Return
+	super: Chip NESAPU_name, Header.nesAPUClock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-NESAPU_Construct:
-	ld de,Header.nesAPUClock
-	jp Chip_Construct
+NESAPU_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 NESAPU_Destruct: equ Chip_Destruct

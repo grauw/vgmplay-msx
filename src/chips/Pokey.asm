@@ -2,14 +2,13 @@
 ; VGM Pokey chip
 ;
 Pokey: MACRO
-	super: Chip Pokey_name, System_Return
+	super: Chip Pokey_name, Header.pokeyClock, System_Return
 	ENDM
 
 ; ix = this
 ; iy = header
-Pokey_Construct:
-	ld de,Header.pokeyClock
-	jp Chip_Construct
+Pokey_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 Pokey_Destruct: equ Chip_Destruct

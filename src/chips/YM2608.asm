@@ -3,7 +3,7 @@
 ;
 YM2608: MACRO
 	this:
-	super: Chip YM2608_name, YM2608_Connect
+	super: Chip YM2608_name, Header.ym2608Clock, YM2608_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -38,9 +38,8 @@ YM2608: MACRO
 
 ; ix = this
 ; iy = header
-YM2608_Construct:
-	ld de,Header.ym2608Clock
-	jp Chip_Construct
+YM2608_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YM2608_Destruct: equ Chip_Destruct

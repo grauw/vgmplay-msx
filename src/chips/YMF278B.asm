@@ -3,7 +3,7 @@
 ;
 YMF278B: MACRO
 	this:
-	super: Chip YMF278B_name, YMF278B_Connect
+	super: Chip YMF278B_name, Header.ymf278bClock, YMF278B_Connect
 
 	; hl' = time remaining
 	; ix = player
@@ -57,9 +57,8 @@ YMF278B: MACRO
 
 ; ix = this
 ; iy = header
-YMF278B_Construct:
-	ld de,Header.ymf278bClock
-	jp Chip_Construct
+YMF278B_Construct: equ Chip_Construct
+;	jp Chip_Construct
 
 ; ix = this
 YMF278B_Destruct: equ Chip_Destruct

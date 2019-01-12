@@ -1,7 +1,7 @@
 ;
 ; VGM chip
 ;
-Chip: MACRO ?name, ?connecter
+Chip: MACRO ?name, ?headerClockOffset, ?connecter
 	clock:
 		dd 0
 	name:
@@ -10,6 +10,8 @@ Chip: MACRO ?name, ?connecter
 		dw 0
 	driver2:
 		dw 0
+	headerClockOffset:
+		dw ?headerClockOffset
 	connecter:
 		dw ?connecter
 	ENDM
@@ -18,6 +20,8 @@ Chip: MACRO ?name, ?connecter
 ; ix = this
 ; iy = header
 Chip_Construct:
+	ld e,(ix + Chip.headerClockOffset)
+	ld d,(ix + Chip.headerClockOffset + 1)
 	call Utils_GetDoubleWordIYOffset
 	ld (ix + Chip.clock),l
 	ld (ix + Chip.clock + 1),h

@@ -2,7 +2,7 @@
 ; VGM AY8910 chip
 ;
 AY8910: MACRO
-	super: Chip AY8910_ay8910Name, AY8910_Connect
+	super: Chip AY8910_ay8910Name, Header.ay8910Clock, AY8910_Connect
 	chipType:
 		db 0
 
@@ -25,7 +25,6 @@ AY8910: MACRO
 ; ix = this
 ; iy = header
 AY8910_Construct:
-	ld de,Header.ay8910Clock
 	call Chip_Construct
 	ld a,(iy + Header.ay8910ChipType)
 	ld (ix + AY8910.chipType),a
