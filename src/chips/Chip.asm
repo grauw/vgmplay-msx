@@ -90,31 +90,30 @@ Chip_Connect:
 	jp hl
 
 ; ix = this
-Chip_PrintInfo: PROC
+Chip_PrintInfo:
+	call Chip_PrintOwnInfo
+	ld de,Chip.driver
+	call Driver_PrintInfoIXOffset
+	call Chip_IsDualChip
+	ret z
+	call Chip_PrintOwnInfo
+	ld de,Chip.driver2
+	jp Driver_PrintInfoIXOffset
+
+Chip_PrintOwnInfo:
 	call Chip_GetName
 	call System_Print
-	call Chip_IsDualChip
 	ld hl,Chip_clockLabelInfix
-	jr z,Single
-	ld hl,Chip_clockDualLabelInfix
-Single:
 	call System_Print
 	call Chip_GetClock
 	call System_PrintDecDEHL
 	ld hl,Chip_hz
-	call System_Print
-	ld de,Chip.driver
-	call Driver_PrintInfoIXOffset
-	ld de,Chip.driver2
-	jp Driver_PrintInfoIXOffset
-	ENDP
+	jp System_Print
+
 
 ;
 Chip_clockLabelInfix:
 	db ": ",0
-
-Chip_clockDualLabelInfix:
-	db " x2: ",0
 
 Chip_hz:
 	db " Hz",13,10,0
