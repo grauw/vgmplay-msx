@@ -413,7 +413,7 @@ OPL4_Reset:
 	ld de,1BF8H
 	call OPL4_WriteRegisterWave
 	ld de,00010000B << 8 | OPL4_WAVE_MEMORY_CONTROL
-	jp OPL4_WriteRegisterWave
+	call OPL4_WriteRegisterWave
 	ld b,0D6H
 	ld de,0020H
 	call OPL4_FillRegisterPairs
