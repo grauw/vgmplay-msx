@@ -95,23 +95,10 @@ OPNAOnSFGPSGMSXAudio_Destruct: equ System_Return
 
 ; ix = this
 OPNAOnSFGPSGMSXAudio_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver)
-	ld d,(ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	push ix
-	ld e,(ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver)
-	ld d,(ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	call nz,Driver_PrintInfo
-	pop ix
-	ret
+	ld de,OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver
+	call Driver_PrintInfoIXOffset
+	ld de,OPNAOnSFGPSGMSXAudio.msxAudioDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPNAOnSFGPSGMSXAudio_name:

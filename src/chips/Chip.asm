@@ -103,27 +103,10 @@ Single:
 	call System_PrintDecDEHL
 	ld hl,Chip_hz
 	call System_Print
-	ld e,(ix + Chip.driver)
-	ld d,(ix + Chip.driver + 1)
-	ld a,e
-	or d
-	ret z
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	ld e,(ix + Chip.driver2)
-	ld d,(ix + Chip.driver2 + 1)
-	ld a,e
-	or d
-	ret z
-	push ix
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	ret
+	ld de,Chip.driver
+	call Driver_PrintInfoIXOffset
+	ld de,Chip.driver2
+	jp Driver_PrintInfoIXOffset
 	ENDP
 
 ;

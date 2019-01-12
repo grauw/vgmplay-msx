@@ -211,23 +211,10 @@ NoOverflow:
 
 ; ix = this
 OPN2OnOPNATurboRPCM_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPN2OnOPNATurboRPCM.opnaDriver)
-	ld d,(ix + OPN2OnOPNATurboRPCM.opnaDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	push ix
-	ld e,(ix + OPN2OnOPNATurboRPCM.turboRPCMDriver)
-	ld d,(ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	call nz,Driver_PrintInfo
-	pop ix
-	ret
+	ld de,OPN2OnOPNATurboRPCM.opnaDriver
+	call Driver_PrintInfoIXOffset
+	ld de,OPN2OnOPNATurboRPCM.turboRPCMDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPN2OnOPNATurboRPCM_name:

@@ -46,14 +46,8 @@ OPN2OnTurboRPCM_Destruct: equ System_Return
 
 ; ix = this
 OPN2OnTurboRPCM_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPN2OnTurboRPCM.turboRPCMDriver)
-	ld d,(ix + OPN2OnTurboRPCM.turboRPCMDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	ret
+	ld de,OPN2OnTurboRPCM.turboRPCMDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPN2OnTurboRPCM_name:

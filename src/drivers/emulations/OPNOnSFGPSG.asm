@@ -70,21 +70,10 @@ OPNOnSFGPSG_Destruct: equ System_Return
 
 ; ix = this
 OPNOnSFGPSG_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPNOnSFGPSG.opnFMOnSFGDriver)
-	ld d,(ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	push ix
-	ld e,(ix + OPNOnSFGPSG.psgDriver)
-	ld d,(ix + OPNOnSFGPSG.psgDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	ret
+	ld de,OPNOnSFGPSG.opnFMOnSFGDriver
+	call Driver_PrintInfoIXOffset
+	ld de,OPNOnSFGPSG.psgDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPNOnSFGPSG_name:

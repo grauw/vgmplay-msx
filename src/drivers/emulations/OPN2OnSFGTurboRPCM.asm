@@ -72,23 +72,10 @@ OPN2OnSFGTurboRPCM_Destruct: equ System_Return
 
 ; ix = this
 OPN2OnSFGTurboRPCM_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver)
-	ld d,(ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	push ix
-	ld e,(ix + OPN2OnSFGTurboRPCM.turboRPCMDriver)
-	ld d,(ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	call nz,Driver_PrintInfo
-	pop ix
-	ret
+	ld de,OPN2OnSFGTurboRPCM.opnFMOnSFGDriver
+	call Driver_PrintInfoIXOffset
+	ld de,OPN2OnSFGTurboRPCM.turboRPCMDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPN2OnSFGTurboRPCM_name:

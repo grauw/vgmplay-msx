@@ -57,6 +57,20 @@ Driver_PrintInfo:
 	ld h,(ix + Driver.printInfo + 1)
 	jp hl
 
+; (ix + de) = this
+Driver_PrintInfoIXOffset:
+	push ix
+	add ix,de
+	ld e,(ix)
+	ld d,(ix + 1)
+	ld ixl,e
+	ld ixh,d
+	ld a,e
+	or d
+	call nz,Driver_PrintInfo
+	pop ix
+	ret
+
 ; ix = this
 Driver_PrintInfoImpl:
 	ld hl,Driver_prefix

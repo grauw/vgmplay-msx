@@ -423,17 +423,6 @@ Overflow:
 	ret
 	ENDP
 
-; ix = this
-OPNFMOnSFG_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPNFMOnSFG.sfgDriver)
-	ld d,(ix + OPNFMOnSFG.sfgDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	ret
-
 ; iy = drivers
 ; ix = this
 ; de <- driver
@@ -446,6 +435,11 @@ OPNFMOnSFG_TryCreateSFG:
 	call Drivers_TryCreateSFG2_IY
 	ld hl,SFG.WriteRegister
 	ret
+
+; ix = this
+OPNFMOnSFG_PrintInfoImpl:
+	ld de,OPNFMOnSFG.sfgDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPNFMOnSFG_name:

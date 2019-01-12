@@ -102,23 +102,10 @@ OPNBBOnNeotronOPNA_Destruct: equ System_Return
 
 ; ix = this
 OPNBBOnNeotronOPNA_PrintInfoImpl:
-	push ix
-	ld e,(ix + OPNBBOnNeotronOPNA.neotronDriver)
-	ld d,(ix + OPNBBOnNeotronOPNA.neotronDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	call Driver_PrintInfo
-	pop ix
-	push ix
-	ld e,(ix + OPNBBOnNeotronOPNA.opnaDriver)
-	ld d,(ix + OPNBBOnNeotronOPNA.opnaDriver + 1)
-	ld ixl,e
-	ld ixh,d
-	ld a,e
-	or d
-	call nz,Driver_PrintInfo
-	pop ix
-	ret
+	ld de,OPNBBOnNeotronOPNA.neotronDriver
+	call Driver_PrintInfoIXOffset
+	ld de,OPNBBOnNeotronOPNA.opnaDriver
+	jp Driver_PrintInfoIXOffset
 
 ;
 OPNBBOnNeotronOPNA_name:
