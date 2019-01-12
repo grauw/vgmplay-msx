@@ -44,11 +44,11 @@ Driver_GetName:
 	ld h,(ix + Driver.name + 1)
 	ret
 
-; bc = name
+; hl = name
 ; ix = this
 Driver_SetName:
-	ld (ix + Driver.name),c
-	ld (ix + Driver.name + 1),b
+	ld (ix + Driver.name),l
+	ld (ix + Driver.name + 1),h
 	ret
 
 ; ix = this

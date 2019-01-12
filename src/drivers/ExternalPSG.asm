@@ -32,15 +32,15 @@ ExternalPSG_Destruct: equ PSG_Destruct
 ;	jp PSG_Destruct
 
 ; ix = this
-; bc <- name
+; hl <- name
 ExternalPSG_GetName:
 	ld a,(ix + ExternalPSG.type)
-	ld bc,ExternalPSG_nameReadWrite
+	ld hl,ExternalPSG_nameReadWrite
 	cp ExternalPSG_TYPE_WRITEONLY
 	ret c
-	ld bc,ExternalPSG_nameWriteOnly
+	ld hl,ExternalPSG_nameWriteOnly
 	ret z
-	ld bc,ExternalPSG_nameMFRSD
+	ld hl,ExternalPSG_nameMFRSD
 	ret
 
 ; ix = this

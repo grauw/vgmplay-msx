@@ -130,12 +130,12 @@ KeyOffLoop:
 	ENDP
 
 ; ix = this
-; bc <- name
+; hl <- name
 SFG_GetName:
 	call SFG_IsSFG01
-	ld bc,SFG_sfg01Name
+	ld hl,SFG_sfg01Name
 	ret z
-	ld bc,SFG_sfg05Name
+	ld hl,SFG_sfg05Name
 	ret
 
 ; ix = this
