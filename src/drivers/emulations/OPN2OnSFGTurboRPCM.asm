@@ -4,7 +4,7 @@
 OPN2OnSFGTurboRPCM_CLOCK: equ 7670453
 
 OPN2OnSFGTurboRPCM: MACRO
-	super: Driver OPN2OnSFGTurboRPCM_name, OPN2OnSFGTurboRPCM_PrintInfoImpl
+	super: Driver OPN2OnSFGTurboRPCM_name, OPN2OnSFGTurboRPCM_CLOCK, OPN2OnSFGTurboRPCM_PrintInfoImpl
 	opnFMOnSFGDriver:
 		dw 0
 	turboRPCMDriver:
@@ -32,10 +32,10 @@ OPN2OnSFGTurboRPCM: MACRO
 
 ; ix = this
 ; iy = drivers
-OPN2OnSFGTurboRPCM_Construct: PROC
+OPN2OnSFGTurboRPCM_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateOPNFMOnSFG_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),d
 	ld hl,OPNFMOnSFG.WriteRegister
@@ -53,18 +53,14 @@ OPN2OnSFGTurboRPCM_Construct: PROC
 	call OPNFMOnSFG_SetFrequencyOffset
 	pop ix
 	call Drivers_TryCreateTurboRPCM_IY
-	jr nc,NoTurboRPCM
+	ret nc
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-NoTurboRPCM:
-	ld de,OPN2OnSFGTurboRPCM_CLOCK >> 16
-	ld hl,OPN2OnSFGTurboRPCM_CLOCK
-	jp Driver_SetClock
-	ENDP
+	ret
 
 ; ix = this
 OPN2OnSFGTurboRPCM_Destruct: equ System_Return

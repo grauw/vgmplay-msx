@@ -4,7 +4,7 @@
 OPN2OnTurboRPCM_CLOCK: equ 7670453
 
 OPN2OnTurboRPCM: MACRO
-	super: Driver OPN2OnTurboRPCM_name, OPN2OnTurboRPCM_PrintInfoImpl
+	super: Driver OPN2OnTurboRPCM_name, OPN2OnTurboRPCM_CLOCK, OPN2OnTurboRPCM_PrintInfoImpl
 	turboRPCMDriver:
 		dw 0
 
@@ -29,16 +29,14 @@ OPN2OnTurboRPCM: MACRO
 OPN2OnTurboRPCM_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateTurboRPCM_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-	ld de,OPN2OnTurboRPCM_CLOCK >> 16
-	ld hl,OPN2OnTurboRPCM_CLOCK
-	jp Driver_SetClock
+	ret
 
 ; ix = this
 OPN2OnTurboRPCM_Destruct: equ System_Return

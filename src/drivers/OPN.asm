@@ -7,7 +7,7 @@ OPN_DATA: equ OPN_BASE + 1
 OPN_CLOCK: equ 3579545
 
 OPN: MACRO
-	super: Driver OPN_name, Driver_PrintInfoImpl
+	super: Driver OPN_name, OPN_CLOCK, Driver_PrintInfoImpl
 
 	; e = register
 	; d = value
@@ -43,11 +43,8 @@ OPN: MACRO
 OPN_Construct:
 	call Driver_Construct
 	call OPN_Detect
-	ret nc
-	call OPN_Reset
-	ld de,OPN_CLOCK >> 16
-	ld hl,OPN_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jr OPN_Reset
 
 ; ix = this
 OPN_Destruct:

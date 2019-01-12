@@ -18,7 +18,7 @@ OPL4_CLOCK: equ 33868800
 
 OPL4: MACRO ?fmbase, ?wavebase, ?name
 	this:
-	super: Driver ?name, Driver_PrintInfoImpl
+	super: Driver ?name, OPL4_CLOCK, Driver_PrintInfoImpl
 	romSize:
 		dd 200000H
 
@@ -103,11 +103,8 @@ OPL4: MACRO ?fmbase, ?wavebase, ?name
 OPL4_Construct:
 	call Driver_Construct
 	call OPL4_Detect
-	ret nc
-	call OPL4_Reset
-	ld de,OPL4_CLOCK >> 16
-	ld hl,OPL4_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jp OPL4_Reset
 
 ; ix = this
 OPL4_Destruct:

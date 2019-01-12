@@ -5,7 +5,7 @@ Franky_DATA: equ 049H
 Franky_CLOCK: equ 3579545
 
 Franky: MACRO
-	super: Driver Franky_name, Driver_PrintInfoImpl
+	super: Driver Franky_name, Franky_CLOCK, Driver_PrintInfoImpl
 
 	; a = value
 	SafeWriteRegister:
@@ -20,13 +20,10 @@ Franky: MACRO
 Franky_Construct:
 	call Driver_Construct
 	call Franky_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	ld a,0
 	out (40H),a  ; make sure no known switched I/O device is listening
-	call Franky_Reset
-	ld de,Franky_CLOCK >> 16
-	ld hl,Franky_CLOCK
-	jp Driver_SetClock
+	jr Franky_Reset
 
 ; ix = this
 Franky_Destruct:

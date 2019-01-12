@@ -1,8 +1,8 @@
 ;
 ; Sound module driver
 ;
-Driver: MACRO ?name, ?printInfo
-	super: Device ?name
+Driver: MACRO ?name, ?clock, ?printInfo
+	super: Device ?name, ?clock
 	printInfo:
 		dw ?printInfo
 	ENDM
@@ -25,9 +25,17 @@ Driver_SetClock: equ Device_SetClock
 ; f <- c: found
 ; Modifies: af, de, hl
 Driver_IsFound:
-	call Driver_GetClock
-	neg
+	call Device_GetFlagBit7
+	scf
+	ret z
+	ccf
 	ret
+
+; ix = this
+; f <- nz/c: found
+; Modifies: af, de, hl
+Driver_NotFound: equ Device_SetFlagBit7
+;	jp Device_SetFlagBit7
 
 ; ix = this
 ; hl <- name

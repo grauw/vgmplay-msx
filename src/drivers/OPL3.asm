@@ -14,7 +14,7 @@ OPL3_FLAG_CONTROL: equ 04H
 
 OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	this:
-	super: Driver ?name, Driver_PrintInfoImpl
+	super: Driver ?name, OPL3_CLOCK, Driver_PrintInfoImpl
 
 	; e = register
 	; d = value
@@ -59,11 +59,8 @@ OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 OPL3_Construct:
 	call Driver_Construct
 	call OPL3_Detect
-	ret nc
-	call OPL3_Reset
-	ld de,OPL3_CLOCK >> 16
-	ld hl,OPL3_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jr OPL3_Reset
 
 ; ix = this
 OPL3_Destruct:

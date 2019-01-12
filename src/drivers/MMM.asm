@@ -11,7 +11,7 @@ MMM_PAGE3: equ 0FFH
 MMM_CLOCK: equ 3579545
 
 MMM: MACRO
-	super: Driver MMM_name, Driver_PrintInfoImpl
+	super: Driver MMM_name, MMM_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -28,13 +28,10 @@ MMM: MACRO
 MMM_Construct:
 	call Driver_Construct
 	call MMM_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	call MMM_SetSlot
 	call MMM_Enable
-	call MMM_Reset
-	ld de,MMM_CLOCK >> 16
-	ld hl,MMM_CLOCK
-	jp Driver_SetClock
+	jr MMM_Reset
 
 ; ix = this
 MMM_Destruct:

@@ -6,7 +6,7 @@ TurboRPCM_CONTROL: equ 0A5H
 TurboRPCM_CLOCK: equ 3579545
 
 TurboRPCM: MACRO
-	super: Driver TurboRPCM_name, Driver_PrintInfoImpl
+	super: Driver TurboRPCM_name, TurboRPCM_CLOCK, Driver_PrintInfoImpl
 
 	; d = value
 	SafeWriteRegister:
@@ -22,11 +22,8 @@ TurboRPCM: MACRO
 TurboRPCM_Construct:
 	call Driver_Construct
 	call TurboRPCM_Detect
-	ret nc
-	call TurboRPCM_Enable
-	ld de,TurboRPCM_CLOCK >> 16
-	ld hl,TurboRPCM_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jr TurboRPCM_Enable
 
 ; ix = this
 TurboRPCM_Destruct:

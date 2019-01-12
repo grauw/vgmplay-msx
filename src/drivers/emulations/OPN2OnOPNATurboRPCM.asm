@@ -5,7 +5,7 @@ OPN2OnOPNATurboRPCM_CLOCK: equ 7670453
 OPN2OnOPNATurboRPCM_CLOCK_RATIO: equ (OPN2OnOPNATurboRPCM_CLOCK << 8) / (OPNA_CLOCK >> 7)
 
 OPN2OnOPNATurboRPCM: MACRO
-	super: Driver OPN2OnOPNATurboRPCM_name, OPN2OnOPNATurboRPCM_PrintInfoImpl
+	super: Driver OPN2OnOPNATurboRPCM_name, OPN2OnOPNATurboRPCM_CLOCK, OPN2OnOPNATurboRPCM_PrintInfoImpl
 	opnaDriver:
 		dw 0
 	turboRPCMDriver:
@@ -135,10 +135,10 @@ OPN2OnOPNATurboRPCM: MACRO
 
 ; ix = this
 ; iy = drivers
-OPN2OnOPNATurboRPCM_Construct: PROC
+OPN2OnOPNATurboRPCM_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateOPNA_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),d
 	ld hl,OPNA.SafeWriteRegister
@@ -162,18 +162,14 @@ OPN2OnOPNATurboRPCM_Construct: PROC
 	ld bc,-128
 	add ix,bc
 	call Drivers_TryCreateTurboRPCM_IY
-	jr nc,NoTurboRPCM
+	ret nc
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM.SafeWriteRegister
 	add hl,de
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-NoTurboRPCM:
-	ld de,OPN2OnOPNATurboRPCM_CLOCK >> 16
-	ld hl,OPN2OnOPNATurboRPCM_CLOCK
-	jp Driver_SetClock
-	ENDP
+	ret
 
 ; ix = this
 OPN2OnOPNATurboRPCM_Destruct: equ System_Return

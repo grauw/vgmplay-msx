@@ -10,7 +10,7 @@ SFG_ID_ADDRESS: equ 80H
 SFG_CLOCK: equ 3579545
 
 SFG: MACRO
-	super: Driver SFG_sfg01Name, Driver_PrintInfoImpl
+	super: Driver SFG_sfg01Name, SFG_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -53,14 +53,11 @@ SFG: MACRO
 SFG_Construct:
 	call Driver_Construct
 	call SFG_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	call SFG_SetSlot
 	call SFG_GetName
 	call Driver_SetName
-	call SFG_Reset
-	ld de,SFG_CLOCK >> 16
-	ld hl,SFG_CLOCK
-	jp Driver_SetClock
+	jr SFG_Reset
 
 ; ix = this
 SFG_Destruct:

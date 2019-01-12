@@ -4,7 +4,7 @@
 OPNAOnSFGPSGMSXAudio_CLOCK: equ 3579545
 
 OPNAOnSFGPSGMSXAudio: MACRO
-	super: Driver OPNAOnSFGPSGMSXAudio_name, OPNAOnSFGPSGMSXAudio_PrintInfoImpl
+	super: Driver OPNAOnSFGPSGMSXAudio_name, OPNAOnSFGPSGMSXAudio_CLOCK, OPNAOnSFGPSGMSXAudio_PrintInfoImpl
 	opnOnSFGPSGDriver:
 		dw 0
 	msxAudioDriver:
@@ -57,10 +57,10 @@ OPNAOnSFGPSGMSXAudio: MACRO
 
 ; ix = this
 ; iy = drivers
-OPNAOnSFGPSGMSXAudio_Construct: PROC
+OPNAOnSFGPSGMSXAudio_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateOPNOnSFGPSG_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver),e
 	ld (ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver + 1),d
 	ld hl,OPNOnSFGPSG.SafeWriteRegister
@@ -72,7 +72,7 @@ OPNAOnSFGPSGMSXAudio_Construct: PROC
 	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteRegister),l
 	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteRegister + 1),h
 	call Drivers_TryCreateMSXAudio_IY
-	jr nc,NoMSXAudio
+	ret nc
 	ld (ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver),e
 	ld (ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver + 1),d
 	ld hl,MSXAudio.SafeWriteRegister
@@ -83,11 +83,7 @@ OPNAOnSFGPSGMSXAudio_Construct: PROC
 	add hl,de
 	ld (ix + OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process),l
 	ld (ix + OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process + 1),h
-NoMSXAudio:
-	ld de,OPNAOnSFGPSGMSXAudio_CLOCK >> 16
-	ld hl,OPNAOnSFGPSGMSXAudio_CLOCK
-	jp Driver_SetClock
-	ENDP
+	ret
 
 ; ix = this
 OPNAOnSFGPSGMSXAudio_Destruct: equ System_Return

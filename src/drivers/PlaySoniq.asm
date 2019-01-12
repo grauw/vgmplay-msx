@@ -10,7 +10,7 @@ PlaySoniq_SN76489_DATA_DEFAULT: equ 49H
 PlaySoniq_CLOCK: equ 3579545
 
 PlaySoniq: MACRO
-	super: Driver PlaySoniq_name, Driver_PrintInfoImpl
+	super: Driver PlaySoniq_name, PlaySoniq_CLOCK, Driver_PrintInfoImpl
 	originalSN76489Port:
 		db 0
 
@@ -27,12 +27,9 @@ PlaySoniq: MACRO
 PlaySoniq_Construct:
 	call Driver_Construct
 	call PlaySoniq_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	call PlaySoniq_Select
-	call PlaySoniq_Reset
-	ld de,PlaySoniq_CLOCK >> 16
-	ld hl,PlaySoniq_CLOCK
-	jp Driver_SetClock
+	jr PlaySoniq_Reset
 
 ; ix = this
 PlaySoniq_Destruct:

@@ -4,7 +4,7 @@
 OPNOnSFGPSG_CLOCK: equ 3579545
 
 OPNOnSFGPSG: MACRO
-	super: Driver OPNOnSFGPSG_name, OPNOnSFGPSG_PrintInfoImpl
+	super: Driver OPNOnSFGPSG_name, OPNOnSFGPSG_CLOCK, OPNOnSFGPSG_PrintInfoImpl
 	opnFMOnSFGDriver:
 		dw 0
 	psgDriver:
@@ -41,7 +41,7 @@ OPNOnSFGPSG: MACRO
 OPNOnSFGPSG_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateOPNFMOnSFG_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),e
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),d
 	ld hl,OPNFMOnSFG.WriteRegister
@@ -53,16 +53,14 @@ OPNOnSFGPSG_Construct:
 	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister),l
 	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister + 1),h
 	call Drivers_TryCreatePSG_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPNOnSFGPSG.psgDriver),e
 	ld (ix + OPNOnSFGPSG.psgDriver + 1),d
 	ld hl,PSG.SafeWriteRegister
 	add hl,de
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister),l
 	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister + 1),h
-	ld de,OPNOnSFGPSG_CLOCK >> 16
-	ld hl,OPNOnSFGPSG_CLOCK
-	jp Driver_SetClock
+	ret
 
 ; ix = this
 OPNOnSFGPSG_Destruct: equ System_Return

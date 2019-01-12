@@ -37,7 +37,7 @@ SIOS_WRITE_SMEM: equ 8025H
 SIOS_SET_SMEM: equ 802BH
 
 Neotron: MACRO
-	super: Driver Neotron_name, Driver_PrintInfoImpl
+	super: Driver Neotron_name, Neotron_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 	heapBuffer:
@@ -149,7 +149,7 @@ Neotron: MACRO
 Neotron_Construct:
 	call Driver_Construct
 	call Neotron_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	call Neotron_SetSlot
 	call Neotron_Select
 	call Neotron_Reset
@@ -182,9 +182,7 @@ Neotron_Construct:
 	ex (sp),ix
 	call NeotronMemory_Construct
 	pop ix
-	ld de,Neotron_CLOCK >> 16
-	ld hl,Neotron_CLOCK
-	jp Driver_SetClock
+	ret
 
 ; ix = this
 Neotron_Destruct:

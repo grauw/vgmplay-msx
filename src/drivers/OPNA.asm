@@ -31,7 +31,7 @@ OPNA_ADPCM_END: equ 11H
 
 OPNA: MACRO
 	this:
-	super: Driver OPNA_name, Driver_PrintInfoImpl
+	super: Driver OPNA_name, OPNA_CLOCK, Driver_PrintInfoImpl
 	safeControlMirror:
 		ds OPNA_ADPCM_END
 
@@ -222,11 +222,8 @@ OPNA: MACRO
 OPNA_Construct:
 	call Driver_Construct
 	call OPNA_Detect
-	ret nc
-	call OPNA_Reset
-	ld de,OPNA_CLOCK >> 16
-	ld hl,OPNA_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jr OPNA_Reset
 
 ; ix = this
 OPNA_Destruct:

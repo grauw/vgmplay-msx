@@ -4,7 +4,7 @@
 OPNBBOnNeotronOPNA_CLOCK: equ 8000000
 
 OPNBBOnNeotronOPNA: MACRO
-	super: Driver OPNBBOnNeotronOPNA_name, OPNBBOnNeotronOPNA_PrintInfoImpl
+	super: Driver OPNBBOnNeotronOPNA_name, OPNBBOnNeotronOPNA_CLOCK, OPNBBOnNeotronOPNA_PrintInfoImpl
 	neotronDriver:
 		dw 0
 	opnaDriver:
@@ -52,10 +52,10 @@ OPNBBOnNeotronOPNA: MACRO
 
 ; ix = this
 ; iy = drivers
-OPNBBOnNeotronOPNA_Construct: PROC
+OPNBBOnNeotronOPNA_Construct:
 	call Driver_Construct
 	call Drivers_TryCreateNeotron_IY
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPNBBOnNeotronOPNA.neotronDriver),e
 	ld (ix + OPNBBOnNeotronOPNA.neotronDriver + 1),d
 	ld hl,Neotron.SafeWriteRegister
@@ -79,7 +79,7 @@ OPNBBOnNeotronOPNA_Construct: PROC
 	ld (ix + OPNBBOnNeotronOPNA.ProcessDataBlockB.process),l
 	ld (ix + OPNBBOnNeotronOPNA.ProcessDataBlockB.process + 1),h
 	call Drivers_TryCreateOPNA_IY
-	jr nc,NoOPNA
+	ret nc
 	ld (ix + OPNBBOnNeotronOPNA.opnaDriver),e
 	ld (ix + OPNBBOnNeotronOPNA.opnaDriver + 1),d
 	ld hl,OPNA.SafeWriteRegister
@@ -90,11 +90,7 @@ OPNBBOnNeotronOPNA_Construct: PROC
 	add hl,de
 	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister),l
 	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister + 1),h
-NoOPNA:
-	ld de,OPNBBOnNeotronOPNA_CLOCK >> 16
-	ld hl,OPNBBOnNeotronOPNA_CLOCK
-	jp Driver_SetClock
-	ENDP
+	ret
 
 ; ix = this
 OPNBBOnNeotronOPNA_Destruct: equ System_Return

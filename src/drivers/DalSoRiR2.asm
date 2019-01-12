@@ -32,11 +32,8 @@ DalSoRiR2: MACRO ?fmbase = DalSoRiR2_FM_BASE_PORT
 DalSoRiR2_Construct:
 	call Driver_Construct
 	call DalSoRiR2_Detect
-	ret nc
-	call OPL4_Reset
-	ld de,OPL4_CLOCK >> 16
-	ld hl,OPL4_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jp OPL4_Reset
 
 ; ix = this
 DalSoRiR2_Destruct: PROC

@@ -1,16 +1,18 @@
 ;
 ; Sound device
 ;
-Device: MACRO ?name
+Device: MACRO ?name, ?clock = 0
 	name:
 		dw ?name
 	clock:
-		dd 0
+		dd ?clock
 	ENDM
 
 ; ix = this
-Device_Construct: equ System_Return
-;	ret
+Device_Construct:
+	res 6,(ix + Device.clock + 3)
+	res 7,(ix + Device.clock + 3)
+	ret
 
 ; ix = this
 ; dehl <- clock (Hz)
@@ -42,6 +44,16 @@ Device_GetFlagBit6:
 ; f <- nz: set
 Device_GetFlagBit7:
 	bit 7,(ix + Device.clock + 3)
+	ret
+
+; ix = this
+Device_SetFlagBit6:
+	set 6,(ix + Device.clock + 3)
+	ret
+
+; ix = this
+Device_SetFlagBit7:
+	set 7,(ix + Device.clock + 3)
 	ret
 
 ; ix = this

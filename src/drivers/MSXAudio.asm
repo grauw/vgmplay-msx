@@ -37,7 +37,7 @@ MSXAudio_FM_BASE: equ 20H
 
 MSXAudio: MACRO
 	this:
-	super: Driver MSXAudio_name, Driver_PrintInfoImpl
+	super: Driver MSXAudio_name, MSXAudio_CLOCK, Driver_PrintInfoImpl
 	safeControlMirror:
 		ds MSXAudio_FM_BASE
 
@@ -170,11 +170,8 @@ MSXAudio: MACRO
 MSXAudio_Construct:
 	call Driver_Construct
 	call MSXAudio_Detect
-	ret nc
-	call MSXAudio_Reset
-	ld de,MSXAudio_CLOCK >> 16
-	ld hl,MSXAudio_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jr MSXAudio_Reset
 
 ; ix = this
 MSXAudio_Destruct:

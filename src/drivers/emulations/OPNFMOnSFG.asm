@@ -6,7 +6,7 @@
 OPNFMOnSFG_CLOCK: equ 3579545
 
 OPNFMOnSFG: MACRO
-	super: Driver OPNFMOnSFG_name, OPNFMOnSFG_PrintInfoImpl
+	super: Driver OPNFMOnSFG_name, OPNFMOnSFG_CLOCK, OPNFMOnSFG_PrintInfoImpl
 	sfgDriver:
 		dw 0
 	frequencyMSBs:
@@ -272,7 +272,7 @@ OPNFMOnSFG: MACRO
 OPNFMOnSFG_Construct:
 	call Driver_Construct
 	call OPNFMOnSFG_TryCreateSFG
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + OPNFMOnSFG.sfgDriver),e
 	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
 	add hl,de
@@ -284,10 +284,7 @@ OPNFMOnSFG_Construct:
 	ld (ix + 1),h
 	ld bc,-OPNFMOnSFG.WriteRegister2.writeSFGRegister
 	add ix,bc
-	call OPNFMOnSFG_Initialize
-	ld de,OPNFMOnSFG_CLOCK >> 16
-	ld hl,OPNFMOnSFG_CLOCK
-	jp Driver_SetClock
+	jr OPNFMOnSFG_Initialize
 
 ; ix = this
 OPNFMOnSFG_Destruct: equ System_Return

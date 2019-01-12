@@ -13,7 +13,7 @@ SCC_BANK_DEFAULT: equ 02H
 SCC_CLOCK: equ 1789773
 
 SCC: MACRO
-	super: Driver SCC_name, Driver_PrintInfoImpl
+	super: Driver SCC_name, SCC_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -68,13 +68,10 @@ SCC: MACRO
 SCC_Construct:
 	call Driver_Construct
 	call SCC_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	call SCC_SetSlot
 	call SCC_Select
-	call SCC_Reset
-	ld de,SCC_CLOCK >> 16
-	ld hl,SCC_CLOCK
-	jp Driver_SetClock
+	jr SCC_Reset
 
 ; ix = this
 SCC_Destruct:

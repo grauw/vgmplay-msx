@@ -12,7 +12,7 @@ Darky_DEVICE_ID: equ 0AAH
 Darky_CLOCK: equ 1789773
 
 Darky: MACRO ?base, ?name = Darky_name
-	super: Driver ?name, Driver_PrintInfoImpl
+	super: Driver ?name, Darky_CLOCK, Driver_PrintInfoImpl
 
 	; e = register
 	; d = value
@@ -39,13 +39,10 @@ Darky: MACRO ?base, ?name = Darky_name
 Darky_Construct:
 	call Driver_Construct
 	call Darky_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + Darky.deviceID),a
 	call Darky_Enable
-	call Darky_Reset
-	ld de,Darky_CLOCK >> 16
-	ld hl,Darky_CLOCK
-	jp Driver_SetClock
+	jr Darky_Reset
 
 ; ix = this
 Darky_Destruct:

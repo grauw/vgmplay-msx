@@ -19,14 +19,11 @@ ExternalPSG: MACRO
 ExternalPSG_Construct:
 	call Driver_Construct
 	call ExternalPSG_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + ExternalPSG.type),a
 	call ExternalPSG_GetName
 	call Driver_SetName
-	call PSG_Reset
-	ld de,PSG_CLOCK >> 16
-	ld hl,PSG_CLOCK
-	jp Driver_SetClock
+	jr PSG_Reset
 
 ExternalPSG_Destruct: equ PSG_Destruct
 ;	jp PSG_Destruct

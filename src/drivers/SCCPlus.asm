@@ -16,7 +16,7 @@ SCCPlus_MODE_SCCPLUS: equ 20H
 SCCPlus_CLOCK: equ 1789773
 
 SCCPlus: MACRO
-	super: Driver SCCPlus_name, Driver_PrintInfoImpl
+	super: Driver SCCPlus_name, SCCPlus_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 
@@ -84,13 +84,10 @@ SCCPlus: MACRO
 SCCPlus_Construct:
 	call Driver_Construct
 	call SCCPlus_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	call SCCPlus_SetSlot
 	call SCCPlus_Select
-	call SCCPlus_Reset
-	ld de,SCCPlus_CLOCK >> 16
-	ld hl,SCCPlus_CLOCK
-	jp Driver_SetClock
+	jr SCCPlus_Reset
 
 ; ix = this
 SCCPlus_Destruct:

@@ -8,7 +8,7 @@ PSG_READ: equ 02H
 PSG_CLOCK: equ 1789773
 
 PSG: MACRO ?base, ?name = PSG_name
-	super: Driver ?name, Driver_PrintInfoImpl
+	super: Driver ?name, PSG_CLOCK, Driver_PrintInfoImpl
 
 	; e = register
 	; d = value
@@ -51,11 +51,8 @@ PSG: MACRO ?base, ?name = PSG_name
 PSG_Construct:
 	call Driver_Construct
 	call PSG_Detect
-	ret nc
-	call PSG_Reset
-	ld de,PSG_CLOCK >> 16
-	ld hl,PSG_CLOCK
-	jp Driver_SetClock
+	jp nc,Driver_NotFound
+	jr PSG_Reset
 
 ; ix = this
 PSG_Destruct:

@@ -8,7 +8,7 @@ MSXMusic_ENABLE_ADDRESS: equ 7FF6H
 MSXMusic_CLOCK: equ 3579545
 
 MSXMusic: MACRO
-	super: Driver MSXMusic_name, Driver_PrintInfoImpl
+	super: Driver MSXMusic_name, MSXMusic_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 	internal:
@@ -36,14 +36,11 @@ MSXMusic: MACRO
 MSXMusic_Construct:
 	call Driver_Construct
 	call MSXMusic_Detect
-	ret nc
+	jp nc,Driver_NotFound
 	ld (ix + MSXMusic.slot),a
 	ld (ix + MSXMusic.internal),b
 	call MSXMusic_Enable
-	call MSXMusic_Reset
-	ld de,MSXMusic_CLOCK >> 16
-	ld hl,MSXMusic_CLOCK
-	jp Driver_SetClock
+	jr MSXMusic_Reset
 
 ; ix = this
 MSXMusic_Destruct:
