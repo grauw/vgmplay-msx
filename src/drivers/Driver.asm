@@ -15,13 +15,13 @@ Driver_Construct: equ System_Return
 ;	ret
 
 ; ix = this
-; dehl <- clock (MHz)
+; dehl <- clock (Hz)
 Driver_GetClock:
 	ld de,Driver.clock
 	jp Utils_GetDoubleWordIXOffset
 
 ; ix = this
-; dehl <- clock (MHz)
+; dehl <- clock (Hz)
 Driver_SetClock:
 	ld (ix + Driver.clock),l
 	ld (ix + Driver.clock + 1),h

@@ -39,7 +39,7 @@ Chip_Destruct: equ System_Return
 Chip_IsActive: equ Chip_GetClock
 
 ; ix = this
-; dehl <- clock (MHz)
+; dehl <- clock (Hz)
 ; f <- z: not active
 Chip_GetClock:
 	ld de,Chip.clock
