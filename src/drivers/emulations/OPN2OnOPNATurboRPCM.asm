@@ -5,7 +5,7 @@ OPN2OnOPNATurboRPCM_CLOCK: equ 7670453
 OPN2OnOPNATurboRPCM_CLOCK_RATIO: equ (OPN2OnOPNATurboRPCM_CLOCK << 8) / (OPNA_CLOCK >> 7)
 
 OPN2OnOPNATurboRPCM: MACRO
-	super: Driver OPN2OnOPNATurboRPCM_name, OPN2OnOPNATurboRPCM_CLOCK, OPN2OnOPNATurboRPCM_PrintInfoImpl
+	super: Driver Device_noName, OPN2OnOPNATurboRPCM_CLOCK, OPN2OnOPNATurboRPCM_PrintInfoImpl
 	opnaDriver:
 		dw 0
 	turboRPCMDriver:
@@ -213,9 +213,6 @@ OPN2OnOPNATurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPN2OnOPNATurboRPCM_name:
-	db "OPNA + turboR PCM",0
-
 	SECTION RAM
 
 OPN2OnOPNATurboRPCM_instance: OPN2OnOPNATurboRPCM

@@ -4,7 +4,7 @@
 OPNOnSFGPSG_CLOCK: equ 3579545
 
 OPNOnSFGPSG: MACRO
-	super: Driver OPNOnSFGPSG_name, OPNOnSFGPSG_CLOCK, OPNOnSFGPSG_PrintInfoImpl
+	super: Driver Device_noName, OPNOnSFGPSG_CLOCK, OPNOnSFGPSG_PrintInfoImpl
 	opnFMOnSFGDriver:
 		dw 0
 	psgDriver:
@@ -74,9 +74,6 @@ OPNOnSFGPSG_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNOnSFGPSG_name:
-	db "SFG + PSG (emu)",0
-
 	SECTION RAM
 
 OPNOnSFGPSG_instance: OPNOnSFGPSG

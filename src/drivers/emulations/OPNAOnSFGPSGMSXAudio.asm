@@ -4,7 +4,7 @@
 OPNAOnSFGPSGMSXAudio_CLOCK: equ 3579545
 
 OPNAOnSFGPSGMSXAudio: MACRO
-	super: Driver OPNAOnSFGPSGMSXAudio_name, OPNAOnSFGPSGMSXAudio_CLOCK, OPNAOnSFGPSGMSXAudio_PrintInfoImpl
+	super: Driver Device_noName, OPNAOnSFGPSGMSXAudio_CLOCK, OPNAOnSFGPSGMSXAudio_PrintInfoImpl
 	opnOnSFGPSGDriver:
 		dw 0
 	msxAudioDriver:
@@ -97,9 +97,6 @@ OPNAOnSFGPSGMSXAudio_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNAOnSFGPSGMSXAudio_name:
-	db "SFG + PSG + MSX-AUDIO (emu)",0
-
 	SECTION RAM
 
 OPNAOnSFGPSGMSXAudio_instance: OPNAOnSFGPSGMSXAudio

@@ -6,7 +6,7 @@
 OPNFMOnSFG_CLOCK: equ 3579545
 
 OPNFMOnSFG: MACRO
-	super: Driver OPNFMOnSFG_name, OPNFMOnSFG_CLOCK, OPNFMOnSFG_PrintInfoImpl
+	super: Driver Device_noName, OPNFMOnSFG_CLOCK, OPNFMOnSFG_PrintInfoImpl
 	sfgDriver:
 		dw 0
 	frequencyMSBs:
@@ -438,9 +438,6 @@ OPNFMOnSFG_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNFMOnSFG_name:
-	db "SFG (emu)",0
-
 OPNFMOnSFG_lfoLUT:
 	db 0, 0, 0, 0, 0, 0, 0, 0, 0C1H, 0C7H, 0C9H, 0CBH, 0CDH, 0D4H, 0F9H, 0FFH
 

@@ -86,4 +86,7 @@ Device_infix:
 	db ": ",0
 
 Device_hz:
-	db " Hz",13,10,0
+	db " Hz",13,10  ;,0
+
+Device_noName:
+	db 0

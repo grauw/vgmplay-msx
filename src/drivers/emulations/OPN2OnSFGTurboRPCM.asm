@@ -4,7 +4,7 @@
 OPN2OnSFGTurboRPCM_CLOCK: equ 7670453
 
 OPN2OnSFGTurboRPCM: MACRO
-	super: Driver OPN2OnSFGTurboRPCM_name, OPN2OnSFGTurboRPCM_CLOCK, OPN2OnSFGTurboRPCM_PrintInfoImpl
+	super: Driver Device_noName, OPN2OnSFGTurboRPCM_CLOCK, OPN2OnSFGTurboRPCM_PrintInfoImpl
 	opnFMOnSFGDriver:
 		dw 0
 	turboRPCMDriver:
@@ -74,9 +74,6 @@ OPN2OnSFGTurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPN2OnSFGTurboRPCM_name:
-	db "SFG + turboR PCM (emu)",0
-
 	SECTION RAM
 
 OPN2OnSFGTurboRPCM_instance: OPN2OnSFGTurboRPCM

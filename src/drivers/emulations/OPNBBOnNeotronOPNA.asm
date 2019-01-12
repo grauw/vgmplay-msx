@@ -4,7 +4,7 @@
 OPNBBOnNeotronOPNA_CLOCK: equ 8000000
 
 OPNBBOnNeotronOPNA: MACRO
-	super: Driver OPNBBOnNeotronOPNA_name, OPNBBOnNeotronOPNA_CLOCK, OPNBBOnNeotronOPNA_PrintInfoImpl
+	super: Driver Device_noName, OPNBBOnNeotronOPNA_CLOCK, OPNBBOnNeotronOPNA_PrintInfoImpl
 	neotronDriver:
 		dw 0
 	opnaDriver:
@@ -104,9 +104,6 @@ OPNBBOnNeotronOPNA_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNBBOnNeotronOPNA_name:
-	db "Neotron + OPNA (emu)",0
-
 	SECTION RAM
 
 OPNBBOnNeotronOPNA_instance: OPNBBOnNeotronOPNA

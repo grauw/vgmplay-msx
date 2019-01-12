@@ -4,7 +4,7 @@
 OPN2OnTurboRPCM_CLOCK: equ 7670453
 
 OPN2OnTurboRPCM: MACRO
-	super: Driver OPN2OnTurboRPCM_name, OPN2OnTurboRPCM_CLOCK, OPN2OnTurboRPCM_PrintInfoImpl
+	super: Driver Device_noName, OPN2OnTurboRPCM_CLOCK, OPN2OnTurboRPCM_PrintInfoImpl
 	turboRPCMDriver:
 		dw 0
 
@@ -48,9 +48,6 @@ OPN2OnTurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPN2OnTurboRPCM_name:
-	db "turboR PCM (emu)",0
-
 	SECTION RAM
 
 OPN2OnTurboRPCM_instance: OPN2OnTurboRPCM
