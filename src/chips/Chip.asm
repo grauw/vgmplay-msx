@@ -2,10 +2,7 @@
 ; VGM chip
 ;
 Chip: MACRO ?name, ?headerClockOffset, ?connecter
-	clock:
-		dd 0
-	name:
-		dw ?name
+	super: Device ?name
 	driver:
 		dw 0
 	driver2:
@@ -16,18 +13,14 @@ Chip: MACRO ?name, ?headerClockOffset, ?connecter
 		dw ?connecter
 	ENDM
 
-; de = header clock offset
 ; ix = this
 ; iy = header
 Chip_Construct:
+	call Device_Construct
 	ld e,(ix + Chip.headerClockOffset)
 	ld d,(ix + Chip.headerClockOffset + 1)
 	call Utils_GetDoubleWordIYOffset
-	ld (ix + Chip.clock),l
-	ld (ix + Chip.clock + 1),h
-	ld (ix + Chip.clock + 2),e
-	ld (ix + Chip.clock + 3),d
-	ret
+	jp Device_SetClock
 
 ; ix = this
 Chip_Destruct: equ System_Return
@@ -37,36 +30,28 @@ Chip_Destruct: equ System_Return
 ; f <- z: not active
 ; Modifies: af, de, hl
 Chip_IsActive: equ Chip_GetClock
+;	jp Chip_GetClock
 
 ; ix = this
 ; dehl <- clock (Hz)
 ; f <- z: not active
-Chip_GetClock:
-	ld de,Chip.clock
-	call Utils_GetDoubleWordIXOffset
-	res 7,d  ; clear flag bits
-	res 6,d
-	ret
+Chip_GetClock: equ Device_GetClock
+;	jp Device_GetClock
 
 ; ix = this
 ; f <- nz: dual chip
-Chip_IsDualChip:
-	bit 6,(ix + Chip.clock + 3)
-	ret
+Chip_IsDualChip: equ Device_GetFlagBit6
+;	jp Device_GetFlagBit6
 
 ; ix = this
 ; hl <- name
-Chip_GetName:
-	ld l,(ix + Chip.name)
-	ld h,(ix + Chip.name + 1)
-	ret
+Chip_GetName: equ Device_GetName
+;	jp Device_GetName
 
 ; hl = name
 ; ix = this
-Chip_SetName:
-	ld (ix + Chip.name),l
-	ld (ix + Chip.name + 1),h
-	ret
+Chip_SetName: equ Device_SetName
+;	jp Device_SetName
 
 ; de = driver
 ; ix = this
@@ -91,29 +76,11 @@ Chip_Connect:
 
 ; ix = this
 Chip_PrintInfo:
-	call Chip_PrintOwnInfo
+	call Device_PrintInfo
 	ld de,Chip.driver
 	call Driver_PrintInfoIXOffset
 	call Chip_IsDualChip
 	ret z
-	call Chip_PrintOwnInfo
+	call Device_PrintInfo
 	ld de,Chip.driver2
 	jp Driver_PrintInfoIXOffset
-
-Chip_PrintOwnInfo:
-	call Chip_GetName
-	call System_Print
-	ld hl,Chip_clockLabelInfix
-	call System_Print
-	call Chip_GetClock
-	call System_PrintDecDEHL
-	ld hl,Chip_hz
-	jp System_Print
-
-
-;
-Chip_clockLabelInfix:
-	db ": ",0
-
-Chip_hz:
-	db " Hz",13,10,0

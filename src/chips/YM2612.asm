@@ -218,9 +218,8 @@ YM2612_Destruct:
 
 ; ix = this
 ; f <- nz: YM3438
-YM2612_IsYM3438:
-	bit 7,(ix + YM2612.super.clock + 3)
-	ret
+YM2612_IsYM3438: equ Device_GetFlagBit7
+;	jp Device_GetFlagBit7
 
 ; iy = drivers
 ; ix = this

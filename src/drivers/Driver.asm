@@ -2,36 +2,28 @@
 ; Sound module driver
 ;
 Driver: MACRO ?name, ?printInfo
-	name:
-		dw ?name
-	clock:
-		dd 0
+	super: Device ?name
 	printInfo:
 		dw ?printInfo
 	ENDM
 
 ; ix = this
-Driver_Construct: equ System_Return
-;	ret
+Driver_Construct: equ Device_Construct
+;	jp Device_Construct
 
 ; ix = this
 ; dehl <- clock (Hz)
-Driver_GetClock:
-	ld de,Driver.clock
-	jp Utils_GetDoubleWordIXOffset
+Driver_GetClock: equ Device_GetClock
+;	jp Device_GetClock
 
 ; ix = this
 ; dehl <- clock (Hz)
-Driver_SetClock:
-	ld (ix + Driver.clock),l
-	ld (ix + Driver.clock + 1),h
-	ld (ix + Driver.clock + 2),e
-	ld (ix + Driver.clock + 3),d
-	ret
+Driver_SetClock: equ Device_SetClock
+;	jp Device_SetClock
 
 ; ix = this
 ; f <- c: found
-; Modifies: a, de, hl
+; Modifies: af, de, hl
 Driver_IsFound:
 	call Driver_GetClock
 	neg
@@ -39,17 +31,13 @@ Driver_IsFound:
 
 ; ix = this
 ; hl <- name
-Driver_GetName:
-	ld l,(ix + Driver.name)
-	ld h,(ix + Driver.name + 1)
-	ret
+Driver_GetName: equ Device_GetName
+;	jp Device_GetName
 
 ; hl = name
 ; ix = this
-Driver_SetName:
-	ld (ix + Driver.name),l
-	ld (ix + Driver.name + 1),h
-	ret
+Driver_SetName: equ Device_SetName
+;	jp Device_SetName
 
 ; ix = this
 Driver_PrintInfo:
@@ -75,22 +63,8 @@ Driver_PrintInfoIXOffset:
 Driver_PrintInfoImpl:
 	ld hl,Driver_prefix
 	call System_Print
-	call Driver_GetName
-	call System_Print
-	ld hl,Driver_infix
-	call System_Print
-	call Driver_GetClock
-	call System_PrintDecDEHL
-	ld hl,Driver_hz
-	call System_Print
-	ret
+	jp Device_PrintInfo
 
 ;
 Driver_prefix:
 	db "-> ",0
-
-Driver_infix:
-	db ": ",0
-
-Driver_hz:
-	db " Hz",13,10,0

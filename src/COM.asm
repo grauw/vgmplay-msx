@@ -84,6 +84,7 @@ READBUFFER: ds READBUFFER_SIZE
 	INCLUDE "GD3.asm"
 	INCLUDE "Player.asm"
 	INCLUDE "Scanner.asm"
+	INCLUDE "Device.asm"
 	INCLUDE "timers/Timer.asm"
 	INCLUDE "drivers/Drivers.asm"
 	INCLUDE "chips/Chips.asm"

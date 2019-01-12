@@ -65,9 +65,8 @@ K051649_Destruct: equ Chip_Destruct
 
 ; ix = this
 ; f <- nz: SCC+
-K051649_IsSCCPlus:
-	bit 7,(ix + K051649.super.clock + 3)
-	ret
+K051649_IsSCCPlus: equ Device_GetFlagBit7
+;	jp Device_GetFlagBit7
 
 ; iy = drivers
 ; ix = this
