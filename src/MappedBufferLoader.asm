@@ -57,7 +57,7 @@ MappedBufferLoader_Load:
 	ld b,a
 	ld a,(Mapper_instance.primaryMapperSlot)
 	cp b
-	jp nz,MappedBufferLoader_LoadViaBuffer
+	jr nz,MappedBufferLoader_LoadViaBuffer
 	push ix
 	call MappedBufferLoader_GetWriter
 	call Writer_WriteBlockDirect
@@ -77,7 +77,7 @@ MappedBufferLoader_Load:
 	call Writer_Advance
 	pop ix
 	pop af
-	jp MappedBufferLoader_Load
+	jr MappedBufferLoader_Load
 
 ; Load data to BASE_ADDRESS via a buffer in the primary mapper.
 ; Because DOS2 can not load directly into nonprimary mapper slots.
@@ -99,4 +99,4 @@ MappedBufferLoader_LoadViaBuffer:
 	call Writer_WriteBlock
 	pop ix
 	pop af
-	jp MappedBufferLoader_Load
+	jr MappedBufferLoader_Load

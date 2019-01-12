@@ -109,7 +109,7 @@ Loop:
 	ld hl,-Mapped32KWriter_SEGMENT_SIZE
 	add hl,bc
 	push hl
-	jp nc,NoCap
+	jr nc,NoCap
 	ld bc,Mapped32KWriter_SEGMENT_SIZE
 NoCap:
 	push bc

@@ -216,7 +216,7 @@ Loop:
 	call Timer_Update
 	pop ix
 	call Player_CheckExitCondition
-	jp z,Loop
+	jr z,Loop
 	push ix
 	call Player_GetTimer
 	call Timer_Stop

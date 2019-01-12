@@ -131,7 +131,7 @@ Loop:
 	call c,System_ThrowException
 	ld c,l
 	ld b,h
-	jp Loop
+	jr Loop
 	ENDP
 
 ; bc = byte count

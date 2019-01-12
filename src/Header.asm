@@ -200,7 +200,7 @@ Header_GetDataOffset: PROC
 	ld h,(ix + Header.version + 1)
 	ld bc,-150H
 	add hl,bc
-	jp nc,Pre1_50
+	jr nc,Pre1_50
 	ld de,Header.vgmDataOffset
 	call Utils_GetDoubleWordIXOffset
 	ld bc,34H

@@ -52,7 +52,7 @@ Loop:
 	cp 2
 	jr c,Loop
 	ld a,DalSoRi_C4_ENABLE
-	jp DalSoRiR2_SetConfig  ; re-enable YRW801 ROM
+	jr DalSoRiR2_SetConfig  ; re-enable YRW801 ROM
 	ENDP
 
 ; dehl = size

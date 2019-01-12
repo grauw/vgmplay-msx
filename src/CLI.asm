@@ -18,7 +18,7 @@ CLI: MACRO
 ; ix = this
 ; ix <- this
 CLI_Construct:
-	jp CLI_Parse
+	jr CLI_Parse
 
 ; ix = this
 ; ix <- this

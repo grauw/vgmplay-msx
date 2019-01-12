@@ -25,7 +25,7 @@ GD3_PrintInfoEnglish:
 	ld hl,GD3_converter
 	call GD3_PrintTag
 	ld hl,GD3_notes
-	jp GD3_PrintTag
+	jr GD3_PrintTag
 
 ; iy = reader
 ; f <- z: tag recognised
@@ -100,7 +100,7 @@ GD3_SkipTag:
 	ld e,a
 	call Reader_Read_IY
 	or e
-	jp nz,GD3_SkipTag
+	jr nz,GD3_SkipTag
 	ret
 
 ;

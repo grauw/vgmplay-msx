@@ -88,7 +88,7 @@ Loop:
 	rl d
 	jr nc,NoAdd
 	add hl,bc
-	jp nc,NoAdd
+	jr nc,NoAdd
 	inc de
 NoAdd:
 	dec a
