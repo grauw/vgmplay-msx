@@ -12,7 +12,7 @@ GZIP_CRC32: equ 0
 HEAP: equ 0C000H
 HEAP_SIZE: equ 1180H
 STACK_SIZE: equ 100H
-READBUFFER_SIZE: equ 0D00H
+READBUFFER_SIZE: equ 0C00H
 
 	org 100H
 
@@ -31,15 +31,17 @@ RAM: equ RAM_PAGE1
 
 	INCLUDE "DOS.asm"
 	INCLUDE "BIOS.asm"
+	INCLUDE "VDP.asm"
 	INCLUDE "Class.asm"
 	INCLUDE "System.asm"
 	INCLUDE "Memory.asm"
 	INCLUDE "Mapper.asm"
 	INCLUDE "Heap.asm"
 	INCLUDE "Utils.asm"
+	INCLUDE "Math.asm"
 	INCLUDE "DOS2Runtime.asm"
 	INCLUDE "Application.asm"
-	INCLUDE "Math.asm"
+	INCLUDE "CLI.asm"
 	INCLUDE "StaticFactory.asm"
 	INCLUDE "MappedBuffer.asm"
 	INCLUDE "MappedBufferLoader.asm"
@@ -76,8 +78,6 @@ READBUFFER: ds READBUFFER_SIZE
 
 	SECTION TPA_PAGE1
 
-	INCLUDE "VDP.asm"
-	INCLUDE "CLI.asm"
 	INCLUDE "Interrupt.asm"
 	INCLUDE "VGM.asm"
 	INCLUDE "Header.asm"
@@ -87,8 +87,6 @@ READBUFFER: ds READBUFFER_SIZE
 	INCLUDE "timers/Timer.asm"
 	INCLUDE "drivers/Drivers.asm"
 	INCLUDE "chips/Chips.asm"
-	INCLUDE "MemoryTest.asm"
-	INCLUDE "HeapTest.asm"
 
 	ENDS
 

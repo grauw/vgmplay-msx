@@ -51,9 +51,6 @@ Application_MainContinue:
 	ld ix,Heap_main
 	call Heap_Construct
 
-	call MemoryTest_Test
-	call HeapTest_Test
-
 	call Player_InitCommandsJumpTable
 
 	ld ix,Application_instance
