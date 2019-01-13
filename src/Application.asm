@@ -177,12 +177,7 @@ Application_EnterMainLoop:
 	call Application_LoadFile
 	call Application_ConstructVGM
 	call Application_ConstructPlayer
-	call Application_EnterBlackout
-	push ix
-	ld hl,Application_Play
-	call System_TryCall
-	pop ix
-	jp Application_ExitBlackout
+	jp Application_Play
 
 ; ix = this
 Application_CheckUsageInstructions:
@@ -360,11 +355,13 @@ Application_ConstructPlayer:
 Application_Play:
 	ld hl,Application_playing
 	call System_Print
+	call Application_EnterBlackout
 	push ix
 	call Application_GetPlayer
-	call Player_Play
+	ld hl,Player_Play
+	call System_TryCall
 	pop ix
-	ret
+	jp Application_ExitBlackout
 
 ; If enabled, blacks out the screen to minimise audio output interference.
 ; ix = this
