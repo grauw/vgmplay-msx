@@ -90,7 +90,7 @@ YM2610_Connect: PROC
 	ret
 TryNeotron:
 	call Drivers_TryCreateNeotron_IY
-	jr nc,TryOPNA
+	jr nc,TryOPNOnSFGPSG
 	call Chip_SetDriver
 	ld hl,Neotron.SafeWriteRegister
 	add hl,de
@@ -108,19 +108,6 @@ TryNeotron:
 	add hl,de
 	ld (ix + YM2610.ProcessDataBlockB.process),l
 	ld (ix + YM2610.ProcessDataBlockB.process + 1),h
-	ret
-TryOPNA:
-	call Drivers_TryCreateOPNA_IY
-	jr nc,TryOPNOnSFGPSG
-	call Chip_SetDriver
-	ld hl,OPNA.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2610.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort0Command.writeRegister + 1),h
-	ld hl,OPNA.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
 	ret
 TryOPNOnSFGPSG:
 	call Drivers_TryCreateOPNOnSFGPSG_IY
