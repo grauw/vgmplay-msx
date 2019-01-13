@@ -177,6 +177,7 @@ Application_EnterMainLoop:
 	call Application_LoadFile
 	call Application_ConstructVGM
 	call Application_ConstructPlayer
+	call Application_LoadDataBlocks
 	jp Application_Play
 
 ; ix = this
@@ -340,14 +341,16 @@ Application_ConstructPlayer:
 	call Application_GetPlayerFactory
 	pop de
 	call StaticFactory_Create
-	call Player_HasDataBlocks
 	pop ix
-	ret nz
-	ld hl,Application_loadingSamples
-	call System_Print
+	ret
+
+Application_LoadDataBlocks:
 	push ix
 	call Application_GetPlayer
-	call Player_LoadDataBlocks
+	call Player_HasDataBlocks
+	ld hl,Application_loadingSamples
+	call z,System_Print
+	call z,Player_LoadDataBlocks
 	pop ix
 	ret
 
