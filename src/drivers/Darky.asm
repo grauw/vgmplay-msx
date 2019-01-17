@@ -137,12 +137,12 @@ Darky_Detect:
 	ret
 
 ;
-Darky_name:
-	db "Darky",0
-
 	SECTION RAM
 
 Darky_instance: Darky Darky_EPSG_BASE_PORT_1
 Darky_instance2: Darky Darky_EPSG_BASE_PORT_2
 
 	ENDS
+
+Darky_name:
+	db "Darky",0

@@ -164,11 +164,11 @@ Allocate:
 	ENDP
 
 ;
-MoonSound_name:
-	db "MoonSound",0
-
 	SECTION RAM
 
 MoonSound_instance: MoonSound
 
 	ENDS
+
+MoonSound_name:
+	db "MoonSound",0

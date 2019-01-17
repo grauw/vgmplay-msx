@@ -203,11 +203,11 @@ SCC_TestReadback:
 	ret
 
 ;
-SCC_name:
-	db "Konami SCC",0
-
 	SECTION RAM
 
 SCC_instance: SCC
 
 	ENDS
+
+SCC_name:
+	db "Konami SCC",0

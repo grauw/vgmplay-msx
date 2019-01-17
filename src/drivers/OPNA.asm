@@ -459,11 +459,11 @@ WriteADPCMRegister:
 	ENDP
 
 ;
-OPNA_name:
-	db "OPNA",0
-
 	SECTION RAM
 
 OPNA_instance: OPNA
 
 	ENDS
+
+OPNA_name:
+	db "OPNA",0

@@ -170,11 +170,11 @@ OPL3_Detect:
 	ret
 
 ;
-OPL3_name:
-	db "OPL3",0
-
 	SECTION RAM
 
 OPL3_instance: OPL3
 
 	ENDS
+
+OPL3_name:
+	db "OPL3",0

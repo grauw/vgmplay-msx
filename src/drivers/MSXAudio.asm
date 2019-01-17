@@ -354,11 +354,11 @@ WriteRegister:
 	ENDP
 
 ;
-MSXAudio_name:
-	db "MSX-AUDIO",0
-
 	SECTION RAM
 
 MSXAudio_instance: MSXAudio
 
 	ENDS
+
+MSXAudio_name:
+	db "MSX-AUDIO",0

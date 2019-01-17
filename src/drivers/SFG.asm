@@ -162,6 +162,13 @@ SFG_MatchID:
 	jp Memory_MatchSlotString
 
 ;
+	SECTION RAM_PAGE1
+
+SFG_instance: SFG
+SFG_instance2: SFG
+
+	ENDS
+
 SFG_sfg01Name:
 	db "Yamaha SFG-01",0
 
@@ -170,10 +177,3 @@ SFG_sfg05Name:
 
 SFG_id:
 	db "MCHFM0"
-
-	SECTION RAM_PAGE1
-
-SFG_instance: SFG
-SFG_instance2: SFG
-
-	ENDS

@@ -64,6 +64,12 @@ ExternalPSG_MatchMFRSDID:
 	jp Memory_MatchSlotString
 
 ;
+	SECTION RAM
+
+ExternalPSG_instance: ExternalPSG
+
+	ENDS
+
 ExternalPSG_nameReadWrite:
 	db "External PSG",0
 
@@ -75,9 +81,3 @@ ExternalPSG_nameMFRSD:
 
 ExternalPSG_mfrsdId:
 	db "MFRSD"
-
-	SECTION RAM
-
-ExternalPSG_instance: ExternalPSG
-
-	ENDS

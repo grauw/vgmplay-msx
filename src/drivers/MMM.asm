@@ -153,11 +153,11 @@ TestValue:
 	ENDS
 
 ;
-MMM_name:
-	db "Musical Memory Mapper",0
-
 	SECTION RAM
 
 MMM_instance: MMM
 
 	ENDS
+
+MMM_name:
+	db "Musical Memory Mapper",0

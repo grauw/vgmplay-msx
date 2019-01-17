@@ -124,11 +124,11 @@ PSG_Detect:
 	ret
 
 ;
-PSG_name:
-	db "Internal PSG",0
-
 	SECTION RAM
 
 PSG_instance: PSG PSG_BASE_PORT
 
 	ENDS
+
+PSG_name:
+	db "Internal PSG",0

@@ -205,11 +205,11 @@ Test:
 	ENDP
 
 ;
-SCCPlus_name:
-	db "Konami SCC+",0
-
 	SECTION RAM
 
 SCCPlus_instance: SCCPlus
 
 	ENDS
+
+SCCPlus_name:
+	db "Konami SCC+",0

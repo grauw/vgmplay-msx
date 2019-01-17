@@ -111,11 +111,11 @@ NotFound:
 	ENDP
 
 ;
-PlaySoniq_name:
-	db "PlaySoniq",0
-
 	SECTION RAM
 
 PlaySoniq_instance: PlaySoniq
 
 	ENDS
+
+PlaySoniq_name:
+	db "PlaySoniq",0

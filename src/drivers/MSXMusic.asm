@@ -152,6 +152,12 @@ MSXMusic_MatchExternalID:
 	jp Memory_MatchSlotString
 
 ;
+	SECTION RAM
+
+MSXMusic_instance: MSXMusic
+
+	ENDS
+
 MSXMusic_name:
 	db "MSX-MUSIC",0
 
@@ -160,9 +166,3 @@ MSXMusic_internalId:
 
 MSXMusic_externalId:
 	db "OPLL"
-
-	SECTION RAM
-
-MSXMusic_instance: MSXMusic
-
-	ENDS

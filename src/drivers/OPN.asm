@@ -124,11 +124,11 @@ OPN_Detect:
 	ret
 
 ;
-OPN_name:
-	db "OPN",0
-
 	SECTION RAM
 
 OPN_instance: OPN
 
 	ENDS
+
+OPN_name:
+	db "OPN",0

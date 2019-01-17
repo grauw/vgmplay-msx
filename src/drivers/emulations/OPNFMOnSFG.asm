@@ -438,11 +438,11 @@ OPNFMOnSFG_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNFMOnSFG_lfoLUT:
-	db 0, 0, 0, 0, 0, 0, 0, 0, 0C1H, 0C7H, 0C9H, 0CBH, 0CDH, 0D4H, 0F9H, 0FFH
-
 	SECTION RAM
 
 OPNFMOnSFG_instance: OPNFMOnSFG
 
 	ENDS
+
+OPNFMOnSFG_lfoLUT:
+	db 0, 0, 0, 0, 0, 0, 0, 0, 0C1H, 0C7H, 0C9H, 0CBH, 0CDH, 0D4H, 0F9H, 0FFH

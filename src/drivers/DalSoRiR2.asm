@@ -131,6 +131,12 @@ NotFound:
 	ENDS
 
 ;
+	SECTION RAM
+
+DalSoRiR2_instance: DalSoRiR2
+
+	ENDS
+
 DalSoRiR2_name:
 	db "DalSoRi R2",0
 
@@ -139,9 +145,3 @@ DalSoRiR2_emptyID:
 
 DalSoRiR2_msxAudioBIOSID:
 	db "AUDIO"
-
-	SECTION RAM
-
-DalSoRiR2_instance: DalSoRiR2
-
-	ENDS

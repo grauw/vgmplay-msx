@@ -55,11 +55,11 @@ Franky_Detect:
 	ret
 
 ;
-Franky_name:
-	db "Franky",0
-
 	SECTION RAM
 
 Franky_instance: Franky
 
 	ENDS
+
+Franky_name:
+	db "Franky",0

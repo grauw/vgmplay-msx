@@ -62,11 +62,11 @@ TurboRPCM_Detect:
 	ret
 
 ;
-TurboRPCM_name:
-	db "TurboR PCM",0
-
 	SECTION RAM
 
 TurboRPCM_instance: TurboRPCM
 
 	ENDS
+
+TurboRPCM_name:
+	db "TurboR PCM",0

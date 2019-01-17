@@ -355,14 +355,14 @@ Neotron_MatchID:
 	jp Memory_MatchSlotString
 
 ;
-Neotron_name:
-	db "Neotron",0
-
-Neotron_id:
-	db "OSC YM  OPNB"
-
 	SECTION RAM
 
 Neotron_instance: Neotron
 
 	ENDS
+
+Neotron_name:
+	db "Neotron",0
+
+Neotron_id:
+	db "OSC YM  OPNB"
