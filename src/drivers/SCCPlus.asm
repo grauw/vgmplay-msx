@@ -37,13 +37,13 @@ SCCPlus: MACRO
 
 	; e = channel * 20H + offset
 	; d = value
-	WriteWaveform:
+	WriteWaveformSCCPlus:
 		ld a,e
 		jp WriteRegister
 
 	; e = channel * 20H + offset
 	; d = value
-	WriteWaveformSCCCompatible:
+	WriteWaveform:
 		ld a,e
 		cp 60H
 		jp c,WriteRegister

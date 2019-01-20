@@ -103,11 +103,11 @@ SCCPlus:
 	call Drivers_TryCreateSCCPlus_IY
 	ret nc
 	call Chip_SetDriver
-	ld hl,SCCPlus.WriteWaveformSCCCompatible
+	ld hl,SCCPlus.WriteWaveform
 	add hl,de
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
 	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
-	ld hl,SCCPlus.WriteWaveform
+	ld hl,SCCPlus.WriteWaveformSCCPlus
 	add hl,de
 	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister),l
 	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister + 1),h
