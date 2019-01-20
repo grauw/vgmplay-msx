@@ -99,7 +99,7 @@ Neotron: MACRO
 
 	; e = register
 	; d = value
-	SafeWriteRegisterOPN: PROC
+	SafeWriteRegisterYM2203: PROC
 		ld a,e
 		cp 28H
 		jr z,KeyOnOff

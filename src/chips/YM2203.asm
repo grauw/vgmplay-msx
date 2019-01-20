@@ -64,7 +64,7 @@ YM2203_TryCreate:
 	ld hl,OPNA.SafeWriteRegister
 	ret c
 	call Drivers_TryCreateNeotron_IY
-	ld hl,Neotron.SafeWriteRegisterOPN
+	ld hl,Neotron.SafeWriteRegisterYM2203
 	ret c
 	call Drivers_TryCreateOPNOnSFGPSG_IY
 	ld hl,OPNOnSFGPSG.SafeWriteRegister
