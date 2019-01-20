@@ -21,7 +21,7 @@ Franky_Construct:
 	call Driver_Construct
 	call Franky_Detect
 	jp nc,Driver_NotFound
-	ld a,0
+	xor a
 	out (40H),a  ; make sure no known switched I/O device is listening
 	jr Franky_Reset
 
