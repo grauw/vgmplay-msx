@@ -56,7 +56,6 @@ YM2612: MACRO
 		ld a,(0)
 	position: equ $ - 2
 		ld d,a
-		ld e,YM2612_PCM_REGISTER
 		call System_Return
 	writeRegister: equ $ - 2
 		ld hl,position
@@ -229,9 +228,9 @@ YM2612_Connect:
 	call Chip_SetDriver
 	ld bc,YM2612.ProcessPort0Command.writeRegister
 	call Device_ConnectInterface
-	ld bc,YM2612.ProcessPCMWrite.writeRegister
-	call Device_ConnectInterfaceAgain
 	ld bc,YM2612.ProcessPort1Command.writeRegister
+	call Device_ConnectInterface
+	ld bc,YM2612.ProcessPCMWrite.writeRegister
 	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z

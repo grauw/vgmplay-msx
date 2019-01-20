@@ -22,6 +22,12 @@ OPN2OnTurboRPCM: MACRO
 	; d = value
 	SafeWriteRegister2:
 		ret
+
+	; d = value
+	SafeWritePCMRegister: PROC
+		jp System_Return
+	writePCMRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -34,7 +40,9 @@ OPN2OnTurboRPCM_Construct:
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM_interface
 	ld bc,OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister
-	jp Device_ConnectInterface
+	call Device_ConnectInterface
+	ld bc,OPN2OnTurboRPCM.SafeWritePCMRegister.writePCMRegister
+	jp Device_ConnectInterfaceAgain
 
 ; ix = this
 OPN2OnTurboRPCM_Destruct: equ System_Return
@@ -49,6 +57,7 @@ OPN2OnTurboRPCM_PrintInfoImpl:
 OPN2OnTurboRPCM_interface:
 	InterfaceOffset OPN2OnTurboRPCM.SafeWriteRegister
 	InterfaceOffset OPN2OnTurboRPCM.SafeWriteRegister2
+	InterfaceOffset OPN2OnTurboRPCM.SafeWritePCMRegister
 
 	SECTION RAM
 

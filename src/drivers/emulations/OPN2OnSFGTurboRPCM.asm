@@ -28,6 +28,12 @@ OPN2OnSFGTurboRPCM: MACRO
 		jp System_Return
 	writeFMRegister: equ $ - 2
 		ENDP
+
+	; d = value
+	SafeWritePCMRegister: PROC
+		jp System_Return
+	writePCMRegister: equ $ - 2
+		ENDP
 	ENDM
 
 ; ix = this
@@ -55,7 +61,9 @@ OPN2OnSFGTurboRPCM_Construct:
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
 	ld hl,TurboRPCM_interface
 	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister
-	jp Device_ConnectInterface
+	call Device_ConnectInterface
+	ld bc,OPN2OnSFGTurboRPCM.SafeWritePCMRegister.writePCMRegister
+	jp Device_ConnectInterfaceAgain
 
 ; ix = this
 OPN2OnSFGTurboRPCM_Destruct: equ System_Return
@@ -72,6 +80,7 @@ OPN2OnSFGTurboRPCM_PrintInfoImpl:
 OPN2OnSFGTurboRPCM_interface:
 	InterfaceOffset OPN2OnSFGTurboRPCM.SafeWriteRegister
 	InterfaceOffset OPN2OnSFGTurboRPCM.SafeWriteRegister2
+	InterfaceOffset OPN2OnSFGTurboRPCM.SafeWritePCMRegister
 
 	SECTION RAM
 
