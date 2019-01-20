@@ -54,14 +54,16 @@ OPNA: MACRO
 	; a = register
 	; d = value
 	WriteRegister: PROC
-		out (OPNA_FM1_ADDRESS),a
-		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
-		ld a,d
-		out (OPNA_FM1_DATA),a
+		ld e,a
 	Wait:
 		in a,(OPNA_STATUS1)
 		rla
 		jr c,Wait
+		ld a,e
+		out (OPNA_FM1_ADDRESS),a
+		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
+		ld a,d
+		out (OPNA_FM1_DATA),a
 		ret
 		ENDP
 	TimerControl:
@@ -80,14 +82,16 @@ OPNA: MACRO
 	; a = register
 	; d = value
 	WriteRegister2: PROC
-		out (OPNA_FM2_ADDRESS),a
-		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
-		ld a,d
-		out (OPNA_FM2_DATA),a
+		ld e,a
 	Wait:
 		in a,(OPNA_STATUS1)
 		rla
 		jr c,Wait
+		ld a,e
+		out (OPNA_FM2_ADDRESS),a
+		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
+		ld a,d
+		out (OPNA_FM2_DATA),a
 		ret
 		ENDP
 	MaskControl2:
