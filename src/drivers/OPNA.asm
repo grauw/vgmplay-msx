@@ -55,9 +55,7 @@ OPNA: MACRO
 	; d = value
 	WriteRegister: PROC
 		out (OPNA_FM1_ADDRESS),a
-		in a,(OPNA_STATUS1)  ; wait 17 cycles
-		in a,(OPNA_STATUS1)
-		or (hl)
+		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
 		ld a,d
 		out (OPNA_FM1_DATA),a
 	Wait:
@@ -83,9 +81,7 @@ OPNA: MACRO
 	; d = value
 	WriteRegister2: PROC
 		out (OPNA_FM2_ADDRESS),a
-		in a,(OPNA_STATUS1)  ; wait 17 cycles
-		in a,(OPNA_STATUS1)
-		or (hl)
+		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
 		ld a,d
 		out (OPNA_FM2_DATA),a
 	Wait:
