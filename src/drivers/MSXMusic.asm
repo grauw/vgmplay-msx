@@ -158,6 +158,9 @@ MSXMusic_instance: MSXMusic
 
 	ENDS
 
+MSXMusic_interface:
+	InterfaceOffset MSXMusic.SafeWriteRegister
+
 MSXMusic_name:
 	db "MSX-MUSIC",0
 

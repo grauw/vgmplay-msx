@@ -169,6 +169,12 @@ SFG_instance2: SFG
 
 	ENDS
 
+SFG_interface:
+	InterfaceOffset SFG.SafeWriteRegister
+
+SFG_interfaceDirect:
+	InterfaceOffset SFG.WriteRegister
+
 SFG_sfg01Name:
 	db "Yamaha SFG-01",0
 

@@ -38,33 +38,30 @@ SN76489_Connect:
 	call SN76489_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + SN76489.ProcessCommand.writeRegister),l
-	ld (ix + SN76489.ProcessCommand.writeRegister + 1),h
+	ld bc,SN76489.ProcessCommand.writeRegister
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call SN76489_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + SN76489.ProcessCommandDual.writeRegister),l
-	ld (ix + SN76489.ProcessCommandDual.writeRegister + 1),h
-	ret
+	ld bc,SN76489.ProcessCommandDual.writeRegister
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- safe write register offset
+; hl <- device interface
 ; f <- c: succeeded
 SN76489_TryCreate:
 	call Drivers_TryCreateMMM_IY
-	ld hl,MMM.SafeWriteRegister
+	ld hl,MMM_interface
 	ret c
 	call Drivers_TryCreatePlaySoniq_IY
-	ld hl,PlaySoniq.SafeWriteRegister
+	ld hl,PlaySoniq_interface
 	ret c
 	call Drivers_TryCreateFranky_IY
-	ld hl,Franky.SafeWriteRegister
+	ld hl,Franky_interface
 	ret
 
 ;

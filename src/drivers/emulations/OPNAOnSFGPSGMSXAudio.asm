@@ -63,27 +63,20 @@ OPNAOnSFGPSGMSXAudio_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver),e
 	ld (ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver + 1),d
-	ld hl,OPNOnSFGPSG.SafeWriteRegister
-	add hl,de
-	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister.safeWriteRegister),l
-	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister.safeWriteRegister + 1),h
-	ld hl,OPNOnSFGPSG.SafeWriteRegister2
-	add hl,de
-	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteRegister),l
-	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteRegister + 1),h
+	ld hl,OPNOnSFGPSG_interface
+	ld bc,OPNAOnSFGPSGMSXAudio.SafeWriteRegister.safeWriteRegister
+	call Device_ConnectInterface
+	ld bc,OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteRegister
+	call Device_ConnectInterface
 	call Drivers_TryCreateMSXAudio_IY
 	ret nc
 	ld (ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver),e
 	ld (ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver + 1),d
-	ld hl,MSXAudio.SafeWriteRegister
-	add hl,de
-	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteADPCMRegister),l
-	ld (ix + OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteADPCMRegister + 1),h
-	ld hl,MSXAudio.ProcessDataBlock
-	add hl,de
-	ld (ix + OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process),l
-	ld (ix + OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process + 1),h
-	ret
+	ld hl,MSXAudio_interface
+	ld bc,OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteADPCMRegister
+	call Device_ConnectInterface
+	ld bc,OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process
+	jp Device_ConnectInterface
 
 ; ix = this
 OPNAOnSFGPSGMSXAudio_Destruct: equ System_Return
@@ -97,6 +90,11 @@ OPNAOnSFGPSGMSXAudio_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+OPNAOnSFGPSGMSXAudio_interface:
+	InterfaceOffset OPNAOnSFGPSGMSXAudio.SafeWriteRegister
+	InterfaceOffset OPNAOnSFGPSGMSXAudio.SafeWriteRegister2
+	InterfaceOffset OPNAOnSFGPSGMSXAudio.ProcessDataBlock
+
 	SECTION RAM
 
 OPNAOnSFGPSGMSXAudio_instance: OPNAOnSFGPSGMSXAudio

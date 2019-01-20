@@ -275,15 +275,10 @@ OPNFMOnSFG_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPNFMOnSFG.sfgDriver),e
 	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
-	add hl,de
-	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister),l
-	ld (ix + OPNFMOnSFG.WriteRegister.writeSFGRegister + 1),h
+	ld bc,OPNFMOnSFG.WriteRegister.writeSFGRegister
+	call Device_ConnectInterface
 	ld bc,OPNFMOnSFG.WriteRegister2.writeSFGRegister
-	add ix,bc
-	ld (ix),l
-	ld (ix + 1),h
-	ld bc,-OPNFMOnSFG.WriteRegister2.writeSFGRegister
-	add ix,bc
+	call Device_ConnectInterfaceAgain
 	jr OPNFMOnSFG_Initialize
 
 ; ix = this
@@ -422,14 +417,14 @@ Overflow:
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- write register offset
+; hl <- device interface
 ; f <- c: succeeded
 OPNFMOnSFG_TryCreateSFG:
 	call Drivers_TryCreateSFG_IY
-	ld hl,SFG.WriteRegister
+	ld hl,SFG_interfaceDirect
 	ret c
 	call Drivers_TryCreateSFG2_IY
-	ld hl,SFG.WriteRegister
+	ld hl,SFG_interfaceDirect
 	ret
 
 ; ix = this
@@ -443,6 +438,10 @@ OPNFMOnSFG_PrintInfoImpl:
 OPNFMOnSFG_instance: OPNFMOnSFG
 
 	ENDS
+
+OPNFMOnSFG_interfaceDirect:
+	InterfaceOffset OPNFMOnSFG.WriteRegister
+	InterfaceOffset OPNFMOnSFG.WriteRegister2
 
 OPNFMOnSFG_lfoLUT:
 	db 0, 0, 0, 0, 0, 0, 0, 0, 0C1H, 0C7H, 0C9H, 0CBH, 0CDH, 0D4H, 0F9H, 0FFH

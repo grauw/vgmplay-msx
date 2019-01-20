@@ -46,55 +46,38 @@ Y8950_Destruct: equ Chip_Destruct
 
 ; iy = drivers
 ; ix = this
-Y8950_Connect: PROC
+Y8950_Connect:
 	call Y8950_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + Y8950.ProcessCommand.writeRegister),l
-	ld (ix + Y8950.ProcessCommand.writeRegister + 1),h
-	ld l,c
-	ld h,b
-	add hl,de
-	jr c,TryDualChip
-	ld (ix + Y8950.ProcessDataBlock.process),l
-	ld (ix + Y8950.ProcessDataBlock.process + 1),h
-TryDualChip:
+	ld bc,Y8950.ProcessCommand.writeRegister
+	call Device_ConnectInterface
+	ld bc,Y8950.ProcessDataBlock.process
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call Y8950_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + Y8950.ProcessCommandDual.writeRegister),l
-	ld (ix + Y8950.ProcessCommandDual.writeRegister + 1),h
-	ld l,c
-	ld h,b
-	add hl,de
-	ret c
-	ld (ix + Y8950.ProcessDataBlock.processDual),l
-	ld (ix + Y8950.ProcessDataBlock.processDual + 1),h
-	ret
-	ENDP
+	ld bc,Y8950.ProcessCommandDual.writeRegister
+	call Device_ConnectInterface
+	ld bc,Y8950.ProcessDataBlock.processDual
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- safe write register offset
-; bc <- process data block offset or -1
+; hl <- device interface
 ; f <- c: succeeded
 Y8950_TryCreate:
 	call Drivers_TryCreateMSXAudio_IY
-	ld hl,MSXAudio.SafeWriteRegister
-	ld bc,MSXAudio.ProcessDataBlock
+	ld hl,MSXAudio_interface
 	ret c
 	call Drivers_TryCreateOPL3_IY
-	ld hl,OPL3.SafeWriteRegister
-	ld bc,-1
+	ld hl,OPL3_interfaceY8950
 	ret c
 	call Drivers_TryCreateMoonSound_IY
-	ld hl,MoonSound.SafeWriteRegister
-	ld bc,-1
+	ld hl,OPL4_interfaceY8950
 	ret
 
 ;

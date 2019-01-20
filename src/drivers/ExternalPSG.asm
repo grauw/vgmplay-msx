@@ -70,6 +70,8 @@ ExternalPSG_instance: ExternalPSG
 
 	ENDS
 
+ExternalPSG_interface: equ PSG_interface
+
 ExternalPSG_nameReadWrite:
 	db "External PSG",0
 

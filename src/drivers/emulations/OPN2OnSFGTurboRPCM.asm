@@ -38,14 +38,11 @@ OPN2OnSFGTurboRPCM_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),d
-	ld hl,OPNFMOnSFG.WriteRegister
-	add hl,de
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister),l
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
-	ld hl,OPNFMOnSFG.WriteRegister2
-	add hl,de
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister),l
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister + 1),h
+	ld hl,OPNFMOnSFG_interfaceDirect
+	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister
+	call Device_ConnectInterface
+	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister
+	call Device_ConnectInterface
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -56,11 +53,9 @@ OPN2OnSFGTurboRPCM_Construct:
 	ret nc
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
-	ld hl,TurboRPCM.SafeWriteRegister
-	add hl,de
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister),l
-	ld (ix + OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-	ret
+	ld hl,TurboRPCM_interface
+	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister
+	jp Device_ConnectInterface
 
 ; ix = this
 OPN2OnSFGTurboRPCM_Destruct: equ System_Return
@@ -74,6 +69,10 @@ OPN2OnSFGTurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+OPN2OnSFGTurboRPCM_interface:
+	InterfaceOffset OPN2OnSFGTurboRPCM.SafeWriteRegister
+	InterfaceOffset OPN2OnSFGTurboRPCM.SafeWriteRegister2
+
 	SECTION RAM
 
 OPN2OnSFGTurboRPCM_instance: OPN2OnSFGTurboRPCM

@@ -141,35 +141,23 @@ OPN2OnOPNATurboRPCM_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),d
-	ld hl,OPNA.SafeWriteRegister
-	add hl,de
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister + 1),h
-	ld hl,OPNA.WriteRegister
-	add hl,de
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister + 1),h
-	ld bc,128
-	add ix,bc
-	ld hl,OPNA.SafeWriteRegister2
-	add hl,de
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister - 128 + 1),h
-	ld hl,OPNA.WriteRegister2
-	add hl,de
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister - 128 + 1),h
-	ld bc,-128
-	add ix,bc
+	ld hl,OPNA_interface
+	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister
+	call Device_ConnectInterface
+	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister
+	call Device_ConnectInterface
+	ld hl,OPNA_interfaceDirect
+	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister
+	call Device_ConnectInterface
+	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister
+	call Device_ConnectInterface
 	call Drivers_TryCreateTurboRPCM_IY
 	ret nc
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1),d
-	ld hl,TurboRPCM.SafeWriteRegister
-	add hl,de
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister),l
-	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-	ret
+	ld hl,TurboRPCM_interface
+	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister
+	jp Device_ConnectInterface
 
 ; ix = this
 OPN2OnOPNATurboRPCM_Destruct: equ System_Return
@@ -213,6 +201,10 @@ OPN2OnOPNATurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+OPN2OnOPNATurboRPCM_interface:
+	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWriteRegister
+	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWriteRegister2
+
 	SECTION RAM
 
 OPN2OnOPNATurboRPCM_instance: OPN2OnOPNATurboRPCM

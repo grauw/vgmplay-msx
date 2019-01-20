@@ -32,11 +32,9 @@ OPN2OnTurboRPCM_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver + 1),d
-	ld hl,TurboRPCM.SafeWriteRegister
-	add hl,de
-	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister),l
-	ld (ix + OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister + 1),h
-	ret
+	ld hl,TurboRPCM_interface
+	ld bc,OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister
+	jp Device_ConnectInterface
 
 ; ix = this
 OPN2OnTurboRPCM_Destruct: equ System_Return
@@ -48,6 +46,10 @@ OPN2OnTurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+OPN2OnTurboRPCM_interface:
+	InterfaceOffset OPN2OnTurboRPCM.SafeWriteRegister
+	InterfaceOffset OPN2OnTurboRPCM.SafeWriteRegister2
+
 	SECTION RAM
 
 OPN2OnTurboRPCM_instance: OPN2OnTurboRPCM

@@ -130,5 +130,8 @@ PSG_instance: PSG PSG_BASE_PORT
 
 	ENDS
 
+PSG_interface:
+	InterfaceOffset PSG.SafeWriteRegister
+
 PSG_name:
 	db "Internal PSG",0

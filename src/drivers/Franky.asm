@@ -61,5 +61,8 @@ Franky_instance: Franky
 
 	ENDS
 
+Franky_interface:
+	InterfaceOffset Franky.SafeWriteRegister
+
 Franky_name:
 	db "Franky",0

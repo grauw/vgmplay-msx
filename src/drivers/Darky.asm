@@ -144,5 +144,8 @@ Darky_instance2: Darky Darky_EPSG_BASE_PORT_2
 
 	ENDS
 
+Darky_interface:
+	InterfaceOffset Darky.SafeWriteRegister
+
 Darky_name:
 	db "Darky",0

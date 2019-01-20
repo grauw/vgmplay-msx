@@ -438,3 +438,8 @@ OPL4_Detect:
 	ret nz
 	scf
 	ret
+
+;
+OPL4_interfaceY8950:
+	InterfaceOffset OPL4.SafeWriteRegister
+	InterfaceAddress Player_SkipDataBlock

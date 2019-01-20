@@ -47,41 +47,29 @@ YM2608_Destruct: equ Chip_Destruct
 
 ; iy = drivers
 ; ix = this
-YM2608_Connect: PROC
-	call Drivers_TryCreateOPNA_IY
-	jr nc,TryOPNAOnSFGPSGMSXAudio
-	call Chip_SetDriver
-	ld hl,OPNA.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2608.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2608.ProcessPort0Command.writeRegister + 1),h
-	ld hl,OPNA.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2608.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2608.ProcessPort1Command.writeRegister + 1),h
-	ld hl,OPNA.ProcessDataBlock
-	add hl,de
-	ld (ix + YM2608.ProcessDataBlock.process),l
-	ld (ix + YM2608.ProcessDataBlock.process + 1),h
-	ret
-TryOPNAOnSFGPSGMSXAudio:
-	call Drivers_TryCreateOPNAOnSFGPSGMSXAudio_IY
+YM2608_Connect:
+	call YM2608_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,OPNAOnSFGPSGMSXAudio.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2608.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2608.ProcessPort0Command.writeRegister + 1),h
-	ld hl,OPNAOnSFGPSGMSXAudio.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2608.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2608.ProcessPort1Command.writeRegister + 1),h
-	ld hl,OPNAOnSFGPSGMSXAudio.ProcessDataBlock
-	add hl,de
-	ld (ix + YM2608.ProcessDataBlock.process),l
-	ld (ix + YM2608.ProcessDataBlock.process + 1),h
+	ld bc,YM2608.ProcessPort0Command.writeRegister
+	call Device_ConnectInterface
+	ld bc,YM2608.ProcessPort1Command.writeRegister
+	call Device_ConnectInterface
+	ld bc,YM2608.ProcessDataBlock.process
+	jp Device_ConnectInterface
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+YM2608_TryCreate:
+	call Drivers_TryCreateOPNA_IY
+	ld hl,OPNA_interface
+	ret c
+	call Drivers_TryCreateOPNAOnSFGPSGMSXAudio_IY
+	ld hl,OPNAOnSFGPSGMSXAudio_interface
 	ret
-	ENDP
 
 ;
 	SECTION RAM

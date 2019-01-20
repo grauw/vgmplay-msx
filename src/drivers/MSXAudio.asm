@@ -360,5 +360,9 @@ MSXAudio_instance: MSXAudio
 
 	ENDS
 
+MSXAudio_interface:
+	InterfaceOffset MSXAudio.SafeWriteRegister
+	InterfaceOffset MSXAudio.ProcessDataBlock
+
 MSXAudio_name:
 	db "MSX-AUDIO",0

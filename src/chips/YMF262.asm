@@ -56,43 +56,31 @@ YMF262_Connect:
 	call YMF262_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + YMF262.ProcessPort0Command.writeRegister),l
-	ld (ix + YMF262.ProcessPort0Command.writeRegister + 1),h
-	ld l,c
-	ld h,b
-	add hl,de
-	ld (ix + YMF262.ProcessPort1Command.writeRegister),l
-	ld (ix + YMF262.ProcessPort1Command.writeRegister + 1),h
+	ld bc,YMF262.ProcessPort0Command.writeRegister
+	call Device_ConnectInterface
+	ld bc,YMF262.ProcessPort1Command.writeRegister
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call YMF262_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + YMF262.ProcessPort0CommandDual.writeRegister),l
-	ld (ix + YMF262.ProcessPort0CommandDual.writeRegister + 1),h
-	ld l,c
-	ld h,b
-	add hl,de
-	ld (ix + YMF262.ProcessPort1CommandDual.writeRegister),l
-	ld (ix + YMF262.ProcessPort1CommandDual.writeRegister + 1),h
-	ret
+	ld bc,YMF262.ProcessPort0CommandDual.writeRegister
+	call Device_ConnectInterface
+	ld bc,YMF262.ProcessPort1CommandDual.writeRegister
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
-; bc <- safe write register 2 offset
 ; de <- driver
-; hl <- safe write register offset
+; hl <- device interface
 ; f <- c: succeeded
 YMF262_TryCreate:
 	call Drivers_TryCreateOPL3_IY
-	ld hl,OPL3.SafeWriteRegister
-	ld bc,OPL3.SafeWriteRegister2
+	ld hl,OPL3_interface
 	ret c
 	call Drivers_TryCreateMoonSound_IY
-	ld hl,MoonSound.SafeWriteRegister
-	ld bc,MoonSound.SafeWriteRegister2
+	ld hl,MoonSound_interface
 	ret
 
 ;

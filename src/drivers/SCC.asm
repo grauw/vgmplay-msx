@@ -209,5 +209,13 @@ SCC_instance: SCC
 
 	ENDS
 
+SCC_interface:
+	InterfaceOffset SCC.WriteWaveform
+	InterfaceOffset SCC.WriteFrequency
+	InterfaceOffset SCC.WriteAmplitude
+	InterfaceOffset SCC.WriteMixer
+	InterfaceOffset SCC.WriteDeformation
+	InterfaceAddress System_ThrowException
+
 SCC_name:
 	db "Konami SCC",0

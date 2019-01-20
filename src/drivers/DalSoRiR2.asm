@@ -137,6 +137,13 @@ DalSoRiR2_instance: DalSoRiR2
 
 	ENDS
 
+DalSoRiR2_interface:
+	InterfaceOffset DalSoRiR2.SafeWriteRegister
+	InterfaceOffset DalSoRiR2.SafeWriteRegister2
+	InterfaceOffset DalSoRiR2.SafeWriteRegisterWave
+	InterfaceOffset DalSoRiR2.ProcessROMDataBlock
+	InterfaceOffset DalSoRiR2.ProcessRAMDataBlock
+
 DalSoRiR2_name:
 	db "DalSoRi R2",0
 

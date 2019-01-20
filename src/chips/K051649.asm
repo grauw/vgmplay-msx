@@ -70,63 +70,37 @@ K051649_IsSCCPlus: equ Device_GetFlagBit7
 
 ; iy = drivers
 ; ix = this
-K051649_Connect: PROC
+K051649_Connect:
+	call K051649_TryCreate
+	ret nc
+	call Chip_SetDriver
+	ld bc,K051649.ProcessCommand.Waveform.writeRegister
+	call Device_ConnectInterface
+	ld bc,K051649.ProcessCommand.Frequency.writeRegister
+	call Device_ConnectInterface
+	ld bc,K051649.ProcessCommand.Amplitude.writeRegister
+	call Device_ConnectInterface
+	ld bc,K051649.ProcessCommand.Mixer.writeRegister
+	call Device_ConnectInterface
+	ld bc,K051649.ProcessCommand.Deformation.writeRegister
+	call Device_ConnectInterface
+	ld bc,K051649.ProcessCommand.WaveformSCCPlus.writeRegister
+	jp Device_ConnectInterface
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+K051649_TryCreate: PROC
 	call K051649_IsSCCPlus
 	jr nz,SCCPlus
 	call Drivers_TryCreateSCC_IY
-	jr nc,SCCPlus
-	call Chip_SetDriver
-	ld hl,SCC.WriteWaveform
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
-	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister),System_ThrowException
-	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister + 1),System_ThrowException >> 8
-	ld hl,SCC.WriteFrequency
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Frequency.writeRegister + 1),h
-	ld hl,SCC.WriteAmplitude
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister + 1),h
-	ld hl,SCC.WriteMixer
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Mixer.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Mixer.writeRegister + 1),h
-	ld hl,SCC.WriteDeformation
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
-	ret
+	ld hl,SCC_interface
+	ret c
 SCCPlus:
 	call Drivers_TryCreateSCCPlus_IY
-	ret nc
-	call Chip_SetDriver
-	ld hl,SCCPlus.WriteWaveform
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Waveform.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Waveform.writeRegister + 1),h
-	ld hl,SCCPlus.WriteWaveformSCCPlus
-	add hl,de
-	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister),l
-	ld (ix + K051649.ProcessCommand.WaveformSCCPlus.writeRegister + 1),h
-	ld hl,SCCPlus.WriteFrequency
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Frequency.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Frequency.writeRegister + 1),h
-	ld hl,SCCPlus.WriteAmplitude
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Amplitude.writeRegister + 1),h
-	ld hl,SCCPlus.WriteMixer
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Mixer.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Mixer.writeRegister + 1),h
-	ld hl,SCCPlus.WriteDeformation
-	add hl,de
-	ld (ix + K051649.ProcessCommand.Deformation.writeRegister),l
-	ld (ix + K051649.ProcessCommand.Deformation.writeRegister + 1),h
+	ld hl,SCCPlus_interface
 	ret
 	ENDP
 

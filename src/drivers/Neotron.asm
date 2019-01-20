@@ -361,6 +361,15 @@ Neotron_instance: Neotron
 
 	ENDS
 
+Neotron_interface:
+	InterfaceOffset Neotron.SafeWriteRegister
+	InterfaceOffset Neotron.SafeWriteRegister2
+	InterfaceOffset Neotron.ProcessDataBlockA
+	InterfaceOffset Neotron.ProcessDataBlockB
+
+Neotron_interfaceYM2203:
+	InterfaceOffset Neotron.SafeWriteRegisterYM2203
+
 Neotron_name:
 	db "Neotron",0
 

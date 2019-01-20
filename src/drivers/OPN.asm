@@ -130,5 +130,8 @@ OPN_instance: OPN
 
 	ENDS
 
+OPN_interface:
+	InterfaceOffset OPN.SafeWriteRegister
+
 OPN_name:
 	db "OPN",0

@@ -211,5 +211,13 @@ SCCPlus_instance: SCCPlus
 
 	ENDS
 
+SCCPlus_interface:
+	InterfaceOffset SCCPlus.WriteWaveform
+	InterfaceOffset SCCPlus.WriteFrequency
+	InterfaceOffset SCCPlus.WriteAmplitude
+	InterfaceOffset SCCPlus.WriteMixer
+	InterfaceOffset SCCPlus.WriteDeformation
+	InterfaceOffset SCCPlus.WriteWaveformSCCPlus
+
 SCCPlus_name:
 	db "Konami SCC+",0

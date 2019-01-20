@@ -465,5 +465,14 @@ OPNA_instance: OPNA
 
 	ENDS
 
+OPNA_interface:
+	InterfaceOffset OPNA.SafeWriteRegister
+	InterfaceOffset OPNA.SafeWriteRegister2
+	InterfaceOffset OPNA.ProcessDataBlock
+
+OPNA_interfaceDirect:
+	InterfaceOffset OPNA.WriteRegister
+	InterfaceOffset OPNA.WriteRegister2
+
 OPNA_name:
 	db "OPNA",0

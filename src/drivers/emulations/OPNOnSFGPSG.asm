@@ -44,23 +44,18 @@ OPNOnSFGPSG_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),e
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),d
-	ld hl,OPNFMOnSFG.WriteRegister
-	add hl,de
-	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister),l
-	ld (ix + OPNOnSFGPSG.WriteRegister.writeFMRegister + 1),h
-	ld hl,OPNFMOnSFG.WriteRegister2
-	add hl,de
-	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister),l
-	ld (ix + OPNOnSFGPSG.WriteRegister2.writeFMRegister + 1),h
+	ld hl,OPNFMOnSFG_interfaceDirect
+	ld bc,OPNOnSFGPSG.WriteRegister.writeFMRegister
+	call Device_ConnectInterface
+	ld bc,OPNOnSFGPSG.WriteRegister2.writeFMRegister
+	call Device_ConnectInterface
 	call Drivers_TryCreatePSG_IY
 	jp nc,Driver_NotFound
 	ld (ix + OPNOnSFGPSG.psgDriver),e
 	ld (ix + OPNOnSFGPSG.psgDriver + 1),d
-	ld hl,PSG.SafeWriteRegister
-	add hl,de
-	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister),l
-	ld (ix + OPNOnSFGPSG.WriteRegister.writePSGRegister + 1),h
-	ret
+	ld hl,PSG_interface
+	ld bc,OPNOnSFGPSG.WriteRegister.writePSGRegister
+	jp Device_ConnectInterface
 
 ; ix = this
 OPNOnSFGPSG_Destruct: equ System_Return
@@ -74,6 +69,13 @@ OPNOnSFGPSG_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+OPNOnSFGPSG_interface:
+OPNOnSFGPSG_interfaceYM2610:
+	InterfaceOffset OPNOnSFGPSG.SafeWriteRegister
+	InterfaceOffset OPNOnSFGPSG.SafeWriteRegister2
+	InterfaceAddress Player_SkipDataBlock
+	InterfaceAddress Player_SkipDataBlock
+
 	SECTION RAM
 
 OPNOnSFGPSG_instance: OPNOnSFGPSG

@@ -58,39 +58,28 @@ OPNBBOnNeotronOPNA_Construct:
 	jp nc,Driver_NotFound
 	ld (ix + OPNBBOnNeotronOPNA.neotronDriver),e
 	ld (ix + OPNBBOnNeotronOPNA.neotronDriver + 1),d
-	ld hl,Neotron.SafeWriteRegister
-	add hl,de
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteADPCMRegister),l
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteADPCMRegister + 1),h
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister),l
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister + 1),h
-	ld hl,Neotron.SafeWriteRegister2
-	add hl,de
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteADPCMRegister),l
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteADPCMRegister + 1),h
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister),l
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister + 1),h
-	ld hl,Neotron.ProcessDataBlockA
-	add hl,de
-	ld (ix + OPNBBOnNeotronOPNA.ProcessDataBlockA.process),l
-	ld (ix + OPNBBOnNeotronOPNA.ProcessDataBlockA.process + 1),h
-	ld hl,Neotron.ProcessDataBlockB
-	add hl,de
-	ld (ix + OPNBBOnNeotronOPNA.ProcessDataBlockB.process),l
-	ld (ix + OPNBBOnNeotronOPNA.ProcessDataBlockB.process + 1),h
+	ld hl,Neotron_interface
+	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteADPCMRegister
+	call Device_ConnectInterface
+	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister
+	call Device_ConnectInterfaceAgain
+	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteADPCMRegister
+	call Device_ConnectInterface
+	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister
+	call Device_ConnectInterfaceAgain
+	ld bc,OPNBBOnNeotronOPNA.ProcessDataBlockA.process
+	call Device_ConnectInterface
+	ld bc,OPNBBOnNeotronOPNA.ProcessDataBlockB.process
+	call Device_ConnectInterface
 	call Drivers_TryCreateOPNA_IY
 	ret nc
 	ld (ix + OPNBBOnNeotronOPNA.opnaDriver),e
 	ld (ix + OPNBBOnNeotronOPNA.opnaDriver + 1),d
-	ld hl,OPNA.SafeWriteRegister
-	add hl,de
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister),l
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister + 1),h
-	ld hl,OPNA.SafeWriteRegister2
-	add hl,de
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister),l
-	ld (ix + OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister + 1),h
-	ret
+	ld hl,OPNA_interface
+	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister
+	call Device_ConnectInterface
+	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister
+	jp Device_ConnectInterface
 
 ; ix = this
 OPNBBOnNeotronOPNA_Destruct: equ System_Return
@@ -104,6 +93,12 @@ OPNBBOnNeotronOPNA_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+OPNBBOnNeotronOPNA_interface:
+	InterfaceOffset OPNBBOnNeotronOPNA.SafeWriteRegister
+	InterfaceOffset OPNBBOnNeotronOPNA.SafeWriteRegister2
+	InterfaceOffset OPNBBOnNeotronOPNA.ProcessDataBlockA
+	InterfaceOffset OPNBBOnNeotronOPNA.ProcessDataBlockB
+
 	SECTION RAM
 
 OPNBBOnNeotronOPNA_instance: OPNBBOnNeotronOPNA

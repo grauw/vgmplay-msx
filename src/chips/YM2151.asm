@@ -38,18 +38,15 @@ YM2151_Connect:
 	call YM2151_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + YM2151.ProcessCommand.writeRegister),l
-	ld (ix + YM2151.ProcessCommand.writeRegister + 1),h
+	ld bc,YM2151.ProcessCommand.writeRegister
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call YM2151_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + YM2151.ProcessCommandDual.writeRegister),l
-	ld (ix + YM2151.ProcessCommandDual.writeRegister + 1),h
-	ret
+	ld bc,YM2151.ProcessCommandDual.writeRegister
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
@@ -58,10 +55,10 @@ YM2151_Connect:
 ; f <- c: succeeded
 YM2151_TryCreate:
 	call Drivers_TryCreateSFG_IY
-	ld hl,SFG.SafeWriteRegister
+	ld hl,SFG_interface
 	ret c
 	call Drivers_TryCreateSFG2_IY
-	ld hl,SFG.SafeWriteRegister
+	ld hl,SFG_interface
 	ret
 
 ;

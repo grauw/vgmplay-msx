@@ -170,5 +170,12 @@ MoonSound_instance: MoonSound
 
 	ENDS
 
+MoonSound_interface:
+	InterfaceOffset MoonSound.SafeWriteRegister
+	InterfaceOffset MoonSound.SafeWriteRegister2
+	InterfaceOffset MoonSound.SafeWriteRegisterWave
+	InterfaceOffset MoonSound.ProcessROMDataBlock
+	InterfaceOffset MoonSound.ProcessRAMDataBlock
+
 MoonSound_name:
 	db "MoonSound",0

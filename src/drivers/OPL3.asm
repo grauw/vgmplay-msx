@@ -176,5 +176,13 @@ OPL3_instance: OPL3
 
 	ENDS
 
+OPL3_interface:
+	InterfaceOffset OPL3.SafeWriteRegister
+	InterfaceOffset OPL3.SafeWriteRegister2
+
+OPL3_interfaceY8950:
+	InterfaceOffset OPL3.SafeWriteRegister
+	InterfaceAddress Player_SkipDataBlock
+
 OPL3_name:
 	db "OPL3",0

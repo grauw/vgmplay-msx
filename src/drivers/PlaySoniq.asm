@@ -117,5 +117,8 @@ PlaySoniq_instance: PlaySoniq
 
 	ENDS
 
+PlaySoniq_interface:
+	InterfaceOffset PlaySoniq.SafeWriteRegister
+
 PlaySoniq_name:
 	db "PlaySoniq",0

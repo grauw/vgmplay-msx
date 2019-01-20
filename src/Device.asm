@@ -81,6 +81,26 @@ Device_PrintInfo:
 	ld hl,Device_hz
 	jp System_Print
 
+; ix = this
+; bc = offset
+; de = other device
+; hl = interface
+Device_ConnectInterfaceAgain:
+	dec hl
+	dec hl
+Device_ConnectInterface:
+	push hl
+	push ix
+	add ix,bc
+	call Interface_GetAddress
+	ld (ix),l
+	ld (ix + 1),h
+	pop ix
+	pop hl
+	inc hl
+	inc hl
+	ret
+
 ;
 Device_infix:
 	db ": ",0

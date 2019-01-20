@@ -66,58 +66,33 @@ YMF278B_Destruct: equ Chip_Destruct
 
 ; iy = drivers
 ; ix = this
-YMF278B_Connect: PROC
-	call Drivers_TryCreateDalSoRiR2_IY
-	jr nc,TryMoonSound
-	call Chip_SetDriver
-	ld hl,DalSoRiR2.SafeWriteRegister
-	add hl,de
-	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister + 1),h
-	ld hl,DalSoRiR2.SafeWriteRegister2
-	add hl,de
-	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister + 1),h
-	ld hl,DalSoRiR2.SafeWriteRegisterWave
-	add hl,de
-	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister + 1),h
-	ld hl,DalSoRiR2.ProcessROMDataBlock
-	add hl,de
-	ld (ix + YMF278B.ProcessROMDataBlock.process),l
-	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),h
-	ld hl,DalSoRiR2.ProcessRAMDataBlock
-	add hl,de
-	ld (ix + YMF278B.ProcessRAMDataBlock.process),l
-	ld (ix + YMF278B.ProcessRAMDataBlock.process + 1),h
-	ret
-TryMoonSound:
-	call Drivers_TryCreateMoonSound_IY
+YMF278B_Connect:
+	call YMF278B_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,MoonSound.SafeWriteRegister
-	add hl,de
-	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.FM1.writeRegister + 1),h
-	ld hl,MoonSound.SafeWriteRegister2
-	add hl,de
-	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.FM2.writeRegister + 1),h
-	ld hl,MoonSound.SafeWriteRegisterWave
-	add hl,de
-	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister),l
-	ld (ix + YMF278B.ProcessCommand.Wave.writeRegister + 1),h
-	ld hl,MoonSound.ProcessROMDataBlock
-	add hl,de
-	ld (ix + YMF278B.ProcessROMDataBlock.process),l
-	ld (ix + YMF278B.ProcessROMDataBlock.process + 1),h
-	ld hl,MoonSound.ProcessRAMDataBlock
-	add hl,de
-	ld (ix + YMF278B.ProcessRAMDataBlock.process),l
-	ld (ix + YMF278B.ProcessRAMDataBlock.process + 1),h
-	ret
-	ENDP
+	ld bc,YMF278B.ProcessCommand.FM1.writeRegister
+	call Device_ConnectInterface
+	ld bc,YMF278B.ProcessCommand.FM2.writeRegister
+	call Device_ConnectInterface
+	ld bc,YMF278B.ProcessCommand.Wave.writeRegister
+	call Device_ConnectInterface
+	ld bc,YMF278B.ProcessROMDataBlock.process
+	call Device_ConnectInterface
+	ld bc,YMF278B.ProcessRAMDataBlock.process
+	jp Device_ConnectInterface
 
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+YMF278B_TryCreate:
+	call Drivers_TryCreateDalSoRiR2_IY
+	ld hl,DalSoRiR2_interface
+	ret c
+	call Drivers_TryCreateMoonSound_IY
+	ld hl,MoonSound_interface
+	ret
 
 ;
 	SECTION RAM

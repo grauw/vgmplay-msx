@@ -41,45 +41,42 @@ AY8910_Connect:
 	call AY8910_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + AY8910.ProcessCommand.writeRegister),l
-	ld (ix + AY8910.ProcessCommand.writeRegister + 1),h
+	ld bc,AY8910.ProcessCommand.writeRegister
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call AY8910_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + AY8910.ProcessCommand.writeRegisterDual),l
-	ld (ix + AY8910.ProcessCommand.writeRegisterDual + 1),h
-	ret
+	ld bc,AY8910.ProcessCommand.writeRegisterDual
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- safe write register offset
+; hl <- device interface
 ; f <- c: succeeded
 AY8910_TryCreate:
 	call Drivers_TryCreateDarky_IY
-	ld hl,Darky.SafeWriteRegister
+	ld hl,Darky_interface
 	ret c
 	call Drivers_TryCreateDarky2_IY
-	ld hl,Darky.SafeWriteRegister
+	ld hl,Darky_interface
 	ret c
 	call Drivers_TryCreatePSG_IY
-	ld hl,PSG.SafeWriteRegister
+	ld hl,PSG_interface
 	ret c
 	call Drivers_TryCreateExternalPSG_IY
-	ld hl,ExternalPSG.SafeWriteRegister
+	ld hl,ExternalPSG_interface
 	ret c
 	call Drivers_TryCreateOPN_IY
-	ld hl,OPN.SafeWriteRegister
+	ld hl,OPN_interface
 	ret c
 	call Drivers_TryCreateOPNA_IY
-	ld hl,OPNA.SafeWriteRegister
+	ld hl,OPNA_interface
 	ret c
 	call Drivers_TryCreateNeotron_IY
-	ld hl,Neotron.SafeWriteRegister
+	ld hl,Neotron_interface
 	ret
 
 ; ix = this

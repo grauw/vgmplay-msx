@@ -38,36 +38,33 @@ YM2203_Connect:
 	call YM2203_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + YM2203.ProcessCommand.writeRegister),l
-	ld (ix + YM2203.ProcessCommand.writeRegister + 1),h
+	ld bc,YM2203.ProcessCommand.writeRegister
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call YM2203_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + YM2203.ProcessCommandDual.writeRegister),l
-	ld (ix + YM2203.ProcessCommandDual.writeRegister + 1),h
-	ret
+	ld bc,YM2203.ProcessCommandDual.writeRegister
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- safe write register offset
+; hl <- device interface
 ; f <- c: succeeded
 YM2203_TryCreate:
 	call Drivers_TryCreateOPN_IY
-	ld hl,OPN.SafeWriteRegister
+	ld hl,OPN_interface
 	ret c
 	call Drivers_TryCreateOPNA_IY
-	ld hl,OPNA.SafeWriteRegister
+	ld hl,OPNA_interface
 	ret c
 	call Drivers_TryCreateNeotron_IY
-	ld hl,Neotron.SafeWriteRegisterYM2203
+	ld hl,Neotron_interfaceYM2203
 	ret c
 	call Drivers_TryCreateOPNOnSFGPSG_IY
-	ld hl,OPNOnSFGPSG.SafeWriteRegister
+	ld hl,OPNOnSFGPSG_interface
 	ret
 
 ;

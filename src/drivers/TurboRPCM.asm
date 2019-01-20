@@ -68,5 +68,8 @@ TurboRPCM_instance: TurboRPCM
 
 	ENDS
 
+TurboRPCM_interface:
+	InterfaceOffset TurboRPCM.SafeWriteRegister
+
 TurboRPCM_name:
 	db "TurboR PCM",0

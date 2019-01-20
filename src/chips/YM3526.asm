@@ -38,33 +38,30 @@ YM3526_Connect:
 	call YM3526_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + YM3526.ProcessCommand.writeRegister),l
-	ld (ix + YM3526.ProcessCommand.writeRegister + 1),h
+	ld bc,YM3526.ProcessCommand.writeRegister
+	call Device_ConnectInterface
 	call Chip_IsDualChip
 	ret z
 	call YM3526_TryCreate
 	ret nc
 	call Chip_SetDriver2
-	add hl,de
-	ld (ix + YM3526.ProcessCommandDual.writeRegister),l
-	ld (ix + YM3526.ProcessCommandDual.writeRegister + 1),h
-	ret
+	ld bc,YM3526.ProcessCommandDual.writeRegister
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- safe write register offset
+; hl <- device interface
 ; f <- c: succeeded
 YM3526_TryCreate:
 	call Drivers_TryCreateMSXAudio_IY
-	ld hl,MSXAudio.SafeWriteRegister
+	ld hl,MSXAudio_interface
 	ret c
 	call Drivers_TryCreateOPL3_IY
-	ld hl,OPL3.SafeWriteRegister
+	ld hl,OPL3_interface
 	ret c
 	call Drivers_TryCreateMoonSound_IY
-	ld hl,MoonSound.SafeWriteRegister
+	ld hl,MoonSound_interface
 	ret
 
 ;

@@ -29,19 +29,17 @@ YM2413_Connect:
 	call YM2413_TryCreate
 	ret nc
 	call Chip_SetDriver
-	add hl,de
-	ld (ix + YM2413.ProcessCommand.writeRegister),l
-	ld (ix + YM2413.ProcessCommand.writeRegister + 1),h
-	ret
+	ld bc,YM2413.ProcessCommand.writeRegister
+	jp Device_ConnectInterface
 
 ; iy = drivers
 ; ix = this
 ; de <- driver
-; hl <- safe write register offset
+; hl <- device interface
 ; f <- c: succeeded
 YM2413_TryCreate:
 	call Drivers_TryCreateMSXMusic_IY
-	ld hl,MSXMusic.SafeWriteRegister
+	ld hl,MSXMusic_interface
 	ret
 
 ;

@@ -65,64 +65,18 @@ YM2610_IsYM2610B: equ Device_GetFlagBit7
 
 ; iy = drivers
 ; ix = this
-YM2610_Connect: PROC
-	call YM2610_IsYM2610B
-	jr z,TryNeotron
-	call Drivers_TryCreateOPNBBOnNeotronOPNA_IY
-	jr nc,TryNeotron
-	call Chip_SetDriver
-	ld hl,OPNBBOnNeotronOPNA.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2610.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort0Command.writeRegister + 1),h
-	ld hl,OPNBBOnNeotronOPNA.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
-	ld hl,OPNBBOnNeotronOPNA.ProcessDataBlockA
-	add hl,de
-	ld (ix + YM2610.ProcessDataBlockA.process),l
-	ld (ix + YM2610.ProcessDataBlockA.process + 1),h
-	ld hl,OPNBBOnNeotronOPNA.ProcessDataBlockB
-	add hl,de
-	ld (ix + YM2610.ProcessDataBlockB.process),l
-	ld (ix + YM2610.ProcessDataBlockB.process + 1),h
-	ret
-TryNeotron:
-	call Drivers_TryCreateNeotron_IY
-	jr nc,TryOPNOnSFGPSG
-	call Chip_SetDriver
-	ld hl,Neotron.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2610.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort0Command.writeRegister + 1),h
-	ld hl,Neotron.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
-	ld hl,Neotron.ProcessDataBlockA
-	add hl,de
-	ld (ix + YM2610.ProcessDataBlockA.process),l
-	ld (ix + YM2610.ProcessDataBlockA.process + 1),h
-	ld hl,Neotron.ProcessDataBlockB
-	add hl,de
-	ld (ix + YM2610.ProcessDataBlockB.process),l
-	ld (ix + YM2610.ProcessDataBlockB.process + 1),h
-	ret
-TryOPNOnSFGPSG:
-	call Drivers_TryCreateOPNOnSFGPSG_IY
+YM2610_Connect:
+	call YM2610_TryCreate
 	ret nc
 	call Chip_SetDriver
-	ld hl,OPNOnSFGPSG.SafeWriteRegister
-	add hl,de
-	ld (ix + YM2610.ProcessPort0Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort0Command.writeRegister + 1),h
-	ld hl,OPNOnSFGPSG.SafeWriteRegister2
-	add hl,de
-	ld (ix + YM2610.ProcessPort1Command.writeRegister),l
-	ld (ix + YM2610.ProcessPort1Command.writeRegister + 1),h
-	ret
-	ENDP
+	ld bc,YM2610.ProcessPort0Command.writeRegister
+	call Device_ConnectInterface
+	ld bc,YM2610.ProcessPort1Command.writeRegister
+	call Device_ConnectInterface
+	ld bc,YM2610.ProcessDataBlockA.process
+	call Device_ConnectInterface
+	ld bc,YM2610.ProcessDataBlockB.process
+	jp Device_ConnectInterface
 
 ; ix = this
 ; hl <- name
@@ -132,6 +86,26 @@ YM2610_GetName:
 	ret z
 	ld hl,YM2610_ym2610bName
 	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+YM2610_TryCreate: PROC
+	call YM2610_IsYM2610B
+	jr z,NoYM2610B
+	call Drivers_TryCreateOPNBBOnNeotronOPNA_IY
+	ld hl,OPNBBOnNeotronOPNA_interface
+	ret c
+NoYM2610B:
+	call Drivers_TryCreateNeotron_IY
+	ld hl,Neotron_interface
+	ret c
+	call Drivers_TryCreateOPNOnSFGPSG_IY
+	ld hl,OPNOnSFGPSG_interfaceYM2610
+	ret
+	ENDP
 
 ;
 	SECTION RAM
