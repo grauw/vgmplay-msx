@@ -39,6 +39,8 @@ OPNA: MACRO
 	; d = value
 	SafeWriteRegister:
 		ld a,e
+		cp 30H
+		jr nc,WriteRegister
 		cp 12H
 		ret z              ; block rhythm TEST register
 		cp 21H
@@ -48,11 +50,7 @@ OPNA: MACRO
 		cp 29H
 		ret z              ; mask IRQ control
 		cp 2DH
-		ret z              ; block access to the prescaler (8 MHz)
-		cp 2EH
-		ret z              ; block access to the prescaler (4 MHz)
-		cp 2FH
-		ret z              ; block access to the prescaler (2.6 MHz)
+		ret nc             ; block access to the prescaler
 	; a = register
 	; d = value
 	WriteRegister: PROC
