@@ -1,7 +1,7 @@
 ;
 ; Franky SN76489 DCSG driver
 ;
-Franky_DATA: equ 049H
+Franky_DATA: equ 48H
 Franky_CLOCK: equ 3579545
 
 Franky: MACRO

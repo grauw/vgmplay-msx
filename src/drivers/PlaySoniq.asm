@@ -6,7 +6,7 @@ PlaySoniq_DATA: equ 2BH
 PlaySoniq_REGISTER_VDPBASE: equ 1DH
 PlaySoniq_REGISTER_PSGBASE: equ 1EH
 PlaySoniq_SN76489_DATA: equ 3BH
-PlaySoniq_SN76489_DATA_DEFAULT: equ 49H
+PlaySoniq_SN76489_DATA_DEFAULT: equ 48H
 PlaySoniq_CLOCK: equ 3579545
 
 PlaySoniq: MACRO
