@@ -88,11 +88,12 @@ Device_PrintInfo:
 Device_ConnectInterfaceAgain:
 	dec hl
 	dec hl
-Device_ConnectInterface:
+Device_ConnectInterface: PROC
 	push hl
 	push ix
 	add ix,bc
 	call Interface_GetAddress
+	call Dereference
 	ld (ix),l
 	ld (ix + 1),h
 	pop ix
@@ -100,6 +101,17 @@ Device_ConnectInterface:
 	inc hl
 	inc hl
 	ret
+Dereference:
+	ld a,(hl)
+	cp 0C3H  ; jp
+	ret nz
+	inc hl
+	ld a,(hl)
+	inc hl
+	ld h,(hl)
+	ld l,a
+	jr Dereference
+	ENDP
 
 ;
 Device_infix:
