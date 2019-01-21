@@ -22,17 +22,14 @@ OPN2OnOPNATurboRPCM: MACRO
 	writePCMRegister: equ $ - 2
 		cp 0A0H
 		jr c,SafeWriteFMRegister
-		cp 0A4H
-		jr c,WriteFrequencyLSB
-		cp 0A8H
-		jr c,WriteFrequencyMSB
-		cp 0ACH
-		jr c,WriteFrequencyLSB
 		cp 0B0H
-		jr c,WriteFrequencyMSB
+		jr c,WriteFrequency
 	SafeWriteFMRegister:
 		jp System_Return
 	safeWriteFMRegister: equ $ - 2
+	WriteFrequency:
+		bit 2,a
+		jr z,WriteFrequencyLSB
 	WriteFrequencyMSB:
 		ld c,a
 		ld b,0
