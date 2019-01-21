@@ -248,6 +248,7 @@ YM2612_Connect:
 ; hl <- device interface
 ; f <- c: succeeded
 YM2612_TryCreate:
+	call Device_GetClock
 	call Drivers_TryCreateOPN2OnOPNATurboRPCM_IY
 	ld hl,OPN2OnOPNATurboRPCM_interface
 	ret c

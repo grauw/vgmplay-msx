@@ -111,10 +111,12 @@ OPN2OnOPNATurboRPCM: MACRO
 		ENDP
 	ENDM
 
+; dehl = clock
 ; ix = this
 ; iy = drivers
 OPN2OnOPNATurboRPCM_Construct:
 	call Driver_Construct
+	call Device_SetClock
 	call Drivers_TryCreateOPNA_IY
 	jp nc,Driver_NotFound
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),e

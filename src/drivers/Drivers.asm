@@ -330,6 +330,7 @@ Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
 	ld bc,Drivers.opn2OnSFGTurboRPCM
 	jr Drivers_TryCreate_IY_Trampoline
 
+; dehl = clock
 ; iy = this
 ; de <- OPN2 on OPNA + turboR PCM driver
 ; f <- c: succeeded
