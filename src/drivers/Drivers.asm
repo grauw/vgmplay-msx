@@ -114,14 +114,14 @@ Loop:
 	ret
 	ENDP
 
-; de = driver factory offset
+; bc = driver factory offset
 ; iy = this
 ; ix <- driver
 ; f <- c: succeeded
 Drivers_TryGet_IY:
 	push iy
 	pop ix
-	add ix,de
+	add ix,bc
 	call StaticFactory_IsConstructed
 	scf
 	ccf
@@ -129,7 +129,7 @@ Drivers_TryGet_IY:
 	call StaticFactory_GetInstance
 	jp Driver_IsFound
 
-; de = driver factory offset
+; bc = driver factory offset
 ; iy = this
 ; de <- driver
 ; f <- c: succeeded
@@ -137,7 +137,7 @@ Drivers_TryCreate_IY:
 	push ix
 	push iy
 	pop ix
-	add ix,de
+	add ix,bc
 	call StaticFactory_Create
 	call c,Driver_IsFound
 	ld e,ixl
@@ -149,28 +149,28 @@ Drivers_TryCreate_IY:
 ; de <- PSG driver
 ; f <- c: succeeded
 Drivers_TryCreatePSG_IY:
-	ld de,Drivers.psg
+	ld bc,Drivers.psg
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- External PSG driver
 ; f <- c: succeeded
 Drivers_TryCreateExternalPSG_IY:
-	ld de,Drivers.externalPSG
+	ld bc,Drivers.externalPSG
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- Darky driver
 ; f <- c: succeeded
 Drivers_TryCreateDarky_IY:
-	ld de,Drivers.darky
+	ld bc,Drivers.darky
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- Darky driver 2
 ; f <- c: succeeded
 Drivers_TryCreateDarky2_IY:
-	ld de,Drivers.darky2
+	ld bc,Drivers.darky2
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
@@ -178,69 +178,69 @@ Drivers_TryCreateDarky2_IY:
 ; f <- c: succeeded
 Drivers_TryCreateSFG_IY:
 	ld a,-1
-	ld de,Drivers.sfg
+	ld bc,Drivers.sfg
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- SFG driver 2
 ; f <- c: succeeded
 Drivers_TryCreateSFG2_IY:
-	ld de,Drivers.sfg
+	ld bc,Drivers.sfg
 	push ix
 	call Drivers_TryGet_IY
 	ld a,(ix + SFG.slot)
 	pop ix
 	ret nc
-	ld de,Drivers.sfg2
+	ld bc,Drivers.sfg2
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- MSX-MUSIC driver
 ; f <- c: succeeded
 Drivers_TryCreateMSXMusic_IY:
-	ld de,Drivers.msxMusic
+	ld bc,Drivers.msxMusic
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- MSX-AUDIO driver
 ; f <- c: succeeded
 Drivers_TryCreateMSXAudio_IY:
-	ld de,Drivers.msxAudio
+	ld bc,Drivers.msxAudio
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPL3 driver
 ; f <- c: succeeded
 Drivers_TryCreateOPL3_IY:
-	ld de,Drivers.opl3
+	ld bc,Drivers.opl3
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- MoonSound driver
 ; f <- c: succeeded
 Drivers_TryCreateMoonSound_IY:
-	ld de,Drivers.moonSound
+	ld bc,Drivers.moonSound
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- DalSoRi R2 driver
 ; f <- c: succeeded
 Drivers_TryCreateDalSoRiR2_IY:
-	ld de,Drivers.dalSoRiR2
+	ld bc,Drivers.dalSoRiR2
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- SCC driver
 ; f <- c: succeeded
 Drivers_TryCreateSCC_IY:
-	ld de,Drivers.scc
+	ld bc,Drivers.scc
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- SCC+ driver
 ; f <- c: succeeded
 Drivers_TryCreateSCCPlus_IY:
-	ld de,Drivers.sccPlus
+	ld bc,Drivers.sccPlus
 	jr Drivers_TryCreate_IY_Trampoline
 
 Drivers_TryCreate_IY_Trampoline:
@@ -250,96 +250,96 @@ Drivers_TryCreate_IY_Trampoline:
 ; de <- Franky driver
 ; f <- c: succeeded
 Drivers_TryCreateFranky_IY:
-	ld de,Drivers.franky
+	ld bc,Drivers.franky
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- PlaySoniq driver
 ; f <- c: succeeded
 Drivers_TryCreatePlaySoniq_IY:
-	ld de,Drivers.playSoniq
+	ld bc,Drivers.playSoniq
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- Musical Memory Mapper driver
 ; f <- c: succeeded
 Drivers_TryCreateMMM_IY:
-	ld de,Drivers.mmm
+	ld bc,Drivers.mmm
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateTurboRPCM_IY:
-	ld de,Drivers.turboRPCM
+	ld bc,Drivers.turboRPCM
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPN driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN_IY:
-	ld de,Drivers.opn
+	ld bc,Drivers.opn
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPNA driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNA_IY:
-	ld de,Drivers.opna
+	ld bc,Drivers.opna
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- Neotron driver
 ; f <- c: succeeded
 Drivers_TryCreateNeotron_IY:
-	ld de,Drivers.neotron
+	ld bc,Drivers.neotron
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPN FM on SFG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNFMOnSFG_IY:
-	ld de,Drivers.opnFMOnSFG
+	ld bc,Drivers.opnFMOnSFG
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPN on SFG + PSG driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNOnSFGPSG_IY:
-	ld de,Drivers.opnOnSFGPSG
+	ld bc,Drivers.opnOnSFGPSG
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPNA on SFG + PSG + MSX-AUDIO driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNAOnSFGPSGMSXAudio_IY:
-	ld de,Drivers.opnaOnSFGPSGMSXAudio
+	ld bc,Drivers.opnaOnSFGPSGMSXAudio
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPNB-B on Neotron + OPNA driver
 ; f <- c: succeeded
 Drivers_TryCreateOPNBBOnNeotronOPNA_IY:
-	ld de,Drivers.opnbbOnNeotronOPNA
+	ld bc,Drivers.opnbbOnNeotronOPNA
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPN2 on SFG + turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnSFGTurboRPCM_IY:
-	ld de,Drivers.opn2OnSFGTurboRPCM
+	ld bc,Drivers.opn2OnSFGTurboRPCM
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPN2 on OPNA + turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnOPNATurboRPCM_IY:
-	ld de,Drivers.opn2OnOPNATurboRPCM
+	ld bc,Drivers.opn2OnOPNATurboRPCM
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
 ; de <- OPN2 on turboR PCM driver
 ; f <- c: succeeded
 Drivers_TryCreateOPN2OnTurboRPCM_IY:
-	ld de,Drivers.opn2OnTurboRPCM
+	ld bc,Drivers.opn2OnTurboRPCM
 	jr Drivers_TryCreate_IY_Trampoline
