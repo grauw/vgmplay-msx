@@ -2,7 +2,6 @@
 ; OPN2 on OPNA + turboR PCM driver
 ;
 OPN2OnOPNATurboRPCM_CLOCK: equ 7670453
-OPN2OnOPNATurboRPCM_CLOCK_RATIO: equ (OPN2OnOPNATurboRPCM_CLOCK << 8) / (OPNA_CLOCK >> 7)
 
 OPN2OnOPNATurboRPCM: MACRO
 	super: Driver Device_noName, OPN2OnOPNATurboRPCM_CLOCK, OPN2OnOPNATurboRPCM_PrintInfoImpl
@@ -45,7 +44,8 @@ OPN2OnOPNATurboRPCM: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		ld bc,OPN2OnOPNATurboRPCM_CLOCK_RATIO
+		ld bc,8000H
+	clockRatio: equ $ - 2
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
 		ld h,e
@@ -88,7 +88,8 @@ OPN2OnOPNATurboRPCM: MACRO
 		add hl,bc
 		ld h,(hl)
 		ld l,d
-		ld bc,OPN2OnOPNATurboRPCM_CLOCK_RATIO
+		ld bc,8000H
+	clockRatio: equ $ - 2
 		call OPN2OnOPNATurboRPCM_AdjustFrequency
 		pop af
 		ld h,e
@@ -128,6 +129,11 @@ OPN2OnOPNATurboRPCM_Construct:
 	call Device_ConnectInterface
 	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister
 	call Device_ConnectInterface
+	call OPN2OnOPNATurboRPCM_CalculateClockRatio
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.clockRatio),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.clockRatio + 1),h
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.clockRatio),l
+	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.clockRatio + 1),h
 	call Drivers_TryCreateTurboRPCM_IY
 	ret nc
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e
@@ -141,6 +147,26 @@ OPN2OnOPNATurboRPCM_Construct:
 ; ix = this
 OPN2OnOPNATurboRPCM_Destruct: equ System_Return
 ;	ret
+
+; de = other device
+; ix = this
+; hl = ratio (1.15 fixed point)
+OPN2OnOPNATurboRPCM_CalculateClockRatio:
+	push ix
+	ld ixl,e
+	ld ixh,d
+	call Device_GetClock
+	add hl,hl
+	rl e
+	ld c,h
+	ld b,e
+	pop ix
+	call Device_GetClock
+	ld d,e
+	ld e,h
+	ld h,l
+	ld l,0
+	jp Math_Divide32x16
 
 ; bc = multiplier
 ; hl = old block + fnum
