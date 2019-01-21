@@ -153,7 +153,7 @@ OPN2OnOPNATurboRPCM_Destruct: equ System_Return
 ; de = other device
 ; ix = this
 ; hl = ratio (1.15 fixed point)
-OPN2OnOPNATurboRPCM_CalculateClockRatio:
+OPN2OnOPNATurboRPCM_CalculateClockRatio: PROC
 	push ix
 	ld ixl,e
 	ld ixh,d
@@ -168,7 +168,16 @@ OPN2OnOPNATurboRPCM_CalculateClockRatio:
 	ld e,h
 	ld h,l
 	ld l,0
+	push bc
+	srl b
+	rr c
+	add hl,bc
+	pop bc
+	jr nc,NoCarry
+	inc de
+NoCarry:
 	jp Math_Divide32x16
+	ENDP
 
 ; bc = multiplier
 ; hl = old block + fnum
