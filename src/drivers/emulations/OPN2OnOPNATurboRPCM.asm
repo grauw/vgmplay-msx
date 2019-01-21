@@ -27,9 +27,9 @@ OPN2OnOPNATurboRPCM: MACRO
 		cp 0A8H
 		jr c,WriteFrequencyMSB
 		cp 0ACH
-		jr c,Write3chFrequencyLSB
+		jr c,WriteFrequencyLSB
 		cp 0B0H
-		jr c,Write3chFrequencyMSB
+		jr c,WriteFrequencyMSB
 	SafeWriteFMRegister:
 		jp System_Return
 	safeWriteFMRegister: equ $ - 2
@@ -61,32 +61,6 @@ OPN2OnOPNATurboRPCM: MACRO
 	WriteFMRegister:
 		jp System_Return
 	writeFMRegister: equ $ - 2
-	Write3chFrequencyMSB:
-		ld c,a
-		ld b,0
-		ld hl,-0ACH + frequencyMSBs + 8
-		add hl,bc
-		ld (hl),d
-		ret
-	Write3chFrequencyLSB:
-		push af
-		ld c,a
-		ld b,0
-		ld hl,-0A8H + frequencyMSBs + 8
-		add hl,bc
-		ld h,(hl)
-		ld l,d
-		ld bc,OPN2OnOPNATurboRPCM_CLOCK_RATIO
-		call OPN2OnOPNATurboRPCM_AdjustFrequency
-		pop af
-		ld h,e
-		ld l,a
-		push hl
-		add a,-0A8H + 0ACH
-		call WriteFMRegister
-		pop de
-		ld a,e
-		jr WriteFMRegister
 		ENDP
 
 	; e = register
