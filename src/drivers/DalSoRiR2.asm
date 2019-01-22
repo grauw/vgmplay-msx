@@ -75,11 +75,18 @@ DalSoRiR2_SetConfig:
 	jp Memory_WriteSlot
 
 ; ix = this
+; iy = drivers
 ; a <- slot
 ; f <- c: found
 DalSoRiR2_Detect:
+	ld bc,Drivers.moonSound
+	push ix
+	call Drivers_TryGet_IY
+	pop ix
 	ld hl,DalSoRiR2_MatchSlot
-	jp Memory_SearchSlots
+	jp nc,Memory_SearchSlots
+	and a
+	ret
 
 	SECTION TPA_PAGE0
 

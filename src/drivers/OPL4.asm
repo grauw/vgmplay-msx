@@ -100,11 +100,11 @@ OPL4: MACRO ?fmbase, ?wavebase, ?name
 
 ; ix = this
 ; iy = drivers
-OPL4_Construct:
-	call Driver_Construct
-	call OPL4_Detect
-	jp nc,Driver_NotFound
-	jp OPL4_Reset
+;OPL4_Construct:
+;	call Driver_Construct
+;	call OPL4_Detect
+;	jp nc,Driver_NotFound
+;	jp OPL4_Reset
 
 ; ix = this
 OPL4_Destruct:

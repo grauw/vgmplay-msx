@@ -70,8 +70,11 @@ MoonSound: MACRO ?fmbase = MoonSound_FM_BASE_PORT
 
 ; ix = this
 ; iy = drivers
-MoonSound_Construct: equ OPL4_Construct
-;	jp OPL4_Construct
+MoonSound_Construct:
+	call Driver_Construct
+	call MoonSound_Detect
+	jp nc,Driver_NotFound
+	jp OPL4_Reset
 
 ; ix = this
 MoonSound_Destruct:
@@ -162,6 +165,18 @@ Allocate:
 	ld (ix + MoonSound.waveNumberMap + 1),d
 	ret
 	ENDP
+
+; ix = this
+; iy = drivers
+; f <- c: Found
+MoonSound_Detect:
+	ld bc,Drivers.dalSoRiR2
+	push ix
+	call Drivers_TryGet_IY
+	pop ix
+	jp nc,OPL4_Detect
+	and a
+	ret
 
 ;
 	SECTION RAM
