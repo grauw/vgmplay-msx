@@ -19,8 +19,11 @@ StaticFactory: MACRO ?instance, ?constructor, ?destructor
 StaticFactory_Create: PROC
 	bit 0,(ix + StaticFactory.constructed)
 	jr nz,Failed
-	ld (ix + StaticFactory.constructed),1
+	push ix
 	call Construct
+	ex (sp),ix
+	ld (ix + StaticFactory.constructed),1
+	pop ix
 	scf
 	ret
 Failed:
