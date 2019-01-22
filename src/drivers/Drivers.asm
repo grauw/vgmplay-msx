@@ -185,12 +185,6 @@ Drivers_TryCreateSFG_IY:
 ; de <- SFG driver 2
 ; f <- c: succeeded
 Drivers_TryCreateSFG2_IY:
-	ld bc,Drivers.sfg
-	push ix
-	call Drivers_TryGet_IY
-	ld a,(ix + SFG.slot)
-	pop ix
-	ret nc
 	ld bc,Drivers.sfg2
 	jr Drivers_TryCreate_IY_Trampoline
 

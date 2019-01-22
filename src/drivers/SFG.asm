@@ -47,7 +47,6 @@ SFG: MACRO
 		jr WriteRegister
 	ENDM
 
-; a = slot of previous SFG (-1 if none)
 ; ix = this
 ; iy = drivers
 SFG_Construct:
@@ -142,15 +141,18 @@ SFG_IsSFG01:
 	and 0F0H
 	ret
 
-; a = slot of previous SFG (-1 if none)
 ; ix = this
+; iy = drivers
 ; f <- c: found
 ; a <- slot
 SFG_Detect:
+	ld bc,Drivers.sfg
+	push ix
+	call Drivers_TryGet_IY
+	ld a,(ix + SFG.slot)
+	pop ix
 	ld hl,SFG_MatchID
-	inc a
-	jp z,Memory_SearchSlots
-	dec a
+	jp nc,Memory_SearchSlots
 	jp Memory_SearchSlots.Continue
 
 ; a = slot id
