@@ -433,13 +433,12 @@ OPNA_WriteADPCMData:
 ; f <- c: found
 OPNA_Detect: PROC
 	in a,(OPNA_STATUS1)
-	and a
+	and 01111111B  ; ignore BUSY
 	ret nz
 	ld de,10000000B << 8 | OPNA_ADPCM_CONTROL
 	call WriteADPCMRegister
-	ld b,100
-	djnz $
 	in a,(OPNA_STATUS1)
+	and 01111111B  ; ignore BUSY
 	push af
 	ld de,00000000B << 8 | OPNA_ADPCM_CONTROL
 	call WriteADPCMRegister
