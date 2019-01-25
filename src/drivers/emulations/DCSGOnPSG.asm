@@ -7,8 +7,6 @@ DCSGOnPSG: MACRO
 	super: Driver Device_noName, DCSGOnPSG_CLOCK, DCSGOnPSG_PrintInfoImpl
 	psg:
 		dw 0
-	latch:
-		db 0
 
 	; a = value
 	SafeWriteRegister:
@@ -134,7 +132,8 @@ DCSGOnPSG: MACRO
 
 	; a = value << 1
 	Register0:
-		ld a,(latch)
+		ld a,0
+	latch: equ $ - 1
 		add a,a
 		jr c,Register01
 	Register00:
