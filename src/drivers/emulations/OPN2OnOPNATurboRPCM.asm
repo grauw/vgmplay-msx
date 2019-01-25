@@ -217,13 +217,13 @@ OPN2OnOPNATurboRPCM_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPN2OnOPNATurboRPCM_interface:
-	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWriteRegister
-	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWriteRegister2
-	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWritePCMRegister
-
 	SECTION RAM
 
 OPN2OnOPNATurboRPCM_instance: OPN2OnOPNATurboRPCM
 
 	ENDS
+
+OPN2OnOPNATurboRPCM_interface:
+	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWriteRegister
+	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWriteRegister2
+	InterfaceOffset OPN2OnOPNATurboRPCM.SafeWritePCMRegister

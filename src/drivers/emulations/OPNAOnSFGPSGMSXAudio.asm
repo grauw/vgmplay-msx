@@ -90,13 +90,13 @@ OPNAOnSFGPSGMSXAudio_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNAOnSFGPSGMSXAudio_interface:
-	InterfaceOffset OPNAOnSFGPSGMSXAudio.SafeWriteRegister
-	InterfaceOffset OPNAOnSFGPSGMSXAudio.SafeWriteRegister2
-	InterfaceOffset OPNAOnSFGPSGMSXAudio.ProcessDataBlock
-
 	SECTION RAM
 
 OPNAOnSFGPSGMSXAudio_instance: OPNAOnSFGPSGMSXAudio
 
 	ENDS
+
+OPNAOnSFGPSGMSXAudio_interface:
+	InterfaceOffset OPNAOnSFGPSGMSXAudio.SafeWriteRegister
+	InterfaceOffset OPNAOnSFGPSGMSXAudio.SafeWriteRegister2
+	InterfaceOffset OPNAOnSFGPSGMSXAudio.ProcessDataBlock

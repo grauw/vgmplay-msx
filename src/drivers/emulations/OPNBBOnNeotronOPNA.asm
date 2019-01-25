@@ -93,14 +93,14 @@ OPNBBOnNeotronOPNA_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-OPNBBOnNeotronOPNA_interface:
-	InterfaceOffset OPNBBOnNeotronOPNA.SafeWriteRegister
-	InterfaceOffset OPNBBOnNeotronOPNA.SafeWriteRegister2
-	InterfaceOffset OPNBBOnNeotronOPNA.ProcessDataBlockA
-	InterfaceOffset OPNBBOnNeotronOPNA.ProcessDataBlockB
-
 	SECTION RAM
 
 OPNBBOnNeotronOPNA_instance: OPNBBOnNeotronOPNA
 
 	ENDS
+
+OPNBBOnNeotronOPNA_interface:
+	InterfaceOffset OPNBBOnNeotronOPNA.SafeWriteRegister
+	InterfaceOffset OPNBBOnNeotronOPNA.SafeWriteRegister2
+	InterfaceOffset OPNBBOnNeotronOPNA.ProcessDataBlockA
+	InterfaceOffset OPNBBOnNeotronOPNA.ProcessDataBlockB

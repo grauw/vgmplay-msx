@@ -243,11 +243,11 @@ DCSGOnPSG_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
-DCSGOnPSG_interface:
-	InterfaceOffset DCSGOnPSG.SafeWriteRegister
-
 	SECTION RAM
 
 DCSGOnPSG_instance: DCSGOnPSG
 
 	ENDS
+
+DCSGOnPSG_interface:
+	InterfaceOffset DCSGOnPSG.SafeWriteRegister

@@ -76,15 +76,15 @@ OPNOnSFGPSG_PrintInfoImpl:
 	jp Driver_PrintInfoIXOffset
 
 ;
+	SECTION RAM
+
+OPNOnSFGPSG_instance: OPNOnSFGPSG
+
+	ENDS
+
 OPNOnSFGPSG_interface:
 OPNOnSFGPSG_interfaceYM2610:
 	InterfaceOffset OPNOnSFGPSG.SafeWriteRegister
 	InterfaceOffset OPNOnSFGPSG.SafeWriteRegister2
 	InterfaceAddress Player_SkipDataBlock
 	InterfaceAddress Player_SkipDataBlock
-
-	SECTION RAM
-
-OPNOnSFGPSG_instance: OPNOnSFGPSG
-
-	ENDS
