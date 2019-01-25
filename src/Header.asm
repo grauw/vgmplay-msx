@@ -140,7 +140,7 @@ Header_Construct:
 	ld hl,Header_noVGMFileError
 	call nz,System_ThrowExceptionWithMessage
 	call Header_ClearPastDataOffset
-	jr Header_FixPre102Clocks
+	jr Header_FixPre102
 
 ; ix = this
 Header_Destruct: equ System_Return
@@ -170,12 +170,14 @@ Header_ClearPastDataOffset:
 	ret
 
 ; ix = this
-Header_FixPre102Clocks:
+Header_FixPre102:
 	ld l,(ix + Header.version)
 	ld h,(ix + Header.version + 1)
 	ld bc,-102H
 	add hl,bc
 	ret c
+	ld (ix + Header.sn76489Feedback + 2),9
+	ld (ix + Header.sn76489ShiftWidth + 2),16
 	ld e,(ix + Header.ym2413Clock + 2)
 	ld d,(ix + Header.ym2413Clock + 3)
 	ld hl,-0040H
