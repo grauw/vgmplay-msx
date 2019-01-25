@@ -22,7 +22,7 @@ DCSGOnPSG: MACRO
 		jr c,Register101
 	Register100:
 		add a,a
-		jr nc,Tone1Frequency
+		jr nc,Tone1FrequencyLow
 	Tone1Attenuation:
 		ld a,d
 		cpl
@@ -31,7 +31,7 @@ DCSGOnPSG: MACRO
 		jr WriteRegisterA
 	Register101:
 		add a,a
-		jr nc,Tone2Frequency
+		jr nc,Tone2FrequencyLow
 	Tone2Attenuation:
 		ld a,d
 		cpl
@@ -43,7 +43,7 @@ DCSGOnPSG: MACRO
 		jr c,Register111
 	Register110:
 		add a,a
-		jr nc,Tone3Frequency
+		jr nc,Tone3FrequencyLow
 	Tone3Attenuation:
 		ld a,d
 		cpl
@@ -87,7 +87,7 @@ DCSGOnPSG: MACRO
 
 	; a = value << 4
 	; d = value
-	Tone1Frequency: PROC
+	Tone1FrequencyLow: PROC
 		ld de,0
 	highAndRegister: equ $ - 2
 		jr WriteToneFrequency
@@ -95,7 +95,7 @@ DCSGOnPSG: MACRO
 
 	; a = value << 4
 	; d = value
-	Tone2Frequency: PROC
+	Tone2FrequencyLow: PROC
 		ld de,2
 	highAndRegister: equ $ - 2
 		jr WriteToneFrequency
@@ -103,7 +103,7 @@ DCSGOnPSG: MACRO
 
 	; a = value << 4
 	; d = value
-	Tone3Frequency: PROC
+	Tone3FrequencyLow: PROC
 		ld hl,WriteNoiseFrequency.tone3FrequencyLow
 		ld (hl),d
 		ld de,4
@@ -144,14 +144,14 @@ DCSGOnPSG: MACRO
 		jr c,Tone1Attenuation
 	Tone1FrequencyHigh:
 		ld e,0
-		ld (Tone1Frequency.highAndRegister),de
+		ld (Tone1FrequencyLow.highAndRegister),de
 		jr WriteToneFrequency
 	Register001:
 		add a,a
 		jr c,Tone2Attenuation
 	Tone2FrequencyHigh:
 		ld e,2
-		ld (Tone2Frequency.highAndRegister),de
+		ld (Tone2FrequencyLow.highAndRegister),de
 		jr WriteToneFrequency
 	Register01:
 		add a,a
@@ -161,7 +161,7 @@ DCSGOnPSG: MACRO
 		jr c,Tone3Attenuation
 	Tone3FrequencyHigh:
 		ld e,4
-		ld (Tone3Frequency.highAndRegister),de
+		ld (Tone3FrequencyLow.highAndRegister),de
 		call WriteToneFrequency
 		jr WriteNoiseFrequency
 
@@ -182,7 +182,7 @@ DCSGOnPSG: MACRO
 		ld a,10H
 		jr WriteRegisterA
 	Noise11:
-		ld a,(Tone3Frequency.high)
+		ld a,(Tone3FrequencyLow.high)
 		ld d,a
 		and 3EH
 		jr nz,Noise01
