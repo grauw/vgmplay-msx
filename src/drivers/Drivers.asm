@@ -21,6 +21,7 @@
 	INCLUDE "OPN.asm"
 	INCLUDE "OPNA.asm"
 	INCLUDE "Neotron.asm"
+	INCLUDE "emulations/DCSGOnPSG.asm"
 	INCLUDE "emulations/OPNFMOnSFG.asm"
 	INCLUDE "emulations/OPNOnSFGPSG.asm"
 	INCLUDE "emulations/OPNAOnSFGPSGMSXAudio.asm"
@@ -71,6 +72,8 @@ Drivers: MACRO
 		StaticFactory OPNA_instance, OPNA_Construct, OPNA_Destruct
 	neotron:
 		StaticFactory Neotron_instance, Neotron_Construct, Neotron_Destruct
+	dcsgOnPSG:
+		StaticFactory DCSGOnPSG_instance, DCSGOnPSG_Construct, DCSGOnPSG_Destruct
 	opnFMOnSFG:
 		StaticFactory OPNFMOnSFG_instance, OPNFMOnSFG_Construct, OPNFMOnSFG_Destruct
 	opnOnSFGPSG:
@@ -287,6 +290,13 @@ Drivers_TryCreateOPNA_IY:
 ; f <- c: succeeded
 Drivers_TryCreateNeotron_IY:
 	ld bc,Drivers.neotron
+	jr Drivers_TryCreate_IY_Trampoline
+
+; iy = this
+; de <- DCSG on PSG driver
+; f <- c: succeeded
+Drivers_TryCreateDCSGOnPSG_IY:
+	ld bc,Drivers.dcsgOnPSG
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this

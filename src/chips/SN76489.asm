@@ -62,6 +62,9 @@ SN76489_TryCreate:
 	ret c
 	call Drivers_TryCreateFranky_IY
 	ld hl,Franky_interface
+	ret c
+	call Drivers_TryCreateDCSGOnPSG_IY
+	ld hl,DCSGOnPSG_interface
 	ret
 
 ;
