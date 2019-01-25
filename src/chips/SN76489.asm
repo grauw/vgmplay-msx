@@ -66,6 +66,18 @@ TI:
 	call Drivers_TryCreateMMM_IY
 	ld hl,MMM_interface
 	ret c
+	call Drivers_TryCreateDCSGTIOnSega_IY
+	ld hl,DCSGTIOnSega_interface
+	ret c
+	call Drivers_TryCreatePlaySoniq_IY
+	ld hl,PlaySoniq_interface
+	ret c
+	call Drivers_TryCreateFranky_IY
+	ld hl,Franky_interface
+	ret c
+	call Drivers_TryCreateDCSGOnPSG_IY
+	ld hl,DCSGOnPSG_interface
+	ret
 Sega:
 	call Drivers_TryCreatePlaySoniq_IY
 	ld hl,PlaySoniq_interface
@@ -75,6 +87,9 @@ Sega:
 	ret c
 	call Drivers_TryCreateDCSGSegaOnTI_IY
 	ld hl,DCSGSegaOnTI_interface
+	ret c
+	call Drivers_TryCreateMMM_IY
+	ld hl,MMM_interface
 	ret c
 	call Drivers_TryCreateDCSGOnPSG_IY
 	ld hl,DCSGOnPSG_interface
