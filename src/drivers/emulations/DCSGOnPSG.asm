@@ -183,15 +183,14 @@ DCSGOnPSG: MACRO
 		jr WriteRegisterA
 	Noise11:
 		ld a,(Tone3FrequencyLow.high)
-		ld d,a
-		and 3EH
+		and 3FH
+		rr a
 		jr nz,Noise01
-		ld a,0
+		sbc a,a
+		and 10H
+		;or 0C0H  ; no need to clear bits 5-7
+		xor 0
 	tone3FrequencyLow: equ $ - 1
-		and 0FH
-		bit 0,d
-		jr z,WriteRegisterA
-		add a,16
 		jr WriteRegisterA
 		ENDP
 
