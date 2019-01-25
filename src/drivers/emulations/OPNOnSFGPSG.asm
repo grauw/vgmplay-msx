@@ -49,17 +49,24 @@ OPNOnSFGPSG_Construct:
 	call Device_ConnectInterface
 	ld bc,OPNOnSFGPSG.WriteRegister2.writeFMRegister
 	call Device_ConnectInterface
-	call Drivers_TryCreatePSG_IY
+	call OPNOnSFGPSG_TryCreatePSG
 	jp nc,Driver_NotFound
 	ld (ix + OPNOnSFGPSG.psgDriver),e
 	ld (ix + OPNOnSFGPSG.psgDriver + 1),d
-	ld hl,PSG_interface
 	ld bc,OPNOnSFGPSG.WriteRegister.writePSGRegister
 	jp Device_ConnectInterface
 
 ; ix = this
 OPNOnSFGPSG_Destruct: equ System_Return
 ;	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPNOnSFGPSG_TryCreatePSG: equ AY8910_TryCreate
+;	jp AY8910_TryCreate
 
 ; ix = this
 OPNOnSFGPSG_PrintInfoImpl:
