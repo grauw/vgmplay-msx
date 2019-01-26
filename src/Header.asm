@@ -176,8 +176,8 @@ Header_FixPre102:
 	ld bc,-102H
 	add hl,bc
 	ret c
-	ld (ix + Header.sn76489Feedback + 2),9
-	ld (ix + Header.sn76489ShiftWidth + 2),16
+	ld (ix + Header.sn76489Feedback),9
+	ld (ix + Header.sn76489ShiftWidth),16
 	ld e,(ix + Header.ym2413Clock + 2)
 	ld d,(ix + Header.ym2413Clock + 3)
 	ld hl,-0040H
