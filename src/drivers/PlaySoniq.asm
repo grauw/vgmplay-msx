@@ -6,35 +6,27 @@ PlaySoniq_DATA: equ 2BH
 PlaySoniq_REGISTER_VDPBASE: equ 1DH
 PlaySoniq_REGISTER_PSGBASE: equ 1EH
 PlaySoniq_SN76489_DATA: equ 3BH
-PlaySoniq_CLOCK: equ 3579545
 
 PlaySoniq: MACRO
-	super: Driver PlaySoniq_name, PlaySoniq_CLOCK, Driver_PrintInfoImpl
+	super: DCSG PlaySoniq_SN76489_DATA, PlaySoniq_name
 	originalSN76489Port:
 		db 0
-
-	; a = value
-	SafeWriteRegister:
-	; a = value
-	WriteRegister:
-		out (PlaySoniq_SN76489_DATA),a
-		ret
 	ENDM
 
 ; ix = this
 ; iy = drivers
 PlaySoniq_Construct:
-	call Driver_Construct
+	call DCSG_Construct
 	call PlaySoniq_Detect
 	jp nc,Driver_NotFound
 	call PlaySoniq_Select
-	jr PlaySoniq_Reset
+	jp DCSG_Reset
 
 ; ix = this
 PlaySoniq_Destruct:
 	call Driver_IsFound
 	ret nc
-	call PlaySoniq_Reset
+	call DCSG_Mute
 	jr PlaySoniq_Deselect
 
 ; ix = this
@@ -54,23 +46,6 @@ PlaySoniq_Deselect:
 	ld a,(ix + PlaySoniq.originalSN76489Port)
 	out (PlaySoniq_DATA),a
 	ret
-
-; a = value
-; ix = this
-PlaySoniq_WriteRegister:
-	ld bc,PlaySoniq.WriteRegister
-	jp Utils_JumpIXOffsetBC
-
-; ix = this
-PlaySoniq_Reset:
-	ld a,9FH
-	call PlaySoniq_WriteRegister
-	ld a,0BFH
-	call PlaySoniq_WriteRegister
-	ld a,0DFH
-	call PlaySoniq_WriteRegister
-	ld a,0FFH
-	jr PlaySoniq_WriteRegister
 
 ; ix = this
 ; f <- c: found
@@ -116,8 +91,7 @@ PlaySoniq_instance: PlaySoniq
 
 	ENDS
 
-PlaySoniq_interface:
-	InterfaceOffset PlaySoniq.SafeWriteRegister
+PlaySoniq_interface: equ DCSG_interface
 
 PlaySoniq_name:
 	db "PlaySoniq",0

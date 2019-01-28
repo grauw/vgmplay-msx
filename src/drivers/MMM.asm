@@ -8,36 +8,28 @@ MMM_PAGE0: equ 0FCH
 MMM_PAGE1: equ 0FDH
 MMM_PAGE2: equ 0FEH
 MMM_PAGE3: equ 0FFH
-MMM_CLOCK: equ 3579545
 
 MMM: MACRO
-	super: Driver MMM_name, MMM_CLOCK, Driver_PrintInfoImpl
+	super: DCSG MMM_SN76489, MMM_name
 	slot:
 		db 0
-
-	; a = value
-	SafeWriteRegister:
-	; a = value
-	WriteRegister:
-		out (MMM_SN76489),a
-		ret
 	ENDM
 
 ; ix = this
 ; iy = drivers
 MMM_Construct:
-	call Driver_Construct
+	call DCSG_Construct
 	call MMM_Detect
 	jp nc,Driver_NotFound
 	call MMM_SetSlot
 	call MMM_Enable
-	jr MMM_Reset
+	jp DCSG_Reset
 
 ; ix = this
 MMM_Destruct:
 	call Driver_IsFound
 	ret nc
-	call MMM_Reset
+	call DCSG_Mute
 	jp MMM_Disable
 
 	SECTION TPA_PAGE0
@@ -79,23 +71,6 @@ MMM_Disable:
 MMM_SetSlot:
 	ld (ix + MMM.slot),a
 	ret
-
-; a = value
-; ix = this
-MMM_WriteRegister:
-	ld bc,MMM.WriteRegister
-	jp Utils_JumpIXOffsetBC
-
-; ix = this
-MMM_Reset:
-	ld a,9FH
-	call MMM_WriteRegister
-	ld a,0BFH
-	call MMM_WriteRegister
-	ld a,0DFH
-	call MMM_WriteRegister
-	ld a,0FFH
-	jr MMM_WriteRegister
 
 ; ix = this
 ; f <- c: found
@@ -159,8 +134,7 @@ MMM_instance: MMM
 
 	ENDS
 
-MMM_interface:
-	InterfaceOffset MMM.SafeWriteRegister
+MMM_interface: equ DCSG_interface
 
 MMM_name:
 	db "Musical Memory Mapper",0

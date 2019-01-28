@@ -14,6 +14,7 @@
 	INCLUDE "DalSoRiR2.asm"
 	INCLUDE "SCC.asm"
 	INCLUDE "SCCPlus.asm"
+	INCLUDE "DCSG.asm"
 	INCLUDE "Franky.asm"
 	INCLUDE "PlaySoniq.asm"
 	INCLUDE "MMM.asm"

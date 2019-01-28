@@ -6,25 +6,17 @@ Franky_VDP_BASE: equ 88H
 Franky_VDP_REGISTER: equ Franky_VDP_BASE + 1
 Franky_VDP_STATUS: equ Franky_VDP_BASE + 1
 Franky_VDP_V_COUNTER: equ 48H
-Franky_CLOCK: equ 3579545
 
 Franky: MACRO
-	super: Driver Franky_nameNTSC, Franky_CLOCK, Driver_PrintInfoImpl
+	super: DCSG Franky_DATA, Franky_nameNTSC
 	ntsc:
 		db 0
-
-	; a = value
-	SafeWriteRegister:
-	; a = value
-	WriteRegister:
-		out (Franky_DATA),a
-		ret
 	ENDM
 
 ; ix = this
 ; iy = drivers
 Franky_Construct:
-	call Driver_Construct
+	call DCSG_Construct
 	call Franky_Detect
 	jp nc,Driver_NotFound
 	ld (ix + Franky.ntsc),a
@@ -32,13 +24,13 @@ Franky_Construct:
 	call Driver_SetName
 	xor a
 	out (40H),a  ; make sure no known switched I/O device is listening
-	jr Franky_Reset
+	jp DCSG_Reset
 
 ; ix = this
 Franky_Destruct:
 	call Driver_IsFound
 	ret nc
-	jr Franky_Reset
+	jr DCSG_Mute
 
 ; ix = this
 ; hl <- name
@@ -48,23 +40,6 @@ Franky_GetName:
 	ret z
 	ld hl,Franky_nameNTSC
 	ret
-
-; a = value
-; ix = this
-Franky_WriteRegister:
-	ld bc,Franky.WriteRegister
-	jp Utils_JumpIXOffsetBC
-
-; ix = this
-Franky_Reset:
-	ld a,9FH
-	call Franky_WriteRegister
-	ld a,0BFH
-	call Franky_WriteRegister
-	ld a,0DFH
-	call Franky_WriteRegister
-	ld a,0FFH
-	jr Franky_WriteRegister
 
 ; ix = this
 ; a <- 0: PAL, -1: NTSC
@@ -105,8 +80,7 @@ Franky_instance: Franky
 
 	ENDS
 
-Franky_interface:
-	InterfaceOffset Franky.SafeWriteRegister
+Franky_interface: equ DCSG_interface
 
 Franky_namePAL:
 	db "Franky PAL",0
