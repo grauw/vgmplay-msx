@@ -8,9 +8,7 @@ Franky_VDP_STATUS: equ Franky_VDP_BASE + 1
 Franky_VDP_V_COUNTER: equ 48H
 
 Franky: MACRO
-	super: DCSG Franky_DATA, Franky_nameNTSC
-	ntsc:
-		db 0
+	super: DCSG Franky_DATA, Franky_name
 	ENDM
 
 ; ix = this
@@ -19,9 +17,6 @@ Franky_Construct:
 	call DCSG_Construct
 	call Franky_Detect
 	jp nc,Driver_NotFound
-	ld (ix + Franky.ntsc),a
-	call Franky_GetName
-	call Driver_SetName
 	xor a
 	out (40H),a  ; make sure no known switched I/O device is listening
 	jp DCSG_Reset
@@ -33,15 +28,6 @@ Franky_Destruct:
 	jr DCSG_Mute
 
 ; ix = this
-; hl <- name
-Franky_GetName:
-	bit 0,(ix + Franky.ntsc)
-	ld hl,Franky_namePAL
-	ret z
-	ld hl,Franky_nameNTSC
-	ret
-
-; ix = this
 ; a <- 0: PAL, -1: NTSC
 ; f <- c: found
 Franky_Detect: PROC
@@ -50,25 +36,41 @@ Franky_Detect: PROC
 	ld c,Franky_VDP_REGISTER
 	ld de,(1 | 80H) << 8 | 00H
 	call WriteVDP  ; VDP mode select 256x192
-	ld de,(0 | 80H) << 8 | 01H
-	call WriteVDP  ; VDP mode select 256x192 + EXTVID
-	ld b,40H
-	djnz $         ; wait 20 µs for it to desync (+margin)
-	in a,(Franky_VDP_V_COUNTER)
 	ld de,(0 | 80H) << 8 | 00H
-	call WriteVDP  ; VDP disable EXTVID
-	cp -43         ; NTSC sync start line
-	jr z,Found
-	xor -70        ; PAL sync start line
-	jr z,Found
-	ret
+	call WriteVDP  ; VDP mode select 256x192
+	ld de,2 << 8 | 4  ; 4 passes, 2 strikes
+	di
+Loop:
+	in a,(Franky_VDP_V_COUNTER)
+	ld c,a
+	ld b,0  ; poll for >228 cycles
+PollLoop:
+	in a,(Franky_VDP_V_COUNTER)
+	sub c
+	jr nz,Change
+	djnz PollLoop
+	jr NotFound
+Change:
+	dec a
+	jr nz,Strike
+Pass:
+	dec e
+	jr nz,Loop
 Found:
-	neg
-	sbc a,a
+	ei
 	scf
+	ret
+Strike:
+	dec d
+	jr nz,Loop
+NotFound:
+	ei
+	and a
 	ret
 WriteVDP:
 	out (c),e
+	ex (sp),hl
+	ex (sp),hl
 	out (c),d
 	ret
 	ENDP
@@ -82,8 +84,5 @@ Franky_instance: Franky
 
 Franky_interface: equ DCSG_interface
 
-Franky_namePAL:
-	db "Franky PAL",0
-
-Franky_nameNTSC:
-	db "Franky NTSC",0
+Franky_name:
+	db "Franky",0
