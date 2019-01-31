@@ -57,14 +57,14 @@ YM2203_TryCreate:
 	call Drivers_TryCreateOPN_IY
 	ld hl,OPN_interface
 	ret c
-	call Drivers_TryCreateOPNA_IY
-	ld hl,OPNA_interface
+	call Drivers_TryCreateOPNOnOPNA_IY
+	ld hl,OPNOnOPNA_interface
 	ret c
 	call Drivers_TryCreateNeotron_IY
 	ld hl,Neotron_interfaceYM2203
 	ret c
-	call Drivers_TryCreateOPNOnSFGPSG_IY
-	ld hl,OPNOnSFGPSG_interface
+	call Drivers_TryCreateOPNOnOPNADual_IY
+	ld hl,OPNOnOPNADual_interface
 	ret
 
 ;

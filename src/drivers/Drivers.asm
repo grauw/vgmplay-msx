@@ -28,6 +28,8 @@
 	INCLUDE "emulations/OPNFMOnSFG.asm"
 	INCLUDE "emulations/OPNOnSFGPSG.asm"
 	INCLUDE "emulations/OPNAOnSFGPSGMSXAudio.asm"
+	INCLUDE "emulations/OPNOnOPNA.asm"
+	INCLUDE "emulations/OPNOnOPNADual.asm"
 	INCLUDE "emulations/OPNBBOnNeotronOPNA.asm"
 	INCLUDE "emulations/OPN2OnSFGTurboRPCM.asm"
 	INCLUDE "emulations/OPN2OnOPNATurboRPCM.asm"
@@ -87,6 +89,10 @@ Drivers: MACRO
 		StaticFactory OPNOnSFGPSG_instance, OPNOnSFGPSG_Construct, OPNOnSFGPSG_Destruct
 	opnaOnSFGPSGMSXAudio:
 		StaticFactory OPNAOnSFGPSGMSXAudio_instance, OPNAOnSFGPSGMSXAudio_Construct, OPNAOnSFGPSGMSXAudio_Destruct
+	opnOnOPNA:
+		StaticFactory OPNOnOPNA_instance, OPNOnOPNA_Construct, OPNOnOPNA_Destruct
+	opnOnOPNADual:
+		StaticFactory OPNOnOPNADual_instance, OPNOnOPNADual_Construct, OPNOnOPNADual_Destruct
 	opnbbOnNeotronOPNA:
 		StaticFactory OPNBBOnNeotronOPNA_instance, OPNBBOnNeotronOPNA_Construct, OPNBBOnNeotronOPNA_Destruct
 	opn2OnSFGTurboRPCM:
@@ -339,6 +345,20 @@ Drivers_TryCreateOPNOnSFGPSG_IY:
 ; f <- c: succeeded
 Drivers_TryCreateOPNAOnSFGPSGMSXAudio_IY:
 	ld bc,Drivers.opnaOnSFGPSGMSXAudio
+	jr Drivers_TryCreate_IY_Trampoline
+
+; iy = this
+; de <- driver
+; f <- c: succeeded
+Drivers_TryCreateOPNOnOPNA_IY:
+	ld bc,Drivers.opnOnOPNA
+	jr Drivers_TryCreate_IY_Trampoline
+
+; iy = this
+; de <- driver
+; f <- c: succeeded
+Drivers_TryCreateOPNOnOPNADual_IY:
+	ld bc,Drivers.opnOnOPNADual
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
