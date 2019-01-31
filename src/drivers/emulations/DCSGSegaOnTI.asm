@@ -5,7 +5,7 @@ DCSGSegaOnTI_CLOCK: equ 3579545
 
 DCSGSegaOnTI: MACRO
 	super: Driver Device_noName, DCSGSegaOnTI_CLOCK, DCSGSegaOnTI_PrintInfoImpl
-	tiDCSG:
+	tiDCSGDriver:
 		dw 0
 
 	; a = value
@@ -118,8 +118,8 @@ DCSGSegaOnTI_Construct:
 	call Driver_Construct
 	call DCSGSegaOnTI_TryCreateTIDCSG
 	jp nc,Driver_NotFound
-	ld (ix + DCSGSegaOnTI.tiDCSG),e
-	ld (ix + DCSGSegaOnTI.tiDCSG + 1),d
+	ld (ix + DCSGSegaOnTI.tiDCSGDriver),e
+	ld (ix + DCSGSegaOnTI.tiDCSGDriver + 1),d
 	ld bc,DCSGSegaOnTI.writeRegister
 	jp Device_ConnectInterface
 
@@ -139,7 +139,7 @@ DCSGSegaOnTI_TryCreateTIDCSG:
 
 ; ix = this
 DCSGSegaOnTI_PrintInfoImpl:
-	ld de,DCSGSegaOnTI.tiDCSG
+	ld de,DCSGSegaOnTI.tiDCSGDriver
 	jp Driver_PrintInfoIXOffset
 
 ;

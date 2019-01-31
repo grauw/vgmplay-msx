@@ -5,7 +5,7 @@ DCSGTIOnSega_CLOCK: equ 3579545
 
 DCSGTIOnSega: MACRO
 	super: Driver Device_noName, DCSGTIOnSega_CLOCK, DCSGTIOnSega_PrintInfoImpl
-	segaDCSG:
+	segaDCSGDriver:
 		dw 0
 
 	; a = value
@@ -148,8 +148,8 @@ DCSGTIOnSega_Construct:
 	call Driver_Construct
 	call DCSGTIOnSega_TryCreateSegaDCSG
 	jp nc,Driver_NotFound
-	ld (ix + DCSGTIOnSega.segaDCSG),e
-	ld (ix + DCSGTIOnSega.segaDCSG + 1),d
+	ld (ix + DCSGTIOnSega.segaDCSGDriver),e
+	ld (ix + DCSGTIOnSega.segaDCSGDriver + 1),d
 	ld bc,DCSGTIOnSega.writeRegister
 	jp Device_ConnectInterface
 
@@ -175,7 +175,7 @@ DCSGTIOnSega_TryCreateSegaDCSG:
 
 ; ix = this
 DCSGTIOnSega_PrintInfoImpl:
-	ld de,DCSGTIOnSega.segaDCSG
+	ld de,DCSGTIOnSega.segaDCSGDriver
 	jp Driver_PrintInfoIXOffset
 
 ;

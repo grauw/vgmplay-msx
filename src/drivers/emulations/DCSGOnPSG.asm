@@ -5,7 +5,7 @@ DCSGOnPSG_CLOCK: equ 3579545
 
 DCSGOnPSG: MACRO
 	super: Driver Device_noName, DCSGOnPSG_CLOCK, DCSGOnPSG_PrintInfoImpl
-	psg:
+	psgDriver:
 		dw 0
 
 	; a = value
@@ -220,8 +220,8 @@ DCSGOnPSG_Construct:
 	call Driver_Construct
 	call DCSGOnPSG_TryCreatePSG
 	jp nc,Driver_NotFound
-	ld (ix + DCSGOnPSG.psg),e
-	ld (ix + DCSGOnPSG.psg + 1),d
+	ld (ix + DCSGOnPSG.psgDriver),e
+	ld (ix + DCSGOnPSG.psgDriver + 1),d
 	ld bc,DCSGOnPSG.writeRegister
 	jp Device_ConnectInterface
 
@@ -239,7 +239,7 @@ DCSGOnPSG_TryCreatePSG: equ AY8910_TryCreate
 
 ; ix = this
 DCSGOnPSG_PrintInfoImpl:
-	ld de,DCSGOnPSG.psg
+	ld de,DCSGOnPSG.psgDriver
 	jp Driver_PrintInfoIXOffset
 
 ;
