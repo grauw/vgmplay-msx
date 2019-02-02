@@ -85,6 +85,7 @@ Device_PrintInfo:
 ; bc = offset
 ; de = other device
 ; hl = interface
+; hl <- next interface
 Device_ConnectInterfaceAgain:
 	dec hl
 	dec hl
