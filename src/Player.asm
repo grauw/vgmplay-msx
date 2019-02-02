@@ -261,18 +261,6 @@ Loop:
 	ret
 	ENDP
 
-; hl' = time remaining
-; ix = this
-; iy = reader
-Player_Wait_M: MACRO ?time
-	exx
-	ld de,?time
-	add hl,de
-	exx
-	ret nc
-	Scanner_Yield_M
-	ENDM
-
 ; ix = this
 ; iy = reader
 Player_ResetPosition:
@@ -385,6 +373,18 @@ NoLoop:
 	ld (ix + Player.ended),-1
 	Scanner_Yield_M
 	ENDP
+
+; hl' = time remaining
+; ix = this
+; iy = reader
+Player_Wait_M: MACRO ?time
+	exx
+	ld de,?time
+	add hl,de
+	exx
+	ret nc
+	Scanner_Yield_M
+	ENDM
 
 ; hl' = time remaining
 ; ix = this
