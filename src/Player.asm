@@ -452,8 +452,9 @@ Player_Skip4:
 	call Reader_Read_IY
 Player_Skip3:
 	call Reader_Read_IY
-Player_Skip2:
 	jp Reader_Read_IY
+Player_Skip2: equ Reader_Read_IY
+;	jp Reader_Read_IY
 Player_Skip1: equ System_Return
 ;	ret
 
