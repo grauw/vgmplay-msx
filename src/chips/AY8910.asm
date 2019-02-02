@@ -12,8 +12,7 @@ AY8910: MACRO
 	ProcessCommand: PROC
 		call Reader_ReadWord_IY
 		bit 7,e
-		jr nz,DualChip
-		jp System_Return
+		jp z,System_Return
 	writeRegister: equ $ - 2
 	DualChip:
 		res 7,e
