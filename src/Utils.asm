@@ -1,3 +1,10 @@
+; f <- c: turbo R
+Utils_IsTurboR:
+	ld hl,IDBYT2
+	call System_ReadBIOS
+	add a,-3
+	ret
+
 ; bc = offset
 ; ix = jump address base
 Utils_JumpIXOffsetBC:

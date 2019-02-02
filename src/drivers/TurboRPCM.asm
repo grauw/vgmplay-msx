@@ -56,10 +56,8 @@ TurboRPCM_Disable:
 
 ; ix = this
 ; f <- c: found
-TurboRPCM_Detect:
-	call System_IsTurboR
-	ccf
-	ret
+TurboRPCM_Detect: equ Utils_IsTurboR
+;	jp Utils_IsTurboR
 
 ;
 	SECTION RAM

@@ -80,7 +80,5 @@ Continue:
 	ENDM
 
 ; f <- c: found
-TurboRTimer_Detect:
-	call System_IsTurboR
-	ccf
-	ret
+TurboRTimer_Detect: equ Utils_IsTurboR
+;	jp Utils_IsTurboR
