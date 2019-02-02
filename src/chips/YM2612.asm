@@ -275,6 +275,25 @@ YM2612_instance: YM2612
 
 	ENDS
 
+YM2612_interfacePCM:
+	InterfaceOffset YM2612.ProcessPCMWrite
+	InterfaceOffset YM2612.ProcessPCMWriteWait1
+	InterfaceOffset YM2612.ProcessPCMWriteWait2
+	InterfaceOffset YM2612.ProcessPCMWriteWait3
+	InterfaceOffset YM2612.ProcessPCMWriteWait4
+	InterfaceOffset YM2612.ProcessPCMWriteWait5
+	InterfaceOffset YM2612.ProcessPCMWriteWait6
+	InterfaceOffset YM2612.ProcessPCMWriteWait7
+	InterfaceOffset YM2612.ProcessPCMWriteWait8
+	InterfaceOffset YM2612.ProcessPCMWriteWait9
+	InterfaceOffset YM2612.ProcessPCMWriteWait10
+	InterfaceOffset YM2612.ProcessPCMWriteWait11
+	InterfaceOffset YM2612.ProcessPCMWriteWait12
+	InterfaceOffset YM2612.ProcessPCMWriteWait13
+	InterfaceOffset YM2612.ProcessPCMWriteWait14
+	InterfaceOffset YM2612.ProcessPCMWriteWait15
+	InterfaceOffset YM2612.ProcessPCMDataSeek
+
 YM2612_ym2612Name:
 	db "YM2612 (OPN2)",0
 

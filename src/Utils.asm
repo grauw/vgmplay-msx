@@ -5,6 +5,17 @@ Utils_IsTurboR:
 	add a,-3
 	ret
 
+; f <- c: R800
+Utils_IsR800:
+	call Utils_IsTurboR
+	ret nc
+	push ix
+	ld ix,GETCPU
+	call System_CallBIOS
+	pop ix
+	add a,-1
+	ret
+
 ; bc = offset
 ; ix = jump address base
 Utils_JumpIXOffsetBC:

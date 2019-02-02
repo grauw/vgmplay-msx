@@ -70,7 +70,7 @@ Player_Construct:
 	pop ix
 	ld (ix + Player.timer),e
 	ld (ix + Player.timer + 1),d
-	ret
+	jr Player_ConnectPCMWrite
 
 ; ix = this
 Player_Destruct:
@@ -143,6 +143,43 @@ LSBExtractionLoop:
 	ld de,Player_commandsJumpTable + 256
 	jp System_FastLDIR
 	ENDP
+
+; ix = this
+Player_ConnectPCMWrite:
+	call Utils_IsR800
+	ret nc
+	ld de,YM2612_instance
+	ld hl,YM2612_interfacePCM
+	ld bc,16 << 8 | 80H
+Loop:
+	call Player_ConnectCommandInterface
+	djnz Loop
+	ld c,0E0H
+	jr Player_ConnectCommandInterface
+
+; ix = this
+; c = command
+; de = other device
+; hl = interface
+; hl <- next interface
+; c <- next command
+Player_ConnectCommandInterface:
+	push de
+	push hl
+	call Interface_GetAddress
+	call Utils_DereferenceJump
+	ex de,hl
+	ld h,Player_commandsJumpTable >> 8
+	ld l,c
+	ld (hl),e
+	inc h
+	ld (hl),d
+	pop hl
+	pop de
+	inc hl
+	inc hl
+	inc c
+	ret
 
 ; ix = this
 ; iy = reader
@@ -558,22 +595,22 @@ Player_commandsJumpTable:
 	dw Player_Wait14Samples       ; 7DH
 	dw Player_Wait15Samples       ; 7EH
 	dw Player_Wait16Samples       ; 7FH
-	dw YM2612_instance.ProcessPCMWrite            ; 80H
-	dw YM2612_instance.ProcessPCMWriteWait1       ; 81H
-	dw YM2612_instance.ProcessPCMWriteWait2       ; 82H
-	dw YM2612_instance.ProcessPCMWriteWait3       ; 83H
-	dw YM2612_instance.ProcessPCMWriteWait4       ; 84H
-	dw YM2612_instance.ProcessPCMWriteWait5       ; 85H
-	dw YM2612_instance.ProcessPCMWriteWait6       ; 86H
-	dw YM2612_instance.ProcessPCMWriteWait7       ; 87H
-	dw YM2612_instance.ProcessPCMWriteWait8       ; 88H
-	dw YM2612_instance.ProcessPCMWriteWait9       ; 89H
-	dw YM2612_instance.ProcessPCMWriteWait10      ; 8AH
-	dw YM2612_instance.ProcessPCMWriteWait11      ; 8BH
-	dw YM2612_instance.ProcessPCMWriteWait12      ; 8CH
-	dw YM2612_instance.ProcessPCMWriteWait13      ; 8DH
-	dw YM2612_instance.ProcessPCMWriteWait14      ; 8EH
-	dw YM2612_instance.ProcessPCMWriteWait15      ; 8FH
+	dw Player_Skip1               ; 80H
+	dw Player_Wait1Samples        ; 81H
+	dw Player_Wait2Samples        ; 82H
+	dw Player_Wait3Samples        ; 83H
+	dw Player_Wait4Samples        ; 84H
+	dw Player_Wait5Samples        ; 85H
+	dw Player_Wait6Samples        ; 86H
+	dw Player_Wait7Samples        ; 87H
+	dw Player_Wait8Samples        ; 88H
+	dw Player_Wait9Samples        ; 89H
+	dw Player_Wait10Samples       ; 8AH
+	dw Player_Wait11Samples       ; 8BH
+	dw Player_Wait12Samples       ; 8CH
+	dw Player_Wait13Samples       ; 8DH
+	dw Player_Wait14Samples       ; 8EH
+	dw Player_Wait15Samples       ; 8FH
 	dw Player_Skip5               ; 90H
 	dw Player_Skip5               ; 91H
 	dw Player_Skip6               ; 92H
