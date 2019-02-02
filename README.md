@@ -79,6 +79,8 @@ Supported sound chips
     * OPNA, Yamaha SFG + PSG + MSX-AUDIO (no drums)
   * YM2610 OPNB
     * Neotron, Yamaha SFG + PSG (no ADPCM)
+  * YM2610B OPNB-B
+    * Neotron + OPNA
   * YM2612 OPN2 x2
     * OPNA + turboR PCM, Yamaha SFG + turboR PCM
 
