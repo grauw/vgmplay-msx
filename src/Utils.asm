@@ -50,3 +50,17 @@ Utils_GetDoubleWordIYOffset:
 	or d
 	pop iy
 	ret
+
+; hl = entry address
+; hl <- destination address
+; Modifies: af
+Utils_DereferenceJump:
+	ld a,(hl)
+	cp 0C3H  ; jp
+	ret nz
+	inc hl
+	ld a,(hl)
+	inc hl
+	ld h,(hl)
+	ld l,a
+	jr Utils_DereferenceJump
