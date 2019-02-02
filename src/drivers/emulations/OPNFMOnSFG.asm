@@ -271,7 +271,7 @@ OPNFMOnSFG: MACRO
 ; iy = drivers
 OPNFMOnSFG_Construct:
 	call Driver_Construct
-	call OPNFMOnSFG_TryCreateSFG
+	call OPNFMOnSFG_TryCreateSFGDirect
 	jp nc,Driver_NotFound
 	ld (ix + OPNFMOnSFG.sfgDriver),e
 	ld (ix + OPNFMOnSFG.sfgDriver + 1),d
@@ -419,7 +419,7 @@ Overflow:
 ; de <- driver
 ; hl <- device interface
 ; f <- c: succeeded
-OPNFMOnSFG_TryCreateSFG:
+OPNFMOnSFG_TryCreateSFGDirect:
 	call Drivers_TryCreateSFG_IY
 	ld hl,SFG_interfaceDirect
 	ret c

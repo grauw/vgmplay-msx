@@ -54,11 +54,10 @@ OPNBBOnNeotronOPNA: MACRO
 ; iy = drivers
 OPNBBOnNeotronOPNA_Construct:
 	call Driver_Construct
-	call Drivers_TryCreateNeotron_IY
+	call OPNBBOnNeotronOPNA_TryCreateOPNB
 	jp nc,Driver_NotFound
 	ld (ix + OPNBBOnNeotronOPNA.neotronDriver),e
 	ld (ix + OPNBBOnNeotronOPNA.neotronDriver + 1),d
-	ld hl,Neotron_interface
 	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteADPCMRegister
 	call Device_ConnectInterface
 	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister
@@ -71,11 +70,10 @@ OPNBBOnNeotronOPNA_Construct:
 	call Device_ConnectInterface
 	ld bc,OPNBBOnNeotronOPNA.ProcessDataBlockB.process
 	call Device_ConnectInterface
-	call Drivers_TryCreateOPNA_IY
+	call OPNBBOnNeotronOPNA_TryCreateOPNA
 	ret nc
 	ld (ix + OPNBBOnNeotronOPNA.opnaDriver),e
 	ld (ix + OPNBBOnNeotronOPNA.opnaDriver + 1),d
-	ld hl,OPNA_interface
 	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister.safeWriteFMRegister
 	call Device_ConnectInterface
 	ld bc,OPNBBOnNeotronOPNA.SafeWriteRegister2.safeWriteFMRegister
@@ -84,6 +82,26 @@ OPNBBOnNeotronOPNA_Construct:
 ; ix = this
 OPNBBOnNeotronOPNA_Destruct: equ System_Return
 ;	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPNBBOnNeotronOPNA_TryCreateOPNB:
+	call Drivers_TryCreateNeotron_IY
+	ld hl,Neotron_interface
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPNBBOnNeotronOPNA_TryCreateOPNA:
+	call Drivers_TryCreateOPNA_IY
+	ld hl,OPNA_interface
+	ret
 
 ; ix = this
 OPNBBOnNeotronOPNA_PrintInfoImpl:

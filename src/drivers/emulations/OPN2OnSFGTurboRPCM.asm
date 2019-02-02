@@ -40,11 +40,10 @@ OPN2OnSFGTurboRPCM: MACRO
 ; iy = drivers
 OPN2OnSFGTurboRPCM_Construct:
 	call Driver_Construct
-	call Drivers_TryCreateOPNFMOnSFG_IY
+	call OPN2OnSFGTurboRPCM_TryCreateOPNFMOnSFGDirect
 	jp nc,Driver_NotFound
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.opnFMOnSFGDriver + 1),d
-	ld hl,OPNFMOnSFG_interfaceDirect
 	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister.writeFMRegister
 	call Device_ConnectInterface
 	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister2.writeFMRegister
@@ -55,11 +54,10 @@ OPN2OnSFGTurboRPCM_Construct:
 	ld de,38464
 	call OPNFMOnSFG_SetFrequencyOffset
 	pop ix
-	call Drivers_TryCreateTurboRPCM_IY
+	call OPN2OnSFGTurboRPCM_TryCreatePCM
 	ret nc
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnSFGTurboRPCM.turboRPCMDriver + 1),d
-	ld hl,TurboRPCM_interface
 	ld bc,OPN2OnSFGTurboRPCM.SafeWriteRegister.writePCMRegister
 	call Device_ConnectInterface
 	ld bc,OPN2OnSFGTurboRPCM.SafeWritePCMRegister.writePCMRegister
@@ -68,6 +66,22 @@ OPN2OnSFGTurboRPCM_Construct:
 ; ix = this
 OPN2OnSFGTurboRPCM_Destruct: equ System_Return
 ;	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPN2OnSFGTurboRPCM_TryCreateOPNFMOnSFGDirect: equ OPNOnSFGPSG_TryCreateOPNFMOnSFGDirect
+;	jp OPNOnSFGPSG_TryCreateOPNFMOnSFGDirect
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPN2OnSFGTurboRPCM_TryCreatePCM: equ OPN2OnTurboRPCM_TryCreatePCM
+;	jp OPN2OnTurboRPCM_TryCreatePCM
 
 ; ix = this
 OPN2OnSFGTurboRPCM_PrintInfoImpl:

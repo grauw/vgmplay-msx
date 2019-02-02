@@ -59,20 +59,18 @@ OPNAOnSFGPSGMSXAudio: MACRO
 ; iy = drivers
 OPNAOnSFGPSGMSXAudio_Construct:
 	call Driver_Construct
-	call Drivers_TryCreateOPNOnSFGPSG_IY
+	call OPNAOnSFGPSGMSXAudio_TryCreateOPNOnSFGPSG
 	jp nc,Driver_NotFound
 	ld (ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver),e
 	ld (ix + OPNAOnSFGPSGMSXAudio.opnOnSFGPSGDriver + 1),d
-	ld hl,OPNOnSFGPSG_interface
 	ld bc,OPNAOnSFGPSGMSXAudio.SafeWriteRegister.safeWriteRegister
 	call Device_ConnectInterface
 	ld bc,OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteRegister
 	call Device_ConnectInterface
-	call Drivers_TryCreateMSXAudio_IY
+	call OPNAOnSFGPSGMSXAudio_TryCreateMSXAudio
 	ret nc
 	ld (ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver),e
 	ld (ix + OPNAOnSFGPSGMSXAudio.msxAudioDriver + 1),d
-	ld hl,MSXAudio_interface
 	ld bc,OPNAOnSFGPSGMSXAudio.SafeWriteRegister2.safeWriteADPCMRegister
 	call Device_ConnectInterface
 	ld bc,OPNAOnSFGPSGMSXAudio.ProcessDataBlock.process
@@ -81,6 +79,26 @@ OPNAOnSFGPSGMSXAudio_Construct:
 ; ix = this
 OPNAOnSFGPSGMSXAudio_Destruct: equ System_Return
 ;	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPNAOnSFGPSGMSXAudio_TryCreateOPNOnSFGPSG:
+	call Drivers_TryCreateOPNOnSFGPSG_IY
+	ld hl,OPNOnSFGPSG_interface
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPNAOnSFGPSGMSXAudio_TryCreateMSXAudio:
+	call Drivers_TryCreateMSXAudio_IY
+	ld hl,MSXAudio_interface
+	ret
 
 ; ix = this
 OPNAOnSFGPSGMSXAudio_PrintInfoImpl:

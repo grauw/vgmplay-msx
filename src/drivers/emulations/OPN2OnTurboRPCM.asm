@@ -34,11 +34,10 @@ OPN2OnTurboRPCM: MACRO
 ; iy = drivers
 OPN2OnTurboRPCM_Construct:
 	call Driver_Construct
-	call Drivers_TryCreateTurboRPCM_IY
+	call OPN2OnTurboRPCM_TryCreatePCM
 	jp nc,Driver_NotFound
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnTurboRPCM.turboRPCMDriver + 1),d
-	ld hl,TurboRPCM_interface
 	ld bc,OPN2OnTurboRPCM.SafeWriteRegister.writePCMRegister
 	call Device_ConnectInterface
 	ld bc,OPN2OnTurboRPCM.SafeWritePCMRegister.writePCMRegister
@@ -47,6 +46,16 @@ OPN2OnTurboRPCM_Construct:
 ; ix = this
 OPN2OnTurboRPCM_Destruct: equ System_Return
 ;	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPN2OnTurboRPCM_TryCreatePCM:
+	call Drivers_TryCreateTurboRPCM_IY
+	ld hl,TurboRPCM_interface
+	ret
 
 ; ix = this
 OPN2OnTurboRPCM_PrintInfoImpl:

@@ -40,11 +40,10 @@ OPNOnSFGPSG: MACRO
 ; iy = drivers
 OPNOnSFGPSG_Construct:
 	call Driver_Construct
-	call Drivers_TryCreateOPNFMOnSFG_IY
+	call OPNOnSFGPSG_TryCreateOPNFMOnSFGDirect
 	jp nc,Driver_NotFound
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver),e
 	ld (ix + OPNOnSFGPSG.opnFMOnSFGDriver + 1),d
-	ld hl,OPNFMOnSFG_interfaceDirect
 	ld bc,OPNOnSFGPSG.WriteRegister.writeFMRegister
 	call Device_ConnectInterface
 	ld bc,OPNOnSFGPSG.WriteRegister2.writeFMRegister
@@ -59,6 +58,16 @@ OPNOnSFGPSG_Construct:
 ; ix = this
 OPNOnSFGPSG_Destruct: equ System_Return
 ;	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPNOnSFGPSG_TryCreateOPNFMOnSFGDirect:
+	call Drivers_TryCreateOPNFMOnSFG_IY
+	ld hl,OPNFMOnSFG_interfaceDirect
+	ret
 
 ; iy = drivers
 ; ix = this

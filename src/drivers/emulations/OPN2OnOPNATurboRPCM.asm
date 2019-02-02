@@ -117,16 +117,16 @@ OPN2OnOPNATurboRPCM: MACRO
 OPN2OnOPNATurboRPCM_Construct:
 	call Driver_Construct
 	call Device_SetClock
-	call Drivers_TryCreateOPNA_IY
+	call OPN2OnOPNATurboRPCM_TryCreateOPNA
 	jp nc,Driver_NotFound
+	push bc
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.opnaDriver + 1),d
-	ld hl,OPNA_interface
 	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister.safeWriteFMRegister
 	call Device_ConnectInterface
 	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister2.safeWriteFMRegister
 	call Device_ConnectInterface
-	ld hl,OPNA_interfaceDirect
+	pop hl
 	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister.writeFMRegister
 	call Device_ConnectInterface
 	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister2.writeFMRegister
@@ -136,11 +136,10 @@ OPN2OnOPNATurboRPCM_Construct:
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister.clockRatio + 1),h
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.clockRatio),l
 	ld (ix + OPN2OnOPNATurboRPCM.SafeWriteRegister2.clockRatio + 1),h
-	call Drivers_TryCreateTurboRPCM_IY
+	call OPN2OnOPNATurboRPCM_TryCreatePCM
 	ret nc
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver),e
 	ld (ix + OPN2OnOPNATurboRPCM.turboRPCMDriver + 1),d
-	ld hl,TurboRPCM_interface
 	ld bc,OPN2OnOPNATurboRPCM.SafeWriteRegister.writePCMRegister
 	call Device_ConnectInterface
 	ld bc,OPN2OnOPNATurboRPCM.SafeWritePCMRegister.writePCMRegister
@@ -208,6 +207,26 @@ NoOverflow:
 	ld d,a
 	ret
 	ENDP
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; bc <- device direct interface
+; f <- c: succeeded
+OPN2OnOPNATurboRPCM_TryCreateOPNA:
+	call Drivers_TryCreateOPNA_IY
+	ld hl,OPNA_interface
+	ld hl,OPNA_interfaceDirect
+	ret
+
+; iy = drivers
+; ix = this
+; de <- driver
+; hl <- device interface
+; f <- c: succeeded
+OPN2OnOPNATurboRPCM_TryCreatePCM: equ OPN2OnTurboRPCM_TryCreatePCM
+;	jp OPN2OnTurboRPCM_TryCreatePCM
 
 ; ix = this
 OPN2OnOPNATurboRPCM_PrintInfoImpl:
