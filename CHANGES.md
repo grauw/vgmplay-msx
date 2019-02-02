@@ -4,6 +4,33 @@ VGMPlay MSX change log
 For the complete list of changes please refer to the
 [revision history](https://bitbucket.org/grauw/vgmplay-msx/commits/all).
 
+[1.3] — 2019-??-??
+------------------
+
+  * New chips: YM2203 OPN, YM2608 OPNA, YM2610 OPNB, YM2610B OPNB-B, YM2612 OPN2
+  * New sound expansions: OPNA, Neotron, Darky, DalSoRi R2, OPL3 (C0H)
+  * Emulation of SN76489 DCSG on PSG
+  * Emulation of YM2203 OPN, YM2608 OPNA and YM2612 OPN2 on Yamaha SFG
+  * Translation of YM2612 OPN2 frequencies to correct tuning
+  * Playback of YM2612 OPN2 PCM samples on MSX turboR
+  * Playback of dual YM2203 OPN on a single Makoto + PSG or Yamaha SFG + 2x PSG
+  * Playback of Y8950 MSX-AUDIO on MoonSound or OPL3, without ADPCM
+  * Support of the DalSoRi R2 4MB RAM mode
+  * Dual chip support for more chips
+  * Improved detection of MSX-AUDIO, MoonSound, PSG, MMM and Franky
+  * Improved sound chip reset and muting
+  * Improved playback processing speed and accuracy
+  * Samples load prior to playback
+  * Added length and loop length to track information
+  * Improved VGM chip overview output
+  * Ability to stop playback with joystick buttons (or space bar)
+  * Ability to use more than 4 MB memory by modifying a compile-time constant
+  * Removed 1chipMSX / Zemmix Neo bug workaround (fixed in KdL firmware v3.3.1)
+  * Fixed MSX-MUSIC playback issues on turbo R
+  * Fixed MSX-AUDIO problem loading samples >128K
+  * Fixed screen going blank on MSX1 during playback
+  * Many code structure and footprint improvements
+
 [1.2] — 2016-01-23
 ------------------
 
