@@ -8,6 +8,7 @@ MMM_PAGE0: equ 0FCH
 MMM_PAGE1: equ 0FDH
 MMM_PAGE2: equ 0FEH
 MMM_PAGE3: equ 0FFH
+MMM_CARNIVORE_ID_ADDRESS: equ 4010H
 
 MMM: MACRO
 	super: DCSG MMM_SN76489, MMM_name
@@ -93,6 +94,19 @@ MMM_MatchSlot: PROC
 	call c,TestValue
 	ld b,3DH
 	call c,TestValue
+	ret nc
+	ld a,c  ; check for and exclude Carnivore2 (mapper similar to MMM)
+	and 8CH
+	cp 88H
+	scf
+	ret nz
+	ld a,c
+	and 83H
+	ld de,MMM_carnivoreId
+	ld hl,MMM_CARNIVORE_ID_ADDRESS
+	ld bc,8
+	call Memory_MatchSlotString
+	ccf
 	ret
 TestValue:
 	call Mapper_instance.GetP1
@@ -135,6 +149,9 @@ MMM_instance: MMM
 	ENDS
 
 MMM_interface: equ DCSG_interface
+
+MMM_carnivoreId:
+	db "CMFCCFRC"
 
 MMM_name:
 	db "Musical Memory Mapper",0
