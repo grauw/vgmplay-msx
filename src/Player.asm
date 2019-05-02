@@ -145,7 +145,7 @@ LSBExtractionLoop:
 	ENDP
 
 ; ix = this
-Player_ConnectPCMWrite:
+Player_ConnectPCMWrite: PROC
 	call Utils_IsR800
 	ret nc
 	ld de,YM2612_instance
@@ -156,6 +156,7 @@ Loop:
 	djnz Loop
 	ld c,0E0H
 	jr Player_ConnectCommandInterface
+	ENDP
 
 ; ix = this
 ; c = command
