@@ -217,7 +217,7 @@ NoOverflow:
 OPN2OnOPNATurboRPCM_TryCreateOPNA:
 	call Drivers_TryCreateMakoto_IY
 	ld hl,Makoto_interface
-	ld hl,Makoto_interfaceDirect
+	ld bc,Makoto_interfaceDirect
 	ret
 
 ; iy = drivers
