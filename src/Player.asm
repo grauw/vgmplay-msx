@@ -324,7 +324,7 @@ Player_ResetPosition:
 	jp MappedReader_SetPosition_IY
 
 ; f <- nz: exit condition occurred
-Player_CheckExitCondition:
+Player_CheckExitCondition: PROC
 	bit 0,(ix + Player.ended)
 	ret nz
 	ld a,(JIFFY)
@@ -332,14 +332,17 @@ Player_CheckExitCondition:
 	ret z
 	ld (ix + Player.lastJiffy),a
 	call DOS_ConsoleStatus  ; ctrl-c
+	and a
+	jr z,TryJoystick
+	call DOS_ConsoleInputWithoutEcho
+	or -1
+	ret
+TryJoystick:
 	ld a,(TRGFLG)
 	and 11110001B  ; space bar or joystick button
 	cp 11110001B
-	ret z
-	and 00000001B  ; space bar
-	call z,DOS_ConsoleInputWithoutEcho
-	or -1
 	ret
+	ENDP
 
 ; hl' = time remaining
 ; ix = this

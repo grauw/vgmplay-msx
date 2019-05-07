@@ -24,7 +24,7 @@ For the complete list of changes please refer to the
   * Samples load prior to playback
   * Added length and loop length to track information
   * Improved VGM chip overview output
-  * Ability to stop playback with joystick buttons (or space bar)
+  * Ability to stop playback with joystick buttons
   * Ability to use more than 4 MB memory by modifying a compile-time constant
   * Removed 1chipMSX / Zemmix Neo bug workaround (fixed in KdL firmware v3.3.1)
   * Fixed MSX-MUSIC playback issues on turbo R
