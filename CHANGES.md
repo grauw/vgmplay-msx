@@ -17,6 +17,7 @@ For the complete list of changes please refer to the
   * Playback of Y8950 MSX-AUDIO on MoonSound or OPL3, without ADPCM
   * Support of the DalSoRi R2 4MB RAM mode
   * Dual chip support for more chips
+  * Support for VGM loop base and modifier
   * Improved detection of MSX-AUDIO, MoonSound, PSG, MMM and Franky
   * Improved sound chip reset and muting
   * Improved playback processing speed and accuracy
