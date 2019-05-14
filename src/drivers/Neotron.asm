@@ -37,7 +37,7 @@ SIOS_WRITE_SMEM: equ 8025H
 SIOS_SET_SMEM: equ 802BH
 
 Neotron: MACRO
-	super: Driver Neotron_name, Neotron_CLOCK, Driver_PrintInfoImpl
+	super: Driver Neotron_nameYM2610, Neotron_CLOCK, Driver_PrintInfoImpl
 	slot:
 		db 0
 	heapBuffer:
@@ -158,6 +158,8 @@ Neotron_Construct:
 	call Neotron_Detect
 	jp nc,Driver_NotFound
 	call Neotron_SetSlot
+	call Neotron_GetName
+	call Driver_SetName
 	call Neotron_Select
 	call Neotron_Reset
 	push ix
@@ -244,6 +246,25 @@ Neotron_Deselect:
 	call Memory_CallSlot
 	pop iy
 	pop ix
+	ret
+
+; ix = this
+; hl <- name
+Neotron_GetName:
+	call Neotron_IsYM2610B
+	ld hl,Neotron_nameYM2610
+	ret nc
+	ld hl,Neotron_nameYM2610B
+	ret
+
+; ix = this
+; f <- z/c: YM2610B, nz/nc: YM2610
+Neotron_IsYM2610B:
+	ld a,(ix + Neotron.slot)
+	ld hl,Neotron_ID_ADDRESS + 18
+	call Memory_ReadSlot
+	xor ~"B"
+	add a,1
 	ret
 
 ; e = register
@@ -361,7 +382,7 @@ Neotron_Detect:
 Neotron_MatchID:
 	ld de,Neotron_id
 	ld hl,Neotron_ID_ADDRESS
-	ld bc,12
+	ld bc,18
 	jp Memory_MatchSlotString
 
 ;
@@ -380,8 +401,11 @@ Neotron_interface:
 Neotron_interfaceYM2203:
 	InterfaceOffset Neotron.SafeWriteRegisterYM2203
 
-Neotron_name:
+Neotron_nameYM2610:
 	db "Neotron",0
 
+Neotron_nameYM2610B:
+	db "Neotron (B)",0
+
 Neotron_id:
-	db "OSC YM  OPNB"
+	db "OSC YM  OPNBYM2610"
