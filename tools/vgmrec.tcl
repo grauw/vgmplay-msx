@@ -2,6 +2,9 @@ namespace eval vgm {
 	variable active false
 	variable psg_register
 	variable opll_register
+	variable psg_used
+	variable opll_used
+	variable sn76489_used
 	variable start_time
 	variable ticks
 	variable music_data
@@ -29,6 +32,9 @@ namespace eval vgm {
 		variable active
 		variable psg_register
 		variable opll_register
+		variable psg_used
+		variable opll_used
+		variable sn76489_used
 		variable start_time
 		variable ticks
 		variable music_data
@@ -48,6 +54,9 @@ namespace eval vgm {
 		set active true
 		set psg_register -1
 		set opll_register -1
+		set psg_used false
+		set opll_used false
+		set sn76489_used false
 		set start_time [machine_info time]
 		set ticks 0
 		set music_data ""
@@ -76,6 +85,7 @@ namespace eval vgm {
 		if {$psg_register >= 0 && $psg_register < 14} {
 			update_time
 			append music_data [format %c%c%c 0xA0 $psg_register $::wp_last_value]
+			variable psg_used true
 		}
 	}
 
@@ -90,6 +100,7 @@ namespace eval vgm {
 		if {$opll_register >= 0} {
 			update_time
 			append music_data [format %c%c%c 0x51 $opll_register $::wp_last_value]
+			variable opll_used true
 		}
 	}
 
@@ -97,6 +108,7 @@ namespace eval vgm {
 		variable music_data
 		update_time
 		append music_data [format %c%c 0x50 $::wp_last_value]
+		variable sn76489_used true
 	}
 
 	proc update_time {} {
@@ -125,6 +137,9 @@ namespace eval vgm {
 
 	proc vgm_stoprec {} {
 		variable active
+		variable psg_used
+		variable opll_used
+		variable sn76489_used
 		variable ticks
 		variable music_data
 		variable file_name
@@ -158,21 +173,21 @@ namespace eval vgm {
 		# VGM version 1.7
 		append header [little_endian 0x170] 
 		# SN76489 clock
-		append header [little_endian 3579545]
+		append header [little_endian [expr $sn76489_used ? 3579545 : 0]]
 		# YM2413 clock
-		append header [little_endian 3579545]
+		append header [little_endian [expr $opll_used ? 3579545 : 0]]
 		append header [zeros 4]
 		# Number of ticks
 		append header [little_endian $ticks]
 		append header [zeros 12]
 		# SN76489 type
-		append header [little_endian [expr 3 | 15 << 16 | 1 << 24 | 1 << 26]]
+		append header [little_endian [expr $sn76489_used ? 3 | 15 << 16 | 1 << 24 | 1 << 26 : 0]]
 		append header [zeros 8]
 		# Data starts at offset 0x100
 		append header [little_endian [expr 0x100 - 0x34]]
 		append header [zeros 60]
 		# AY8910 clock
-		append header [little_endian 1789773]
+		append header [little_endian [expr $psg_used ? 1789773 : 0]]
 		append header [zeros 136]
 
 		set file_handle [open $file_name "w"]
