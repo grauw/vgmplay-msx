@@ -68,8 +68,7 @@ namespace eval vgm {
 	}
 
 	proc write_psg_address {} {
-		variable psg_register
-		set psg_register $::wp_last_value
+		variable psg_register $::wp_last_value
 	}
 
 	proc write_psg_data {} {
@@ -83,8 +82,7 @@ namespace eval vgm {
 	}
 
 	proc write_opll_address {} {
-		variable opll_register
-		set opll_register $::wp_last_value
+		variable opll_register $::wp_last_value
 	}
 
 	proc write_opll_data {} {
