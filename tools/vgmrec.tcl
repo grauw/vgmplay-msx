@@ -27,7 +27,7 @@ namespace eval vgm {
 	proc vgm_startrec {{filename "music.vgm"}} {
 		variable active
 		variable psg_register
-		variable fm_register
+		variable opll_register
 		variable start_time
 		variable ticks
 		variable music_data
@@ -45,7 +45,7 @@ namespace eval vgm {
 
 		set active true
 		set psg_register -1
-		set fm_register -1
+		set opll_register -1
 		set start_time [machine_info time]
 		set ticks 0
 		set music_data ""
