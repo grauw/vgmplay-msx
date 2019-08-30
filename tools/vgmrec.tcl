@@ -9,13 +9,11 @@ namespace eval vgm {
 	variable ticks
 	variable music_data
 	variable file_name
-	variable sample_accurate true
 	variable watchpoint_psg_address
 	variable watchpoint_psg_data
 	variable watchpoint_opll_address
 	variable watchpoint_opll_data
 	variable watchpoint_sn76489_data
-	variable watchpoint_isr
 
 	proc little_endian {value} {
 		format %c%c%c%c [expr $value & 0xFF] \
@@ -39,13 +37,11 @@ namespace eval vgm {
 		variable ticks
 		variable music_data
 		variable file_name
-		variable sample_accurate
 		variable watchpoint_psg_address
 		variable watchpoint_psg_data
 		variable watchpoint_opll_address
 		variable watchpoint_opll_data
 		variable watchpoint_sn76489_data
-		variable watchpoint_isr
 
 		if {$active} {
 			error "Already recording."
@@ -67,9 +63,6 @@ namespace eval vgm {
 		set watchpoint_opll_address [debug set_watchpoint write_io 0x7C {} {vgm::write_opll_address}]
 		set watchpoint_opll_data [debug set_watchpoint write_io 0x7D {} {vgm::write_opll_data}]
 		set watchpoint_sn76489_data [debug set_watchpoint write_io 0x3F {} {vgm::write_sn76489_data}]
-		if {!$sample_accurate} {
-			set watchpoint_isr [debug set_watchpoint read_mem 0x38 {} {vgm::update_frametime}]
-		}
 
 		puts "Recording started"
 	}
@@ -115,10 +108,6 @@ namespace eval vgm {
 		variable start_time
 		variable ticks
 		variable music_data
-		variable sample_accurate
-		if {!$sample_accurate} {
-			return
-		}
 		set new_ticks [expr int(([machine_info time] - $start_time) * 44100)]
 		while {$new_ticks > $ticks} {
 			set difference [expr $new_ticks - $ticks]
@@ -126,13 +115,6 @@ namespace eval vgm {
 			append music_data [format %c%c%c 0x61 [expr $step & 0xFF] [expr ($step >> 8) & 0xFF]]
 			incr ticks $step
 		}
-	}
-
-	proc update_frametime {} {
-		variable ticks
-		variable music_data
-		set new_ticks [expr $ticks + 735]
-		append music_data [format %c 0x62]
 	}
 
 	proc vgm_stoprec {} {
@@ -143,13 +125,11 @@ namespace eval vgm {
 		variable ticks
 		variable music_data
 		variable file_name
-		variable sample_accurate
 		variable watchpoint_psg_address
 		variable watchpoint_psg_data
 		variable watchpoint_opll_address
 		variable watchpoint_opll_data
 		variable watchpoint_sn76489_data
-		variable watchpoint_isr
 
 		if {!$active} {
 			error "Not recording."
@@ -160,9 +140,6 @@ namespace eval vgm {
 		debug remove_watchpoint $watchpoint_opll_address
 		debug remove_watchpoint $watchpoint_opll_data
 		debug remove_watchpoint $watchpoint_sn76489_data
-		if {!$sample_accurate} {
-			debug remove_watchpoint $watchpoint_isr
-		}
 
 		update_time
 		append music_data [format %c 0x66]
