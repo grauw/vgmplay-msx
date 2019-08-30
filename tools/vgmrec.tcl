@@ -11,6 +11,7 @@ namespace eval vgm {
 	variable watchpoint_psg_data
 	variable watchpoint_opll_address
 	variable watchpoint_opll_data
+	variable watchpoint_sn76489_data
 	variable watchpoint_isr
 
 	proc little_endian {value} {
@@ -37,6 +38,7 @@ namespace eval vgm {
 		variable watchpoint_psg_data
 		variable watchpoint_opll_address
 		variable watchpoint_opll_data
+		variable watchpoint_sn76489_data
 		variable watchpoint_isr
 
 		if {$active} {
@@ -55,6 +57,7 @@ namespace eval vgm {
 		set watchpoint_psg_data [debug set_watchpoint write_io 0xA1 {} {vgm::write_psg_data}]
 		set watchpoint_opll_address [debug set_watchpoint write_io 0x7C {} {vgm::write_opll_address}]
 		set watchpoint_opll_data [debug set_watchpoint write_io 0x7D {} {vgm::write_opll_data}]
+		set watchpoint_sn76489_data [debug set_watchpoint write_io 0x3F {} {vgm::write_sn76489_data}]
 		if {!$sample_accurate} {
 			set watchpoint_isr [debug set_watchpoint read_mem 0x38 {} {vgm::update_frametime}]
 		}
@@ -88,6 +91,12 @@ namespace eval vgm {
 			update_time
 			append music_data [format %c%c%c 0x51 $opll_register $::wp_last_value]
 		}
+	}
+
+	proc write_sn76489_data {} {
+		variable music_data
+		update_time
+		append music_data [format %c%c 0x50 $::wp_last_value]
 	}
 
 	proc update_time {} {
@@ -124,6 +133,7 @@ namespace eval vgm {
 		variable watchpoint_psg_data
 		variable watchpoint_opll_address
 		variable watchpoint_opll_data
+		variable watchpoint_sn76489_data
 		variable watchpoint_isr
 
 		if {!$active} {
@@ -134,6 +144,7 @@ namespace eval vgm {
 		debug remove_watchpoint $watchpoint_psg_data
 		debug remove_watchpoint $watchpoint_opll_address
 		debug remove_watchpoint $watchpoint_opll_data
+		debug remove_watchpoint $watchpoint_sn76489_data
 		if {!$sample_accurate} {
 			debug remove_watchpoint $watchpoint_isr
 		}
@@ -146,13 +157,17 @@ namespace eval vgm {
 		append header [little_endian [expr [string length $music_data] + 0x100 - 4]]
 		# VGM version 1.7
 		append header [little_endian 0x170] 
-		append header [zeros 4]
+		# SN76489 clock
+		append header [little_endian 3579545]
 		# YM2413 clock
 		append header [little_endian 3579545]
 		append header [zeros 4]
 		# Number of ticks
 		append header [little_endian $ticks]
-		append header [zeros 24]
+		append header [zeros 12]
+		# SN76489 type
+		append header [little_endian [expr 3 | 15 << 16 | 1 << 24 | 1 << 26]]
+		append header [zeros 8]
 		# Data starts at offset 0x100
 		append header [little_endian [expr 0x100 - 0x34]]
 		append header [zeros 60]
