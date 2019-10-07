@@ -51,6 +51,8 @@ Makoto: MACRO
 		ret z              ; mask IRQ control
 		cp 2DH
 		ret nc             ; block access to the prescaler
+		cp 10H
+		jr z,WriteRhythmKey
 	; a = register
 	; d = value
 	WriteRegister: PROC
@@ -72,6 +74,11 @@ Makoto: MACRO
 		ld d,a
 		ld a,e
 		jr WriteRegister
+	WriteRhythmKey:
+		call WriteRegister  ; call modified to jp if Z80
+		ld b,100
+		djnz $  ; wait 576 cycles (~258 bus cycles)
+		ret
 
 	; e = register
 	; d = value
@@ -221,7 +228,11 @@ Makoto_Construct:
 	call Driver_Construct
 	call Makoto_Detect
 	jp nc,Driver_NotFound
-	jr Makoto_Reset
+	call Makoto_Reset
+	call Utils_IsR800
+	ret c
+	ld (ix + Makoto.WriteRhythmKey),0C3H  ; jp, optimisation for Z80
+	ret
 
 ; ix = this
 Makoto_Destruct:

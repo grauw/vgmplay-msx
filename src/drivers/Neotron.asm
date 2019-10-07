@@ -82,6 +82,8 @@ Neotron: MACRO
 		ld a,e
 		cp 02H
 		ret z              ; block ADPCM-A TEST register
+		and a
+		jr z,WriteADPCMAKey
 	; a = register
 	; d = value
 	WriteRegister2: PROC
@@ -96,6 +98,11 @@ Neotron: MACRO
 		in a,(9AH)
 		ret
 		ENDP
+	WriteADPCMAKey:
+		call WriteRegister2  ; call modified to jp if Z80
+		ld b,100
+		djnz $  ; wait 576 cycles (~258 bus cycles)
+		ret
 
 	; e = register
 	; d = value
@@ -182,6 +189,9 @@ Neotron_Construct:
 	ex (sp),ix
 	call NeotronMemory_Construct
 	pop ix
+	call Utils_IsR800
+	ret c
+	ld (ix + Neotron.WriteADPCMAKey),0C3H  ; jp, optimisation for Z80
 	ret
 
 ; ix = this
