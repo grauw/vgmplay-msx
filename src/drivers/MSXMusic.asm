@@ -137,6 +137,8 @@ MSXMusic_Detect:
 ; a = slot id
 ; f <- c: found
 MSXMusic_MatchInternalID:
+	call Utils_IsNotRAMSlot
+	ret nc
 	ld de,MSXMusic_internalId
 	ld hl,MSXMusic_ID_ADDRESS
 	ld bc,8
@@ -146,6 +148,8 @@ MSXMusic_MatchInternalID:
 ; ix = this
 ; f <- c: found
 MSXMusic_MatchExternalID:
+	call Utils_IsNotRAMSlot
+	ret nc
 	ld de,MSXMusic_externalId
 	ld hl,MSXMusic_ID_ADDRESS + 4
 	ld bc,4

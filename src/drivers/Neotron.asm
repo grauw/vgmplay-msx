@@ -380,6 +380,8 @@ Neotron_Detect:
 ; a = slot id
 ; f <- c: found
 Neotron_MatchID:
+	call Utils_IsNotRAMSlot
+	ret nc
 	ld de,Neotron_id
 	ld hl,Neotron_ID_ADDRESS
 	ld bc,18

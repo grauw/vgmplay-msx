@@ -97,12 +97,12 @@ DalSoRiR2_Detect:
 	and a
 	ret
 
-	SECTION TPA_PAGE0
-
 ; a = slot id
 ; ix = this
 ; f <- c: found
 DalSoRiR2_MatchSlot: PROC
+	call Utils_IsNotRAMSlot
+	ret nc
 	ld bc,8
 	ld de,DalSoRiR2_emptyID
 	ld hl,4000H
@@ -116,9 +116,6 @@ DalSoRiR2_MatchSlot: PROC
 Continue:
 	ld (ix + DalSoRiR2.slot),a
 	di
-	ld hl,DalSoRi_CONFIG
-	call Memory_ReadSlot
-	push af
 	xor a
 	call DalSoRiR2_SetConfig  ; disable all ports
 	call OPL4_Detect
@@ -128,23 +125,14 @@ Continue:
 	call OPL4_Detect
 	jr nc,NotFound
 Found:
-	pop af
 	ei
 	scf
 	ret
 NotFound:
-	pop af
-	call DalSoRiR2_SetConfig
 	ei
 	and a
 	ret
 	ENDP
-
-	IF $ > 4000H
-		ERROR "Must not be in page 1."
-	ENDIF
-
-	ENDS
 
 ;
 	SECTION RAM

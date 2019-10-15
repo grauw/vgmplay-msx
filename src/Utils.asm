@@ -16,6 +16,24 @@ Utils_IsR800:
 	add a,-1
 	ret
 
+; a = slot
+; f <- c: RAM
+; Modifies: f, b, de, hl
+Utils_IsRAMSlot:
+	push ix
+	ld ix,Mapper_instance
+	call Mapper_IsRAMSlot
+	pop ix
+	ret
+
+; a = slot
+; f <- c: no RAM
+; Modifies: f, b, de, hl
+Utils_IsNotRAMSlot:
+	call Utils_IsRAMSlot
+	ccf
+	ret
+
 ; bc = offset
 ; ix = jump address base
 Utils_JumpIXOffsetBC:
