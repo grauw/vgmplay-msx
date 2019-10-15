@@ -93,3 +93,37 @@ Utils_DereferenceJump:
 	ld h,(hl)
 	ld l,a
 	jr Utils_DereferenceJump
+
+; a = slot
+; bc = string length
+; hl = address
+; Modifies: none
+Utils_PrintSlotString: PROC
+	push bc
+	push de
+	push hl
+	push af
+	call System_PrintHexA
+	ld a,":"
+	call System_PrintChar
+	ld a," "
+	call System_PrintChar
+Loop:
+	pop af
+	push af
+	push bc
+	call Memory_ReadSlot
+	call System_PrintHexA
+	pop bc
+	inc hl
+	dec bc
+	ld a,b
+	or c
+	jr nz,Loop
+	call System_PrintCrLf
+	pop af
+	pop hl
+	pop de
+	pop bc
+	ret
+	ENDP
