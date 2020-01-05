@@ -63,8 +63,8 @@ Loop:
 	ret z
 	cp "/"
 	jr z,Option
-	cp " "
-	jr nz,Path
+	cp " " + 1
+	jr nc,Path
 	inc de
 	jr Loop
 Option:
@@ -98,10 +98,8 @@ OptionBlackout:
 	jr Next
 Next:
 	ld a,(de)
-	and a
-	ret z
-	cp " "
-	ret z
+	cp " " + 1
+	ret c
 	ld hl,CLI_unknownOptionError
 	call System_ThrowExceptionWithMessage
 	ENDP
@@ -148,10 +146,8 @@ CLI_ParseNumber: PROC
 	ld hl,CLI_unknownOptionError
 Loop:
 	ld a,(de)
-	and a
-	ret z
-	cp " "
-	ret z
+	cp " " + 1
+	ret c
 	sub "0"
 	call c,System_ThrowExceptionWithMessage
 	cp 10
