@@ -112,11 +112,15 @@ CLI_ParsePath: PROC
 	ld hl,CLI_multiplePathsError
 	call nz,System_ThrowExceptionWithMessage
 	push de
-	call DOS_ParsePathname
+Loop:
 	ld a,(de)
+	inc de
+	cp " " + 1
+	jr nc,Loop
+	dec de
 	and a
 	jr z,FindFile
-	ld a,0
+	xor a
 	ld (de),a
 	inc de
 FindFile:
