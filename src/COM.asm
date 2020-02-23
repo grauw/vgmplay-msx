@@ -65,7 +65,7 @@ RAM: equ RAM_PAGE1
 	SECTION RAM_PAGE0
 
 Heap_main:
-	Heap HEAP, HEAP_SIZE
+	Heap
 
 	ENDS
 
