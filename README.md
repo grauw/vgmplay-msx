@@ -10,13 +10,11 @@ Project information
 
 Plays back VGM music files on MSX with the supported sound chips.
 
-Author: Laurens Holst <laurens.nospam@grauw.nl>  
-Site: <https://bitbucket.org/grauw/vgmplay-msx>  
-Downloads: <https://bitbucket.org/grauw/vgmplay-msx/downloads>  
-History: <https://bitbucket.org/grauw/vgmplay-msx/src/default/CHANGES.md>  
-Issues: <https://bitbucket.org/grauw/vgmplay-msx/issues>  
-Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>  
-License: Simplified BSD License
+  * Author: Laurens Holst <laurens@grauw.nl>
+  * Site: <http://www.grauw.nl/projects/vgmplay-msx/>
+  * Source: <https://hg.sr.ht/~grauw/vgmplay-msx>
+  * Support: <http://www.msx.org/forum/msx-talk/software/vgmplay-msx>
+  * License: Simplified BSD License
 
 VGMPlay can play back music for quite a number of sound chips using various
 common and less common sound expansions for MSX, such as the PSG, MoonSound and
@@ -39,7 +37,7 @@ For collections of VGM music see:
 <http://opl.wafflenet.com/>
 
 
-System Requirements
+System requirements
 -------------------
 
   * MSX, MSX2, MSX2+ or MSX turboR
@@ -132,10 +130,10 @@ VGMPlay depends on the library projects Neonlib and Gunzip; it is recommended
 to clone the project with Mercurial so they will automatically be pulled in
 at the correct version, otherwise you have to download them manually:
 
-    hg clone https://bitbucket.org/grauw/vgmplay-msx
+    hg clone https://hg.sr.ht/~grauw/vgmplay-msx
 
-Building the project is really easy on all modern desktop platforms. On MacOS
-and Linux, simply invoke `make` to build the binary and symbol files into the
+Building the project is easy on all modern desktop platforms. On MacOS and
+Linux, simply invoke `make` to build the binary and symbol files into the
 `bin` directory:
 
     make
@@ -147,6 +145,6 @@ To launch the build in openMSX after building, put a copy of `MSXDOS2.SYS` and
 `COMMAND2.COM` and some VGM files to test with in the `bin` directory, and then
 invoke the `make run` command.
 
-Note that the [glass](https://bitbucket.org/grauw/glass) assembler which is
+Note that the [glass](http://www.grauw.nl/projects/glass/) assembler which is
 embedded in the project requires [Java 8](http://java.com/getjava). To check
 your Java version, invoke the `java -version` command.
