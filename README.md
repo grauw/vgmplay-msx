@@ -23,18 +23,16 @@ Yamaha SFG. A detailed list can be found below.
 Both the VGM and VGZ formats are supported. The compressed VGZ format takes
 longer to load but also consumes less disk space. If so desired, VGZ files can
 be manually decompressed to VGM with
-[gunzip for MSX](https://bitbucket.org/grauw/gunzip) or PC.
+[gunzip for MSX](http://www.grauw.nl/projects/gunzip/) or PC.
 
 The timing resolution is 50 or 60 Hz on MSX1 machines with a TMS9918 VDP, 300 Hz
 on machines with a V9938 or V9958 VDP, and 4000 Hz on MSX turboR.
 
-For more information on the VGM format see:  
-<http://www.smspower.org/Music/VGMFileFormat>
+For collections of VGM music see:
 
-For collections of VGM music see:  
-<http://vgmrips.net/>  
-<http://www.smspower.org/Music/VGMs>  
-<http://opl.wafflenet.com/>
+  * <http://vgmrips.net/>
+  * <http://www.smspower.org/Music/VGMs>
+  * <http://opl.wafflenet.com/>
 
 
 System requirements
