@@ -2,7 +2,7 @@ VGMPlay MSX change log
 ======================
 
 For the complete list of changes please refer to the
-[revision history](https://bitbucket.org/grauw/vgmplay-msx/commits/all).
+[revision history](https://hg.sr.ht/~grauw/vgmplay-msx/log).
 
 [1.3] — 2019-??-??
 ------------------
@@ -63,6 +63,6 @@ For the complete list of changes please refer to the
 Initial release.
 
 
-[1.2]: https://bitbucket.org/grauw/vgmplay-msx/commits/tag/release-1.2
-[1.1]: https://bitbucket.org/grauw/vgmplay-msx/commits/tag/release-1.1
-[1.0]: https://bitbucket.org/grauw/vgmplay-msx/commits/tag/release-1.0
+[1.2]: https://hg.sr.ht/~grauw/vgmplay-msx/log/release-1.2
+[1.1]: https://hg.sr.ht/~grauw/vgmplay-msx/log/release-1.1
+[1.0]: https://hg.sr.ht/~grauw/vgmplay-msx/log/release-1.0
