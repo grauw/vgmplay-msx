@@ -137,7 +137,7 @@ MSXAudio: MACRO
 		out (MSXAudio_ADDRESS_PORT),a
 		in a,(MSXAudio_STATUS_PORT)  ; wait 12 cycles
 		ld a,(hl)                    ;  "
-		ld a,80H
+		ld a,11110000B
 		out (MSXAudio_DATA_PORT),a
 		in a,(MSXAudio_STATUS_PORT)  ; wait 12 cycles
 		ld a,(hl)                    ;  "

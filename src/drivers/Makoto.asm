@@ -194,7 +194,7 @@ Makoto: MACRO
 		out (Makoto_FM2_ADDRESS),a
 		in a,(Makoto_STATUS1)  ; wait 12 cycles
 		ld a,(hl)            ;  "
-		ld a,80H
+		ld a,11110000B
 		out (Makoto_FM2_DATA),a
 		in a,(Makoto_STATUS1)  ; wait 12 cycles
 		ld a,(hl)            ;  "
