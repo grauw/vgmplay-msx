@@ -63,7 +63,7 @@ Makoto: MACRO
 		jr c,Wait
 		ld a,e
 		out (Makoto_FM1_ADDRESS),a
-		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
+		jp $ + 3  ; wait 17 / 8.00 µs
 		ld a,d
 		out (Makoto_FM1_DATA),a
 		ret
@@ -77,7 +77,7 @@ Makoto: MACRO
 	WriteRhythmKey:
 		call WriteRegister  ; call modified to jp if Z80
 		ld b,100
-		djnz $  ; wait 576 cycles (~258 bus cycles)
+		djnz $  ; wait 576 / 8.00 µs
 		ret
 
 	; e = register
@@ -96,7 +96,7 @@ Makoto: MACRO
 		jr c,Wait
 		ld a,e
 		out (Makoto_FM2_ADDRESS),a
-		jp $ + 3  ; wait 17 cycles (7.6 bus cycles)
+		jp $ + 3  ; wait 17 / 8.00 µs
 		ld a,d
 		out (Makoto_FM2_DATA),a
 		ret
@@ -186,20 +186,20 @@ Makoto: MACRO
 		ld b,c
 		ld c,Makoto_FM2_DATA
 		ld a,Makoto_ADPCM_DATA
-		out (Makoto_FM2_ADDRESS),a  ; wait 12 cycles after
+		out (Makoto_FM2_ADDRESS),a  ; wait 17 / 8.00 µs after
 		jr Wait
 	Next:
-		in a,(Makoto_STATUS1)  ; wait 12 cycles
+		in a,(Makoto_STATUS1)  ; wait 17 / 8.00 µs
 		ld a,Makoto_FLAG_CONTROL
 		out (Makoto_FM2_ADDRESS),a
-		in a,(Makoto_STATUS1)  ; wait 12 cycles
+		in a,(Makoto_STATUS1)  ; wait 17 / 8.00 µs
 		ld a,(hl)            ;  "
 		ld a,11110000B
 		out (Makoto_FM2_DATA),a
-		in a,(Makoto_STATUS1)  ; wait 12 cycles
+		in a,(Makoto_STATUS1)  ; wait 17 / 8.00 µs
 		ld a,(hl)            ;  "
 		ld a,Makoto_ADPCM_DATA
-		out (Makoto_FM2_ADDRESS),a  ; wait 12 cycles after
+		out (Makoto_FM2_ADDRESS),a  ; wait 17 / 8.00 µs after
 	Wait:
 		in a,(Makoto_STATUS1)
 		and 00001000B

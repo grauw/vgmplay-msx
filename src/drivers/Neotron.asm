@@ -61,11 +61,11 @@ Neotron: MACRO
 	begin: Memory_AccessPreparedSlot_BEGIN
 		ld hl,Neotron_FM1_ADDRESS
 		ld (hl),a
-		ld a,(hl)  ; wait 17 cycles
+		ld a,(hl)  ; wait 17 / 8.00 µs
 		inc l
 		ld (hl),d
 		Memory_AccessPreparedSlot_END
-		in a,(9AH)  ; wait 83 cycles
+		in a,(9AH)  ; wait 83 / 8.00 µs
 		in a,(9AH)
 		ret
 		ENDP
@@ -90,18 +90,18 @@ Neotron: MACRO
 	begin: Memory_AccessPreparedSlot_BEGIN
 		ld hl,Neotron_FM2_ADDRESS
 		ld (hl),a
-		ld a,(hl)  ; wait 17 cycles
+		ld a,(hl)  ; wait 17 / 8.00 µs
 		inc l
 		ld (hl),d
 		Memory_AccessPreparedSlot_END
-		in a,(9AH)  ; wait 83 cycles
+		in a,(9AH)  ; wait 83 / 8.00 µs
 		in a,(9AH)
 		ret
 		ENDP
 	WriteADPCMAKey:
 		call WriteRegister2  ; call modified to jp if Z80
 		ld b,100
-		djnz $  ; wait 576 cycles (~258 bus cycles)
+		djnz $  ; wait 576 / 8.00 µs
 		ret
 
 	; e = register

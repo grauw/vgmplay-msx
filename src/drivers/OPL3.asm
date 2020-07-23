@@ -26,7 +26,7 @@ OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	; d = value
 	WriteRegister:
 		out (?base + OPL3_FM_ADDRESS),a
-		jp $ + 3     ; wait 32 cycles (8 bus cycles)
+		jp $ + 3     ; wait 32 / 14.32 µs
 		ld a,d
 		out (?base + OPL3_FM_DATA),a
 		ret
@@ -43,7 +43,7 @@ OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	; d = value
 	WriteRegister2:
 		out (?base + OPL3_FM2_ADDRESS),a
-		jp $ + 3     ; wait 32 cycles (8 bus cycles)
+		jp $ + 3     ; wait 32 / 14.32 µs
 		ld a,d
 		out (?base + OPL3_FM2_DATA),a
 		ret
