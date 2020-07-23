@@ -344,12 +344,10 @@ MSXAudio_Detect: PROC
 WriteRegister:
 	ld a,e
 	out (MSXAudio_ADDRESS_PORT),a
-	ld b,8  ; wait 12 cycles
-	djnz $
+	in a,(MSXAudio_STATUS_PORT)  ; wait 12 cycles
+	ld a,(hl)                    ;  "
 	ld a,d
 	out (MSXAudio_DATA_PORT),a
-	ld b,8  ; wait 12 cycles
-	djnz $
 	ret
 	ENDP
 
