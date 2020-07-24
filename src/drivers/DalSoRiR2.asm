@@ -115,7 +115,6 @@ DalSoRiR2_MatchSlot: PROC
 	ret nc
 Continue:
 	ld (ix + DalSoRiR2.slot),a
-	di
 	xor a
 	call DalSoRiR2_SetConfig  ; disable all ports
 	call OPL4_Detect
@@ -125,11 +124,9 @@ Continue:
 	call OPL4_Detect
 	jr nc,NotFound
 Found:
-	ei
 	scf
 	ret
 NotFound:
-	ei
 	and a
 	ret
 	ENDP
