@@ -186,20 +186,15 @@ Makoto: MACRO
 		ld b,c
 		ld c,Makoto_FM2_DATA
 		ld a,Makoto_ADPCM_DATA
-		out (Makoto_FM2_ADDRESS),a  ; wait 17 / 8.00 µs after
+		out (Makoto_FM2_ADDRESS),a
 		jr Wait
 	Next:
-		in a,(Makoto_STATUS1)  ; wait 17 / 8.00 µs
 		ld a,Makoto_FLAG_CONTROL
 		out (Makoto_FM2_ADDRESS),a
-		in a,(Makoto_STATUS1)  ; wait 17 / 8.00 µs
-		ld a,(hl)            ;  "
 		ld a,11110000B
 		out (Makoto_FM2_DATA),a
-		in a,(Makoto_STATUS1)  ; wait 17 / 8.00 µs
-		ld a,(hl)            ;  "
 		ld a,Makoto_ADPCM_DATA
-		out (Makoto_FM2_ADDRESS),a  ; wait 17 / 8.00 µs after
+		out (Makoto_FM2_ADDRESS),a
 	Wait:
 		in a,(Makoto_STATUS1)
 		and 00001000B
