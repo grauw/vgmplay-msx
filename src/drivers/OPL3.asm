@@ -36,7 +36,14 @@ OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	MaskControl:
 		cp 8H
 		jr z,WriteRegister
-		ret
+		cp 1H
+		ret nz
+	MaskTest:
+		ld a,d
+		and 00100000B  ; pass waveform select enable for OPL2s
+		ld d,a
+		ld a,e
+		jr WriteRegister
 
 	; e = register
 	; d = value
@@ -136,6 +143,8 @@ OPL3_Reset:
 	ld b,0D6H
 	ld de,0020H
 	call OPL3_FillRegisterPairs
+	ld de,0001H
+	call OPL3_WriteRegister
 	ld de,0008H
 	call OPL3_WriteRegister
 	ld de,0004H
