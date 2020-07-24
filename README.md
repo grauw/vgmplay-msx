@@ -26,7 +26,8 @@ be manually decompressed to VGM with
 [gunzip for MSX](http://www.grauw.nl/projects/gunzip/) or PC.
 
 The timing resolution is 50 or 60 Hz on MSX1 machines with a TMS9918 VDP, 300 Hz
-on machines with a V9938 or V9958 VDP, and 4000 Hz on MSX turboR.
+on machines with a V9938 or V9958 VDP, 1130 Hz if a MoonSound or OPL3 is
+present, and 4000 Hz on MSX turboR.
 
 For collections of VGM music see:
 

@@ -25,10 +25,12 @@ OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	; a = register
 	; d = value
 	WriteRegister:
+		di
 		out (?base + OPL3_FM_ADDRESS),a
 	basePort: equ $ - 1
-		jp $ + 3     ; wait 32 / 14.32 µs
+		cp (hl)      ; wait 32 / 14.32 µs
 		ld a,d
+		ei
 		out (?base + OPL3_FM_DATA),a
 		ret
 	MaskControl:
@@ -43,9 +45,11 @@ OPL3: MACRO ?base = OPL3_BASE_PORT, ?name = OPL3_name
 	; a = register
 	; d = value
 	WriteRegister2:
+		di
 		out (?base + OPL3_FM2_ADDRESS),a
-		jp $ + 3     ; wait 32 / 14.32 µs
+		cp (hl)      ; wait 32 / 14.32 µs
 		ld a,d
+		ei
 		out (?base + OPL3_FM2_DATA),a
 		ret
 

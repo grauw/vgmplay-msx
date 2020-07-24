@@ -31,9 +31,10 @@ OPL4: MACRO ?fmbase, ?wavebase, ?name
 	; a = register
 	; d = value
 	WriteRegister:
+		di
 		out (?fmbase + OPL4_FM_ADDRESS),a
-		nop     ; wait 56 / 33.87 µs
-		ld a,d
+		ld a,d  ; wait 56 / 33.87 µs
+		ei
 		out (?fmbase + OPL4_FM_DATA),a
 		ret
 	MaskControl:
@@ -48,9 +49,10 @@ OPL4: MACRO ?fmbase, ?wavebase, ?name
 	; a = register
 	; d = value
 	WriteRegister2:
+		di
 		out (?fmbase + OPL4_FM2_ADDRESS),a
-		nop     ; wait 56 / 33.87 µs
-		ld a,d
+		ld a,d  ; wait 56 / 33.87 µs
+		ei
 		out (?fmbase + OPL4_FM2_DATA),a
 		ret
 
