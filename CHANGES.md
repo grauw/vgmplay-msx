@@ -64,6 +64,6 @@ For the complete list of changes please refer to the
 Initial release.
 
 
-[1.2]: https://hg.sr.ht/~grauw/vgmplay-msx/log/release-1.2
-[1.1]: https://hg.sr.ht/~grauw/vgmplay-msx/log/release-1.1
-[1.0]: https://hg.sr.ht/~grauw/vgmplay-msx/log/release-1.0
+[1.2]: https://hg.sr.ht/~grauw/vgmplay-msx/log?rev=release-1.2
+[1.1]: https://hg.sr.ht/~grauw/vgmplay-msx/log?rev=release-1.1
+[1.0]: https://hg.sr.ht/~grauw/vgmplay-msx/log?rev=release-1.0
