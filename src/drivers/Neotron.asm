@@ -407,7 +407,7 @@ Neotron_nameYM2610:
 	db "Neotron",0
 
 Neotron_nameYM2610B:
-	db "Neotron (B)",0
+	db "Neotron B",0
 
 Neotron_id:
 	db "OSC YM  OPNBYM2610"
