@@ -22,6 +22,7 @@
 	INCLUDE "OPN.asm"
 	INCLUDE "Makoto.asm"
 	INCLUDE "Neotron.asm"
+	INCLUDE "SoundStar.asm"
 	INCLUDE "emulations/DCSGOnPSG.asm"
 	INCLUDE "emulations/DCSGSegaOnTI.asm"
 	INCLUDE "emulations/DCSGTIOnSega.asm"
@@ -77,6 +78,8 @@ Drivers: MACRO
 		StaticFactory Makoto_instance, Makoto_Construct, Makoto_Destruct
 	neotron:
 		StaticFactory Neotron_instance, Neotron_Construct, Neotron_Destruct
+	soundStar:
+		StaticFactory SoundStar_instance, SoundStar_Construct, SoundStar_Destruct
 	dcsgOnPSG:
 		StaticFactory DCSGOnPSG_instance, DCSGOnPSG_Construct, DCSGOnPSG_Destruct
 	dcsgSegaOnTI:
@@ -303,6 +306,13 @@ Drivers_TryCreateMakoto_IY:
 ; f <- c: succeeded
 Drivers_TryCreateNeotron_IY:
 	ld bc,Drivers.neotron
+	jr Drivers_TryCreate_IY_Trampoline
+
+; iy = this
+; de <- driver
+; f <- c: succeeded
+Drivers_TryCreateSoundStar_IY:
+	ld bc,Drivers.soundStar
 	jr Drivers_TryCreate_IY_Trampoline
 
 ; iy = this
